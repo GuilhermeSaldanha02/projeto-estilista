@@ -37,9 +37,20 @@ _Atualizado a cada sessão. É a memória do agente entre conversas._
 - [x] `app/teste-img/page.tsx` — busca primeiro produto via GROQ, renderiza foto em retrato 3:4 com `next/image fill + sanityLoader + sizes`
 - [x] Build de produção limpo, sem warnings
 
+## Concluído (continuação)
+
+### feat/layout-shell — Header + Nav + Footer (2026-06-17)
+
+- [x] `components/layout/Header.tsx` — server component; busca categorias (só com inStock=true) e `siteSettings.whatsappNumber` via GROQ
+- [x] `components/layout/Nav.tsx` — client component; mega-menu desktop (JS hover + delay 150ms, focus/blur para teclado); hambúrguer mobile → lista vertical
+- [x] `components/layout/Footer.tsx` — espresso, linha dourada topo, nome centralizado
+- [x] `app/layout.tsx` — envolvido com Header + Footer; offset via `<div>` (não `<main>`) para não aninhar `<main>` das páginas filhas
+- [x] Build de produção limpo, TypeScript sem erros
+
+**Regras cumpridas:** sem fallback de categorias; WA oculto se `whatsappNumber` vazio; bloco destaque usa token `bg-ink`; teclado acessível.
+
 ## Pendente (próximos passos)
 
-- [ ] **feat/layout-shell** — Header fixo espresso com menu-cascata desktop / acordeão mobile + Footer espresso; dados de categorias via GROQ
 - [ ] **feat/home** — Hero com vídeo mudo (loop, muted, autoplay, poster) + seção da stylist + CTAs
 - [ ] **feat/categoria** — Template `/categoria/[slug]`: grade de produtos, ISR, categoria vazia some do menu
 - [ ] **feat/produto** — Template `/produto/[slug]`: fotos, descrição, botão WhatsApp com nome da peça
