@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { client } from '@/sanity/lib/client'
-import { urlFor, sanityLoader } from '@/sanity/lib/image'
+import { urlFor } from '@/sanity/lib/image'
 
 // Busca o primeiro produto que tenha ao menos uma foto
 const query = `*[_type == "product" && defined(images[0])][0] {
@@ -57,7 +57,7 @@ export default async function TesteImgPage() {
       >
         <Image
           src={baseUrl}
-          loader={sanityLoader}
+
           alt={product.image.alt ?? product.title}
           fill
           sizes="(max-width: 640px) 288px, 320px"
