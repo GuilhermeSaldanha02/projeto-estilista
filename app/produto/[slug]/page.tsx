@@ -115,8 +115,7 @@ export default async function ProdutoPage({ params }: Props) {
           {mainImage?.asset ? (
             <div className="relative aspect-[3/4] overflow-hidden bg-sand-100">
               <Image
-                src={urlFor(mainImage).url()}
-  
+                src={urlFor(mainImage).width(900).height(1200).fit('crop').auto('format').url()}
                 alt={mainImage.alt ?? product.title}
                 fill
                 priority
@@ -139,8 +138,7 @@ export default async function ProdutoPage({ params }: Props) {
                 img?.asset ? (
                   <div key={i} className="relative aspect-[3/4] overflow-hidden bg-sand-100">
                     <Image
-                      src={urlFor(img).url()}
-        
+                      src={urlFor(img).width(300).height(400).fit('crop').auto('format').url()}
                       alt={img.alt ?? `${product.title} — foto ${i + 2}`}
                       fill
                       sizes="(max-width: 768px) 33vw, 17vw"

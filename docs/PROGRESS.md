@@ -54,11 +54,13 @@ _Atualizado a cada sessão. É a memória do agente entre conversas._
 - [x] `components/ProductCard.tsx` — card 3:4 com `urlFor` (CDN global via `loaderFile`), nome em Cormorant, "Quero esta peça" como `<span>` (nunca `<Link>` aninhado), hover scale na foto, fallback sem foto
 - [x] `app/categoria/[slug]/page.tsx` — grade `2→3→4 col`, ISR `revalidate = 60` (SDD §1), `generateStaticParams` para slugs com produto em estoque, página amigável quando categoria não existe ou está vazia, metadata dinâmica
 - [x] `app/produto/[slug]/page.tsx` — foto principal + miniaturas extras, breadcrumb com categoria, nome + preço (R$), PortableText, botão WhatsApp com mensagem pré-preenchida (`whatsappNumber` de `siteSettings` — oculto se vazio), página amigável se produto não encontrado, metadata dinâmica
-- [x] `sanity/lib/image.ts` — `export default sanityLoader` adicionado para funcionar como `loaderFile`
-- [x] `next.config.ts` — `loader: 'custom'` + `loaderFile` → injeta CDN transforms globalmente; elimina necessidade de passar `loader` como prop (resolve conflito RSC→Client Component)
-- [x] Build de produção limpo: `/categoria/vestidos` e `/produto/vestido-esmeralda` pré-renderizados como SSG com `Revalidate 1m` ✓
+- [x] `next.config.ts` — apenas `remotePatterns` para `cdn.sanity.io` (abordagem `loaderFile` foi removida — ver nota abaixo)
+- [x] Todas as imagens Sanity geradas com `urlFor(img).width(W).height(H).fit('crop').auto('format').url()` — URL já dimensionada, sem depender de `loader` prop
+- [x] Build de produção limpo + runtime 200 OK verificado: `/categoria/vestidos` e `/produto/vestido-esmeralda`
 
-**Regras cumpridas:** `dynamicParams` padrão `true` (novas peças publicadas no Sanity renderizam sem rebuild); WA oculto se `whatsappNumber` vazio; sem dado hardcoded; sem `<Link>` aninhado; `revalidate = 60` conforme SDD §1.
+**Nota sobre loaderFile:** a abordagem inicial usou `loaderFile` global no `next.config.ts` para evitar passar `sanityLoader` como prop. Isso eliminou o erro de build RSC (funções não podem ser passadas de Server Component para Client Component), mas causou erro de runtime `Image is missing "loader" prop`. A solução correta: URL completa já com dimensões via `urlFor().width().height().fit().url()` + `remotePatterns` padrão. O `/_next/image` serve as imagens diretamente sem precisar de `loader` customizado.
+
+**Regras cumpridas:** `dynamicParams` padrão `true`; WA oculto se `whatsappNumber` vazio; sem dado hardcoded; sem `<Link>` aninhado; `revalidate = 60` conforme SDD §1.
 
 **Fora do escopo desta branch (não é erro):** `/colecao/novidades` ainda retorna 404 — a rota `/colecao/[slug]` não existe ainda.
 

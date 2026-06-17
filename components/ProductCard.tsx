@@ -31,8 +31,7 @@ export default function ProductCard({ product }: { product: ProductCardData }) {
         <div className="relative aspect-[3/4] overflow-hidden bg-sand-100">
           {product.image?.asset ? (
             <Image
-              src={urlFor(product.image).url()}
-
+              src={urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()}
               alt={product.image.alt ?? product.title}
               fill
               sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"

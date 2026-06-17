@@ -34,6 +34,3 @@ export const sanityLoader: ImageLoader = ({ src, width, quality }) => {
   url.searchParams.set('q', String(quality ?? 80))
   return url.toString()
 }
-
-// Default export required for next.config loaderFile
-export default sanityLoader
