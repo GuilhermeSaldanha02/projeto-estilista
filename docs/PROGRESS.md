@@ -49,18 +49,31 @@ _Atualizado a cada sessão. É a memória do agente entre conversas._
 
 **Regras cumpridas:** sem fallback de categorias; WA oculto se `whatsappNumber` vazio; bloco destaque usa token `bg-ink`; teclado acessível.
 
+### feat/rotas-catalogo — Rotas de catálogo (2026-06-17)
+
+- [x] `components/ProductCard.tsx` — card 3:4 com `urlFor` (CDN global via `loaderFile`), nome em Cormorant, "Quero esta peça" como `<span>` (nunca `<Link>` aninhado), hover scale na foto, fallback sem foto
+- [x] `app/categoria/[slug]/page.tsx` — grade `2→3→4 col`, ISR `revalidate = 60` (SDD §1), `generateStaticParams` para slugs com produto em estoque, página amigável quando categoria não existe ou está vazia, metadata dinâmica
+- [x] `app/produto/[slug]/page.tsx` — foto principal + miniaturas extras, breadcrumb com categoria, nome + preço (R$), PortableText, botão WhatsApp com mensagem pré-preenchida (`whatsappNumber` de `siteSettings` — oculto se vazio), página amigável se produto não encontrado, metadata dinâmica
+- [x] `next.config.ts` — apenas `remotePatterns` para `cdn.sanity.io` (abordagem `loaderFile` foi removida — ver nota abaixo)
+- [x] Todas as imagens Sanity geradas com `urlFor(img).width(W).height(H).fit('crop').auto('format').url()` — URL já dimensionada, sem depender de `loader` prop
+- [x] Build de produção limpo + runtime 200 OK verificado: `/categoria/vestidos` e `/produto/vestido-esmeralda`
+
+**Nota sobre loaderFile:** a abordagem inicial usou `loaderFile` global no `next.config.ts` para evitar passar `sanityLoader` como prop. Isso eliminou o erro de build RSC (funções não podem ser passadas de Server Component para Client Component), mas causou erro de runtime `Image is missing "loader" prop`. A solução correta: URL completa já com dimensões via `urlFor().width().height().fit().url()` + `remotePatterns` padrão. O `/_next/image` serve as imagens diretamente sem precisar de `loader` customizado.
+
+**Regras cumpridas:** `dynamicParams` padrão `true`; WA oculto se `whatsappNumber` vazio; sem dado hardcoded; sem `<Link>` aninhado; `revalidate = 60` conforme SDD §1.
+
+**Fora do escopo desta branch (não é erro):** `/colecao/novidades` ainda retorna 404 — a rota `/colecao/[slug]` não existe ainda.
+
 ## Pendente (próximos passos)
 
 - [ ] **feat/home** — Hero com vídeo mudo (loop, muted, autoplay, poster) + seção da stylist + CTAs
-- [ ] **feat/categoria** — Template `/categoria/[slug]`: grade de produtos, ISR, categoria vazia some do menu
-- [ ] **feat/produto** — Template `/produto/[slug]`: fotos, descrição, botão WhatsApp com nome da peça
-- [ ] **feat/colecao** — Template `/colecao/[slug]`: filtro por tag
+- [ ] **feat/colecao** — Template `/colecao/[slug]`: filtro por tag (similar a `/categoria/[slug]`)
 - [ ] **feat/seo** — sitemap.ts, metadados por página, dados estruturados
 - [ ] Remover `/teste-img` antes do deploy de produção (é uma página de debug)
 
 ## Próximo passo imediato
 
-`feat/layout-shell` — header espresso com menu-cascata (desktop) / acordeão de toque (mobile) + footer.
+`feat/home` — Hero + seção da stylist + CTAs (requer asset de vídeo ou foto hero).
 
 ---
 

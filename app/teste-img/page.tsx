@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import { client } from '@/sanity/lib/client'
-import { urlFor, sanityLoader } from '@/sanity/lib/image'
+import { urlFor } from '@/sanity/lib/image'
 
 // Busca o primeiro produto que tenha ao menos uma foto
 const query = `*[_type == "product" && defined(images[0])][0] {
@@ -40,8 +40,7 @@ export default async function TesteImgPage() {
     )
   }
 
-  // URL base sem transforms — o sanityLoader injeta ?w= ?auto= ?q= em cada breakpoint
-  const baseUrl = urlFor(product.image).url()
+  const baseUrl = urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()
 
   return (
     <main className="min-h-screen bg-sand-200 flex flex-col items-center justify-center gap-8 p-8">
@@ -57,7 +56,7 @@ export default async function TesteImgPage() {
       >
         <Image
           src={baseUrl}
-          loader={sanityLoader}
+
           alt={product.image.alt ?? product.title}
           fill
           sizes="(max-width: 640px) 288px, 320px"
