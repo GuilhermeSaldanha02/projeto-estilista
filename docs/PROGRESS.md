@@ -62,12 +62,16 @@ _Atualizado a cada sessão. É a memória do agente entre conversas._
 
 **Regras cumpridas:** `dynamicParams` padrão `true`; WA oculto se `whatsappNumber` vazio; sem dado hardcoded; sem `<Link>` aninhado; `revalidate = 60` conforme SDD §1.
 
-**Fora do escopo desta branch (não é erro):** `/colecao/novidades` ainda retorna 404 — a rota `/colecao/[slug]` não existe ainda.
+### feat/novidades — Página /colecao/novidades (2026-06-17)
+
+- [x] `app/colecao/novidades/page.tsx` — rota estática; GROQ `inStock == true | order(_createdAt desc) [0...12]`, sem filtro por categoria ou tag; ISR `revalidate = 60`; importa `ProductCard` existente; mesmo grid `2→3→4 col`; página amigável "em breve" se sem produtos
+- [x] Build limpo + runtime verificado via HTTP: status 200, `<h1>Novidades</h1>` presente, grid e cards renderizados, links `/produto/…` e imagens `cdn.sanity.io` presentes no HTML
+
+**Elimina 404:** o link "Novidades" no header (`/colecao/novidades`) não retorna mais 404.
 
 ## Pendente (próximos passos)
 
 - [ ] **feat/home** — Hero com vídeo mudo (loop, muted, autoplay, poster) + seção da stylist + CTAs
-- [ ] **feat/colecao** — Template `/colecao/[slug]`: filtro por tag (similar a `/categoria/[slug]`)
 - [ ] **feat/seo** — sitemap.ts, metadados por página, dados estruturados
 - [ ] Remover `/teste-img` antes do deploy de produção (é uma página de debug)
 
