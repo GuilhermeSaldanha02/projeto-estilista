@@ -56,7 +56,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
               aria-haspopup="true"
               aria-expanded={megaOpen}
               onFocus={openMega}
-              className="text-cream-text/50 hover:text-cream-text font-sans text-[10px] tracking-widest uppercase transition-colors py-2"
+              className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2"
             >
               Categorias
             </button>
@@ -76,7 +76,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                     <Link
                       key={cat._id}
                       href={`/categoria/${cat.slug}`}
-                      className="text-cream-text/65 hover:text-cream-text focus:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors outline-none focus-visible:underline"
+                      className="text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 font-sans text-sm tracking-wide uppercase transition-opacity outline-none focus-visible:underline"
                       onClick={() => setMegaOpen(false)}
                     >
                       {cat.title}
