@@ -69,15 +69,25 @@ _Atualizado a cada sessão. É a memória do agente entre conversas._
 
 **Elimina 404:** o link "Novidades" no header (`/colecao/novidades`) não retorna mais 404.
 
+### feat/home — Home real (2026-06-18)
+
+- [x] `app/page.tsx` substituído: home real com 3 blocos, ISR `revalidate = 60`
+- [x] **Hero:** vídeo `/hero.mp4` com `poster`, `autoPlay loop muted playsInline preload="none"`; poster estático com `hidden motion-reduce:block` + vídeo com `motion-reduce:hidden` (respeita `prefers-reduced-motion`); gradiente `from-black/70 via-black/40 to-transparent` para legibilidade; texto e CTAs alinhados à esquerda
+- [x] **Novidades:** importa `ProductCard` existente; GROQ `inStock == true | order(_createdAt desc) [0...8]`; mesmo grid `2→3→4 col`; link "ver todas" para `/colecao/novidades`; seção omitida automaticamente se sem produtos
+- [x] **Personal Stylist:** fundo espresso, título em Cormorant, parágrafo provisório marcado no código, botão WhatsApp esmeralda com mensagem de agendamento (`"Oi! Gostaria de agendar um horário de personal styling."`); botão oculto se `whatsappNumber` vazio
+- [x] Build limpo: `/` pré-renderizado SSG com `Revalidate 1m`; todos os elementos verificados via HTTP no servidor de produção
+
+**Texto provisório na seção Stylist** — substituir pelo conteúdo real via Sanity Studio quando disponível.
+
 ## Pendente (próximos passos)
 
-- [ ] **feat/home** — Hero com vídeo mudo (loop, muted, autoplay, poster) + seção da stylist + CTAs
 - [ ] **feat/seo** — sitemap.ts, metadados por página, dados estruturados
 - [ ] Remover `/teste-img` antes do deploy de produção (é uma página de debug)
+- [ ] Substituir texto provisório da seção Stylist pelo conteúdo real no Studio
 
 ## Próximo passo imediato
 
-`feat/home` — Hero + seção da stylist + CTAs (requer asset de vídeo ou foto hero).
+`feat/seo` — sitemap.ts, metadados por rota, Open Graph.
 
 ---
 
