@@ -39,9 +39,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const category = await client.fetch<Category | null>(categoryQuery, { slug })
   return {
-    title: category ? `${category.title} — Estilista` : 'Categoria — Estilista',
+    title: category?.title ?? 'Categoria',
     description: category
-      ? `Veja todas as peças da categoria ${category.title} da Estilista.`
+      ? `Veja todas as peças de ${category.title} da Estilista.`
       : undefined,
   }
 }
