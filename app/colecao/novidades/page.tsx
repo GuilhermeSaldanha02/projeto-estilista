@@ -6,7 +6,7 @@ import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Novidades — Estilista',
+  title: 'Novidades',
   description: 'As peças mais recentes da Estilista, de todas as categorias.',
 }
 

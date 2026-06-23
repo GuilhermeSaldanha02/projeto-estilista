@@ -7,7 +7,7 @@ import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Estilista — Moda Feminina',
+  title: { absolute: 'Estilista — Moda Feminina' },
   description:
     'Moda feminina com olhar de personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
 }

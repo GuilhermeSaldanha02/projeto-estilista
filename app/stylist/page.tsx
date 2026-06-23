@@ -6,9 +6,15 @@ import { urlFor } from '@/sanity/lib/image'
 
 export const revalidate = 60
 
-export const metadata: Metadata = {
-  title: 'Stylist — Estilista',
-  description: 'Conheça a personal stylist por trás da Estilista e agende seu atendimento.',
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await client.fetch<{ name?: string; tagline?: string } | null>(
+    `*[_type == "stylistProfile"][0]{ name, tagline }`
+  )
+  return {
+    title: profile?.name ?? 'Stylist',
+    description:
+      profile?.tagline ?? 'Conheça a personal stylist por trás da Estilista e agende seu atendimento.',
+  }
 }
 
 type SanityImg = {

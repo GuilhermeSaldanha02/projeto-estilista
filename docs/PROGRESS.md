@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-23 (main — merge PR #10)_
+_Última atualização: 2026-06-23 (feat/seo — PR #12 aberto)_
 
 ---
 
@@ -115,6 +115,22 @@ bug já resolvido._
   Estado amigável se `stylistProfile` vazio (nunca 404).
 - ISR 60 s; imagens via `urlFor()`; WA via `siteSettings`.
 
+### #12 feat/seo — SEO técnico
+
+- `app/robots.ts` — bloqueia `/studio`, aponta para `/sitemap.xml`
+- `app/sitemap.ts` — dinâmico via Sanity: rotas estáticas + categorias com estoque + todos os produtos em estoque (ISR 1h). URL via `NEXT_PUBLIC_SITE_URL`.
+- `app/layout.tsx` — `metadataBase`, `title.template '%s — Estilista'`, `openGraph` base (siteName, locale, type)
+- `app/page.tsx` — title `{ absolute }` para contornar o template
+- `app/colecao/novidades/page.tsx` — title simplificado (template aplica o sufixo)
+- `app/categoria/[slug]/page.tsx` — title sem sufixo hardcoded; description melhorada
+- `app/stylist/page.tsx` — `generateMetadata` lê `name`/`tagline` do Sanity (fallback elegante)
+- `app/produto/[slug]/page.tsx` — `generateMetadata` com description extraída do PortableText + OG image via Sanity CDN; JSON-LD schema.org/Product (name, image, description, brand — SEM offers/price)
+
+**Pendentes (documentado, não implementado):**
+- **FAVICON** — aguarda ícone de marca da dona
+- **OG /stylist** — pronto quando Sanity tiver foto da stylist cadastrada
+- **`NEXT_PUBLIC_SITE_URL`** — deve ser configurado na Vercel no momento do deploy
+
 ### #7 feat/home — Home real
 
 - `app/page.tsx` substituiu a tela de teste. 3 blocos, ISR.
@@ -140,7 +156,6 @@ bug já resolvido._
 ### Independente — pode fazer a qualquer momento
 
 - Trocar "PERSONAL STYLIST" (inglês) no hero por termo em PT, se decidido.
-- **feat/seo** — `sitemap.ts`, metadados/título por página, Open Graph, favicon.
 - **Dívida técnica — layout `etapas`:** a dona precisa digitar a lista numerada
   manualmente no PortableText (1. texto 2. texto…). Se a resposta da Q4 vier com
   muitas etapas ou com subestrutura, migrar o campo `body` para um array aninhado
