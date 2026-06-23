@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-22 (feat/stylist-cms)_
+_Última atualização: 2026-06-23 (main — merge PR #10)_
 
 ---
 
@@ -11,8 +11,9 @@ Piloto com a interface essencialmente completa. Vitrine (categoria) + página de
 produto + novidades + home com hero em vídeo. Venda e agendamento fecham via
 WhatsApp. A dona gerencia conteúdo pelo Sanity Studio em `/studio`.
 
-O que falta antes de entregar: página `/stylist` (bloqueada por conteúdo externo),
-polimentos finais e deploy. Ver "Pendências" no fim.
+O que falta antes de entregar: polimentos finais e deploy. A página `/stylist`
+tem arquitetura CMS completa — aguarda só o conteúdo real (questionário + fotos)
+a ser cadastrado pela dona no Studio. Ver "Pendências" no fim.
 
 ---
 
@@ -94,27 +95,25 @@ bug já resolvido._
   sobre espresso). Corrigido com `opacity-85/90` (utility nativa — o modificador
   `/N` do Tailwind não funciona com cores definidas como CSS variables opacas)
 
-### #8 feat/stylist-estrutura — Casca estrutural da /stylist
+### #8 + #10 feat/stylist — Página /stylist CMS-driven (na main)
 
-- `app/stylist/page.tsx` — 6 blocos com placeholders explícitos; ISR `revalidate = 60`.
-- `Nav.tsx` — link "STYLIST" adicionado: desktop (ao lado de Categorias) + mobile.
+- PR #8 (`feat/stylist-estrutura`) — criou a casca estrutural com placeholders e o link
+  "STYLIST" no Nav (desktop e mobile). Mergeado primeiro.
+- PR #9 (`feat/stylist-cms`) — reescreveu a page e o schema. Mergeado em
+  `feat/stylist-estrutura` (base original da branch).
+- PR #10 (`feat/stylist-cms → main`) — levou a versão CMS-driven diretamente para main,
+  substituindo completamente a casca do #8. Verificado: grep limpo, build limpo, browser
+  sem nenhum `[PLACEHOLDER]`.
 
-### feat/stylist-cms — /stylist editável via Sanity (sobre #8)
-
-- `sanity/schemas/stylistProfile.ts` — adicionados: `tagline` (frase do hero, Q1);
-  `sections[]` (array de objeto com `eyebrow`, `title`, `body`, `image`, `layout`);
-  removido `bio` (não tinha uso). Preview no Studio mostra título e layout de cada seção.
-- `app/stylist/page.tsx` — reescrito para ler `stylistProfile` (name, tagline, photo,
-  sections[]) + `siteSettings.whatsappNumber`. Hero sempre renderiza (com "Em breve" se
-  vazio). Seções por `.map()` com switch de layout:
-  - `padrao`: texto, fundo claro, suporta blockquote com borda dourada.
-  - `foto-esquerda` / `foto-direita`: foto + texto lado a lado (fundo sand-100).
-  - `etapas`: fundo espresso, lista ordenada com número em Cormorant dourado.
-  - `destaque-escuro`: fundo sand-200, texto centralizado italic + botão WhatsApp.
-- Estado amigável: sem profile → hero mostra "Em breve"; sections vazio → só hero.
-- Imagens via `urlFor().width().height().fit('crop').auto('format').url()` (regra PROGRESS).
-- WhatsApp: número de `siteSettings` (não de `stylistProfile`).
-- Build limpo; `/stylist` estático com ISR 1 min.
+**Estado final na main:**
+- `sanity/schemas/stylistProfile.ts` — `name`, `tagline`, `photo`, `sections[]`
+  (eyebrow / title / body / image / layout), `whatsappNumber`, `bookingMessage`.
+  Campo `bio` removido (não tinha uso).
+- `app/stylist/page.tsx` — hero lê `name`/`tagline`/`photo` do Sanity; seções
+  dinâmicas via `sections[].map()` com 5 layouts visuais: `padrao`, `foto-esquerda`,
+  `foto-direita`, `etapas` (espresso), `destaque-escuro` (sand-200 + botão WA).
+  Estado amigável se `stylistProfile` vazio (nunca 404).
+- ISR 60 s; imagens via `urlFor()`; WA via `siteSettings`.
 
 ### #7 feat/home — Home real
 
@@ -131,10 +130,10 @@ bug já resolvido._
 
 ### Bloqueado por conteúdo externo
 
-- **Página `/stylist`** — arquitetura CMS completa (feat/stylist-cms). Aguarda
-  devolutiva da personal stylist: respostas Q1-Q7 + 1-2 fotos. A dona cria as seções
-  diretamente no Studio (singleton `stylistProfile`). Q6 (o que ela NÃO faz) vai no
-  body do bloco "Pra quem é" (layout padrão), sem seção própria.
+- **Conteúdo da /stylist** — arquitetura pronta. A dona cria as seções no Studio
+  (singleton "Perfil da Estilista"): preenche nome, tagline, foto, e adiciona seções
+  escolhendo o layout. Aguarda devolutiva: respostas Q1-Q7 + 1-2 fotos.
+  Q6 (o que ela NÃO faz) vai no body do bloco "Pra quem é" (layout padrão).
 - **Coleção por tag** (`/colecao/[tag]` além de novidades) — depende de cadastrar
   peças com tags no Studio. Sem conteúdo, a página abre vazia.
 
@@ -143,6 +142,10 @@ bug já resolvido._
 - Remover `app/teste-img/` (página de debug, criada no setup; não pode ir para produção).
 - Trocar "PERSONAL STYLIST" (inglês) no hero por termo em PT, se decidido.
 - **feat/seo** — `sitemap.ts`, metadados/título por página, Open Graph, favicon.
+- **Dívida técnica — layout `etapas`:** a dona precisa digitar a lista numerada
+  manualmente no PortableText (1. texto 2. texto…). Se a resposta da Q4 vier com
+  muitas etapas ou com subestrutura, migrar o campo `body` para um array aninhado
+  `{ título, descrição }` dentro da section do tipo `etapas`.
 
 ### Só no fim (deploy)
 
