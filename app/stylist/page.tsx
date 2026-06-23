@@ -286,7 +286,7 @@ function DestaqueSection({ section, waHref }: { section: StylistSection; waHref:
       <div className="max-w-2xl mx-auto text-center">
         <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
         {section.body && (
-          <div className="[&_p]:font-display [&_p]:text-2xl md:[&_p]:text-3xl [&_p]:font-light [&_p]:italic [&_p]:text-ink/60 [&_p]:leading-snug [&_p]:mb-6 mb-10">
+          <div className="[&_p]:font-display [&_p]:text-2xl md:[&_p]:text-3xl [&_p]:font-light [&_p]:italic [&_p]:text-ink/65 [&_p]:leading-snug [&_p]:mb-6 mb-10">
             <PortableText value={section.body} />
           </div>
         )}

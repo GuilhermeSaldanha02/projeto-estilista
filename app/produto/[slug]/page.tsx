@@ -158,7 +158,7 @@ export default async function ProdutoPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Breadcrumb */}
-      <nav aria-label="Navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink/40">
+      <nav aria-label="Navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink/65">
         <Link href="/" className="hover:text-ink transition-colors">Início</Link>
         {product.category && (
           <>
@@ -192,7 +192,7 @@ export default async function ProdutoPage({ params }: Props) {
             </div>
           ) : (
             <div className="aspect-[3/4] bg-sand-100 flex items-center justify-center">
-              <span className="font-sans text-[10px] tracking-widest uppercase text-ink/30">
+              <span className="font-sans text-[10px] tracking-widest uppercase text-ink/65">
                 Foto em breve
               </span>
             </div>
@@ -223,7 +223,7 @@ export default async function ProdutoPage({ params }: Props) {
           {/* Cabeçalho */}
           <div>
             {product.category && (
-              <p className="font-sans text-[10px] tracking-widest uppercase text-ink/45 mb-2">
+              <p className="font-sans text-[10px] tracking-widest uppercase text-ink/65 mb-2">
                 {product.category.title}
               </p>
             )}
@@ -264,7 +264,7 @@ export default async function ProdutoPage({ params }: Props) {
           {product.category && (
             <Link
               href={`/categoria/${product.category.slug}`}
-              className="font-sans text-[10px] tracking-widest uppercase text-ink/40 hover:text-ink transition-colors mt-2"
+              className="font-sans text-[10px] tracking-widest uppercase text-ink/65 hover:text-ink transition-colors mt-2"
             >
               ← Ver mais em {product.category.title}
             </Link>

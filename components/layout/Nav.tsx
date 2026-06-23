@@ -47,7 +47,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         {/* Desktop: link Stylist */}
         <Link
           href="/stylist"
-          className="hidden md:block text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2 mr-6"
+          className="hidden md:block text-cream-text/85 hover:text-cream-text font-sans text-[10px] tracking-widest uppercase transition-colors py-2 mr-6"
           onClick={() => setMegaOpen(false)}
         >
           Stylist
@@ -65,7 +65,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
               aria-haspopup="true"
               aria-expanded={megaOpen}
               onFocus={openMega}
-              className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2"
+              className="text-cream-text/85 hover:text-cream-text font-sans text-[10px] tracking-widest uppercase transition-colors py-2"
             >
               Categorias
             </button>
@@ -75,7 +75,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
               <div
                 role="navigation"
                 aria-label="Categorias"
-                className="fixed inset-x-0 top-[72px] z-40 flex bg-espresso border-t border-dourado/25 shadow-2xl"
+                className="fixed inset-x-0 top-[72px] z-50 flex bg-espresso border-t border-dourado/25 shadow-2xl"
                 onMouseEnter={openMega}
                 onMouseLeave={closeMega}
               >
@@ -85,7 +85,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                     <Link
                       key={cat._id}
                       href={`/categoria/${cat.slug}`}
-                      className="text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 font-sans text-sm tracking-wide uppercase transition-opacity outline-none focus-visible:underline"
+                      className="text-cream-text/90 hover:text-cream-text focus:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors outline-none focus-visible:underline"
                       onClick={() => setMegaOpen(false)}
                     >
                       {cat.title}
