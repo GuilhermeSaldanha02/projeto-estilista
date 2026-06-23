@@ -139,7 +139,6 @@ bug já resolvido._
 
 ### Independente — pode fazer a qualquer momento
 
-- Remover `app/teste-img/` (página de debug, criada no setup; não pode ir para produção).
 - Trocar "PERSONAL STYLIST" (inglês) no hero por termo em PT, se decidido.
 - **feat/seo** — `sitemap.ts`, metadados/título por página, Open Graph, favicon.
 - **Dívida técnica — layout `etapas`:** a dona precisa digitar a lista numerada
