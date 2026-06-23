@@ -90,7 +90,7 @@ export default async function CategoriaPage({ params }: Props) {
 function EmBreve({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <main className="min-h-[60vh] flex flex-col items-center justify-center text-center px-5">
-      <p className="font-sans text-[10px] tracking-widest uppercase text-ink/40 mb-4">
+      <p className="font-sans text-[10px] tracking-widest uppercase text-ink/65 mb-4">
         Estilista
       </p>
       <h1 className="font-display text-3xl md:text-4xl font-light text-ink mb-3">{title}</h1>

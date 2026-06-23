@@ -20,6 +20,19 @@
   --ink:        #1A1A1A;
   --cream-text: #F4EFE6;
 
+  /* Canais RGB para o modificador /N do Tailwind (valores idênticos acima) */
+  --sand-50-rgb:         244 239 230;
+  --sand-100-rgb:        237 227 210;
+  --sand-200-rgb:        231 219 200;
+  --sand-300-rgb:        220 203 176;
+  --espresso-rgb:        36 28 23;
+  --esmeralda-rgb:       11 93 70;
+  --esmeralda-light-rgb: 29 154 114;
+  --bordo-rgb:           123 30 58;
+  --dourado-rgb:         194 161 77;
+  --ink-rgb:             26 26 26;
+  --cream-text-rgb:      244 239 230;
+
   /* Fontes */
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }

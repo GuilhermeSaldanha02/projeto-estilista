@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-23 (feat/seo — PR #12 aberto)_
+_Última atualização: 2026-06-23 (branch fix/nav-contraste-alinhamento — PR aberto, aguarda revisão visual)_
 
 ---
 
@@ -89,11 +89,11 @@ bug já resolvido._
 - Importa `ProductCard` existente; mesmo grid; página "em breve" se vazia
 - Elimina o 404 do link "Novidades" no header
 
-### #6 fix/nav-contraste — Contraste do Nav (WCAG AA)
+### #6 fix/nav-contraste — Contraste do Nav (WCAG AA) — PALIATIVO, SUBSTITUÍDO
 
-- Gatilho e links do mega-menu estavam quase invisíveis em repouso (opacidade baixa
-  sobre espresso). Corrigido com `opacity-85/90` (utility nativa — o modificador
-  `/N` do Tailwind não funciona com cores definidas como CSS variables opacas)
+- Gatilho e links do mega-menu desktop estavam quase invisíveis em repouso.
+  Corrigido com `opacity-85/90` como contorno temporário.
+  ⚠️ Esta regra de "usar opacity- em vez de /N" foi REVOGADA pelo fix/#14 abaixo.
 
 ### #8 + #10 feat/stylist — Página /stylist CMS-driven (na main)
 
@@ -115,6 +115,47 @@ bug já resolvido._
   Estado amigável se `stylistProfile` vazio (nunca 404).
 - ISR 60 s; imagens via `urlFor()`; WA via `siteSettings`.
 
+### fix/nav-contraste-alinhamento — Tokens RGB + alinhamento + WCAG AA (em revisão)
+
+**Bug 1 — raiz dos tokens:** `tailwind.config.ts` redefinido de `var(--token)` para
+`rgb(var(--token-rgb) / <alpha-value>)`. `globals.css` ganhou as variáveis `--token-rgb`
+com canais R G B separados (hex original preservado para uso CSS direto).
+O modificador `/N` agora gera CSS válido em TODO o projeto (~45 ocorrências, 7 arquivos).
+O contorno `opacity-85/90` do PR #6 foi normalizado para `/85`/`/90` (consistência).
+
+**Bug 2 — mega-menu desktop:** z-index corrigido de `z-40` para `z-50` (mesmo nível
+do header), eliminando o encobrimento do painel pelo stacking context do header.
+
+**Regra revogada:** ~~"não use /N com CSS vars"~~ — `/N` agora funciona. O fix foi
+na raiz (tokens com `<alpha-value>`), não paliativo. Onde havia `opacity-N` como
+contorno, pode (e deve) usar `/N` diretamente.
+
+**WCAG AA — itens corrigidos neste PR** (valores que reprovavam 4,5:1 para texto pequeno):
+
+| Arquivo | Elemento | Antigo → Novo | Contraste |
+|---|---|---|---|
+| ProductCard.tsx:42 | "Foto em breve" (placeholder) | `/30` → `/65` | 1,85:1 → 4,77:1 ✓ |
+| ProductCard.tsx:55 | preço do produto | `/60` → `/65` | 4,34:1 → 4,77:1 ✓ |
+| produto/[slug]/page.tsx:195 | "Foto em breve" (produto) | `/30` → `/65` | 1,85:1 → 4,92:1 ✓ |
+| produto/[slug]/page.tsx:161 | breadcrumb | `/40` → `/65` | 2,40:1 → 4,77:1 ✓ |
+| produto/[slug]/page.tsx:226 | label categoria | `/45` → `/65` | 2,70:1 → 4,77:1 ✓ |
+| produto/[slug]/page.tsx:267 | "← Voltar" | `/40` → `/65` | 2,40:1 → 4,77:1 ✓ |
+| categoria/[slug]/page.tsx:93 | label "ESTILISTA" | `/40` → `/65` | 2,40:1 → 4,77:1 ✓ |
+| stylist/page.tsx:289 | chamada final (PortableText) | `/60` → `/65` | 4,10:1 → 4,77:1 ✓ |
+
+**Itens deixados para o Impeccable (não alterados):**
+- `Footer.tsx:8` — `text-cream-text/40` em espresso (3,5:1). Era invisível antes do fix de raiz; agora visível mas abaixo de AA. Caso herdado, decisão de polish.
+- Todas as linhas decorativas `bg-dourado/N` — ornamentos sem texto, sem alvo WCAG.
+
+### #7 feat/home — Home real
+
+- `app/page.tsx` substituiu a tela de teste. 3 blocos, ISR.
+- **Hero:** vídeo `/hero.mp4` + poster, `autoPlay loop muted playsInline`,
+  `prefers-reduced-motion`, gradiente para legibilidade, texto/CTAs à esquerda
+- **Novidades:** `ProductCard` + GROQ `[0...8]` + link "ver todas"
+- **Personal Stylist:** seção com texto PROVISÓRIO + botão de agendamento.
+  É um teaser — o conteúdo real vai na futura página `/stylist`.
+
 ### #12 feat/seo — SEO técnico
 
 - `app/robots.ts` — bloqueia `/studio`, aponta para `/sitemap.xml`
@@ -130,15 +171,6 @@ bug já resolvido._
 - **FAVICON** — aguarda ícone de marca da dona
 - **OG /stylist** — pronto quando Sanity tiver foto da stylist cadastrada
 - **`NEXT_PUBLIC_SITE_URL`** — deve ser configurado na Vercel no momento do deploy
-
-### #7 feat/home — Home real
-
-- `app/page.tsx` substituiu a tela de teste. 3 blocos, ISR.
-- **Hero:** vídeo `/hero.mp4` + poster, `autoPlay loop muted playsInline`,
-  `prefers-reduced-motion`, gradiente para legibilidade, texto/CTAs à esquerda
-- **Novidades:** `ProductCard` + GROQ `[0...8]` + link "ver todas"
-- **Personal Stylist:** seção com texto PROVISÓRIO + botão de agendamento.
-  É um teaser — o conteúdo real vai na futura página `/stylist`.
 
 ---
 
