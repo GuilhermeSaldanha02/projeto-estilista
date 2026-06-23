@@ -44,6 +44,15 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
           {mobileOpen ? <XIcon /> : <MenuIcon />}
         </button>
 
+        {/* Desktop: link Stylist */}
+        <Link
+          href="/stylist"
+          className="hidden md:block text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2 mr-6"
+          onClick={() => setMegaOpen(false)}
+        >
+          Stylist
+        </Link>
+
         {/* Desktop: trigger do mega-menu */}
         {categories.length > 0 && (
           <div
@@ -164,6 +173,16 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 >
                   Novidades
                   <span className="text-dourado/45 text-xs" aria-hidden="true">→</span>
+                </Link>
+              </li>
+              <li className="border-t border-white/5">
+                <Link
+                  href="/stylist"
+                  className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Stylist
+                  <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
                 </Link>
               </li>
             </ul>
