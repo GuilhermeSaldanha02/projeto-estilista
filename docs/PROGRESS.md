@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-23 (feat/seo — PR #12 aberto)_
+_Última atualização: 2026-06-23 (main — merge PR #12 feat/seo)_
 
 ---
 
@@ -115,6 +115,15 @@ bug já resolvido._
   Estado amigável se `stylistProfile` vazio (nunca 404).
 - ISR 60 s; imagens via `urlFor()`; WA via `siteSettings`.
 
+### #7 feat/home — Home real
+
+- `app/page.tsx` substituiu a tela de teste. 3 blocos, ISR.
+- **Hero:** vídeo `/hero.mp4` + poster, `autoPlay loop muted playsInline`,
+  `prefers-reduced-motion`, gradiente para legibilidade, texto/CTAs à esquerda
+- **Novidades:** `ProductCard` + GROQ `[0...8]` + link "ver todas"
+- **Personal Stylist:** seção com texto PROVISÓRIO + botão de agendamento.
+  É um teaser — o conteúdo real vai na futura página `/stylist`.
+
 ### #12 feat/seo — SEO técnico
 
 - `app/robots.ts` — bloqueia `/studio`, aponta para `/sitemap.xml`
@@ -130,15 +139,6 @@ bug já resolvido._
 - **FAVICON** — aguarda ícone de marca da dona
 - **OG /stylist** — pronto quando Sanity tiver foto da stylist cadastrada
 - **`NEXT_PUBLIC_SITE_URL`** — deve ser configurado na Vercel no momento do deploy
-
-### #7 feat/home — Home real
-
-- `app/page.tsx` substituiu a tela de teste. 3 blocos, ISR.
-- **Hero:** vídeo `/hero.mp4` + poster, `autoPlay loop muted playsInline`,
-  `prefers-reduced-motion`, gradiente para legibilidade, texto/CTAs à esquerda
-- **Novidades:** `ProductCard` + GROQ `[0...8]` + link "ver todas"
-- **Personal Stylist:** seção com texto PROVISÓRIO + botão de agendamento.
-  É um teaser — o conteúdo real vai na futura página `/stylist`.
 
 ---
 
