@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-22 (feat/stylist-estrutura)_
+_Última atualização: 2026-06-22 (feat/stylist-cms)_
 
 ---
 
@@ -97,15 +97,24 @@ bug já resolvido._
 ### #8 feat/stylist-estrutura — Casca estrutural da /stylist
 
 - `app/stylist/page.tsx` — 6 blocos com placeholders explícitos; ISR `revalidate = 60`.
-- Bloco 1: placeholder de foto (cinza 3:4), `[NOME DA STYLIST]`, `[DEFINIÇÃO — Q1]` em Cormorant italic, botão "AGENDAR HORÁRIO" esmeralda funcional.
-- Bloco 2: `[PRA QUEM É — Q2]`.
-- Bloco 3: `[HISTÓRIA — Q5]` + 2ª placeholder de foto opcional.
-- Bloco 4: 4 etapas numeradas `[ETAPA N — Q4]` em fundo espresso.
-- Bloco 5: `[O QUE MUDA — Q3]` + `[SENSAÇÃO — Q7]` em quote com borda dourada.
-- Bloco 6: `[CHAMADA FINAL]` + botão "AGENDAR HORÁRIO" esmeralda funcional.
-- Botão WhatsApp real: `wa.me/{whatsappNumber}?text=Oi!...`, oculto se número vazio.
-- `Nav.tsx` — link "STYLIST" adicionado: desktop (ao lado de Categorias) + mobile (lista vertical). Mesmo estilo opacity-85/hover:opacity-100 dos demais.
-- **Aguarda:** conteúdo real da stylist (entrevista Q1-Q7 + fotos).
+- `Nav.tsx` — link "STYLIST" adicionado: desktop (ao lado de Categorias) + mobile.
+
+### feat/stylist-cms — /stylist editável via Sanity (sobre #8)
+
+- `sanity/schemas/stylistProfile.ts` — adicionados: `tagline` (frase do hero, Q1);
+  `sections[]` (array de objeto com `eyebrow`, `title`, `body`, `image`, `layout`);
+  removido `bio` (não tinha uso). Preview no Studio mostra título e layout de cada seção.
+- `app/stylist/page.tsx` — reescrito para ler `stylistProfile` (name, tagline, photo,
+  sections[]) + `siteSettings.whatsappNumber`. Hero sempre renderiza (com "Em breve" se
+  vazio). Seções por `.map()` com switch de layout:
+  - `padrao`: texto, fundo claro, suporta blockquote com borda dourada.
+  - `foto-esquerda` / `foto-direita`: foto + texto lado a lado (fundo sand-100).
+  - `etapas`: fundo espresso, lista ordenada com número em Cormorant dourado.
+  - `destaque-escuro`: fundo sand-200, texto centralizado italic + botão WhatsApp.
+- Estado amigável: sem profile → hero mostra "Em breve"; sections vazio → só hero.
+- Imagens via `urlFor().width().height().fit('crop').auto('format').url()` (regra PROGRESS).
+- WhatsApp: número de `siteSettings` (não de `stylistProfile`).
+- Build limpo; `/stylist` estático com ISR 1 min.
 
 ### #7 feat/home — Home real
 
@@ -122,9 +131,10 @@ bug já resolvido._
 
 ### Bloqueado por conteúdo externo
 
-- **Página `/stylist`** — casca estrutural criada (#8). Aguarda devolutiva da
-  personal stylist: respostas Q1-Q7 + 1-2 fotos reais para preencher os placeholders.
-  Q6 (o que ela NÃO faz) tempera os blocos 2 e 4, sem bloco próprio.
+- **Página `/stylist`** — arquitetura CMS completa (feat/stylist-cms). Aguarda
+  devolutiva da personal stylist: respostas Q1-Q7 + 1-2 fotos. A dona cria as seções
+  diretamente no Studio (singleton `stylistProfile`). Q6 (o que ela NÃO faz) vai no
+  body do bloco "Pra quem é" (layout padrão), sem seção própria.
 - **Coleção por tag** (`/colecao/[tag]` além de novidades) — depende de cadastrar
   peças com tags no Studio. Sem conteúdo, a página abre vazia.
 
