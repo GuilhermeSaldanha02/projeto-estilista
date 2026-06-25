@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-23 (branch fix/nav-contraste-alinhamento — PR aberto, aguarda revisão visual)_
+_Última atualização: 2026-06-25_
 
 ---
 
@@ -11,9 +11,9 @@ Piloto com a interface essencialmente completa. Vitrine (categoria) + página de
 produto + novidades + home com hero em vídeo. Venda e agendamento fecham via
 WhatsApp. A dona gerencia conteúdo pelo Sanity Studio em `/studio`.
 
-O que falta antes de entregar: polimentos finais e deploy. A página `/stylist`
-tem arquitetura CMS completa — aguarda só o conteúdo real (questionário + fotos)
-a ser cadastrado pela dona no Studio. Ver "Pendências" no fim.
+O que falta antes de entregar: rebrand LT Studio (bloqueado por logo — ver Pendências),
+cadastrar o conteúdo da `/stylist` no Studio (desbloqueado — respostas chegaram),
+polimentos finais e deploy.
 
 ---
 
@@ -93,7 +93,7 @@ bug já resolvido._
 
 - Gatilho e links do mega-menu desktop estavam quase invisíveis em repouso.
   Corrigido com `opacity-85/90` como contorno temporário.
-  ⚠️ Esta regra de "usar opacity- em vez de /N" foi REVOGADA pelo fix/#14 abaixo.
+  ⚠️ Esta regra de "usar opacity- em vez de /N" foi REVOGADA pelo PR #13 abaixo.
 
 ### #8 + #10 feat/stylist — Página /stylist CMS-driven (na main)
 
@@ -115,7 +115,7 @@ bug já resolvido._
   Estado amigável se `stylistProfile` vazio (nunca 404).
 - ISR 60 s; imagens via `urlFor()`; WA via `siteSettings`.
 
-### fix/nav-contraste-alinhamento — Tokens RGB + alinhamento + WCAG AA (em revisão)
+### #13 fix/nav-contraste-alinhamento — Tokens RGB + alinhamento + WCAG AA ✓ mergeado
 
 **Bug 1 — raiz dos tokens:** `tailwind.config.ts` redefinido de `var(--token)` para
 `rgb(var(--token-rgb) / <alpha-value>)`. `globals.css` ganhou as variáveis `--token-rgb`
@@ -178,20 +178,40 @@ contorno, pode (e deve) usar `/N` diretamente.
 
 ### Bloqueado por conteúdo externo
 
-- **Conteúdo da /stylist** — arquitetura pronta. A dona cria as seções no Studio
-  (singleton "Perfil da Estilista"): preenche nome, tagline, foto, e adiciona seções
-  escolhendo o layout. Aguarda devolutiva: respostas Q1-Q7 + 1-2 fotos.
-  Q6 (o que ela NÃO faz) vai no body do bloco "Pra quem é" (layout padrão).
+- **Rebrand para LT STUDIO** — BLOQUEADO. A stylist está recriando a logo e o
+  rebrand inteiro depende dela. Está tudo desenhado e acordado, falta só o asset:
+  - Logo vai no header À ESQUERDA; links de nav ao CENTRO; WhatsApp à direita.
+  - O texto "ESTILISTA" é substituído: header → logo image; hero → texto "LT STUDIO".
+  - Rename "Estilista" → "LT Studio" em 14 ocorrências em 8 arquivos mapeadas:
+    `layout.tsx`, `page.tsx`, `categoria/[slug]`, `colecao/novidades`, `produto/[slug]`,
+    `stylist/page.tsx`, `Footer.tsx`, `Nav.tsx`. **NÃO trocar:** `package.json`,
+    `projectId` Sanity, slugs de URL.
+  - O alinhamento do mega-menu (PR #14, fechado sem merge) será refeito dentro do
+    rebrand, pois o header novo muda o layout inteiro.
+  - **Asset pendente da designer:** logo LT em SVG vetorial, fundo transparente, em
+    CREME (`--cream-text`, para o header espresso) + versão escura (para fundos claros).
+    A versão PNG dourada anterior foi DESCARTADA (texturizada, com halo, não vetorial).
+  - **IMPORTANTE:** o rename de texto NÃO pode ser feito sem a logo — ficaria
+    "LT Studio" nos títulos e "Estilista"/sem-logo no header. O pacote é atômico.
 - **Coleção por tag** (`/colecao/[tag]` além de novidades) — depende de cadastrar
   peças com tags no Studio. Sem conteúdo, a página abre vazia.
+
+### A fazer (desbloqueado)
+
+- **Cadastrar conteúdo da /stylist no Studio** — respostas do questionário chegaram.
+  A arquitetura CMS (`stylistProfile` com `sections[]`) está pronta. Próximo passo:
+  abrir o Studio e criar as seções com os dados recebidos.
+  ⚠️ **Alerta de escopo:** a Q4 (como funciona) veio com **7 etapas**, e o layout
+  `etapas` foi projetado para 3-4. Confirmar antes de cadastrar: o layout aguenta 7
+  itens ou precisa do ajuste de dívida técnica (ver abaixo)?
 
 ### Independente — pode fazer a qualquer momento
 
 - Trocar "PERSONAL STYLIST" (inglês) no hero por termo em PT, se decidido.
-- **Dívida técnica — layout `etapas`:** a dona precisa digitar a lista numerada
-  manualmente no PortableText (1. texto 2. texto…). Se a resposta da Q4 vier com
-  muitas etapas ou com subestrutura, migrar o campo `body` para um array aninhado
-  `{ título, descrição }` dentro da section do tipo `etapas`.
+- **Dívida técnica — layout `etapas`:** a resposta da Q4 veio com 7 etapas (acima
+  do previsto). Se o layout atual não comportar bem, migrar o campo `body` para um
+  array aninhado `{ título, descrição }` dentro da section do tipo `etapas`. Decidir
+  antes de cadastrar o conteúdo da /stylist.
 
 ### Só no fim (deploy)
 
