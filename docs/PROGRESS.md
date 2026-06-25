@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-23 (branch fix/nav-contraste-alinhamento — PR aberto, aguarda revisão visual)_
+_Última atualização: 2026-06-25 (branch fix/mega-menu-alinhamento — aguarda validação visual em tela larga)_
 
 ---
 
@@ -187,6 +187,9 @@ contorno, pode (e deve) usar `/N` diretamente.
 
 ### Independente — pode fazer a qualquer momento
 
+- **Alinhamento do mega-menu DESKTOP:** ~~pendente~~ — corrigido na branch
+  `fix/mega-menu-alinhamento`, aguarda validação visual em tela larga (≥1440px).
+  Ver PR em revisão.
 - Trocar "PERSONAL STYLIST" (inglês) no hero por termo em PT, se decidido.
 - **Dívida técnica — layout `etapas`:** a dona precisa digitar a lista numerada
   manualmente no PortableText (1. texto 2. texto…). Se a resposta da Q4 vier com

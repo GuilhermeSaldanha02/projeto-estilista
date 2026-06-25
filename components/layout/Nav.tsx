@@ -70,42 +70,47 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
               Categorias
             </button>
 
-            {/* Mega-menu panel: fixo, span completo, acessível via teclado */}
+            {/* Mega-menu panel: fixo, fundo full-bleed, conteúdo no container do site */}
             {megaOpen && (
               <div
                 role="navigation"
                 aria-label="Categorias"
-                className="fixed inset-x-0 top-[72px] z-50 flex bg-espresso border-t border-dourado/25 shadow-2xl"
+                className="fixed inset-x-0 top-[72px] z-50 bg-espresso border-t border-dourado/25 shadow-2xl"
                 onMouseEnter={openMega}
                 onMouseLeave={closeMega}
               >
-                {/* Coluna de categorias */}
-                <div className="flex-1 px-10 py-8 grid grid-cols-2 gap-x-12 gap-y-4 max-w-lg">
-                  {categories.map(cat => (
+                {/* Container alinhado ao grid do site (max-w-7xl mx-auto) */}
+                <div className="max-w-7xl mx-auto w-full flex">
+
+                  {/* Coluna de categorias */}
+                  <div className="px-10 py-8 grid grid-cols-2 gap-x-12 gap-y-4 max-w-lg">
+                    {categories.map(cat => (
+                      <Link
+                        key={cat._id}
+                        href={`/categoria/${cat.slug}`}
+                        className="text-cream-text/90 hover:text-cream-text focus:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors outline-none focus-visible:underline"
+                        onClick={() => setMegaOpen(false)}
+                      >
+                        {cat.title}
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Bloco de destaque — usa token ink */}
+                  <div className="w-56 shrink-0 bg-ink flex flex-col items-center justify-center gap-4 py-12 px-6">
+                    <span className="font-sans text-[9px] text-dourado tracking-[0.3em] uppercase">
+                      Em destaque
+                    </span>
+                    <div className="w-6 h-px bg-dourado/40" />
                     <Link
-                      key={cat._id}
-                      href={`/categoria/${cat.slug}`}
-                      className="text-cream-text/90 hover:text-cream-text focus:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors outline-none focus-visible:underline"
+                      href="/colecao/novidades"
+                      className="font-display text-[1.4rem] font-light italic text-cream-text hover:text-dourado focus:text-dourado transition-colors text-center outline-none focus-visible:underline"
                       onClick={() => setMegaOpen(false)}
                     >
-                      {cat.title}
+                      Novidades
                     </Link>
-                  ))}
-                </div>
+                  </div>
 
-                {/* Bloco de destaque — usa token ink */}
-                <div className="w-56 shrink-0 bg-ink flex flex-col items-center justify-center gap-4 py-12 px-6">
-                  <span className="font-sans text-[9px] text-dourado tracking-[0.3em] uppercase">
-                    Em destaque
-                  </span>
-                  <div className="w-6 h-px bg-dourado/40" />
-                  <Link
-                    href="/colecao/novidades"
-                    className="font-display text-[1.4rem] font-light italic text-cream-text hover:text-dourado focus:text-dourado transition-colors text-center outline-none focus-visible:underline"
-                    onClick={() => setMegaOpen(false)}
-                  >
-                    Novidades
-                  </Link>
                 </div>
               </div>
             )}
