@@ -7,7 +7,7 @@ import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Estilista — Moda Feminina',
+  title: 'LT Studio — Moda Feminina',
   description:
     'Moda feminina com olhar de personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
 }
@@ -77,7 +77,7 @@ export default async function HomePage() {
               Personal Stylist
             </p>
             <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-light text-cream-text tracking-[0.2em] uppercase leading-none mb-5">
-              Estilista
+              LT Studio
             </h1>
             <p className="font-sans text-sm md:text-base text-cream-text tracking-wide leading-relaxed mb-8 max-w-xs opacity-90">
               Moda feminina com olhar de personal stylist

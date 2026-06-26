@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { NavCategory } from './Header'
 
 interface NavProps {
@@ -29,9 +30,13 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
   }
 
   return (
-    <div className="h-full grid grid-cols-[1fr_auto_1fr] items-center px-5 md:px-10">
+    /*
+     * Mobile:  grid-cols-[1fr_auto_1fr] → hamburger | logo (centro) | WA
+     * Desktop: grid-cols-[auto_1fr_auto] → logo (esq) | links (centro) | WA
+     */
+    <div className="h-full grid grid-cols-[1fr_auto_1fr] md:grid-cols-[auto_1fr_auto] items-center px-5 md:px-10 gap-x-6">
 
-      {/* ── LEFT: hamburger (mobile) | nav trigger (desktop) ── */}
+      {/* ── COL 1: mobile=hamburger, desktop=logo ── */}
       <div className="flex items-center">
 
         {/* Mobile: hambúrguer */}
@@ -44,85 +49,111 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
           {mobileOpen ? <XIcon /> : <MenuIcon />}
         </button>
 
-        {/* Desktop: link Stylist */}
+        {/* Desktop: logo à esquerda */}
         <Link
-          href="/stylist"
-          className="hidden md:block text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2 mr-6"
-          onClick={() => setMegaOpen(false)}
+          href="/"
+          className="hidden md:block hover:opacity-75 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4"
+          onClick={() => { setMobileOpen(false); setMegaOpen(false) }}
         >
-          Stylist
+          <Image
+            src="/logo-lt.png"
+            alt="LT Studio"
+            width={66}
+            height={36}
+            priority
+          />
         </Link>
-
-        {/* Desktop: trigger do mega-menu */}
-        {categories.length > 0 && (
-          <div
-            className="hidden md:block relative"
-            onMouseEnter={openMega}
-            onMouseLeave={closeMega}
-            onBlur={handleBlur}
-          >
-            <button
-              aria-haspopup="true"
-              aria-expanded={megaOpen}
-              onFocus={openMega}
-              className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2"
-            >
-              Categorias
-            </button>
-
-            {/* Mega-menu panel: fixo, span completo, acessível via teclado */}
-            {megaOpen && (
-              <div
-                role="navigation"
-                aria-label="Categorias"
-                className="fixed inset-x-0 top-[72px] z-40 flex bg-espresso border-t border-dourado/25 shadow-2xl"
-                onMouseEnter={openMega}
-                onMouseLeave={closeMega}
-              >
-                {/* Coluna de categorias */}
-                <div className="flex-1 px-10 py-8 grid grid-cols-2 gap-x-12 gap-y-4 max-w-lg">
-                  {categories.map(cat => (
-                    <Link
-                      key={cat._id}
-                      href={`/categoria/${cat.slug}`}
-                      className="text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 font-sans text-sm tracking-wide uppercase transition-opacity outline-none focus-visible:underline"
-                      onClick={() => setMegaOpen(false)}
-                    >
-                      {cat.title}
-                    </Link>
-                  ))}
-                </div>
-
-                {/* Bloco de destaque — usa token ink */}
-                <div className="w-56 shrink-0 bg-ink flex flex-col items-center justify-center gap-4 py-12 px-6">
-                  <span className="font-sans text-[9px] text-dourado tracking-[0.3em] uppercase">
-                    Em destaque
-                  </span>
-                  <div className="w-6 h-px bg-dourado/40" />
-                  <Link
-                    href="/colecao/novidades"
-                    className="font-display text-[1.4rem] font-light italic text-cream-text hover:text-dourado focus:text-dourado transition-colors text-center outline-none focus-visible:underline"
-                    onClick={() => setMegaOpen(false)}
-                  >
-                    Novidades
-                  </Link>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
-      {/* ── CENTER: Logo ── */}
-      <Link
-        href="/"
-        className="font-display text-2xl md:text-[1.75rem] font-light text-cream-text tracking-[0.25em] uppercase hover:opacity-70 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4"
-        onClick={() => { setMobileOpen(false); setMegaOpen(false) }}
-      >
-        Estilista
-      </Link>
+      {/* ── COL 2: mobile=logo (centralizada), desktop=links nav (centralizados) ── */}
+      <div className="flex items-center justify-center">
 
-      {/* ── RIGHT: WhatsApp ── */}
+        {/* Mobile: logo centralizada */}
+        <Link
+          href="/"
+          className="md:hidden hover:opacity-75 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4"
+          onClick={() => { setMobileOpen(false); setMegaOpen(false) }}
+        >
+          <Image
+            src="/logo-lt.png"
+            alt="LT Studio"
+            width={55}
+            height={30}
+            priority
+          />
+        </Link>
+
+        {/* Desktop: Stylist + Categorias */}
+        <div className="hidden md:flex items-center gap-8">
+          <Link
+            href="/stylist"
+            className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2"
+            onClick={() => setMegaOpen(false)}
+          >
+            Stylist
+          </Link>
+
+          {categories.length > 0 && (
+            <div
+              className="relative"
+              onMouseEnter={openMega}
+              onMouseLeave={closeMega}
+              onBlur={handleBlur}
+            >
+              <button
+                aria-haspopup="true"
+                aria-expanded={megaOpen}
+                onFocus={openMega}
+                className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2"
+              >
+                Categorias
+              </button>
+
+              {/* Mega-menu: colunas distribuídas sem vão */}
+              {megaOpen && (
+                <div
+                  role="navigation"
+                  aria-label="Categorias"
+                  className="fixed inset-x-0 top-[72px] z-40 flex bg-espresso border-t border-dourado/25 shadow-2xl"
+                  onMouseEnter={openMega}
+                  onMouseLeave={closeMega}
+                >
+                  {/* Categorias: flex-1 preenche todo espaço disponível, grid 3 colunas */}
+                  <div className="flex-1 px-10 py-8 grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+                    {categories.map(cat => (
+                      <Link
+                        key={cat._id}
+                        href={`/categoria/${cat.slug}`}
+                        className="text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 font-sans text-sm tracking-wide uppercase transition-opacity outline-none focus-visible:underline"
+                        onClick={() => setMegaOpen(false)}
+                      >
+                        {cat.title}
+                      </Link>
+                    ))}
+                  </div>
+
+                  {/* Bloco destaque */}
+                  <div className="w-56 shrink-0 bg-ink flex flex-col items-center justify-center gap-4 py-12 px-6">
+                    <span className="font-sans text-[9px] text-dourado tracking-[0.3em] uppercase">
+                      Em destaque
+                    </span>
+                    <div className="w-6 h-px bg-dourado/40" />
+                    <Link
+                      href="/colecao/novidades"
+                      className="font-display text-[1.4rem] font-light italic text-cream-text hover:text-dourado focus:text-dourado transition-colors text-center outline-none focus-visible:underline"
+                      onClick={() => setMegaOpen(false)}
+                    >
+                      Novidades
+                    </Link>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── COL 3: WhatsApp ── */}
       <div className="flex items-center justify-end">
         {waHref && (
           <a

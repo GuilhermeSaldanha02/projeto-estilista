@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     { slug }
   )
   return {
-    title: product ? `${product.title} — Estilista` : 'Peça — Estilista',
+    title: product ? `${product.title} — LT Studio` : 'Peça — LT Studio',
   }
 }
 
@@ -212,7 +212,7 @@ function PecaNaoEncontrada() {
   return (
     <main className="min-h-[60vh] flex flex-col items-center justify-center text-center px-5">
       <p className="font-sans text-[10px] tracking-widest uppercase text-ink/40 mb-4">
-        Estilista
+        LT Studio
       </p>
       <h1 className="font-display text-3xl md:text-4xl font-light text-ink mb-3">
         Peça não encontrada

@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-26 (feat/stylist-cards-e-contraste — fix campo items condicional)_
+_Última atualização: 2026-06-26 (feat/rebrand-lt-studio)_
 
 ---
 
@@ -176,14 +176,53 @@ Título do campo atualizado para "Itens dos cards". `Título` agora tem `require
 
 ---
 
+### feat/rebrand-lt-studio — Rebrand + fix números etapas
+
+**REBRAND "Estilista" → "LT Studio" (Plano A com logo de teste):**
+- Grep final: zero ocorrências de "Estilista" visível em app/ e components/
+- Trocado: metadata (title template `%s | LT Studio`), hero H1, eyebrows/aria-labels
+  de fallback nas páginas categoria/produto/novidades/stylist, Footer, Nav
+- NÃO trocado (intencional): package.json, projectId Sanity, slugs de URL,
+  nomes de variáveis, conteúdo do Sanity (gerido pela dona)
+- **Header:** logo `/logo-lt.png` substitui texto "ESTILISTA".
+  Desktop: logo esquerda (66×36px) | links centro | WA direita — grid `[auto_1fr_auto]`.
+  Mobile: hamburger esquerda | logo centro (55×30px) | WA direita — grid `[1fr_auto_1fr]`.
+  Mega-menu: removido `max-w-lg` da coluna de categorias, `grid-cols-2 lg:grid-cols-3`
+  distribui as categorias sem vão no centro da página.
+- **Footer:** logo `/logo-lt.png` (99×54px, opacity-80) sobre espresso, substituindo texto.
+  Escolha: logo em vez de texto puro — mais consistência com o header. A PNG pode ter
+  halo claro visível sobre o espresso (asset provisório — conferir visualmente).
+- **Favicon:** `app/icon.png` gerado via sharp: 48×48, fit contain, fundo espresso.
+  Next.js reconheceu automaticamente (aparece como rota `/icon.png` no build).
+
+**REBRAND — PENDENTE:**
+- Trocar `/public/logo-lt.png` pela logo DEFINITIVA da Luiza (SVG champagne + versão
+  escura para fundo espresso) quando ela entregar. Mesmo filename — troca automática.
+- Favicon definitivo a partir do SVG (ícone quadrado, sem halo).
+
+**Fix regressão — números do "Como funciona" (EtapasSection):**
+- Causa: `EtapasSection` renderizava números via `{index + 1}` em `listItem.number`
+  (funciona se conteúdo Sanity é lista numerada) mas `block.normal` não tinha número.
+  Se o conteúdo "Como funciona" foi gravado como parágrafos simples, os números sumiam.
+- Fix robusto: `block.normal` em `EtapasSection` agora usa CSS counter
+  (`[counter-increment:step]` + `before:content-[counter(step)]`).
+  Funciona tanto para listas numeradas (index+1 explícito) quanto para parágrafos.
+  Wrapper recebe `[counter-reset:step]` para garantir contagem do 1.
+- Texto alinhado à esquerda (`text-left`) explícito para eliminar ambiguidade visual.
+
+**POLISH VISUAL (cores, fontes, espaçamento, "cara de IA") = IMPECCABLE.**
+Etapa final, a rodar em sessão separada DEPOIS deste rebrand. NÃO fazer por prompt avulso.
+
+---
+
 ## Pendências
 
 ### Bloqueado por conteúdo externo
 
-- **Página `/stylist`** — arquitetura CMS completa (feat/stylist-cms). Aguarda
-  devolutiva da personal stylist: respostas Q1-Q7 + 1-2 fotos. A dona cria as seções
-  diretamente no Studio (singleton `stylistProfile`). Q6 (o que ela NÃO faz) vai no
-  body do bloco "Pra quem é" (layout padrão), sem seção própria.
+- **Página `/stylist`** — arquitetura CMS completa. Aguarda devolutiva da personal
+  stylist: respostas Q1-Q7 + 1-2 fotos. A dona cria as seções no Studio.
+- **Logo definitiva** — Luiza entrega SVG champagne + versão escura (para fundo espresso).
+  Trocar `public/logo-lt.png` + regenerar `app/icon.png` a partir do SVG.
 - **Coleção por tag** (`/colecao/[tag]` além de novidades) — depende de cadastrar
   peças com tags no Studio. Sem conteúdo, a página abre vazia.
 

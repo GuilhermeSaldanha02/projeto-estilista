@@ -13,7 +13,10 @@ const cormorant = Cormorant_Garamond({
 })
 
 export const metadata: Metadata = {
-  title: 'Estilista — Moda Feminina',
+  title: {
+    default: 'LT Studio — Moda Feminina',
+    template: '%s | LT Studio',
+  },
   description: 'Vitrine de moda feminina com personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
 }
 
