@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-22 (feat/stylist-cms)_
+_Última atualização: 2026-06-26 (feat/stylist-cards-e-contraste — fix campo items condicional)_
 
 ---
 
@@ -115,6 +115,55 @@ bug já resolvido._
 - Imagens via `urlFor().width().height().fit('crop').auto('format').url()` (regra PROGRESS).
 - WhatsApp: número de `siteSettings` (não de `stylistProfile`).
 - Build limpo; `/stylist` estático com ISR 1 min.
+
+### feat/stylist-cards-e-contraste — Layouts destaque-escuro e cards (sobre feat/stylist-cms)
+
+**Problema corrigido:** o layout `destaque-escuro` estava mal nomeado — usava fundo claro
+(sand-200). O nome sugeria escuro mas a implementação era clara. Corrigido com dois layouts
+distintos para o fecho da página (ritmo claro → escuro → claro).
+
+**Novos/renomeados layouts no schema e componente:**
+- `destaque-claro` _(novo valor, substitui `destaque-escuro` para novas seleções)_:
+  fundo sand-200, citação itálica, texto ink, botão WhatsApp — para "Vamos começar?".
+  Alias de compatibilidade: o valor antigo `destaque-escuro` ainda roteia para este
+  componente (`DestaqueClaroSection`) enquanto os docs do Sanity não forem atualizados.
+- `transformacao-escura` _(novo)_: fundo espresso, texto CREME em todo o wrapper
+  (não apenas `[&_p]` — cobre TODOS os tipos de bloco do PortableText, evitando o bug
+  de herança de cor escura). Sem botão WhatsApp. Para "O que muda".
+- `cards` _(novo)_: grid 2 col desktop / 1 col mobile, fundo claro (sand-50 por card),
+  texto ink, campo `items[]` no schema (array `{titulo, subtitulo}`). Para "Pra quem é".
+
+**Campo novo no schema:** `items[]` (objeto `cardItem` com `titulo` e `subtitulo`).
+Usado exclusivamente pelo layout `cards`. O campo `body` permanece disponível para os
+outros layouts.
+
+**Studio:** radio de layouts atualizado com 7 opções e labels claros.
+
+**⚠️ PENDENTE — recadastro no Studio (ação da dona):**
+1. Seção **"O que muda"** → selecionar layout **"Destaque escuro (fundo espresso, texto claro)"**
+   (`transformacao-escura`).
+2. Seção **"Vamos começar?"** → selecionar layout **"Destaque claro (citação, fundo areia)"**
+   (`destaque-claro`).
+3. Seção **"Pra quem é"** → selecionar layout **"Cards (grade de itens)"** (`cards`) e
+   preencher os 4 itens abaixo no campo "Itens (layout Cards)":
+   - Card 1: "Armário cheio, nada pra vestir" / "Você tem peças, mas sente que nunca acha o que combina."
+   - Card 2: "Uma fase nova" / "Novo trabalho, corpo que mudou, um recomeço que pede uma nova imagem."
+   - Card 3: "Sem tempo pra comprar" / "Quer se vestir melhor sem perder horas dentro de loja."
+   - Card 4: "Descobrir o próprio estilo" / "Encontrar o que tem a sua cara, de verdade."
+   **⚠️ Subtítulos são rascunho do Claude — PENDENTE de validação/revisão da stylist Luiza
+   antes de publicar como definitivos.**
+
+- Build limpo; `/stylist` com ISR 1 min. Validação visual aguarda a dona no browser
+  (desktop + mobile) após recadastrar as seções no Studio.
+
+**Bug corrigido (fix sobre feat/stylist-cards-e-contraste):** campo `items` estava
+declarado ANTES do campo `layout` no schema e sem a propriedade `hidden` condicional.
+Resultado: o campo sempre aparecia no Studio (para todos os layouts) acima do radio,
+em vez de aparecer apenas quando `layout === 'cards'` logo abaixo do radio.
+Correção: campo `items` movido para APÓS `layout`, adicionado
+`hidden: ({ parent }) => parent?.layout !== 'cards'`. Campo `body` ganhou
+`hidden: ({ parent }) => parent?.layout === 'cards'` para sumir quando irrelevante.
+Título do campo atualizado para "Itens dos cards". `Título` agora tem `required()`.
 
 ### #7 feat/home — Home real
 

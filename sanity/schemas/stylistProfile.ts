@@ -64,9 +64,10 @@ export const stylistProfile = defineType({
             defineField({
               name: 'body',
               title: 'Conteúdo',
-              description: 'Para o layout "Etapas", escreva uma lista ordenada (1. 2. 3…)',
+              description: 'Para o layout "Etapas", escreva uma lista ordenada (1. 2. 3…).',
               type: 'array',
               of: [{ type: 'block' }],
+              hidden: ({ parent }) => parent?.layout === 'cards',
             }),
             defineField({
               name: 'image',
@@ -92,10 +93,42 @@ export const stylistProfile = defineType({
                   { title: 'Foto à esquerda + texto à direita', value: 'foto-esquerda' },
                   { title: 'Texto à esquerda + foto à direita', value: 'foto-direita' },
                   { title: 'Etapas numeradas (fundo escuro)', value: 'etapas' },
-                  { title: 'Destaque final com botão WhatsApp', value: 'destaque-escuro' },
+                  { title: 'Destaque escuro (fundo espresso, texto claro)', value: 'transformacao-escura' },
+                  { title: 'Destaque claro (citação, fundo areia)', value: 'destaque-claro' },
+                  { title: 'Cards (grade de itens)', value: 'cards' },
                 ],
                 layout: 'radio',
               },
+            }),
+            defineField({
+              name: 'items',
+              title: 'Itens dos cards',
+              description: 'Cada item vira um card na grade. Arraste para reordenar.',
+              type: 'array',
+              hidden: ({ parent }) => parent?.layout !== 'cards',
+              of: [
+                defineArrayMember({
+                  type: 'object',
+                  name: 'cardItem',
+                  title: 'Card',
+                  preview: {
+                    select: { title: 'titulo', subtitle: 'subtitulo' },
+                  },
+                  fields: [
+                    defineField({
+                      name: 'titulo',
+                      title: 'Título',
+                      type: 'string',
+                      validation: (rule) => rule.required(),
+                    }),
+                    defineField({
+                      name: 'subtitulo',
+                      title: 'Subtítulo',
+                      type: 'string',
+                    }),
+                  ],
+                }),
+              ],
             }),
           ],
         }),
