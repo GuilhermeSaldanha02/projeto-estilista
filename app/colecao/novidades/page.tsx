@@ -6,8 +6,8 @@ import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Novidades — Estilista',
-  description: 'As peças mais recentes da Estilista, de todas as categorias.',
+  title: 'Novidades — LT Studio',
+  description: 'As peças mais recentes da LT Studio, de todas as categorias.',
 }
 
 const novidsQuery = `
@@ -26,7 +26,7 @@ export default async function NovidadesPage() {
     return (
       <main className="min-h-[60vh] flex flex-col items-center justify-center text-center px-5">
         <p className="font-sans text-[10px] tracking-widest uppercase text-ink/40 mb-4">
-          Estilista
+          LT Studio
         </p>
         <h1 className="font-display text-3xl md:text-4xl font-light text-ink mb-3">Novidades</h1>
         <p className="font-sans text-sm text-ink/60 mb-8 max-w-xs">
