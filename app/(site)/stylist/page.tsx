@@ -249,9 +249,6 @@ function EtapasSection({ section }: { section: StylistSection }) {
    *   + before:content-[counter(step)] — evita invisibilidade se o conteúdo
    *   não for formatado como lista ordenada no Studio
    */
-  const numSpanClass =
-    'font-display text-3xl font-light text-dourado/60 leading-none w-8 shrink-0 select-none'
-
   const components = {
     list: {
       number: ({ children }: { children: React.ReactNode }) => (
@@ -261,23 +258,16 @@ function EtapasSection({ section }: { section: StylistSection }) {
     listItem: {
       number: ({ children, index }: { children: React.ReactNode; index: number }) => (
         <li className="flex gap-6 items-start text-left">
-          <span aria-hidden className={numSpanClass}>{index + 1}</span>
+          <span
+            aria-hidden
+            className="font-display text-3xl font-light text-dourado/60 leading-none w-8 shrink-0 select-none"
+          >
+            {index + 1}
+          </span>
           <div className="font-sans text-sm text-cream-text/75 tracking-wide leading-relaxed flex-1">
             {children}
           </div>
         </li>
-      ),
-    },
-    block: {
-      /* Fallback: se o conteúdo for parágrafos normais em vez de lista numerada,
-         CSS counter garante que os números apareçam da mesma forma */
-      normal: ({ children }: { children: React.ReactNode }) => (
-        <div className="[counter-increment:step] flex gap-6 items-start text-left">
-          <span aria-hidden className={`before:content-[counter(step)] ${numSpanClass}`} />
-          <p className="font-sans text-sm text-cream-text/75 tracking-wide leading-relaxed flex-1">
-            {children}
-          </p>
-        </div>
       ),
     },
   }
@@ -297,7 +287,7 @@ function EtapasSection({ section }: { section: StylistSection }) {
         )}
         <div className="w-8 h-px bg-dourado/40 mb-10" />
         {section.body && (
-          <div className="[counter-reset:step] space-y-8">
+          <div className="space-y-8">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             <PortableText value={section.body} components={components as any} />
           </div>

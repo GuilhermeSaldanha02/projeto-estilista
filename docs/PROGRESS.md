@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-29 (merge main→feat/rebrand-lt-studio para unificar SEO + rebrand LT Studio)_
+_Última atualização: 2026-06-29 (fix etapas + isolamento /studio via route group)_
 
 ---
 
@@ -247,18 +247,24 @@ Título do campo atualizado para "Itens dos cards". `Título` agora tem `require
   escura para fundo espresso) quando ela entregar. Mesmo filename — troca automática.
 - Favicon definitivo a partir do SVG (ícone quadrado, sem halo).
 
-**Fix regressão — números do "Como funciona" (EtapasSection):**
-- Causa: `EtapasSection` renderizava números via `{index + 1}` em `listItem.number`
-  (funciona se conteúdo Sanity é lista numerada) mas `block.normal` não tinha número.
-  Se o conteúdo "Como funciona" foi gravado como parágrafos simples, os números sumiam.
-- Fix robusto: `block.normal` em `EtapasSection` agora usa CSS counter
-  (`[counter-increment:step]` + `before:content-[counter(step)]`).
-  Funciona tanto para listas numeradas (index+1 explícito) quanto para parágrafos.
-  Wrapper recebe `[counter-reset:step]` para garantir contagem do 1.
-- Texto alinhado à esquerda (`text-left`) explícito para eliminar ambiguidade visual.
+**Fix regressão — números do "Como funciona" (EtapasSection):** *(corrigido 2026-06-29)*
+- Causa real: `text-dourado/60` dependia de `--dourado-rgb` (padrão `/N` do PR#13).
+  O branch feat/rebrand-lt-studio não tinha esse PR ainda → cor transparente → números invisíveis.
+  Após merge do main (que incluiu PR#13), `text-dourado/60` passou a gerar CSS válido.
+- Fix adicional: removido override `block.normal` do EtapasSection — ele era chamado
+  DENTRO de cada list item, criando double-render (número do index+1 + número CSS counter).
+  Ficou apenas `list.number` + `listItem.number` com `{index + 1}`. Simples e correto.
+- REGRA: conteúdo "Como funciona" no Studio deve ser uma LISTA NUMERADA (não parágrafos).
+
+**Fix isolamento /studio:** *(corrigido 2026-06-29)*
+- Causa: `app/layout.tsx` raiz aplicava Header+Footer a TODAS as rotas, incluindo /studio.
+- Fix: route group `app/(site)/` — todas as páginas do site foram movidas para cá.
+  `app/(site)/layout.tsx` tem Header+Footer. `app/layout.tsx` ficou mínimo (fonts+body).
+  `/studio` herda só o root mínimo → Studio renderiza sem header/footer do site.
+- URLs não mudaram (route groups não adicionam segmentos à URL).
 
 **POLISH VISUAL (cores, fontes, espaçamento, "cara de IA") = IMPECCABLE.**
-Etapa final, a rodar em sessão separada DEPOIS deste rebrand. NÃO fazer por prompt avulso.
+Etapa final, a rodar em sessão separada. NÃO fazer por prompt avulso.
 
 ---
 
