@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: profile?.name ?? 'Stylist',
     description:
-      profile?.tagline ?? 'Conheça a personal stylist por trás da Estilista e agende seu atendimento.',
+      profile?.tagline ?? 'Conheça a personal stylist por trás da LT Studio e agende seu atendimento.',
   }
 }
 
@@ -23,13 +23,20 @@ type SanityImg = {
   hotspot?: { x: number; y: number }
 }
 
+type CardItem = {
+  _key: string
+  titulo: string
+  subtitulo: string
+}
+
 type StylistSection = {
   _key: string
   eyebrow?: string
   title?: string
   body?: PortableTextBlock[]
   image?: SanityImg
-  layout?: 'padrao' | 'foto-esquerda' | 'foto-direita' | 'etapas' | 'destaque-escuro'
+  items?: CardItem[]
+  layout?: 'padrao' | 'foto-esquerda' | 'foto-direita' | 'etapas' | 'destaque-escuro' | 'destaque-claro' | 'transformacao-escura' | 'cards'
 }
 
 type StylistProfile = {
@@ -49,6 +56,7 @@ const profileQuery = `*[_type == "stylistProfile"][0]{
     title,
     body,
     image { asset, alt },
+    items[] { _key, titulo, subtitulo },
     layout
   }
 }`
@@ -122,8 +130,13 @@ export default async function StylistPage() {
             return <FotoLadoSection key={section._key} section={section} reverse={true} />
           case 'etapas':
             return <EtapasSection key={section._key} section={section} />
-          case 'destaque-escuro':
-            return <DestaqueSection key={section._key} section={section} waHref={waHref} />
+          case 'transformacao-escura':
+            return <TransformacaoEscuraSection key={section._key} section={section} />
+          case 'destaque-claro':
+          case 'destaque-escuro': // alias de compatibilidade — docs Sanity antigos
+            return <DestaqueClaroSection key={section._key} section={section} waHref={waHref} />
+          case 'cards':
+            return <CardsSection key={section._key} section={section} />
           default:
             return <PadraoSection key={section._key} section={section} />
         }
@@ -229,29 +242,32 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
 
 /* ── Seção etapas numeradas (fundo espresso) ── */
 function EtapasSection({ section }: { section: StylistSection }) {
+  /*
+   * Números robustos para dois formatos de conteúdo Sanity:
+   * - Lista numerada (listType:'number'): listItem.number usa {index+1} explícito
+   * - Parágrafos normais (block.normal): CSS counter via [counter-increment:step]
+   *   + before:content-[counter(step)] — evita invisibilidade se o conteúdo
+   *   não for formatado como lista ordenada no Studio
+   */
   const components = {
     list: {
       number: ({ children }: { children: React.ReactNode }) => (
-        <ol className="space-y-8">{children}</ol>
+        <ol className="space-y-8 list-none p-0 m-0">{children}</ol>
       ),
     },
     listItem: {
       number: ({ children, index }: { children: React.ReactNode; index: number }) => (
-        <li className="flex gap-6 items-start">
-          <span className="font-display text-3xl font-light text-dourado/60 leading-none w-8 shrink-0 select-none">
+        <li className="flex gap-6 items-start text-left">
+          <span
+            aria-hidden
+            className="font-display text-3xl font-light text-dourado/60 leading-none w-8 shrink-0 select-none"
+          >
             {index + 1}
           </span>
           <div className="font-sans text-sm text-cream-text/75 tracking-wide leading-relaxed flex-1">
             {children}
           </div>
         </li>
-      ),
-    },
-    block: {
-      normal: ({ children }: { children: React.ReactNode }) => (
-        <p className="font-sans text-sm text-cream-text/75 tracking-wide leading-relaxed mb-4">
-          {children}
-        </p>
       ),
     },
   }
@@ -271,16 +287,18 @@ function EtapasSection({ section }: { section: StylistSection }) {
         )}
         <div className="w-8 h-px bg-dourado/40 mb-10" />
         {section.body && (
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          <PortableText value={section.body} components={components as any} />
+          <div className="space-y-8">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            <PortableText value={section.body} components={components as any} />
+          </div>
         )}
       </div>
     </section>
   )
 }
 
-/* ── Seção de destaque final com CTA ── */
-function DestaqueSection({ section, waHref }: { section: StylistSection; waHref: string | null }) {
+/* ── Destaque claro — citação itálica, fundo areia, botão WhatsApp (ex. "Vamos começar?") ── */
+function DestaqueClaroSection({ section, waHref }: { section: StylistSection; waHref: string | null }) {
   return (
     <section className="bg-sand-200 py-16 px-5" aria-label={section.eyebrow ?? section.title}>
       <div className="max-w-2xl mx-auto text-center">
@@ -291,6 +309,69 @@ function DestaqueSection({ section, waHref }: { section: StylistSection; waHref:
           </div>
         )}
         <WaButton waHref={waHref} large />
+      </div>
+    </section>
+  )
+}
+
+/* ── Destaque escuro — clímax da página, fundo espresso, todo texto em creme (ex. "O que muda") ── */
+function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
+  return (
+    <section className="bg-espresso py-16 px-5" aria-label={section.eyebrow ?? section.title}>
+      <div className="max-w-2xl mx-auto text-center">
+        {section.eyebrow && (
+          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-4">
+            {section.eyebrow}
+          </p>
+        )}
+        {section.title && (
+          <h2 className="font-display text-3xl md:text-4xl font-light text-cream-text tracking-wide mb-6">
+            {section.title}
+          </h2>
+        )}
+        <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
+        {section.body && (
+          /* text-cream-text no wrapper garante que TODOS os elementos filhos herdam a cor clara,
+             sem depender de seletores [&_p] que não cobrem listas nem outros tipos de bloco */
+          <div className="text-cream-text [&_p]:font-display [&_p]:text-xl md:[&_p]:text-2xl [&_p]:font-light [&_p]:italic [&_p]:leading-snug [&_p]:mb-4 [&_li]:font-sans [&_li]:text-sm [&_li]:leading-relaxed [&_li]:mb-2">
+            <PortableText value={section.body} />
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}
+
+/* ── Cards — grade de itens, fundo areia claro (ex. "Pra quem é") ── */
+function CardsSection({ section }: { section: StylistSection }) {
+  return (
+    <section className="py-16 px-5" aria-label={section.eyebrow ?? section.title}>
+      <div className="max-w-4xl mx-auto">
+        {section.eyebrow && (
+          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-4">
+            {section.eyebrow}
+          </p>
+        )}
+        {section.title && (
+          <h2 className="font-display text-3xl md:text-4xl font-light text-ink tracking-wide mb-4">
+            {section.title}
+          </h2>
+        )}
+        <div className="w-8 h-px bg-dourado/40 mb-10" />
+        {section.items && section.items.length > 0 && (
+          <ul className="grid grid-cols-1 md:grid-cols-2 gap-5 list-none p-0 m-0">
+            {section.items.map((item) => (
+              <li key={item._key} className="bg-sand-50 border border-sand-300/40 px-7 py-6">
+                <p className="font-display text-lg font-light text-ink tracking-wide mb-2">
+                  {item.titulo}
+                </p>
+                <p className="font-sans text-sm text-ink/65 tracking-wide leading-relaxed">
+                  {item.subtitulo}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   )

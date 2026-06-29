@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-23 (branch fix/nav-contraste-alinhamento — PR aberto, aguarda revisão visual)_
+_Última atualização: 2026-06-29 (fix etapas + isolamento /studio via route group)_
 
 ---
 
@@ -147,6 +147,55 @@ contorno, pode (e deve) usar `/N` diretamente.
 - `Footer.tsx:8` — `text-cream-text/40` em espresso (3,5:1). Era invisível antes do fix de raiz; agora visível mas abaixo de AA. Caso herdado, decisão de polish.
 - Todas as linhas decorativas `bg-dourado/N` — ornamentos sem texto, sem alvo WCAG.
 
+### feat/stylist-cards-e-contraste — Layouts destaque-escuro e cards (sobre feat/stylist-cms)
+
+**Problema corrigido:** o layout `destaque-escuro` estava mal nomeado — usava fundo claro
+(sand-200). O nome sugeria escuro mas a implementação era clara. Corrigido com dois layouts
+distintos para o fecho da página (ritmo claro → escuro → claro).
+
+**Novos/renomeados layouts no schema e componente:**
+- `destaque-claro` _(novo valor, substitui `destaque-escuro` para novas seleções)_:
+  fundo sand-200, citação itálica, texto ink, botão WhatsApp — para "Vamos começar?".
+  Alias de compatibilidade: o valor antigo `destaque-escuro` ainda roteia para este
+  componente (`DestaqueClaroSection`) enquanto os docs do Sanity não forem atualizados.
+- `transformacao-escura` _(novo)_: fundo espresso, texto CREME em todo o wrapper
+  (não apenas `[&_p]` — cobre TODOS os tipos de bloco do PortableText, evitando o bug
+  de herança de cor escura). Sem botão WhatsApp. Para "O que muda".
+- `cards` _(novo)_: grid 2 col desktop / 1 col mobile, fundo claro (sand-50 por card),
+  texto ink, campo `items[]` no schema (array `{titulo, subtitulo}`). Para "Pra quem é".
+
+**Campo novo no schema:** `items[]` (objeto `cardItem` com `titulo` e `subtitulo`).
+Usado exclusivamente pelo layout `cards`. O campo `body` permanece disponível para os
+outros layouts.
+
+**Studio:** radio de layouts atualizado com 7 opções e labels claros.
+
+**⚠️ PENDENTE — recadastro no Studio (ação da dona):**
+1. Seção **"O que muda"** → selecionar layout **"Destaque escuro (fundo espresso, texto claro)"**
+   (`transformacao-escura`).
+2. Seção **"Vamos começar?"** → selecionar layout **"Destaque claro (citação, fundo areia)"**
+   (`destaque-claro`).
+3. Seção **"Pra quem é"** → selecionar layout **"Cards (grade de itens)"** (`cards`) e
+   preencher os 4 itens abaixo no campo "Itens (layout Cards)":
+   - Card 1: "Armário cheio, nada pra vestir" / "Você tem peças, mas sente que nunca acha o que combina."
+   - Card 2: "Uma fase nova" / "Novo trabalho, corpo que mudou, um recomeço que pede uma nova imagem."
+   - Card 3: "Sem tempo pra comprar" / "Quer se vestir melhor sem perder horas dentro de loja."
+   - Card 4: "Descobrir o próprio estilo" / "Encontrar o que tem a sua cara, de verdade."
+   **⚠️ Subtítulos são rascunho do Claude — PENDENTE de validação/revisão da stylist Luiza
+   antes de publicar como definitivos.**
+
+- Build limpo; `/stylist` com ISR 1 min. Validação visual aguarda a dona no browser
+  (desktop + mobile) após recadastrar as seções no Studio.
+
+**Bug corrigido (fix sobre feat/stylist-cards-e-contraste):** campo `items` estava
+declarado ANTES do campo `layout` no schema e sem a propriedade `hidden` condicional.
+Resultado: o campo sempre aparecia no Studio (para todos os layouts) acima do radio,
+em vez de aparecer apenas quando `layout === 'cards'` logo abaixo do radio.
+Correção: campo `items` movido para APÓS `layout`, adicionado
+`hidden: ({ parent }) => parent?.layout !== 'cards'`. Campo `body` ganhou
+`hidden: ({ parent }) => parent?.layout === 'cards'` para sumir quando irrelevante.
+Título do campo atualizado para "Itens dos cards". `Título` agora tem `required()`.
+
 ### #7 feat/home — Home real
 
 - `app/page.tsx` substituiu a tela de teste. 3 blocos, ISR.
@@ -174,14 +223,61 @@ contorno, pode (e deve) usar `/N` diretamente.
 
 ---
 
+### feat/rebrand-lt-studio — Rebrand + fix números etapas
+
+**REBRAND "Estilista" → "LT Studio" (Plano A com logo de teste):**
+- Grep final: zero ocorrências de "Estilista" visível em app/ e components/
+- Trocado: metadata (title template `%s | LT Studio`), hero H1, eyebrows/aria-labels
+  de fallback nas páginas categoria/produto/novidades/stylist, Footer, Nav
+- NÃO trocado (intencional): package.json, projectId Sanity, slugs de URL,
+  nomes de variáveis, conteúdo do Sanity (gerido pela dona)
+- **Header:** logo `/logo-lt.png` substitui texto "ESTILISTA".
+  Desktop: logo esquerda (66×36px) | links centro | WA direita — grid `[auto_1fr_auto]`.
+  Mobile: hamburger esquerda | logo centro (55×30px) | WA direita — grid `[1fr_auto_1fr]`.
+  Mega-menu: removido `max-w-lg` da coluna de categorias, `grid-cols-2 lg:grid-cols-3`
+  distribui as categorias sem vão no centro da página.
+- **Footer:** logo `/logo-lt.png` (99×54px, opacity-80) sobre espresso, substituindo texto.
+  Escolha: logo em vez de texto puro — mais consistência com o header. A PNG pode ter
+  halo claro visível sobre o espresso (asset provisório — conferir visualmente).
+- **Favicon:** `app/icon.png` gerado via sharp: 48×48, fit contain, fundo espresso.
+  Next.js reconheceu automaticamente (aparece como rota `/icon.png` no build).
+
+**REBRAND — PENDENTE:**
+- Trocar `/public/logo-lt.png` pela logo DEFINITIVA da Luiza (SVG champagne + versão
+  escura para fundo espresso) quando ela entregar. Mesmo filename — troca automática.
+- Favicon definitivo a partir do SVG (ícone quadrado, sem halo).
+
+**Fix regressão — números do "Como funciona" (EtapasSection):** *(corrigido 2026-06-29)*
+- Causa real: `text-dourado/60` dependia de `--dourado-rgb` (padrão `/N` do PR#13).
+  O branch feat/rebrand-lt-studio não tinha esse PR ainda → cor transparente → números invisíveis.
+  Após merge do main (que incluiu PR#13), `text-dourado/60` passou a gerar CSS válido.
+- Fix adicional: removido override `block.normal` do EtapasSection — ele era chamado
+  DENTRO de cada list item, criando double-render (número do index+1 + número CSS counter).
+  Ficou apenas `list.number` + `listItem.number` com `{index + 1}`. Simples e correto.
+- REGRA: conteúdo "Como funciona" no Studio deve ser uma LISTA NUMERADA (não parágrafos).
+
+**Fix isolamento /studio:** *(corrigido 2026-06-29)*
+- Causa: `app/layout.tsx` raiz aplicava Header+Footer a TODAS as rotas, incluindo /studio.
+- Fix: route group `app/(site)/` — todas as páginas do site foram movidas para cá.
+  `app/(site)/layout.tsx` tem Header+Footer. `app/layout.tsx` ficou mínimo (fonts+body).
+  `/studio` herda só o root mínimo → Studio renderiza sem header/footer do site.
+- URLs não mudaram (route groups não adicionam segmentos à URL).
+
+**POLISH VISUAL (cores, fontes, espaçamento, "cara de IA") = IMPECCABLE.**
+Etapa final, a rodar em sessão separada. NÃO fazer por prompt avulso.
+
+---
+
 ## Pendências
 
 ### Bloqueado por conteúdo externo
 
-- **Conteúdo da /stylist** — arquitetura pronta. A dona cria as seções no Studio
+- **Página `/stylist`** — arquitetura CMS completa. A dona cria as seções no Studio
   (singleton "Perfil da Estilista"): preenche nome, tagline, foto, e adiciona seções
-  escolhendo o layout. Aguarda devolutiva: respostas Q1-Q7 + 1-2 fotos.
-  Q6 (o que ela NÃO faz) vai no body do bloco "Pra quem é" (layout padrão).
+  escolhendo o layout. Aguarda devolutiva da personal stylist: respostas Q1-Q7 + 1-2 fotos.
+  Q6 (o que ela NÃO faz) vai no body do bloco "Pra quem é" (layout `cards`).
+- **Logo definitiva** — Luiza entrega SVG champagne + versão escura (para fundo espresso).
+  Trocar `public/logo-lt.png` + regenerar `app/icon.png` a partir do SVG.
 - **Coleção por tag** (`/colecao/[tag]` além de novidades) — depende de cadastrar
   peças com tags no Studio. Sem conteúdo, a página abre vazia.
 

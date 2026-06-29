@@ -1,8 +1,6 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond } from 'next/font/google'
 import './globals.css'
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -16,9 +14,12 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http:/
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { template: '%s — Estilista', default: 'Estilista — Moda Feminina' },
+  title: {
+    default: 'LT Studio — Moda Feminina',
+    template: '%s | LT Studio',
+  },
   description: 'Vitrine de moda feminina com personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
-  openGraph: { siteName: 'Estilista', locale: 'pt_BR', type: 'website' },
+  openGraph: { siteName: 'LT Studio', locale: 'pt_BR', type: 'website' },
 }
 
 export default function RootLayout({
@@ -29,12 +30,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" className={cormorant.variable}>
       <body className="flex flex-col min-h-screen">
-        <Header />
-        {/* div, não main — as páginas filhas já declaram seu próprio <main> */}
-        <div className="flex-1 pt-16 md:pt-[72px]">
-          {children}
-        </div>
-        <Footer />
+        {children}
       </body>
     </html>
   )
