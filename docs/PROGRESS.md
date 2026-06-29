@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-26 (feat/rebrand-lt-studio)_
+_Última atualização: 2026-06-29 (merge main→feat/rebrand-lt-studio para unificar SEO + rebrand LT Studio)_
 
 ---
 
@@ -11,8 +11,9 @@ Piloto com a interface essencialmente completa. Vitrine (categoria) + página de
 produto + novidades + home com hero em vídeo. Venda e agendamento fecham via
 WhatsApp. A dona gerencia conteúdo pelo Sanity Studio em `/studio`.
 
-O que falta antes de entregar: página `/stylist` (bloqueada por conteúdo externo),
-polimentos finais e deploy. Ver "Pendências" no fim.
+O que falta antes de entregar: polimentos finais e deploy. A página `/stylist`
+tem arquitetura CMS completa — aguarda só o conteúdo real (questionário + fotos)
+a ser cadastrado pela dona no Studio. Ver "Pendências" no fim.
 
 ---
 
@@ -88,33 +89,63 @@ bug já resolvido._
 - Importa `ProductCard` existente; mesmo grid; página "em breve" se vazia
 - Elimina o 404 do link "Novidades" no header
 
-### #6 fix/nav-contraste — Contraste do Nav (WCAG AA)
+### #6 fix/nav-contraste — Contraste do Nav (WCAG AA) — PALIATIVO, SUBSTITUÍDO
 
-- Gatilho e links do mega-menu estavam quase invisíveis em repouso (opacidade baixa
-  sobre espresso). Corrigido com `opacity-85/90` (utility nativa — o modificador
-  `/N` do Tailwind não funciona com cores definidas como CSS variables opacas)
+- Gatilho e links do mega-menu desktop estavam quase invisíveis em repouso.
+  Corrigido com `opacity-85/90` como contorno temporário.
+  ⚠️ Esta regra de "usar opacity- em vez de /N" foi REVOGADA pelo fix/#14 abaixo.
 
-### #8 feat/stylist-estrutura — Casca estrutural da /stylist
+### #8 + #10 feat/stylist — Página /stylist CMS-driven (na main)
 
-- `app/stylist/page.tsx` — 6 blocos com placeholders explícitos; ISR `revalidate = 60`.
-- `Nav.tsx` — link "STYLIST" adicionado: desktop (ao lado de Categorias) + mobile.
+- PR #8 (`feat/stylist-estrutura`) — criou a casca estrutural com placeholders e o link
+  "STYLIST" no Nav (desktop e mobile). Mergeado primeiro.
+- PR #9 (`feat/stylist-cms`) — reescreveu a page e o schema. Mergeado em
+  `feat/stylist-estrutura` (base original da branch).
+- PR #10 (`feat/stylist-cms → main`) — levou a versão CMS-driven diretamente para main,
+  substituindo completamente a casca do #8. Verificado: grep limpo, build limpo, browser
+  sem nenhum `[PLACEHOLDER]`.
 
-### feat/stylist-cms — /stylist editável via Sanity (sobre #8)
+**Estado final na main:**
+- `sanity/schemas/stylistProfile.ts` — `name`, `tagline`, `photo`, `sections[]`
+  (eyebrow / title / body / image / layout), `whatsappNumber`, `bookingMessage`.
+  Campo `bio` removido (não tinha uso).
+- `app/stylist/page.tsx` — hero lê `name`/`tagline`/`photo` do Sanity; seções
+  dinâmicas via `sections[].map()` com 5 layouts visuais: `padrao`, `foto-esquerda`,
+  `foto-direita`, `etapas` (espresso), `destaque-escuro` (sand-200 + botão WA).
+  Estado amigável se `stylistProfile` vazio (nunca 404).
+- ISR 60 s; imagens via `urlFor()`; WA via `siteSettings`.
 
-- `sanity/schemas/stylistProfile.ts` — adicionados: `tagline` (frase do hero, Q1);
-  `sections[]` (array de objeto com `eyebrow`, `title`, `body`, `image`, `layout`);
-  removido `bio` (não tinha uso). Preview no Studio mostra título e layout de cada seção.
-- `app/stylist/page.tsx` — reescrito para ler `stylistProfile` (name, tagline, photo,
-  sections[]) + `siteSettings.whatsappNumber`. Hero sempre renderiza (com "Em breve" se
-  vazio). Seções por `.map()` com switch de layout:
-  - `padrao`: texto, fundo claro, suporta blockquote com borda dourada.
-  - `foto-esquerda` / `foto-direita`: foto + texto lado a lado (fundo sand-100).
-  - `etapas`: fundo espresso, lista ordenada com número em Cormorant dourado.
-  - `destaque-escuro`: fundo sand-200, texto centralizado italic + botão WhatsApp.
-- Estado amigável: sem profile → hero mostra "Em breve"; sections vazio → só hero.
-- Imagens via `urlFor().width().height().fit('crop').auto('format').url()` (regra PROGRESS).
-- WhatsApp: número de `siteSettings` (não de `stylistProfile`).
-- Build limpo; `/stylist` estático com ISR 1 min.
+### fix/nav-contraste-alinhamento — Tokens RGB + alinhamento + WCAG AA (em revisão)
+
+**Bug 1 — raiz dos tokens:** `tailwind.config.ts` redefinido de `var(--token)` para
+`rgb(var(--token-rgb) / <alpha-value>)`. `globals.css` ganhou as variáveis `--token-rgb`
+com canais R G B separados (hex original preservado para uso CSS direto).
+O modificador `/N` agora gera CSS válido em TODO o projeto (~45 ocorrências, 7 arquivos).
+O contorno `opacity-85/90` do PR #6 foi normalizado para `/85`/`/90` (consistência).
+
+**Bug 2 — mega-menu desktop:** z-index corrigido de `z-40` para `z-50` (mesmo nível
+do header), eliminando o encobrimento do painel pelo stacking context do header.
+
+**Regra revogada:** ~~"não use /N com CSS vars"~~ — `/N` agora funciona. O fix foi
+na raiz (tokens com `<alpha-value>`), não paliativo. Onde havia `opacity-N` como
+contorno, pode (e deve) usar `/N` diretamente.
+
+**WCAG AA — itens corrigidos neste PR** (valores que reprovavam 4,5:1 para texto pequeno):
+
+| Arquivo | Elemento | Antigo → Novo | Contraste |
+|---|---|---|---|
+| ProductCard.tsx:42 | "Foto em breve" (placeholder) | `/30` → `/65` | 1,85:1 → 4,77:1 ✓ |
+| ProductCard.tsx:55 | preço do produto | `/60` → `/65` | 4,34:1 → 4,77:1 ✓ |
+| produto/[slug]/page.tsx:195 | "Foto em breve" (produto) | `/30` → `/65` | 1,85:1 → 4,92:1 ✓ |
+| produto/[slug]/page.tsx:161 | breadcrumb | `/40` → `/65` | 2,40:1 → 4,77:1 ✓ |
+| produto/[slug]/page.tsx:226 | label categoria | `/45` → `/65` | 2,70:1 → 4,77:1 ✓ |
+| produto/[slug]/page.tsx:267 | "← Voltar" | `/40` → `/65` | 2,40:1 → 4,77:1 ✓ |
+| categoria/[slug]/page.tsx:93 | label "ESTILISTA" | `/40` → `/65` | 2,40:1 → 4,77:1 ✓ |
+| stylist/page.tsx:289 | chamada final (PortableText) | `/60` → `/65` | 4,10:1 → 4,77:1 ✓ |
+
+**Itens deixados para o Impeccable (não alterados):**
+- `Footer.tsx:8` — `text-cream-text/40` em espresso (3,5:1). Era invisível antes do fix de raiz; agora visível mas abaixo de AA. Caso herdado, decisão de polish.
+- Todas as linhas decorativas `bg-dourado/N` — ornamentos sem texto, sem alvo WCAG.
 
 ### feat/stylist-cards-e-contraste — Layouts destaque-escuro e cards (sobre feat/stylist-cms)
 
@@ -174,6 +205,22 @@ Título do campo atualizado para "Itens dos cards". `Título` agora tem `require
 - **Personal Stylist:** seção com texto PROVISÓRIO + botão de agendamento.
   É um teaser — o conteúdo real vai na futura página `/stylist`.
 
+### #12 feat/seo — SEO técnico
+
+- `app/robots.ts` — bloqueia `/studio`, aponta para `/sitemap.xml`
+- `app/sitemap.ts` — dinâmico via Sanity: rotas estáticas + categorias com estoque + todos os produtos em estoque (ISR 1h). URL via `NEXT_PUBLIC_SITE_URL`.
+- `app/layout.tsx` — `metadataBase`, `title.template '%s — Estilista'`, `openGraph` base (siteName, locale, type)
+- `app/page.tsx` — title `{ absolute }` para contornar o template
+- `app/colecao/novidades/page.tsx` — title simplificado (template aplica o sufixo)
+- `app/categoria/[slug]/page.tsx` — title sem sufixo hardcoded; description melhorada
+- `app/stylist/page.tsx` — `generateMetadata` lê `name`/`tagline` do Sanity (fallback elegante)
+- `app/produto/[slug]/page.tsx` — `generateMetadata` com description extraída do PortableText + OG image via Sanity CDN; JSON-LD schema.org/Product (name, image, description, brand — SEM offers/price)
+
+**Pendentes (documentado, não implementado):**
+- **FAVICON** — aguarda ícone de marca da dona
+- **OG /stylist** — pronto quando Sanity tiver foto da stylist cadastrada
+- **`NEXT_PUBLIC_SITE_URL`** — deve ser configurado na Vercel no momento do deploy
+
 ---
 
 ### feat/rebrand-lt-studio — Rebrand + fix números etapas
@@ -219,8 +266,10 @@ Etapa final, a rodar em sessão separada DEPOIS deste rebrand. NÃO fazer por pr
 
 ### Bloqueado por conteúdo externo
 
-- **Página `/stylist`** — arquitetura CMS completa. Aguarda devolutiva da personal
-  stylist: respostas Q1-Q7 + 1-2 fotos. A dona cria as seções no Studio.
+- **Página `/stylist`** — arquitetura CMS completa. A dona cria as seções no Studio
+  (singleton "Perfil da Estilista"): preenche nome, tagline, foto, e adiciona seções
+  escolhendo o layout. Aguarda devolutiva da personal stylist: respostas Q1-Q7 + 1-2 fotos.
+  Q6 (o que ela NÃO faz) vai no body do bloco "Pra quem é" (layout `cards`).
 - **Logo definitiva** — Luiza entrega SVG champagne + versão escura (para fundo espresso).
   Trocar `public/logo-lt.png` + regenerar `app/icon.png` a partir do SVG.
 - **Coleção por tag** (`/colecao/[tag]` além de novidades) — depende de cadastrar
@@ -228,9 +277,11 @@ Etapa final, a rodar em sessão separada DEPOIS deste rebrand. NÃO fazer por pr
 
 ### Independente — pode fazer a qualquer momento
 
-- Remover `app/teste-img/` (página de debug, criada no setup; não pode ir para produção).
 - Trocar "PERSONAL STYLIST" (inglês) no hero por termo em PT, se decidido.
-- **feat/seo** — `sitemap.ts`, metadados/título por página, Open Graph, favicon.
+- **Dívida técnica — layout `etapas`:** a dona precisa digitar a lista numerada
+  manualmente no PortableText (1. texto 2. texto…). Se a resposta da Q4 vier com
+  muitas etapas ou com subestrutura, migrar o campo `body` para um array aninhado
+  `{ título, descrição }` dentro da section do tipo `etapas`.
 
 ### Só no fim (deploy)
 

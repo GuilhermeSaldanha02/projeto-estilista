@@ -12,12 +12,16 @@ const cormorant = Cormorant_Garamond({
   display: 'swap',
 })
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ?? 'http://localhost:3000'
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'LT Studio — Moda Feminina',
     template: '%s | LT Studio',
   },
   description: 'Vitrine de moda feminina com personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
+  openGraph: { siteName: 'LT Studio', locale: 'pt_BR', type: 'website' },
 }
 
 export default function RootLayout({

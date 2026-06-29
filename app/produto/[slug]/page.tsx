@@ -47,14 +47,60 @@ export async function generateStaticParams() {
   return products.map(p => ({ slug: p.slug }))
 }
 
+function extractPlainText(
+  blocks: Array<{ _type: string; children?: Array<{ text?: string }> }>
+): string {
+  return blocks
+    .filter(b => b._type === 'block')
+    .flatMap(b => b.children ?? [])
+    .map(c => c.text ?? '')
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
-  const product = await client.fetch<Pick<Product, 'title'> | null>(
-    `*[_type == "product" && slug.current == $slug][0]{ title }`,
+  const product = await client.fetch<{
+    title: string
+    firstImage?: { asset?: { _ref: string }; alt?: string }
+    description?: Array<{ _type: string; children?: Array<{ text?: string }> }>
+  } | null>(
+    `*[_type == "product" && slug.current == $slug][0]{
+      title,
+      "firstImage": images[0] { asset, alt },
+      description
+    }`,
     { slug }
   )
+  if (!product) return { title: 'Peça não encontrada' }
+
+  const descText = product.description
+    ? extractPlainText(product.description).slice(0, 160)
+    : ''
+  const description = descText || `${product.title} — disponível na LT Studio.`
+
+  const ogImageUrl = product.firstImage?.asset
+    ? urlFor(product.firstImage).width(1200).height(630).fit('crop').auto('format').url()
+    : undefined
+
   return {
-    title: product ? `${product.title} — LT Studio` : 'Peça — LT Studio',
+    title: product.title,
+    description,
+    openGraph: ogImageUrl
+      ? {
+          title: product.title,
+          description,
+          images: [
+            {
+              url: ogImageUrl,
+              width: 1200,
+              height: 630,
+              alt: product.firstImage?.alt ?? product.title,
+            },
+          ],
+        }
+      : undefined,
   }
 }
 
@@ -88,10 +134,31 @@ export default async function ProdutoPage({ params }: Props) {
 
   const [mainImage, ...extraImages] = product.images ?? []
 
+  const descPlain = product.description
+    ? extractPlainText(
+        product.description as Array<{ _type: string; children?: Array<{ text?: string }> }>
+      ).slice(0, 300)
+    : undefined
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.title,
+    ...(mainImage?.asset && {
+      image: urlFor(mainImage).width(1200).height(1600).fit('crop').auto('format').url(),
+    }),
+    ...(descPlain && { description: descPlain }),
+    brand: { '@type': 'Brand', name: 'LT Studio' },
+  }
+
   return (
     <main className="min-h-screen py-10 px-5 max-w-6xl mx-auto">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb */}
-      <nav aria-label="Navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink/40">
+      <nav aria-label="Navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink/65">
         <Link href="/" className="hover:text-ink transition-colors">Início</Link>
         {product.category && (
           <>
@@ -125,7 +192,7 @@ export default async function ProdutoPage({ params }: Props) {
             </div>
           ) : (
             <div className="aspect-[3/4] bg-sand-100 flex items-center justify-center">
-              <span className="font-sans text-[10px] tracking-widest uppercase text-ink/30">
+              <span className="font-sans text-[10px] tracking-widest uppercase text-ink/65">
                 Foto em breve
               </span>
             </div>
@@ -156,7 +223,7 @@ export default async function ProdutoPage({ params }: Props) {
           {/* Cabeçalho */}
           <div>
             {product.category && (
-              <p className="font-sans text-[10px] tracking-widest uppercase text-ink/45 mb-2">
+              <p className="font-sans text-[10px] tracking-widest uppercase text-ink/65 mb-2">
                 {product.category.title}
               </p>
             )}
@@ -197,7 +264,7 @@ export default async function ProdutoPage({ params }: Props) {
           {product.category && (
             <Link
               href={`/categoria/${product.category.slug}`}
-              className="font-sans text-[10px] tracking-widest uppercase text-ink/40 hover:text-ink transition-colors mt-2"
+              className="font-sans text-[10px] tracking-widest uppercase text-ink/65 hover:text-ink transition-colors mt-2"
             >
               ← Ver mais em {product.category.title}
             </Link>

@@ -6,7 +6,7 @@ import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 export const revalidate = 60
 
 export const metadata: Metadata = {
-  title: 'Novidades — LT Studio',
+  title: 'Novidades',
   description: 'As peças mais recentes da LT Studio, de todas as categorias.',
 }
 

@@ -114,7 +114,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 <div
                   role="navigation"
                   aria-label="Categorias"
-                  className="fixed inset-x-0 top-[72px] z-40 flex bg-espresso border-t border-dourado/25 shadow-2xl"
+                  className="fixed inset-x-0 top-[72px] z-50 flex bg-espresso border-t border-dourado/25 shadow-2xl"
                   onMouseEnter={openMega}
                   onMouseLeave={closeMega}
                 >

@@ -6,9 +6,15 @@ import { urlFor } from '@/sanity/lib/image'
 
 export const revalidate = 60
 
-export const metadata: Metadata = {
-  title: 'Stylist — LT Studio',
-  description: 'Conheça a personal stylist por trás da LT Studio e agende seu atendimento.',
+export async function generateMetadata(): Promise<Metadata> {
+  const profile = await client.fetch<{ name?: string; tagline?: string } | null>(
+    `*[_type == "stylistProfile"][0]{ name, tagline }`
+  )
+  return {
+    title: profile?.name ?? 'Stylist',
+    description:
+      profile?.tagline ?? 'Conheça a personal stylist por trás da LT Studio e agende seu atendimento.',
+  }
 }
 
 type SanityImg = {
@@ -308,7 +314,7 @@ function DestaqueClaroSection({ section, waHref }: { section: StylistSection; wa
       <div className="max-w-2xl mx-auto text-center">
         <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
         {section.body && (
-          <div className="[&_p]:font-display [&_p]:text-2xl md:[&_p]:text-3xl [&_p]:font-light [&_p]:italic [&_p]:text-ink/60 [&_p]:leading-snug [&_p]:mb-6 mb-10">
+          <div className="[&_p]:font-display [&_p]:text-2xl md:[&_p]:text-3xl [&_p]:font-light [&_p]:italic [&_p]:text-ink/65 [&_p]:leading-snug [&_p]:mb-6 mb-10">
             <PortableText value={section.body} />
           </div>
         )}

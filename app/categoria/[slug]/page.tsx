@@ -39,9 +39,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const category = await client.fetch<Category | null>(categoryQuery, { slug })
   return {
-    title: category ? `${category.title} — LT Studio` : 'Categoria — LT Studio',
+    title: category?.title ?? 'Categoria',
     description: category
-      ? `Veja todas as peças da categoria ${category.title} da LT Studio.`
+      ? `Veja todas as peças de ${category.title} da LT Studio.`
       : undefined,
   }
 }
@@ -90,7 +90,7 @@ export default async function CategoriaPage({ params }: Props) {
 function EmBreve({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <main className="min-h-[60vh] flex flex-col items-center justify-center text-center px-5">
-      <p className="font-sans text-[10px] tracking-widest uppercase text-ink/40 mb-4">
+      <p className="font-sans text-[10px] tracking-widest uppercase text-ink/65 mb-4">
         LT Studio
       </p>
       <h1 className="font-display text-3xl md:text-4xl font-light text-ink mb-3">{title}</h1>
