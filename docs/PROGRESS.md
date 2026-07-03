@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-06-29 (fix etapas + isolamento /studio via route group)_
+_Última atualização: 2026-07-01 (feat: "Como funciona" 3 passos na seção espresso da home)_
 
 ---
 
@@ -220,6 +220,82 @@ Título do campo atualizado para "Itens dos cards". `Título` agora tem `require
 - **FAVICON** — aguarda ícone de marca da dona
 - **OG /stylist** — pronto quando Sanity tiver foto da stylist cadastrada
 - **`NEXT_PUBLIC_SITE_URL`** — deve ser configurado na Vercel no momento do deploy
+
+---
+
+### feat/como-funciona — "Como funciona" 3 passos na home *(2026-07-01)*
+
+**Objetivo:** reduzir o medo de clicar no WhatsApp explicando que o contato é simples,
+não o atendimento (que já é detalhado na /stylist). NÃO duplica o diagnóstico/curadoria/
+transformação da página da stylist.
+
+**Localização:** dentro da seção espresso da home (`aria-label="Personal Styling"`),
+entre o parágrafo de apresentação e o botão de agendamento.
+
+**Conteúdo dos 3 passos:**
+1. "É simples" — WhatsApp abre com mensagem pré-escrita, só enviar.
+2. "A gente conversa" — Luiza entende e marca o atendimento no seu tempo.
+3. "Você descobre seu estilo" — no atendimento, ela alinha roupas e objetivos.
+
+**Design:**
+- Grid `1-col mobile / 3-col desktop`, `gap-y-8 md:gap-x-8`
+- Cada passo: `border-t border-cream-text/10 pt-6` — separação sutil sem cards
+- Número: `text-[10px] tracking-[0.4em] uppercase text-cream-text/35` — discreto, não decorativo
+- Título: `font-display text-xl font-light text-cream-text` — serif leve, consistente com a seção
+- Corpo: `font-sans text-sm text-cream-text/70` — ~7:1 contraste sobre espresso (WCAG AA ✓)
+- `text-left` nos passos, mantendo `text-center` no restante da seção
+- Seção expandida de `py-16` para `py-20 md:py-28`
+- Body text migrado de `opacity-75` para `/75` (padrão do sistema de tokens RGB)
+
+**Hardcoded** — conteúdo fixo no JSX (não CMS); adequado para texto de processo que
+raramente muda. Se a Luiza quiser editar, pode pedir em sessão futura.
+
+---
+
+### feat/empty-states — Empty states compartilhado *(2026-07-01)*
+
+**Problema:** os três estados de vazio existentes (EmBreve em categoria, inline em novidades,
+PecaNaoEncontrada em produto) usavam fundo branco/padrão, `text-ink/40` (falha WCAG AA ~2.4:1),
+voz clínica, e só ofereciam "← Voltar ao início" como saída.
+
+**Solução:** componente compartilhado `components/EmptyState.tsx` no registro espresso.
+- Fundo `bg-espresso` — o header e footer já são espresso; a página vazia vira uma
+  atmosfera coesa em vez de um vazio branco.
+- Eyebrow dourado + regra de 1px (padrão do sistema).
+- Headline em `font-display font-light text-cream-text` — voz editorial, não clínica.
+- Body em `text-cream-text/75` (contraste >4.5:1 sobre espresso — WCAG AA aprovado).
+- CTA primário borgonha + link secundário `cream-text/60` com hover `cream-text`.
+- `secondaryExternal` flag para links de WhatsApp (abre em nova aba).
+
+**Empty states atualizados:**
+- `categoria/[slug]`: "Em cuidadosa seleção." (vazia) / "Categoria não encontrada." (404)
+  → CTA: Ver novidades + Conheça a stylist
+- `colecao/novidades`: "Novas peças em breve."
+  → CTA: Conheça a stylist + ← Início
+- `produto/[slug]`: "Esta peça saiu de cena."
+  → CTA: Ver novidades + WhatsApp da stylist (se número configurado no CMS)
+
+**Remoções:** `EmBreve` (categoria), `PecaNaoEncontrada` (produto), estado inline (novidades).
+Imports de `Link` que só existiam para esses componentes foram removidos junto.
+
+---
+
+### feat/curatorial-note — Nota da Stylist (home) *(2026-07-01)*
+
+**Funcionalidade:** seção editorial CMS-driven exibida entre Novidades e Personal Styling
+na homepage. A stylist escreve a nota no Sanity Studio (Configurações do Site) e ela
+aparece automaticamente. Deixar o campo vazio oculta a seção por completo.
+
+**Arquivos alterados:**
+- `sanity/schemas/siteSettings.ts` — campos `curatorNote` (text, 4 linhas) e
+  `curatorNoteByline` (string opcional, ex.: "Letícia Tadei — Julho 2025")
+- `components/CuratorialNote.tsx` — componente novo: section `bg-sand-100`, eyebrow dourado,
+  linha divisória, texto em `font-display font-light`, byline label
+- `app/(site)/page.tsx` — `settingsQuery` expandida para buscar os dois campos novos;
+  tipo TypeScript atualizado; seção #3 com renderização condicional
+
+**Design:** fundo `sand-100` cria degrau tonal suave entre o grid de produtos (areia base)
+e a faixa espresso abaixo. Sem card, sem borda — o texto é a identidade da seção.
 
 ---
 
