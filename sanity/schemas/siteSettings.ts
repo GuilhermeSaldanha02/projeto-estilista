@@ -37,5 +37,19 @@ export const siteSettings = defineType({
       options: { hotspot: true },
       description: 'Exibida enquanto o vídeo carrega — mantenha leve.',
     }),
+    defineField({
+      name: 'curatorNote',
+      title: 'Nota da Stylist',
+      type: 'text',
+      rows: 4,
+      description:
+        'Nota curatorial exibida na página inicial entre os produtos e a seção de agendamento. Deixe em branco para ocultar a seção.',
+    }),
+    defineField({
+      name: 'curatorNoteByline',
+      title: 'Assinatura da nota',
+      type: 'string',
+      description: 'Opcional. Ex.: Letícia Tadei — Julho 2025',
+    }),
   ],
 })

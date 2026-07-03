@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import ProductCard, { type ProductCardData } from '@/components/ProductCard'
+import CuratorialNote from '@/components/CuratorialNote'
 
 // ISR — produtos e settings vêm do Sanity; 60s para refletir publicações sem rebuild
 export const revalidate = 60
@@ -20,12 +21,12 @@ const productsQuery = `
     "image": images[0] { asset, crop, hotspot, alt }
   }
 `
-const settingsQuery = `*[_type == "siteSettings"][0]{ whatsappNumber }`
+const settingsQuery = `*[_type == "siteSettings"][0]{ whatsappNumber, curatorNote, curatorNoteByline }`
 
 export default async function HomePage() {
   const [products, settings] = await Promise.all([
     client.fetch<ProductCardData[]>(productsQuery),
-    client.fetch<{ whatsappNumber?: string } | null>(settingsQuery),
+    client.fetch<{ whatsappNumber?: string; curatorNote?: string; curatorNoteByline?: string } | null>(settingsQuery),
   ])
 
   const whatsappNumber = settings?.whatsappNumber
@@ -83,8 +84,8 @@ export default async function HomePage() {
               Moda feminina com olhar de personal stylist
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              {/* CTA bordô — leva para novidades */}
+            <div className="flex flex-col items-start gap-3">
+              {/* CTA primário — borgonha, leva para novidades */}
               <Link
                 href="/colecao/novidades"
                 className="inline-flex items-center justify-center bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
@@ -92,20 +93,16 @@ export default async function HomePage() {
                 Quero esta peça
               </Link>
 
-              {/* CTA esmeralda — agendamento WhatsApp */}
-              {waScheduleHref ? (
+              {/* CTA secundário — link de texto, agendamento WhatsApp */}
+              {waScheduleHref && (
                 <a
                   href={waScheduleHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center bg-esmeralda text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
+                  className="font-sans text-[11px] tracking-widest uppercase text-cream-text/60 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4"
                 >
-                  Agendar horário
+                  Agendar horário →
                 </a>
-              ) : (
-                <span className="inline-flex items-center justify-center bg-esmeralda text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 opacity-50 cursor-not-allowed select-none">
-                  Agendar horário
-                </span>
               )}
             </div>
           </div>
@@ -138,9 +135,19 @@ export default async function HomePage() {
       )}
 
       {/* ═══════════════════════════════════════
-          3. PERSONAL STYLIST — apresentação + CTA agendamento
+          3. NOTA DA STYLIST — nota curatorial (exibida quando preenchida no CMS)
       ═══════════════════════════════════════ */}
-      <section className="bg-espresso py-16 px-5" aria-label="Personal Styling">
+      {settings?.curatorNote && (
+        <CuratorialNote
+          note={settings.curatorNote}
+          byline={settings.curatorNoteByline}
+        />
+      )}
+
+      {/* ═══════════════════════════════════════
+          4. PERSONAL STYLIST — apresentação + CTA agendamento
+      ═══════════════════════════════════════ */}
+      <section className="bg-espresso py-20 md:py-28 px-5" aria-label="Personal Styling">
         <div className="max-w-3xl mx-auto text-center">
           <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-5">
             Personal Styling
@@ -149,11 +156,43 @@ export default async function HomePage() {
           <h2 className="font-display text-3xl md:text-4xl font-light text-cream-text tracking-wide mb-6">
             Um olhar profissional para o seu estilo
           </h2>
-          {/* Texto provisório — substitua pelo conteúdo da stylist no Sanity Studio */}
-          <p className="font-sans text-sm text-cream-text leading-relaxed mb-10 max-w-prose mx-auto opacity-75">
+          <p className="font-sans text-sm text-cream-text/75 leading-relaxed mb-14 max-w-prose mx-auto">
             Do consultório de moda ao look do dia a dia: encontramos juntas as peças certas
             para a sua vida, seu corpo e o que você quer comunicar com a roupa.
           </p>
+
+          {/* Como funciona — 3 passos sobre o contato, não o atendimento */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-y-8 md:gap-x-8 md:gap-y-0 mb-14 text-left">
+            {[
+              {
+                n: '01',
+                title: 'É simples',
+                body: 'Você toca o botão e o WhatsApp abre com a mensagem já escrita. É só enviar — sem formulário, sem cadastro.',
+              },
+              {
+                n: '02',
+                title: 'A gente conversa',
+                body: 'A Luiza entende o que você precisa e marca o atendimento, no seu tempo.',
+              },
+              {
+                n: '03',
+                title: 'Você descobre seu estilo',
+                body: 'No atendimento, ela alinha suas roupas aos seus objetivos.',
+              },
+            ].map(step => (
+              <div key={step.n} className="border-t border-cream-text/10 pt-6">
+                <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text/35 mb-4">
+                  {step.n}
+                </p>
+                <h3 className="font-display text-xl font-light text-cream-text tracking-wide mb-3 [text-wrap:balance]">
+                  {step.title}
+                </h3>
+                <p className="font-sans text-sm text-cream-text/75 leading-relaxed">
+                  {step.body}
+                </p>
+              </div>
+            ))}
+          </div>
 
           {waScheduleHref ? (
             <a
