@@ -1,0 +1,12 @@
+{
+  "files": ["app/**/*.tsx", "app/**/*.ts"],
+  "framework": "nextjs-app-router",
+  "insertBefore": "</body>",
+  "commentSyntax": "//",
+  "devServer": {
+    "command": "npm run dev",
+    "port": 3000,
+    "url": "http://localhost:3000"
+  },
+  "cspChecked": true
+}
