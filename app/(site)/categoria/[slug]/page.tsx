@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import ProductCard, { type ProductCardData } from '@/components/ProductCard'
+import EmptyState from '@/components/EmptyState'
 
 // ISR — SDD §1: catálogo reflete o que a dona publica sem rebuild manual
 export const revalidate = 60
@@ -56,18 +56,26 @@ export default async function CategoriaPage({ params }: Props) {
 
   if (!category) {
     return (
-      <EmBreve
-        title="Categoria não encontrada"
-        subtitle="Esta categoria não existe ou foi removida."
+      <EmptyState
+        headline="Categoria não encontrada."
+        body="O link pode ter mudado. Explore nossas peças pelo menu acima."
+        primaryHref="/colecao/novidades"
+        primaryLabel="Ver novidades"
+        secondaryHref="/stylist"
+        secondaryLabel="Conheça a stylist"
       />
     )
   }
 
   if (products.length === 0) {
     return (
-      <EmBreve
-        title={category.title}
-        subtitle="Esta categoria estará disponível em breve. Volte logo!"
+      <EmptyState
+        headline="Em cuidadosa seleção."
+        body={`Novas peças de ${category.title} chegam em breve. Confira o que acabou de chegar.`}
+        primaryHref="/colecao/novidades"
+        primaryLabel="Ver novidades"
+        secondaryHref="/stylist"
+        secondaryLabel="Conheça a stylist"
       />
     )
   }
@@ -87,20 +95,3 @@ export default async function CategoriaPage({ params }: Props) {
   )
 }
 
-function EmBreve({ title, subtitle }: { title: string; subtitle: string }) {
-  return (
-    <main className="min-h-[60vh] flex flex-col items-center justify-center text-center px-5">
-      <p className="font-sans text-[10px] tracking-widest uppercase text-ink/65 mb-4">
-        LT Studio
-      </p>
-      <h1 className="font-display text-3xl md:text-4xl font-light text-ink mb-3">{title}</h1>
-      <p className="font-sans text-sm text-ink/60 mb-8 max-w-xs">{subtitle}</p>
-      <Link
-        href="/"
-        className="font-sans text-[10px] tracking-widest uppercase text-espresso hover:text-bordo transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
-      >
-        ← Voltar ao início
-      </Link>
-    </main>
-  )
-}

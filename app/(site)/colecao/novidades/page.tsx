@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import ProductCard, { type ProductCardData } from '@/components/ProductCard'
+import EmptyState from '@/components/EmptyState'
 
 export const revalidate = 60
 
@@ -24,21 +24,14 @@ export default async function NovidadesPage() {
 
   if (products.length === 0) {
     return (
-      <main className="min-h-[60vh] flex flex-col items-center justify-center text-center px-5">
-        <p className="font-sans text-[10px] tracking-widest uppercase text-ink/40 mb-4">
-          LT Studio
-        </p>
-        <h1 className="font-display text-3xl md:text-4xl font-light text-ink mb-3">Novidades</h1>
-        <p className="font-sans text-sm text-ink/60 mb-8 max-w-xs">
-          Em breve novidades chegando. Volte logo!
-        </p>
-        <Link
-          href="/"
-          className="font-sans text-[10px] tracking-widest uppercase text-espresso hover:text-bordo transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
-        >
-          ← Voltar ao início
-        </Link>
-      </main>
+      <EmptyState
+        headline="Novas peças em breve."
+        body="A stylist está preparando uma nova seleção. Volte logo — ou agende um atendimento personalizado."
+        primaryHref="/stylist"
+        primaryLabel="Conheça a stylist"
+        secondaryHref="/"
+        secondaryLabel="← Início"
+      />
     )
   }
 

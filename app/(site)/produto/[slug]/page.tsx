@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { PortableText, type PortableTextBlock } from '@portabletext/react'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
+import EmptyState from '@/components/EmptyState'
 
 // ISR — SDD §1: produto reflete o que a dona publica sem rebuild manual
 export const revalidate = 60
@@ -121,8 +122,19 @@ export default async function ProdutoPage({ params }: Props) {
   ])
 
   if (!product) {
+    const waScheduleHref = settings?.whatsappNumber
+      ? `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Oi! Gostaria de agendar um horário de personal styling.')}`
+      : undefined
     return (
-      <PecaNaoEncontrada />
+      <EmptyState
+        headline="Esta peça saiu de cena."
+        body="Não está mais disponível — mas a stylist pode te ajudar a encontrar algo especial."
+        primaryHref="/colecao/novidades"
+        primaryLabel="Ver novidades"
+        secondaryHref={waScheduleHref}
+        secondaryLabel={waScheduleHref ? 'Falar com a stylist' : undefined}
+        secondaryExternal={!!waScheduleHref}
+      />
     )
   }
 
@@ -275,27 +287,6 @@ export default async function ProdutoPage({ params }: Props) {
   )
 }
 
-function PecaNaoEncontrada() {
-  return (
-    <main className="min-h-[60vh] flex flex-col items-center justify-center text-center px-5">
-      <p className="font-sans text-[10px] tracking-widest uppercase text-ink/40 mb-4">
-        LT Studio
-      </p>
-      <h1 className="font-display text-3xl md:text-4xl font-light text-ink mb-3">
-        Peça não encontrada
-      </h1>
-      <p className="font-sans text-sm text-ink/60 mb-8 max-w-xs">
-        Esta peça não está mais disponível ou foi removida.
-      </p>
-      <Link
-        href="/"
-        className="font-sans text-[10px] tracking-widest uppercase text-espresso hover:text-bordo transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
-      >
-        ← Voltar ao início
-      </Link>
-    </main>
-  )
-}
 
 function WhatsAppIcon() {
   return (
