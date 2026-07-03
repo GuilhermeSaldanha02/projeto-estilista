@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vestido midi de linho · Cambraia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--sand-50:#F4EFE6;--sand-100:#EDE3D2;--sand-200:#E7DBC8;--sand-300:#DCCBB0;--espresso:#241C17;--emerald:#0B5D46;--emerald-l:#1D9A72;--bordeaux:#7B1E3A;--gold:#C2A14D;--ink:#1A1A1A;--cream:#F4EFE6;--muted:#6B5E52;--font-d:'Cormorant Garamond',Georgia,serif;--font-b:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;--banner-h:40px;--header-h:68px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);background:var(--sand-200);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--emerald);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden}
+
+.top-banner{position:sticky;top:0;z-index:110;background:var(--espresso);color:var(--cream);height:var(--banner-h);display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.09em}
+.site-header{position:sticky;top:var(--banner-h);z-index:100;height:var(--header-h);background:var(--sand-200);border-bottom:1px solid var(--sand-300)}
+.header-inner{max-width:1440px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--font-d);font-size:26px;font-weight:500;letter-spacing:.06em;color:var(--ink);text-decoration:none;flex-shrink:0}
+.nav-primary{display:none;align-items:center;gap:2px;list-style:none}
+@media(min-width:1024px){.nav-primary{display:flex}}
+.nav-link{font-size:13px;letter-spacing:.04em;color:var(--ink);text-decoration:none;padding:8px 14px;border-radius:3px;background:none;border:none;cursor:pointer;font-family:var(--font-b);transition:background .15s}
+.nav-link:hover,.nav-link.active{background:rgba(36,28,23,.07)}
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn-wpp-header{display:none;align-items:center;gap:8px;background:var(--emerald);color:#fff;font-size:13px;font-weight:500;letter-spacing:.04em;padding:9px 18px;border-radius:3px;text-decoration:none;transition:background .15s;white-space:nowrap}
+@media(min-width:640px){.btn-wpp-header{display:flex}}
+.btn-wpp-header:hover{background:var(--emerald-l)}
+.btn-wpp-header svg{width:15px;height:15px}
+.btn-menu{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:8px}
+@media(min-width:1024px){.btn-menu{display:none}}
+.btn-menu span{display:block;width:20px;height:1.5px;background:var(--ink)}
+
+.mega-panel{position:fixed;top:calc(var(--banner-h) + var(--header-h));left:0;width:100%;z-index:99;background:var(--sand-100);border-bottom:1px solid var(--sand-300);box-shadow:0 12px 48px rgba(36,28,23,.14);display:none;grid-template-columns:1fr 320px}
+.mega-panel.open{display:grid}
+.panel-left{padding:40px 48px 32px}
+.panel-cats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px 24px;margin-bottom:28px}
+.panel-cats-grid a{font-family:var(--font-d);font-size:19px;color:var(--ink);text-decoration:none;padding:8px 0;border-bottom:1px solid transparent;display:block;transition:color .15s,border-color .15s}
+.panel-cats-grid a:hover{color:var(--emerald);border-bottom-color:var(--gold)}
+.panel-cols{display:flex;gap:20px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--sand-300)}
+.panel-cols a{font-size:12px;letter-spacing:.08em;color:var(--muted);text-decoration:none;padding:6px 0;transition:color .15s;border-bottom:1.5px solid transparent}
+.panel-cols a:hover{color:var(--emerald);border-bottom-color:var(--emerald)}
+.panel-right{background:var(--espresso);padding:40px 32px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;min-height:280px}
+.panel-right-bg{position:absolute;inset:0;background:linear-gradient(160deg,#3a2d25 0%,var(--espresso) 100%)}
+.panel-right-content{position:relative;z-index:1}
+.panel-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.panel-title{font-family:var(--font-d);font-size:30px;font-style:italic;font-weight:400;color:var(--cream);line-height:1.15;margin-bottom:18px}
+.panel-cta{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.1em;color:var(--gold);text-decoration:none;transition:gap .15s}
+.panel-cta:hover{gap:14px}.panel-cta::after{content:'→'}
+
+.mobile-nav{position:fixed;inset:0;z-index:200;background:var(--espresso);transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+.mobile-nav.open{transform:translateX(0)}
+.mob-nav-head{padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(194,161,77,.2);flex-shrink:0}
+.mob-logo{font-family:var(--font-d);font-size:22px;color:var(--cream);text-decoration:none}
+.btn-close{background:none;border:none;color:var(--cream);font-size:22px;cursor:pointer;padding:4px;line-height:1}
+.mob-nav-body{flex:1;overflow-y:auto}
+.mob-acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:none;border:none;border-bottom:1px solid rgba(255,255,255,.06);font-family:var(--font-d);font-size:22px;color:var(--cream);cursor:pointer;text-align:left}
+.mob-acc-btn .chev{width:16px;height:16px;color:var(--gold);transition:transform .2s;flex-shrink:0}
+.mob-acc-btn.open .chev{transform:rotate(90deg)}
+.mob-acc-body{display:none;padding:4px 24px 16px 42px;background:rgba(0,0,0,.18)}
+.mob-acc-body.open{display:block}
+.mob-acc-body a{display:block;padding:11px 0;font-size:15px;color:rgba(244,239,230,.75);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:color .15s}
+.mob-acc-body a:hover{color:var(--gold)}
+.mob-plain-link{display:block;padding:18px 24px;font-family:var(--font-d);font-size:22px;color:var(--cream);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.06)}
+.mob-nav-foot{padding:24px;border-top:1px solid rgba(194,161,77,.2);flex-shrink:0}
+.mob-cta{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;background:var(--bordeaux);color:#fff;font-size:14px;font-weight:500;text-decoration:none;border-radius:3px;letter-spacing:.04em;transition:background .15s}
+.mob-cta:hover{background:#9B2548}
+
+/* BREADCRUMB */
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.breadcrumb a{color:var(--muted);text-decoration:none}
+.breadcrumb a:hover{color:var(--emerald)}
+.breadcrumb .sep{opacity:.5}
+
+/* PRODUCT PAGE LAYOUT */
+.prod-page-wrap{max-width:1440px;margin:0 auto;padding:32px 24px 80px}
+@media(min-width:768px){.prod-page-wrap{padding:40px 40px 96px}}
+@media(min-width:1280px){.prod-page-wrap{display:grid;grid-template-columns:1fr 420px;gap:80px;padding:48px 64px 96px;align-items:start}}
+
+.prod-crumb{margin-bottom:28px}
+
+/* GALLERY */
+.gallery{display:flex;flex-direction:column;gap:10px;margin-bottom:40px}
+@media(min-width:1280px){.gallery{margin-bottom:0;position:sticky;top:calc(var(--banner-h) + var(--header-h) + 32px)}}
+.gallery-main{width:100%;aspect-ratio:3/4;background:var(--sand-100);border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center;cursor:zoom-in;position:relative}
+.gallery-main-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+.gallery-badge{position:absolute;top:16px;left:16px;background:var(--emerald);color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:5px 10px;border-radius:2px}
+.gallery-thumbs{display:flex;gap:8px}
+.gallery-thumb{width:80px;height:106px;border-radius:2px;cursor:pointer;border:2px solid transparent;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;transition:border-color .15s}
+.gallery-thumb.active{border-color:var(--ink)}
+.gallery-thumb:nth-child(1){background:#e8dfc8}
+.gallery-thumb:nth-child(2){background:#ddd4be}
+.gallery-thumb:nth-child(3){background:#e2d8c4}
+.gallery-thumb:nth-child(4){background:#d8cfba}
+
+/* PRODUCT DETAILS */
+.prod-details{padding-top:4px}
+.prod-d-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--emerald);margin-bottom:10px}
+.prod-d-name{font-family:var(--font-d);font-size:clamp(34px,4vw,54px);font-weight:400;line-height:1.05;color:var(--ink);margin-bottom:6px}
+.prod-d-cat{font-size:12px;letter-spacing:.06em;color:var(--muted);margin-bottom:24px}
+.prod-d-cat a{color:var(--muted);text-decoration:none;border-bottom:1px solid transparent;transition:border-color .15s}
+.prod-d-cat a:hover{color:var(--emerald);border-bottom-color:var(--emerald)}
+.prod-d-price{font-size:28px;font-weight:500;color:var(--ink);letter-spacing:-.02em}
+.prod-d-orig{font-size:16px;color:var(--muted);text-decoration:line-through;margin-right:8px;font-weight:400}
+.prod-d-install{font-size:12px;color:var(--muted);margin-top:4px;margin-bottom:28px}
+.prod-divider{height:1px;background:var(--sand-300);margin:24px 0}
+.prod-label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.prod-label span{font-size:13px;color:var(--ink);letter-spacing:0;text-transform:none}
+
+/* COLOR SWATCHES */
+.color-swatches{display:flex;gap:10px;margin-bottom:24px}
+.color-swatch{width:30px;height:30px;border-radius:50%;cursor:pointer;position:relative;border:2px solid transparent;transition:border-color .15s}
+.color-swatch.active::after{content:'';position:absolute;inset:-5px;border-radius:50%;border:1.5px solid var(--ink)}
+.swatch-caqui{background:#9B8B6A}
+.swatch-preto{background:#1A1A1A}
+.swatch-branco{background:#F0EBE0;box-shadow:inset 0 0 0 1px #DCCBB0}
+.swatch-verde{background:#0B5D46}
+
+/* SIZE GRID */
+.size-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px}
+.size-btn{min-width:52px;padding:10px 14px;border:1px solid var(--sand-300);background:none;border-radius:2px;font-size:13px;color:var(--ink);cursor:pointer;transition:all .15s;font-family:var(--font-b);text-align:center}
+.size-btn:hover{border-color:var(--ink)}
+.size-btn.active{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.size-btn.unavail{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+.size-guide{font-size:11px;color:var(--emerald);text-decoration:underline;cursor:pointer;margin-bottom:28px;display:inline-block;margin-top:8px}
+
+/* WPP CTA */
+.prod-cta-wpp{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:18px 24px;background:var(--bordeaux);color:#fff;font-size:15px;font-weight:500;letter-spacing:.04em;text-decoration:none;border-radius:3px;border:none;cursor:pointer;transition:background .15s,transform .1s;margin-bottom:12px}
+.prod-cta-wpp:hover{background:#9B2548}
+.prod-cta-wpp:active{transform:scale(.99)}
+.prod-cta-wpp svg{width:18px;height:18px;flex-shrink:0}
+.prod-cta-stylist{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:14px 24px;background:transparent;color:var(--emerald);font-size:13px;letter-spacing:.04em;text-decoration:none;border-radius:3px;border:1px solid var(--emerald);transition:background .15s}
+.prod-cta-stylist:hover{background:rgba(11,93,70,.06)}
+.prod-trust{display:flex;gap:20px;flex-wrap:wrap;margin-top:24px}
+.prod-trust-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.prod-trust-item svg{width:14px;height:14px;color:var(--gold);flex-shrink:0}
+
+/* DESCRIPTION */
+.prod-desc-wrap{margin-top:32px}
+.detail-item{border-top:1px solid var(--sand-300)}
+.detail-item:last-child{border-bottom:1px solid var(--sand-300)}
+.detail-btn{width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px 0;background:none;border:none;cursor:pointer;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);font-family:var(--font-b)}
+.detail-btn svg{width:13px;height:13px;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.detail-btn.open svg{transform:rotate(45deg)}
+.detail-body{display:none;padding-bottom:20px;font-size:14px;color:var(--muted);line-height:1.8}
+.detail-body.open{display:block}
+
+/* RELATED */
+.related{background:var(--sand-100);margin-top:80px}
+.related-inner{max-width:1440px;margin:0 auto;padding:64px 24px}
+@media(min-width:768px){.related-inner{padding:80px 40px}}
+@media(min-width:1280px){.related-inner{padding:80px 64px}}
+.related-head{margin-bottom:36px}
+.sec-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.sec-title{font-family:var(--font-d);font-size:clamp(26px,4vw,40px);font-weight:400;color:var(--ink);line-height:1.15}
+.sec-title em{font-style:italic;color:var(--emerald)}
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:768px){.products-grid{grid-template-columns:repeat(4,1fr);gap:20px}}
+.product-card{display:flex;flex-direction:column;background:var(--sand-50);border-radius:2px;overflow:hidden;text-decoration:none;color:var(--ink);transition:box-shadow .2s}
+.product-card:hover{box-shadow:0 6px 32px rgba(36,28,23,.13)}
+.prod-img{aspect-ratio:3/4;position:relative;overflow:hidden;background:var(--sand-100)}
+.prod-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:transform .5s ease}
+.product-card:hover .prod-img-ph{transform:scale(1.04)}
+.prod-img-ph svg{opacity:.18}
+.prod-img.tint-a{background:#e8dfc8}.prod-img.tint-b{background:#ddd4be}.prod-img.tint-c{background:#e2d8c4}.prod-img.tint-d{background:#d8cfba}
+.prod-info{padding:14px 14px 16px;display:flex;flex-direction:column;gap:3px}
+.prod-name{font-family:var(--font-d);font-size:17px;font-weight:400;line-height:1.25}
+.prod-detail{font-size:11px;color:var(--muted)}
+.prod-price{font-size:14px;font-weight:500;margin-top:5px}
+.btn-prod-wpp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;background:var(--bordeaux);color:#fff;font-size:11px;font-weight:500;letter-spacing:.05em;text-decoration:none;border-radius:2px;border:none;cursor:pointer;transition:background .15s;margin-top:10px}
+.btn-prod-wpp:hover{background:#9B2548}
+.btn-prod-wpp svg{width:12px;height:12px;flex-shrink:0}
+
+/* FOOTER */
+footer{background:var(--espresso)}
+.footer-inner{max-width:1440px;margin:0 auto;padding:64px 24px 40px;display:grid;gap:40px}
+@media(min-width:768px){.footer-inner{grid-template-columns:2fr 1fr 1fr 1fr;padding:80px 40px 48px}}
+@media(min-width:1280px){.footer-inner{padding:80px 64px 48px}}
+.footer-logo{font-family:var(--font-d);font-size:30px;font-weight:500;letter-spacing:.06em;color:var(--cream);text-decoration:none;display:block;margin-bottom:14px}
+.footer-tagline{font-family:var(--font-d);font-size:15px;font-style:italic;color:rgba(244,239,230,.45);line-height:1.6;margin-bottom:22px}
+.footer-wpp{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--gold);text-decoration:none;transition:color .15s}
+.footer-wpp:hover{color:var(--cream)}
+.footer-col-title{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.footer-links{list-style:none}
+.footer-links li+li{margin-top:12px}
+.footer-links a{font-size:14px;color:rgba(244,239,230,.6);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:var(--cream)}
+.footer-bottom{max-width:1440px;margin:0 auto;padding:18px 24px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(min-width:1280px){.footer-bottom{padding:18px 64px}}
+.footer-copy{font-size:11px;color:rgba(244,239,230,.35)}
+.footer-rule{width:28px;height:1px;background:var(--gold);opacity:.45}
+</style>
+</head>
+<body>
+
+<div class="top-banner">Frete grátis em compras acima de R$&nbsp;399 &nbsp;·&nbsp; Entrega em todo o Brasil</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Cambraia</a>
+    <nav aria-label="Navegação principal">
+      <ul class="nav-primary">
+        <li><button class="nav-link" id="js-nav-trigger" aria-expanded="false" aria-controls="mega-panel">Categorias</button></li>
+        <li><a href="collection.html" class="nav-link">Novidades</a></li>
+        <li><a href="stylist.html" class="nav-link">Personal stylist</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20uma%20consultoria%20de%20estilo." class="btn-wpp-header" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar com a stylist
+      </a>
+      <button class="btn-menu" id="js-mob-open" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mega-panel" id="mega-panel" role="dialog" aria-label="Categorias">
+  <div class="panel-left">
+    <nav class="panel-cats-grid" aria-label="Categorias de produto">
+      <a href="category.html?c=vestidos">Vestidos</a>
+      <a href="category.html?c=saias">Saias</a>
+      <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+      <a href="category.html?c=calcas">Calças</a>
+      <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+      <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+      <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+      <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+      <a href="category.html?c=acessorios">Acessórios</a>
+    </nav>
+    <nav class="panel-cols" aria-label="Coleções">
+      <a href="collection.html?c=novidades">Novidades</a>
+      <a href="collection.html?c=denim">Denim</a>
+      <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+      <a href="collection.html?c=conjuntos">Conjuntos</a>
+      <a href="collection.html?c=festa">Festa</a>
+      <a href="collection.html?c=estacao">Estação</a>
+    </nav>
+  </div>
+  <div class="panel-right">
+    <div class="panel-right-bg" aria-hidden="true"></div>
+    <div class="panel-right-content">
+      <p class="panel-eyebrow">Em destaque</p>
+      <p class="panel-title">Alfaiataria<br>de verão</p>
+      <a href="collection.html?c=alfaiataria" class="panel-cta">Ver coleção</a>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav" id="mobile-nav" aria-label="Menu" aria-hidden="true">
+  <div class="mob-nav-head">
+    <a href="index.html" class="mob-logo">Cambraia</a>
+    <button class="btn-close" id="js-mob-close" aria-label="Fechar menu">✕</button>
+  </div>
+  <div class="mob-nav-body">
+    <div>
+      <button class="mob-acc-btn" data-acc="cats">Categorias
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"></polyline></svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cats">
+        <a href="category.html?c=vestidos">Vestidos</a>
+        <a href="category.html?c=saias">Saias</a>
+        <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+        <a href="category.html?c=calcas">Calças</a>
+        <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+        <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+        <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+        <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+        <a href="category.html?c=acessorios">Acessórios</a>
+      </div>
+    </div>
+    <div>
+      <button class="mob-acc-btn" data-acc="cols">Coleções
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"></polyline></svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cols">
+        <a href="collection.html?c=novidades">Novidades</a>
+        <a href="collection.html?c=denim">Denim</a>
+        <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+        <a href="collection.html?c=conjuntos">Conjuntos</a>
+        <a href="collection.html?c=festa">Festa</a>
+        <a href="collection.html?c=estacao">Estação</a>
+      </div>
+    </div>
+    <a href="stylist.html" class="mob-plain-link">Personal stylist</a>
+  </div>
+  <div class="mob-nav-foot">
+    <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo." class="mob-cta" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Agendar com Luiza Thomax
+    </a>
+  </div>
+</nav>
+
+<main>
+  <div class="prod-page-wrap">
+    <div class="prod-crumb">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html">Início</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <a href="category.html?c=vestidos">Vestidos</a>
+        <span class="sep" aria-hidden="true">›</span>
+        <span>Vestido midi de linho</span>
+      </nav>
+    </div>
+
+    <!-- GALLERY -->
+    <div class="gallery" aria-label="Galeria de fotos do produto">
+      <div class="gallery-main">
+        <span class="gallery-badge">Novo</span>
+        <div class="gallery-main-ph" aria-hidden="true">
+          <svg width="110" height="148" viewBox="0 0 110 148" fill="none" stroke="#DCCBB0" stroke-width="1.2">
+            <path d="M37 18 L18 36 L6 112 L104 112 L92 36 L73 18"/>
+            <path d="M37 18 C37 6 73 6 73 18"/>
+            <ellipse cx="55" cy="15" rx="12" ry="9"/>
+            <line x1="6" y1="112" x2="15" y2="148"/>
+            <line x1="104" y1="112" x2="95" y2="148"/>
+            <line x1="15" y1="148" x2="95" y2="148"/>
+          </svg>
+        </div>
+      </div>
+      <div class="gallery-thumbs" role="list" aria-label="Miniaturas">
+        <button class="gallery-thumb active" aria-label="Foto 1" onclick="selectThumb(this)" role="listitem">
+          <svg width="30" height="40" viewBox="0 0 30 40" fill="none" stroke="#DCCBB0" stroke-width="1"><path d="M10 5L5 10L2 30L28 30L25 10L20 5"/></svg>
+        </button>
+        <button class="gallery-thumb" aria-label="Foto 2" onclick="selectThumb(this)" role="listitem">
+          <svg width="30" height="40" viewBox="0 0 30 40" fill="none" stroke="#DCCBB0" stroke-width="1"><path d="M10 5L5 10L2 30L28 30L25 10L20 5"/></svg>
+        </button>
+        <button class="gallery-thumb" aria-label="Foto 3" onclick="selectThumb(this)" role="listitem">
+          <svg width="30" height="40" viewBox="0 0 30 40" fill="none" stroke="#DCCBB0" stroke-width="1"><path d="M10 5L5 10L2 30L28 30L25 10L20 5"/></svg>
+        </button>
+        <button class="gallery-thumb" aria-label="Foto 4" onclick="selectThumb(this)" role="listitem">
+          <svg width="30" height="40" viewBox="0 0 30 40" fill="none" stroke="#DCCBB0" stroke-width="1"><path d="M10 5L5 10L2 30L28 30L25 10L20 5"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="prod-details">
+      <p class="prod-d-eyebrow">Vestidos · Novidade</p>
+      <h1 class="prod-d-name">Vestido midi<br>de linho</h1>
+      <p class="prod-d-cat"><a href="category.html?c=vestidos">Vestidos</a> · <a href="collection.html?c=novidades">Novidades</a></p>
+
+      <div class="prod-d-price">R$&nbsp;479,00</div>
+      <p class="prod-d-install">ou 3× de R$&nbsp;159,67 sem juros</p>
+
+      <div class="prod-divider" aria-hidden="true"></div>
+
+      <p class="prod-label">Cor: <span id="color-name">Cáqui</span></p>
+      <div class="color-swatches" role="group" aria-label="Selecionar cor">
+        <button class="color-swatch swatch-caqui active" aria-label="Cáqui" aria-pressed="true" onclick="selectColor(this,'Cáqui')"></button>
+        <button class="color-swatch swatch-preto" aria-label="Preto" aria-pressed="false" onclick="selectColor(this,'Preto')"></button>
+        <button class="color-swatch swatch-branco" aria-label="Branco off" aria-pressed="false" onclick="selectColor(this,'Branco off')"></button>
+      </div>
+
+      <p class="prod-label">Tamanho: <span id="size-name">—</span></p>
+      <div class="size-grid" role="group" aria-label="Selecionar tamanho">
+        <button class="size-btn unavail" disabled aria-label="PP, indisponível">PP</button>
+        <button class="size-btn" onclick="selectSize(this,'P')" aria-label="P">P</button>
+        <button class="size-btn" onclick="selectSize(this,'M')" aria-label="M">M</button>
+        <button class="size-btn" onclick="selectSize(this,'G')" aria-label="G">G</button>
+        <button class="size-btn unavail" disabled aria-label="GG, indisponível">GG</button>
+      </div>
+      <span class="size-guide" role="button" tabindex="0">Guia de medidas</span>
+
+      <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Quero%20o%20Vestido%20midi%20de%20linho.%20Pode%20me%20ajudar%3F" class="prod-cta-wpp" id="wpp-btn" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Quero esta peça
+      </a>
+      <a href="stylist.html" class="prod-cta-stylist">
+        Pedir ajuda à Luiza para montar o look
+      </a>
+
+      <div class="prod-trust">
+        <span class="prod-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 12l5 5L19 7"/></svg>
+          Frete grátis acima de R$&nbsp;399
+        </span>
+        <span class="prod-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><circle cx="16" cy="13" r="1"/></svg>
+          Pagamento seguro
+        </span>
+        <span class="prod-trust-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+          Troca em 7 dias
+        </span>
+      </div>
+
+      <!-- ACCORDION -->
+      <div class="prod-desc-wrap">
+        <div class="detail-item">
+          <button class="detail-btn open" onclick="toggleDetail(this)" aria-expanded="true">
+            Descrição
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="detail-body open">
+            <p>Vestido midi de linho cáqui com corte reto e levemente evasê. Fechamento com botões frontais da cintura para baixo, decote quadrado. Tecido 100% linho lavado, ultraleve e respirável.</p>
+            <p style="margin-top:12px">Curadoria Luiza Thomax: "Uma peça que vai do brunch ao jantar com apenas uma troca de acessório."</p>
+          </div>
+        </div>
+        <div class="detail-item">
+          <button class="detail-btn" onclick="toggleDetail(this)" aria-expanded="false">
+            Composição &amp; cuidados
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="detail-body">
+            100% linho. Lavar à mão ou na máquina em ciclo delicado (30°C). Não usar secadora. Passar com ferro morno.
+          </div>
+        </div>
+        <div class="detail-item">
+          <button class="detail-btn" onclick="toggleDetail(this)" aria-expanded="false">
+            Entrega &amp; troca
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+          <div class="detail-body">
+            Frete grátis para compras acima de R$ 399. Prazo: 3 a 7 dias úteis. Trocas e devoluções em até 7 dias após o recebimento — basta entrar em contato pelo WhatsApp.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATED PRODUCTS -->
+  <section class="related" aria-label="Complete o look">
+    <div class="related-inner">
+      <div class="related-head">
+        <p class="sec-eyebrow">Seleção de Luiza Thomax</p>
+        <h2 class="sec-title">Complete o <em>look</em></h2>
+      </div>
+      <div class="products-grid">
+        <a href="product.html" class="product-card">
+          <div class="prod-img tint-b">
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#DCCBB0" stroke-width="1.5"><path d="M28 12L10 22L4 56L52 56L46 22Z"/><ellipse cx="28" cy="10" rx="9" ry="7"/></svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Blusa de seda com laço</div>
+            <div class="prod-detail">Off-white · PP ao G</div>
+            <div class="prod-price">R$&nbsp;329,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Blusa%20de%20seda%20com%20laço." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+        <a href="product.html" class="product-card">
+          <div class="prod-img tint-c">
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="56" height="80" viewBox="0 0 56 80" fill="none" stroke="#DCCBB0" stroke-width="1.5"><rect x="4" y="4" width="48" height="16" rx="2"/><path d="M4 20L10 80L28 80L28 48"/><path d="M52 20L46 80L28 80L28 48"/></svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Calça alfaiataria</div>
+            <div class="prod-detail">Preto · 36 ao 44</div>
+            <div class="prod-price">R$&nbsp;549,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Calça%20alfaiataria." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+        <a href="product.html" class="product-card">
+          <div class="prod-img tint-a">
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="#DCCBB0" stroke-width="1.5"><path d="M28 14L10 24L4 56L52 56L46 24Z"/><ellipse cx="28" cy="12" rx="9" ry="7"/></svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Blusa de tricô off-white</div>
+            <div class="prod-detail">Off-white · PP ao GG</div>
+            <div class="prod-price">R$&nbsp;289,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Blusa%20de%20tricô%20off-white." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+        <a href="product.html" class="product-card">
+          <div class="prod-img tint-d">
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="56" height="80" viewBox="0 0 56 80" fill="none" stroke="#DCCBB0" stroke-width="1.5"><rect x="14" y="4" width="28" height="10" rx="2"/><path d="M14 14L2 80L54 80L42 14Z"/></svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Saia midi evasê</div>
+            <div class="prod-detail">Verde musgo · P ao G</div>
+            <div class="prod-price">R$&nbsp;349,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Saia%20midi%20evasê." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">Cambraia</a>
+      <p class="footer-tagline">Moda feminina com curadoria.<br>Atendimento pelo WhatsApp.</p>
+      <a href="https://wa.me/5583988886932" class="footer-wpp" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        +55 83 9888-6932
+      </a>
+    </div>
+    <div>
+      <p class="footer-col-title">Loja</p>
+      <ul class="footer-links">
+        <li><a href="collection.html">Novidades</a></li>
+        <li><a href="category.html?c=vestidos">Vestidos</a></li>
+        <li><a href="category.html?c=saias">Saias</a></li>
+        <li><a href="category.html?c=blusas-tops">Blusas &amp; tops</a></li>
+        <li><a href="category.html?c=calcas">Calças</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Coleções</p>
+      <ul class="footer-links">
+        <li><a href="collection.html?c=denim">Denim</a></li>
+        <li><a href="collection.html?c=alfaiataria">Alfaiataria</a></li>
+        <li><a href="collection.html?c=conjuntos">Conjuntos</a></li>
+        <li><a href="collection.html?c=festa">Festa</a></li>
+        <li><a href="collection.html?c=estacao">Estação</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Atendimento</p>
+      <ul class="footer-links">
+        <li><a href="stylist.html">Personal stylist</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20tenho%20uma%20dúvida." target="_blank" rel="noopener">Falar no WhatsApp</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria." target="_blank" rel="noopener">Agendar consultoria</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Cambraia. Todos os direitos reservados.</span>
+    <div class="footer-rule" aria-hidden="true"></div>
+  </div>
+</footer>
+
+<script>
+const trigger=document.getElementById('js-nav-trigger'),panel=document.getElementById('mega-panel');let closeTimer;
+function openPanel(){clearTimeout(closeTimer);panel.classList.add('open');trigger.setAttribute('aria-expanded','true')}
+function closePanel(){closeTimer=setTimeout(()=>{panel.classList.remove('open');trigger.setAttribute('aria-expanded','false')},140)}
+trigger?.addEventListener('mouseenter',openPanel);trigger?.addEventListener('mouseleave',closePanel);
+trigger?.addEventListener('click',()=>panel.classList.contains('open')?closePanel():openPanel());
+panel?.addEventListener('mouseenter',()=>clearTimeout(closeTimer));panel?.addEventListener('mouseleave',closePanel);
+const mobileNav=document.getElementById('mobile-nav');
+function openMob(){mobileNav.classList.add('open');mobileNav.removeAttribute('aria-hidden');document.body.style.overflow='hidden'}
+function closeMob(){mobileNav.classList.remove('open');mobileNav.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+document.getElementById('js-mob-open')?.addEventListener('click',openMob);
+document.getElementById('js-mob-close')?.addEventListener('click',closeMob);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanel();closeMob()}});
+document.querySelectorAll('[data-acc]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.dataset.acc,body=document.getElementById('acc-'+id),open=btn.classList.contains('open');
+    document.querySelectorAll('.mob-acc-btn').forEach(b=>b.classList.remove('open'));
+    document.querySelectorAll('.mob-acc-body').forEach(b=>b.classList.remove('open'));
+    if(!open){btn.classList.add('open');body?.classList.add('open')}
+  })
+});
+
+let selectedColor='Cáqui',selectedSize='';
+function selectColor(el,name){
+  document.querySelectorAll('.color-swatch').forEach(s=>{s.classList.remove('active');s.setAttribute('aria-pressed','false')});
+  el.classList.add('active');el.setAttribute('aria-pressed','true');
+  selectedColor=name;document.getElementById('color-name').textContent=name;updateWppLink();
+}
+function selectSize(el,size){
+  document.querySelectorAll('.size-btn:not(.unavail)').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');selectedSize=size;
+  document.getElementById('size-name').textContent=size;updateWppLink();
+}
+function updateWppLink(){
+  const prod='Vestido midi de linho';
+  const msg=selectedSize
+    ?`Olá, Luiza! Quero o ${prod} na cor ${selectedColor}, tamanho ${selectedSize}. Pode me ajudar?`
+    :`Olá, Luiza! Quero o ${prod} na cor ${selectedColor}. Pode me ajudar?`;
+  document.getElementById('wpp-btn').href=`https://wa.me/5583988886932?text=${encodeURIComponent(msg)}`;
+}
+function selectThumb(el){
+  document.querySelectorAll('.gallery-thumb').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+}
+function toggleDetail(btn){
+  const body=btn.nextElementSibling;
+  const open=btn.classList.contains('open');
+  btn.classList.toggle('open',!open);
+  body.classList.toggle('open',!open);
+  btn.setAttribute('aria-expanded',String(!open));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1387 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cambraia — Moda Feminina com Curadoria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+  <style>
+    /* ===== TOKENS ===== */
+    :root {
+      --sand-50:  #F4EFE6;
+      --sand-100: #EDE3D2;
+      --sand-200: #E7DBC8;
+      --sand-300: #DCCBB0;
+      --espresso: #241C17;
+      --emerald:  #0B5D46;
+      --emerald-l:#1D9A72;
+      --bordeaux: #7B1E3A;
+      --gold:     #C2A14D;
+      --ink:      #1A1A1A;
+      --cream:    #F4EFE6;
+      --muted:    #6B5E52;
+
+      --font-d: 'Cormorant Garamond', Georgia, serif;
+      --font-b: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+
+      --banner-h: 40px;
+      --header-h: 68px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-b);
+      background: var(--sand-200);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--emerald);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    /* ===== TOP BANNER ===== */
+    .top-banner {
+      position: sticky;
+      top: 0;
+      z-index: 110;
+      background: var(--espresso);
+      color: var(--cream);
+      height: var(--banner-h);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      letter-spacing: 0.09em;
+    }
+
+    /* ===== HEADER ===== */
+    .site-header {
+      position: sticky;
+      top: var(--banner-h);
+      z-index: 100;
+      height: var(--header-h);
+      background: var(--sand-200);
+      border-bottom: 1px solid var(--sand-300);
+    }
+
+    .header-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: var(--font-d);
+      font-size: 26px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    /* desktop nav */
+    .nav-primary {
+      display: none;
+      align-items: center;
+      gap: 2px;
+      list-style: none;
+    }
+    @media (min-width: 1024px) { .nav-primary { display: flex; } }
+
+    .nav-link {
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 3px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-b);
+      transition: background 0.15s;
+    }
+    .nav-link:hover { background: rgba(36,28,23,0.07); }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* WhatsApp CTA */
+    .btn-wpp-header {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      background: var(--emerald);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      padding: 9px 18px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    @media (min-width: 640px) { .btn-wpp-header { display: flex; } }
+    .btn-wpp-header:hover { background: var(--emerald-l); }
+    .btn-wpp-header svg { width: 15px; height: 15px; }
+
+    /* Hamburger */
+    .btn-menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+    }
+    @media (min-width: 1024px) { .btn-menu { display: none; } }
+    .btn-menu span {
+      display: block;
+      width: 20px;
+      height: 1.5px;
+      background: var(--ink);
+    }
+
+    /* ===== MEGA PANEL ===== */
+    .mega-panel {
+      position: fixed;
+      top: calc(var(--banner-h) + var(--header-h));
+      left: 0;
+      width: 100%;
+      z-index: 99;
+      background: var(--sand-100);
+      border-bottom: 1px solid var(--sand-300);
+      box-shadow: 0 12px 48px rgba(36,28,23,0.14);
+      display: none;
+      grid-template-columns: 1fr 320px;
+    }
+    .mega-panel.open { display: grid; }
+
+    .panel-left { padding: 40px 48px 32px; }
+
+    .panel-cats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px 24px;
+      margin-bottom: 28px;
+    }
+
+    .panel-cats-grid a {
+      font-family: var(--font-d);
+      font-size: 19px;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 8px 0;
+      border-bottom: 1px solid transparent;
+      display: block;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .panel-cats-grid a:hover {
+      color: var(--emerald);
+      border-bottom-color: var(--gold);
+    }
+
+    .panel-cols {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      padding-top: 20px;
+      border-top: 1px solid var(--sand-300);
+    }
+    .panel-cols a {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 0;
+      transition: color 0.15s;
+      border-bottom: 1.5px solid transparent;
+    }
+    .panel-cols a:hover {
+      color: var(--emerald);
+      border-bottom-color: var(--emerald);
+    }
+
+    .panel-right {
+      background: var(--espresso);
+      padding: 40px 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      overflow: hidden;
+      min-height: 280px;
+    }
+    .panel-right-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #3a2d25 0%, var(--espresso) 100%);
+    }
+    .panel-right-content { position: relative; z-index: 1; }
+    .panel-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .panel-title {
+      font-family: var(--font-d);
+      font-size: 30px;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .panel-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-decoration: none;
+      transition: gap 0.15s;
+    }
+    .panel-cta:hover { gap: 14px; }
+    .panel-cta::after { content: '→'; }
+
+    /* ===== MOBILE NAV ===== */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: var(--espresso);
+      transform: translateX(-100%);
+      transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+    .mobile-nav.open { transform: translateX(0); }
+
+    .mob-nav-head {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(194,161,77,0.2);
+      flex-shrink: 0;
+    }
+    .mob-logo {
+      font-family: var(--font-d);
+      font-size: 22px;
+      color: var(--cream);
+      text-decoration: none;
+    }
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--cream);
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+
+    .mob-nav-body { flex: 1; overflow-y: auto; }
+
+    .mob-acc-btn {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      background: none;
+      border: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-family: var(--font-d);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      cursor: pointer;
+      text-align: left;
+    }
+    .mob-acc-btn .chev {
+      width: 16px;
+      height: 16px;
+      color: var(--gold);
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .mob-acc-btn.open .chev { transform: rotate(90deg); }
+
+    .mob-acc-body {
+      display: none;
+      padding: 4px 24px 16px 42px;
+      background: rgba(0,0,0,0.18);
+    }
+    .mob-acc-body.open { display: block; }
+    .mob-acc-body a {
+      display: block;
+      padding: 11px 0;
+      font-size: 15px;
+      color: rgba(244,239,230,0.75);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: color 0.15s;
+    }
+    .mob-acc-body a:hover { color: var(--gold); }
+
+    .mob-plain-link {
+      display: block;
+      padding: 18px 24px;
+      font-family: var(--font-d);
+      font-size: 22px;
+      color: var(--cream);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .mob-nav-foot {
+      padding: 24px;
+      border-top: 1px solid rgba(194,161,77,0.2);
+      flex-shrink: 0;
+    }
+    .mob-cta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px;
+      background: var(--bordeaux);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
+      transition: background 0.15s;
+    }
+    .mob-cta:hover { background: #9B2548; }
+
+    /* ===== BUTTONS ===== */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bordeaux);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 14px 28px;
+      border-radius: 3px;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .btn-primary:hover { background: #9B2548; }
+    .btn-primary:active { transform: scale(0.98); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--cream);
+      font-size: 14px;
+      letter-spacing: 0.05em;
+      padding: 14px 28px;
+      border-radius: 3px;
+      text-decoration: none;
+      border: 1px solid rgba(244,239,230,0.38);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-ghost:hover {
+      border-color: var(--gold);
+      background: rgba(194,161,77,0.08);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      height: 94vh;
+      min-height: 560px;
+      max-height: 960px;
+      background: var(--espresso);
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.5;
+    }
+
+    /* Video placeholder (shown when no video source) */
+    .hero-video-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #3a2d25 0%, #1a1008 100%);
+    }
+    .hero-video-placeholder::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 70% 40%, rgba(11,93,70,0.25) 0%, transparent 60%);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(36,28,23,0.88) 0%,
+        rgba(36,28,23,0.25) 55%,
+        transparent 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 24px 72px;
+      width: 100%;
+    }
+
+    @media (min-width: 768px) { .hero-content { padding: 0 40px 96px; } }
+    @media (min-width: 1280px) { .hero-content { padding: 0 64px 104px; } }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .hero-title {
+      font-family: var(--font-d);
+      font-size: clamp(40px, 9vw, 100px);
+      font-weight: 400;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.04;
+      margin-bottom: 22px;
+      max-width: 720px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: rgba(244,239,230,0.72);
+      margin-bottom: 36px;
+      max-width: 380px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ===== SECTION WRAPPER ===== */
+    .section {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 64px 24px;
+    }
+    @media (min-width: 768px) { .section { padding: 80px 40px; } }
+    @media (min-width: 1280px) { .section { padding: 96px 64px; } }
+
+    .bg-light { background: var(--sand-100); }
+    .bg-dark  { background: var(--espresso); }
+
+    /* ===== SECTION HEADER ===== */
+    .sec-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 40px;
+      gap: 16px;
+    }
+
+    .sec-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .sec-title {
+      font-family: var(--font-d);
+      font-size: clamp(26px, 4vw, 44px);
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.15;
+    }
+    .sec-title em { font-style: italic; color: var(--emerald); }
+
+    .sec-title-light { color: var(--cream); }
+    .sec-title-light em { color: var(--gold); }
+
+    .link-all {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--emerald);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 1px solid var(--emerald);
+      padding-bottom: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: gap 0.15s;
+    }
+    .link-all:hover { gap: 10px; }
+    .link-all::after { content: '→'; }
+
+    /* ===== PRODUCT CARD ===== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (min-width: 640px)  { .products-grid { gap: 16px; } }
+    @media (min-width: 768px)  { .products-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+    @media (min-width: 1280px) { .products-grid { grid-template-columns: repeat(4, 1fr); gap: 24px; } }
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      background: var(--sand-50);
+      border-radius: 2px;
+      overflow: hidden;
+      text-decoration: none;
+      color: var(--ink);
+      transition: box-shadow 0.2s;
+    }
+    .product-card:hover { box-shadow: 0 6px 32px rgba(36,28,23,0.13); }
+
+    .prod-img {
+      aspect-ratio: 3/4;
+      position: relative;
+      overflow: hidden;
+      background: var(--sand-100);
+    }
+
+    /* SVG placeholder clothing silhouette */
+    .prod-img-ph {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.5s ease;
+    }
+    .product-card:hover .prod-img-ph { transform: scale(1.04); }
+
+    .prod-img-ph svg { opacity: 0.18; }
+
+    /* Tints para diferenciar produtos */
+    .prod-img.tint-a { background: #e8dfc8; }
+    .prod-img.tint-b { background: #ddd4be; }
+    .prod-img.tint-c { background: #e2d8c4; }
+    .prod-img.tint-d { background: #d8cfba; }
+
+    .badge-new {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--emerald);
+      color: #fff;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 9px;
+      border-radius: 2px;
+      z-index: 1;
+    }
+
+    .prod-info {
+      padding: 16px 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .prod-name {
+      font-family: var(--font-d);
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 1.25;
+    }
+
+    .prod-detail {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+    }
+
+    .prod-price {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--ink);
+      margin-top: 6px;
+    }
+    .prod-price .orig {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: line-through;
+      font-weight: 400;
+      margin-right: 6px;
+    }
+
+    .btn-prod-wpp {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px;
+      background: var(--bordeaux);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 12px;
+    }
+    .btn-prod-wpp:hover { background: #9B2548; }
+    .btn-prod-wpp svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* ===== STYLIST SECTION ===== */
+    .stylist-wrap {
+      background: var(--espresso);
+    }
+
+    .stylist-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 80px 24px;
+      display: grid;
+      gap: 48px;
+      align-items: center;
+    }
+    @media (min-width: 768px)  { .stylist-inner { grid-template-columns: 1fr 1fr; padding: 96px 40px; } }
+    @media (min-width: 1280px) { .stylist-inner { grid-template-columns: 420px 1fr; gap: 96px; padding: 120px 64px; } }
+
+    .stylist-img-frame {
+      position: relative;
+    }
+
+    .stylist-img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #3a2d25;
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .stylist-img svg { opacity: 0.12; }
+
+    .stylist-accent {
+      position: absolute;
+      bottom: -18px;
+      right: -18px;
+      width: 100px;
+      height: 100px;
+      border: 1px solid var(--gold);
+      border-radius: 2px;
+      pointer-events: none;
+    }
+
+    .stylist-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .stylist-name {
+      font-family: var(--font-d);
+      font-size: clamp(36px, 5vw, 68px);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.08;
+      margin-bottom: 6px;
+    }
+
+    .stylist-role {
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    .stylist-bio {
+      font-size: 15px;
+      line-height: 1.8;
+      color: rgba(244,239,230,0.68);
+      margin-bottom: 36px;
+    }
+    .stylist-bio p + p { margin-top: 16px; }
+
+    .btn-agendar {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--bordeaux);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 16px 32px;
+      border-radius: 3px;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+    .btn-agendar:hover { background: #9B2548; }
+
+    /* ===== COLLECTIONS ===== */
+    .cols-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    @media (min-width: 768px) { .cols-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .cols-grid { grid-template-columns: repeat(6, 1fr); gap: 10px; } }
+
+    .col-card {
+      position: relative;
+      aspect-ratio: 2/3;
+      border-radius: 2px;
+      overflow: hidden;
+      text-decoration: none;
+      display: flex;
+      align-items: flex-end;
+      background: var(--espresso);
+    }
+
+    .col-card-bg {
+      position: absolute;
+      inset: 0;
+      transition: transform 0.5s ease;
+    }
+    .col-card:hover .col-card-bg { transform: scale(1.06); }
+
+    .col-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(36,28,23,0.88) 0%, transparent 55%);
+    }
+
+    .col-card-label {
+      position: relative;
+      padding: 14px 13px;
+      font-family: var(--font-d);
+      font-size: 18px;
+      color: var(--cream);
+      line-height: 1.2;
+    }
+
+    /* ===== EDITORIAL QUOTE ===== */
+    .editorial {
+      background: var(--espresso);
+      padding: 80px 24px;
+    }
+    .editorial-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .editorial-line {
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      margin: 0 auto 32px;
+    }
+    .editorial-quote {
+      font-family: var(--font-d);
+      font-size: clamp(22px, 4vw, 42px);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.35;
+      margin-bottom: 24px;
+    }
+    .editorial-attr {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ===== FOOTER ===== */
+    footer { background: var(--espresso); }
+
+    .footer-inner {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 64px 24px 40px;
+      display: grid;
+      gap: 40px;
+    }
+    @media (min-width: 768px)  { .footer-inner { grid-template-columns: 2fr 1fr 1fr 1fr; padding: 80px 40px 48px; } }
+    @media (min-width: 1280px) { .footer-inner { padding: 80px 64px 48px; } }
+
+    .footer-logo {
+      font-family: var(--font-d);
+      font-size: 30px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--cream);
+      text-decoration: none;
+      display: block;
+      margin-bottom: 14px;
+    }
+
+    .footer-tagline {
+      font-family: var(--font-d);
+      font-size: 15px;
+      font-style: italic;
+      color: rgba(244,239,230,0.45);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    .footer-wpp {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-wpp:hover { color: var(--cream); }
+
+    .footer-col-title {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+
+    .footer-links { list-style: none; }
+    .footer-links li + li { margin-top: 12px; }
+    .footer-links a {
+      font-size: 14px;
+      color: rgba(244,239,230,0.6);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-links a:hover { color: var(--cream); }
+
+    .footer-bottom {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    @media (min-width: 1280px) { .footer-bottom { padding: 18px 64px; } }
+
+    .footer-copy {
+      font-size: 11px;
+      color: rgba(244,239,230,0.35);
+    }
+
+    .footer-rule {
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.45;
+    }
+
+    /* ===== UTILITY ===== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      clip: rect(0,0,0,0);
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BANNER -->
+<div class="top-banner">
+  Frete grátis em compras acima de R$&nbsp;399 &nbsp;·&nbsp; Entrega em todo o Brasil
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Cambraia</a>
+
+    <nav aria-label="Navegação principal">
+      <ul class="nav-primary">
+        <li>
+          <button class="nav-link" id="js-nav-trigger" aria-expanded="false" aria-controls="mega-panel">
+            Categorias
+          </button>
+        </li>
+        <li><a href="collection.html" class="nav-link">Novidades</a></li>
+        <li><a href="stylist.html" class="nav-link">Personal stylist</a></li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20uma%20consultoria%20de%20estilo."
+         class="btn-wpp-header" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Falar com a stylist
+      </a>
+      <button class="btn-menu" id="js-mob-open" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- MEGA PANEL (desktop) -->
+<div class="mega-panel" id="mega-panel" role="dialog" aria-label="Categorias">
+  <div class="panel-left">
+    <nav class="panel-cats-grid" aria-label="Categorias de produto">
+      <a href="category.html?c=vestidos">Vestidos</a>
+      <a href="category.html?c=saias">Saias</a>
+      <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+      <a href="category.html?c=calcas">Calças</a>
+      <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+      <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+      <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+      <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+      <a href="category.html?c=acessorios">Acessórios</a>
+    </nav>
+    <nav class="panel-cols" aria-label="Coleções">
+      <a href="collection.html?c=novidades">Novidades</a>
+      <a href="collection.html?c=denim">Denim</a>
+      <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+      <a href="collection.html?c=conjuntos">Conjuntos</a>
+      <a href="collection.html?c=festa">Festa</a>
+      <a href="collection.html?c=estacao">Estação</a>
+    </nav>
+  </div>
+  <div class="panel-right">
+    <div class="panel-right-bg" aria-hidden="true"></div>
+    <div class="panel-right-content">
+      <p class="panel-eyebrow">Em destaque</p>
+      <p class="panel-title">Alfaiataria<br>de verão</p>
+      <a href="collection.html?c=alfaiataria" class="panel-cta">Ver coleção</a>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobile-nav" aria-label="Menu" aria-hidden="true">
+  <div class="mob-nav-head">
+    <a href="index.html" class="mob-logo">Cambraia</a>
+    <button class="btn-close" id="js-mob-close" aria-label="Fechar menu">✕</button>
+  </div>
+  <div class="mob-nav-body">
+    <div>
+      <button class="mob-acc-btn" data-acc="cats">
+        Categorias
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cats">
+        <a href="category.html?c=vestidos">Vestidos</a>
+        <a href="category.html?c=saias">Saias</a>
+        <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+        <a href="category.html?c=calcas">Calças</a>
+        <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+        <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+        <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+        <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+        <a href="category.html?c=acessorios">Acessórios</a>
+      </div>
+    </div>
+    <div>
+      <button class="mob-acc-btn" data-acc="cols">
+        Coleções
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="9,18 15,12 9,6"></polyline>
+        </svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cols">
+        <a href="collection.html?c=novidades">Novidades</a>
+        <a href="collection.html?c=denim">Denim</a>
+        <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+        <a href="collection.html?c=conjuntos">Conjuntos</a>
+        <a href="collection.html?c=festa">Festa</a>
+        <a href="collection.html?c=estacao">Estação</a>
+      </div>
+    </div>
+    <a href="stylist.html" class="mob-plain-link">Personal stylist</a>
+  </div>
+  <div class="mob-nav-foot">
+    <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo."
+       class="mob-cta" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      Agendar com Luiza Thomax
+    </a>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" aria-label="Destaque principal">
+    <div class="hero-video-placeholder" aria-hidden="true"></div>
+    <video class="hero-video" autoplay muted loop playsinline aria-hidden="true">
+      <!-- <source src="assets/hero.mp4" type="video/mp4"> -->
+    </video>
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Nova coleção — Verão 2025</p>
+      <h1 class="hero-title">O vestido que<br>você ainda não<br>sabe que precisa.</h1>
+      <p class="hero-sub">Curadoria feita à mão por Luiza Thomax — cada peça escolhida para realçar quem você é.</p>
+      <div class="hero-actions">
+        <a href="collection.html" class="btn-primary">Ver novidades</a>
+        <a href="stylist.html" class="btn-ghost">Conhecer a stylist</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOVIDADES -->
+  <div class="bg-light">
+    <div class="section">
+      <div class="sec-head">
+        <div>
+          <p class="sec-eyebrow">Chegou agora</p>
+          <h2 class="sec-title">Novidades da <em>semana</em></h2>
+        </div>
+        <a href="collection.html" class="link-all">Ver todas</a>
+      </div>
+      <div class="products-grid">
+
+        <!-- Produto 1 -->
+        <a href="product.html" class="product-card" aria-label="Vestido midi de linho — R$ 479,00">
+          <div class="prod-img tint-a">
+            <span class="badge-new">Novo</span>
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="72" height="96" viewBox="0 0 72 96" fill="none" stroke="#DCCBB0" stroke-width="1.5">
+                <path d="M24 12 L12 24 L4 72 L68 72 L60 24 L48 12"/>
+                <path d="M24 12 C24 4 48 4 48 12"/>
+                <ellipse cx="36" cy="10" rx="8" ry="6"/>
+                <line x1="24" y1="12" x2="4" y2="28"/>
+                <line x1="48" y1="12" x2="68" y2="28"/>
+                <line x1="4" y1="72" x2="10" y2="96"/>
+                <line x1="68" y1="72" x2="62" y2="96"/>
+                <line x1="10" y1="96" x2="62" y2="96"/>
+              </svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Vestido midi linho</div>
+            <div class="prod-detail">Cáqui · M, G disponíveis</div>
+            <div class="prod-price">R$&nbsp;479,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pelo%20Vestido%20midi%20linho.%20Pode%20me%20ajudar%3F"
+               class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+
+        <!-- Produto 2 -->
+        <a href="product.html" class="product-card" aria-label="Blusa de seda com laço — R$ 329,00">
+          <div class="prod-img tint-b">
+            <span class="badge-new">Novo</span>
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#DCCBB0" stroke-width="1.5">
+                <path d="M36 16 L18 28 L10 72 L62 72 L54 28 Z"/>
+                <ellipse cx="36" cy="14" rx="9" ry="7"/>
+                <line x1="18" y1="28" x2="4" y2="20"/>
+                <line x1="54" y1="28" x2="68" y2="20"/>
+                <path d="M28 36 C28 30 44 30 44 36"/>
+              </svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Blusa de seda com laço</div>
+            <div class="prod-detail">Off-white · PP, P, M</div>
+            <div class="prod-price"><span class="orig">R$&nbsp;389,00</span>R$&nbsp;329,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Blusa%20de%20seda%20com%20laço.%20Pode%20me%20ajudar%3F"
+               class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+
+        <!-- Produto 3 -->
+        <a href="product.html" class="product-card" aria-label="Calça alfaiataria — R$ 549,00">
+          <div class="prod-img tint-c">
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="56" height="96" viewBox="0 0 56 96" fill="none" stroke="#DCCBB0" stroke-width="1.5">
+                <rect x="4" y="4" width="48" height="20" rx="2"/>
+                <path d="M4 24 L10 96 L28 96 L28 56"/>
+                <path d="M52 24 L46 96 L28 96 L28 56"/>
+              </svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Calça alfaiataria</div>
+            <div class="prod-detail">Preto · 36 ao 44</div>
+            <div class="prod-price">R$&nbsp;549,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Calça%20alfaiataria.%20Pode%20me%20ajudar%3F"
+               class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+
+        <!-- Produto 4 -->
+        <a href="product.html" class="product-card" aria-label="Saia midi evasê — R$ 349,00">
+          <div class="prod-img tint-d">
+            <span class="badge-new">Novo</span>
+            <div class="prod-img-ph" aria-hidden="true">
+              <svg width="72" height="80" viewBox="0 0 72 80" fill="none" stroke="#DCCBB0" stroke-width="1.5">
+                <rect x="22" y="4" width="28" height="12" rx="2"/>
+                <path d="M22 16 L4 80 L68 80 L50 16 Z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="prod-info">
+            <div class="prod-name">Saia midi evasê</div>
+            <div class="prod-detail">Verde musgo · P ao G</div>
+            <div class="prod-price">R$&nbsp;349,00</div>
+            <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Saia%20midi%20evasê.%20Pode%20me%20ajudar%3F"
+               class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Quero esta peça
+            </a>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- STYLIST SECTION -->
+  <section class="stylist-wrap" aria-label="Personal stylist">
+    <div class="stylist-inner">
+      <div class="stylist-img-frame">
+        <div class="stylist-img" role="img" aria-label="Foto de Luiza Thomax">
+          <svg width="100" height="140" viewBox="0 0 100 140" fill="none" stroke="#C2A14D" stroke-width="1">
+            <circle cx="50" cy="35" r="24"/>
+            <path d="M14 140 C14 100 86 100 86 140"/>
+          </svg>
+        </div>
+        <div class="stylist-accent" aria-hidden="true"></div>
+      </div>
+      <div>
+        <p class="stylist-eyebrow">Personal stylist</p>
+        <h2 class="stylist-name">Luiza<br>Thomax</h2>
+        <p class="stylist-role">Consultora de estilo · Cambraia</p>
+        <div class="stylist-bio">
+          <p>Com mais de oito anos de experiência em consultoria de imagem, Luiza Thomax acredita que a roupa certa é aquela que faz você se sentir exatamente como você é — sem esforço.</p>
+          <p>Ela seleciona cada peça da Cambraia pensando em quem vai vesti-la. Não em tendência. Em você.</p>
+        </div>
+        <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo."
+           class="btn-agendar" target="_blank" rel="noopener">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Agendar horário
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLEÇÕES -->
+  <div class="section">
+    <div class="sec-head">
+      <div>
+        <p class="sec-eyebrow">Universos</p>
+        <h2 class="sec-title">Nossas <em>coleções</em></h2>
+      </div>
+    </div>
+    <div class="cols-grid">
+      <a href="collection.html?c=novidades" class="col-card" aria-label="Coleção Novidades">
+        <div class="col-card-bg" style="background: linear-gradient(135deg,#3a2d25,#241C17)" aria-hidden="true"></div>
+        <div class="col-card-overlay"></div>
+        <span class="col-card-label">Novidades</span>
+      </a>
+      <a href="collection.html?c=denim" class="col-card" aria-label="Coleção Denim">
+        <div class="col-card-bg" style="background: linear-gradient(135deg,#2a3a5c,#1a2540)" aria-hidden="true"></div>
+        <div class="col-card-overlay"></div>
+        <span class="col-card-label">Denim</span>
+      </a>
+      <a href="collection.html?c=alfaiataria" class="col-card" aria-label="Coleção Alfaiataria">
+        <div class="col-card-bg" style="background: linear-gradient(135deg,#3a2d20,#1e1610)" aria-hidden="true"></div>
+        <div class="col-card-overlay"></div>
+        <span class="col-card-label">Alfaiataria</span>
+      </a>
+      <a href="collection.html?c=conjuntos" class="col-card" aria-label="Coleção Conjuntos">
+        <div class="col-card-bg" style="background: linear-gradient(135deg,#1a4535,#0B5D46)" aria-hidden="true"></div>
+        <div class="col-card-overlay"></div>
+        <span class="col-card-label">Conjuntos</span>
+      </a>
+      <a href="collection.html?c=festa" class="col-card" aria-label="Coleção Festa">
+        <div class="col-card-bg" style="background: linear-gradient(135deg,#4a1428,#7B1E3A)" aria-hidden="true"></div>
+        <div class="col-card-overlay"></div>
+        <span class="col-card-label">Festa</span>
+      </a>
+      <a href="collection.html?c=estacao" class="col-card" aria-label="Coleção Estação">
+        <div class="col-card-bg" style="background: linear-gradient(135deg,#6b4e1a,#C2A14D)" aria-hidden="true"></div>
+        <div class="col-card-overlay"></div>
+        <span class="col-card-label">Estação</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- EDITORIAL -->
+  <div class="editorial">
+    <div class="editorial-inner">
+      <div class="editorial-line" aria-hidden="true"></div>
+      <blockquote class="editorial-quote">
+        "Moda é o que você compra.<br>Estilo é o que você faz com ela."
+      </blockquote>
+      <p class="editorial-attr">— Luiza Thomax, personal stylist</p>
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">Cambraia</a>
+      <p class="footer-tagline">Moda feminina com curadoria.<br>Atendimento pelo WhatsApp.</p>
+      <a href="https://wa.me/5583988886932" class="footer-wpp" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        +55 83 9888-6932
+      </a>
+    </div>
+    <div>
+      <p class="footer-col-title">Loja</p>
+      <ul class="footer-links">
+        <li><a href="collection.html">Novidades</a></li>
+        <li><a href="category.html?c=vestidos">Vestidos</a></li>
+        <li><a href="category.html?c=saias">Saias</a></li>
+        <li><a href="category.html?c=blusas-tops">Blusas &amp; tops</a></li>
+        <li><a href="category.html?c=calcas">Calças</a></li>
+        <li><a href="category.html?c=acessorios">Acessórios</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Coleções</p>
+      <ul class="footer-links">
+        <li><a href="collection.html?c=denim">Denim</a></li>
+        <li><a href="collection.html?c=alfaiataria">Alfaiataria</a></li>
+        <li><a href="collection.html?c=conjuntos">Conjuntos</a></li>
+        <li><a href="collection.html?c=festa">Festa</a></li>
+        <li><a href="collection.html?c=estacao">Estação</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Atendimento</p>
+      <ul class="footer-links">
+        <li><a href="stylist.html">Personal stylist</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20tenho%20uma%20dúvida." target="_blank" rel="noopener">Falar no WhatsApp</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria." target="_blank" rel="noopener">Agendar consultoria</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Cambraia. Todos os direitos reservados.</span>
+    <div class="footer-rule" aria-hidden="true"></div>
+  </div>
+</footer>
+
+<script>
+  /* ===== MEGA PANEL ===== */
+  const trigger = document.getElementById('js-nav-trigger');
+  const panel   = document.getElementById('mega-panel');
+  let closeTimer;
+
+  function openPanel()  { clearTimeout(closeTimer); panel.classList.add('open'); trigger.setAttribute('aria-expanded','true'); }
+  function closePanel() { closeTimer = setTimeout(() => { panel.classList.remove('open'); trigger.setAttribute('aria-expanded','false'); }, 140); }
+
+  trigger?.addEventListener('mouseenter', openPanel);
+  trigger?.addEventListener('mouseleave', closePanel);
+  trigger?.addEventListener('click', () => panel.classList.contains('open') ? closePanel() : openPanel());
+  panel?.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+  panel?.addEventListener('mouseleave', closePanel);
+
+  /* ===== MOBILE NAV ===== */
+  const mobileNav = document.getElementById('mobile-nav');
+
+  function openMob()  { mobileNav.classList.add('open'); mobileNav.removeAttribute('aria-hidden'); document.body.style.overflow = 'hidden'; }
+  function closeMob() { mobileNav.classList.remove('open'); mobileNav.setAttribute('aria-hidden','true'); document.body.style.overflow = ''; }
+
+  document.getElementById('js-mob-open')?.addEventListener('click', openMob);
+  document.getElementById('js-mob-close')?.addEventListener('click', closeMob);
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closePanel(); closeMob(); }
+  });
+
+  /* ===== ACCORDION ===== */
+  document.querySelectorAll('[data-acc]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id   = btn.dataset.acc;
+      const body = document.getElementById('acc-' + id);
+      const open = btn.classList.contains('open');
+      document.querySelectorAll('.mob-acc-btn').forEach(b => b.classList.remove('open'));
+      document.querySelectorAll('.mob-acc-body').forEach(b => b.classList.remove('open'));
+      if (!open) { btn.classList.add('open'); body?.classList.add('open'); }
+    });
+  });
+</script>
+</body>
+</html>

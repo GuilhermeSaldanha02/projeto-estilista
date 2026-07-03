@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title id="page-title">Novidades · Cambraia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--sand-50:#F4EFE6;--sand-100:#EDE3D2;--sand-200:#E7DBC8;--sand-300:#DCCBB0;--espresso:#241C17;--emerald:#0B5D46;--emerald-l:#1D9A72;--bordeaux:#7B1E3A;--gold:#C2A14D;--ink:#1A1A1A;--cream:#F4EFE6;--muted:#6B5E52;--font-d:'Cormorant Garamond',Georgia,serif;--font-b:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;--banner-h:40px;--header-h:68px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);background:var(--sand-200);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--emerald);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden}
+
+.top-banner{position:sticky;top:0;z-index:110;background:var(--espresso);color:var(--cream);height:var(--banner-h);display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.09em}
+.site-header{position:sticky;top:var(--banner-h);z-index:100;height:var(--header-h);background:var(--sand-200);border-bottom:1px solid var(--sand-300)}
+.header-inner{max-width:1440px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--font-d);font-size:26px;font-weight:500;letter-spacing:.06em;color:var(--ink);text-decoration:none;flex-shrink:0}
+.nav-primary{display:none;align-items:center;gap:2px;list-style:none}
+@media(min-width:1024px){.nav-primary{display:flex}}
+.nav-link{font-size:13px;letter-spacing:.04em;color:var(--ink);text-decoration:none;padding:8px 14px;border-radius:3px;background:none;border:none;cursor:pointer;font-family:var(--font-b);transition:background .15s}
+.nav-link:hover,.nav-link.active{background:rgba(36,28,23,.07)}
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn-wpp-header{display:none;align-items:center;gap:8px;background:var(--emerald);color:#fff;font-size:13px;font-weight:500;letter-spacing:.04em;padding:9px 18px;border-radius:3px;text-decoration:none;transition:background .15s;white-space:nowrap}
+@media(min-width:640px){.btn-wpp-header{display:flex}}
+.btn-wpp-header:hover{background:var(--emerald-l)}
+.btn-wpp-header svg{width:15px;height:15px}
+.btn-menu{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:8px}
+@media(min-width:1024px){.btn-menu{display:none}}
+.btn-menu span{display:block;width:20px;height:1.5px;background:var(--ink)}
+
+.mega-panel{position:fixed;top:calc(var(--banner-h) + var(--header-h));left:0;width:100%;z-index:99;background:var(--sand-100);border-bottom:1px solid var(--sand-300);box-shadow:0 12px 48px rgba(36,28,23,.14);display:none;grid-template-columns:1fr 320px}
+.mega-panel.open{display:grid}
+.panel-left{padding:40px 48px 32px}
+.panel-cats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px 24px;margin-bottom:28px}
+.panel-cats-grid a{font-family:var(--font-d);font-size:19px;color:var(--ink);text-decoration:none;padding:8px 0;border-bottom:1px solid transparent;display:block;transition:color .15s,border-color .15s}
+.panel-cats-grid a:hover{color:var(--emerald);border-bottom-color:var(--gold)}
+.panel-cols{display:flex;gap:20px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--sand-300)}
+.panel-cols a{font-size:12px;letter-spacing:.08em;color:var(--muted);text-decoration:none;padding:6px 0;transition:color .15s;border-bottom:1.5px solid transparent}
+.panel-cols a:hover{color:var(--emerald);border-bottom-color:var(--emerald)}
+.panel-right{background:var(--espresso);padding:40px 32px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;min-height:280px}
+.panel-right-bg{position:absolute;inset:0;background:linear-gradient(160deg,#3a2d25 0%,var(--espresso) 100%)}
+.panel-right-content{position:relative;z-index:1}
+.panel-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.panel-title{font-family:var(--font-d);font-size:30px;font-style:italic;font-weight:400;color:var(--cream);line-height:1.15;margin-bottom:18px}
+.panel-cta{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.1em;color:var(--gold);text-decoration:none;transition:gap .15s}
+.panel-cta:hover{gap:14px}.panel-cta::after{content:'→'}
+
+.mobile-nav{position:fixed;inset:0;z-index:200;background:var(--espresso);transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+.mobile-nav.open{transform:translateX(0)}
+.mob-nav-head{padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(194,161,77,.2);flex-shrink:0}
+.mob-logo{font-family:var(--font-d);font-size:22px;color:var(--cream);text-decoration:none}
+.btn-close{background:none;border:none;color:var(--cream);font-size:22px;cursor:pointer;padding:4px;line-height:1}
+.mob-nav-body{flex:1;overflow-y:auto}
+.mob-acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:none;border:none;border-bottom:1px solid rgba(255,255,255,.06);font-family:var(--font-d);font-size:22px;color:var(--cream);cursor:pointer;text-align:left}
+.mob-acc-btn .chev{width:16px;height:16px;color:var(--gold);transition:transform .2s;flex-shrink:0}
+.mob-acc-btn.open .chev{transform:rotate(90deg)}
+.mob-acc-body{display:none;padding:4px 24px 16px 42px;background:rgba(0,0,0,.18)}
+.mob-acc-body.open{display:block}
+.mob-acc-body a{display:block;padding:11px 0;font-size:15px;color:rgba(244,239,230,.75);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:color .15s}
+.mob-acc-body a:hover{color:var(--gold)}
+.mob-plain-link{display:block;padding:18px 24px;font-family:var(--font-d);font-size:22px;color:var(--cream);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.06)}
+.mob-nav-foot{padding:24px;border-top:1px solid rgba(194,161,77,.2);flex-shrink:0}
+.mob-cta{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;background:var(--bordeaux);color:#fff;font-size:14px;font-weight:500;text-decoration:none;border-radius:3px;letter-spacing:.04em;transition:background .15s}
+.mob-cta:hover{background:#9B2548}
+
+/* PRODUCT CARD */
+.product-card{display:flex;flex-direction:column;background:var(--sand-50);border-radius:2px;overflow:hidden;text-decoration:none;color:var(--ink);transition:box-shadow .2s}
+.product-card:hover{box-shadow:0 6px 32px rgba(36,28,23,.13)}
+.prod-img{aspect-ratio:3/4;position:relative;overflow:hidden;background:var(--sand-100)}
+.prod-img-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:transform .5s ease}
+.product-card:hover .prod-img-ph{transform:scale(1.04)}
+.prod-img-ph svg{opacity:.18}
+.prod-img.tint-a{background:#e8dfc8}.prod-img.tint-b{background:#ddd4be}.prod-img.tint-c{background:#e2d8c4}.prod-img.tint-d{background:#d8cfba}.prod-img.tint-e{background:#e5d9c2}.prod-img.tint-f{background:#d4cbb5}
+.badge-new{position:absolute;top:12px;left:12px;background:var(--emerald);color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:2px;z-index:1}
+.badge-off{position:absolute;top:12px;left:12px;background:var(--bordeaux);color:#fff;font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:4px 9px;border-radius:2px;z-index:1}
+.prod-info{padding:16px 16px 18px;display:flex;flex-direction:column;gap:4px}
+.prod-name{font-family:var(--font-d);font-size:18px;font-weight:400;line-height:1.25}
+.prod-detail{font-size:11px;color:var(--muted);letter-spacing:.03em}
+.prod-price{font-size:15px;font-weight:500;color:var(--ink);margin-top:6px}
+.prod-price .orig{font-size:12px;color:var(--muted);text-decoration:line-through;font-weight:400;margin-right:6px}
+.btn-prod-wpp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px;background:var(--bordeaux);color:#fff;font-size:12px;font-weight:500;letter-spacing:.05em;text-decoration:none;border-radius:2px;border:none;cursor:pointer;transition:background .15s;margin-top:12px}
+.btn-prod-wpp:hover{background:#9B2548}
+.btn-prod-wpp svg{width:13px;height:13px;flex-shrink:0}
+
+/* COLLECTION HERO */
+.coll-hero{background:var(--espresso);padding:80px 24px 64px;position:relative;overflow:hidden}
+@media(min-width:768px){.coll-hero{padding:96px 40px 80px}}
+@media(min-width:1280px){.coll-hero{padding:120px 64px 96px}}
+.coll-hero::before{content:'';position:absolute;top:-30%;right:-5%;width:500px;height:500px;border-radius:50%;background:radial-gradient(ellipse,rgba(11,93,70,.2) 0%,transparent 70%);pointer-events:none}
+.coll-hero-inner{max-width:1440px;margin:0 auto;position:relative;display:flex;align-items:flex-end;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.coll-hero-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px}
+.coll-hero-title{font-family:var(--font-d);font-size:clamp(52px,10vw,120px);font-style:italic;font-weight:400;color:var(--cream);line-height:.9;margin-bottom:8px}
+.coll-hero-sub{font-size:14px;color:rgba(244,239,230,.5);letter-spacing:.04em}
+.coll-hero-count{font-family:var(--font-d);font-size:clamp(60px,8vw,100px);font-style:italic;color:rgba(194,161,77,.18);line-height:1;flex-shrink:0;align-self:flex-end}
+
+/* COLLECTION TABS */
+.coll-tabs{background:var(--sand-200);border-bottom:1px solid var(--sand-300);position:sticky;top:calc(var(--banner-h) + var(--header-h));z-index:50}
+.coll-tabs-inner{max-width:1440px;margin:0 auto;padding:0 24px;display:flex;gap:0;overflow-x:auto;height:52px;align-items:stretch;-ms-overflow-style:none;scrollbar-width:none}
+.coll-tabs-inner::-webkit-scrollbar{display:none}
+@media(min-width:1280px){.coll-tabs-inner{padding:0 64px}}
+.coll-tab{font-size:12px;letter-spacing:.06em;color:var(--muted);padding:0 18px;height:100%;display:flex;align-items:center;border:none;background:none;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;transition:all .15s;font-family:var(--font-b)}
+.coll-tab.active{color:var(--ink);border-bottom-color:var(--ink)}
+.coll-tab:hover{color:var(--emerald)}
+
+/* GRID */
+.coll-products{max-width:1440px;margin:0 auto;padding:40px 24px 96px}
+@media(min-width:768px){.coll-products{padding:40px 40px 96px}}
+@media(min-width:1280px){.coll-products{padding:48px 64px 96px}}
+.coll-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:640px){.coll-grid{gap:16px}}
+@media(min-width:768px){.coll-grid{grid-template-columns:repeat(3,1fr);gap:20px}}
+@media(min-width:1280px){.coll-grid{grid-template-columns:repeat(4,1fr);gap:24px}}
+
+/* FOOTER */
+footer{background:var(--espresso)}
+.footer-inner{max-width:1440px;margin:0 auto;padding:64px 24px 40px;display:grid;gap:40px}
+@media(min-width:768px){.footer-inner{grid-template-columns:2fr 1fr 1fr 1fr;padding:80px 40px 48px}}
+@media(min-width:1280px){.footer-inner{padding:80px 64px 48px}}
+.footer-logo{font-family:var(--font-d);font-size:30px;font-weight:500;letter-spacing:.06em;color:var(--cream);text-decoration:none;display:block;margin-bottom:14px}
+.footer-tagline{font-family:var(--font-d);font-size:15px;font-style:italic;color:rgba(244,239,230,.45);line-height:1.6;margin-bottom:22px}
+.footer-wpp{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--gold);text-decoration:none;transition:color .15s}
+.footer-wpp:hover{color:var(--cream)}
+.footer-col-title{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.footer-links{list-style:none}
+.footer-links li+li{margin-top:12px}
+.footer-links a{font-size:14px;color:rgba(244,239,230,.6);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:var(--cream)}
+.footer-bottom{max-width:1440px;margin:0 auto;padding:18px 24px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(min-width:1280px){.footer-bottom{padding:18px 64px}}
+.footer-copy{font-size:11px;color:rgba(244,239,230,.35)}
+.footer-rule{width:28px;height:1px;background:var(--gold);opacity:.45}
+</style>
+</head>
+<body>
+
+<div class="top-banner">Frete grátis em compras acima de R$&nbsp;399 &nbsp;·&nbsp; Entrega em todo o Brasil</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Cambraia</a>
+    <nav aria-label="Navegação principal">
+      <ul class="nav-primary">
+        <li><button class="nav-link" id="js-nav-trigger" aria-expanded="false" aria-controls="mega-panel">Categorias</button></li>
+        <li><a href="collection.html" class="nav-link active">Novidades</a></li>
+        <li><a href="stylist.html" class="nav-link">Personal stylist</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20uma%20consultoria%20de%20estilo." class="btn-wpp-header" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar com a stylist
+      </a>
+      <button class="btn-menu" id="js-mob-open" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mega-panel" id="mega-panel" role="dialog" aria-label="Categorias">
+  <div class="panel-left">
+    <nav class="panel-cats-grid" aria-label="Categorias de produto">
+      <a href="category.html?c=vestidos">Vestidos</a>
+      <a href="category.html?c=saias">Saias</a>
+      <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+      <a href="category.html?c=calcas">Calças</a>
+      <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+      <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+      <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+      <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+      <a href="category.html?c=acessorios">Acessórios</a>
+    </nav>
+    <nav class="panel-cols" aria-label="Coleções">
+      <a href="collection.html?c=novidades">Novidades</a>
+      <a href="collection.html?c=denim">Denim</a>
+      <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+      <a href="collection.html?c=conjuntos">Conjuntos</a>
+      <a href="collection.html?c=festa">Festa</a>
+      <a href="collection.html?c=estacao">Estação</a>
+    </nav>
+  </div>
+  <div class="panel-right">
+    <div class="panel-right-bg" aria-hidden="true"></div>
+    <div class="panel-right-content">
+      <p class="panel-eyebrow">Em destaque</p>
+      <p class="panel-title">Alfaiataria<br>de verão</p>
+      <a href="collection.html?c=alfaiataria" class="panel-cta">Ver coleção</a>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav" id="mobile-nav" aria-label="Menu" aria-hidden="true">
+  <div class="mob-nav-head">
+    <a href="index.html" class="mob-logo">Cambraia</a>
+    <button class="btn-close" id="js-mob-close" aria-label="Fechar menu">✕</button>
+  </div>
+  <div class="mob-nav-body">
+    <div>
+      <button class="mob-acc-btn" data-acc="cats">Categorias
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"></polyline></svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cats">
+        <a href="category.html?c=vestidos">Vestidos</a>
+        <a href="category.html?c=saias">Saias</a>
+        <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+        <a href="category.html?c=calcas">Calças</a>
+        <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+        <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+        <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+        <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+        <a href="category.html?c=acessorios">Acessórios</a>
+      </div>
+    </div>
+    <div>
+      <button class="mob-acc-btn" data-acc="cols">Coleções
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"></polyline></svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cols">
+        <a href="collection.html?c=novidades">Novidades</a>
+        <a href="collection.html?c=denim">Denim</a>
+        <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+        <a href="collection.html?c=conjuntos">Conjuntos</a>
+        <a href="collection.html?c=festa">Festa</a>
+        <a href="collection.html?c=estacao">Estação</a>
+      </div>
+    </div>
+    <a href="stylist.html" class="mob-plain-link">Personal stylist</a>
+  </div>
+  <div class="mob-nav-foot">
+    <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo." class="mob-cta" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Agendar com Luiza Thomax
+    </a>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section class="coll-hero" aria-label="Coleção em destaque">
+    <div class="coll-hero-inner">
+      <div>
+        <p class="coll-hero-eyebrow" id="hero-eyebrow">Curadoria Cambraia</p>
+        <h1 class="coll-hero-title" id="hero-title">Novidades</h1>
+        <p class="coll-hero-sub" id="hero-sub">Chegou agora · Seleção semanal de Luiza Thomax</p>
+      </div>
+      <div class="coll-hero-count" aria-hidden="true" id="hero-count">24</div>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="coll-tabs" role="tablist" aria-label="Coleções">
+    <div class="coll-tabs-inner">
+      <button class="coll-tab active" onclick="setTab(this,'novidades')" role="tab">Novidades</button>
+      <button class="coll-tab" onclick="setTab(this,'denim')" role="tab">Denim</button>
+      <button class="coll-tab" onclick="setTab(this,'alfaiataria')" role="tab">Alfaiataria</button>
+      <button class="coll-tab" onclick="setTab(this,'conjuntos')" role="tab">Conjuntos</button>
+      <button class="coll-tab" onclick="setTab(this,'festa')" role="tab">Festa</button>
+      <button class="coll-tab" onclick="setTab(this,'estacao')" role="tab">Estação</button>
+    </div>
+  </div>
+
+  <!-- GRID -->
+  <div class="coll-products">
+    <div class="coll-grid" id="coll-grid">
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-a">
+          <span class="badge-new">Novo</span>
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="72" height="96" viewBox="0 0 72 96" fill="none" stroke="#DCCBB0" stroke-width="1.5"><path d="M24 12 L12 24 L4 72 L68 72 L60 24 L48 12"/><ellipse cx="36" cy="10" rx="8" ry="6"/><line x1="4" y1="72" x2="10" y2="96"/><line x1="68" y1="72" x2="62" y2="96"/><line x1="10" y1="96" x2="62" y2="96"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Vestido midi linho</div>
+          <div class="prod-detail">Cáqui · M, G</div>
+          <div class="prod-price">R$&nbsp;479,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pelo%20Vestido%20midi%20linho." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-b">
+          <span class="badge-new">Novo</span>
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="72" height="72" viewBox="0 0 72 72" fill="none" stroke="#DCCBB0" stroke-width="1.5"><path d="M36 16 L18 28 L10 72 L62 72 L54 28 Z"/><ellipse cx="36" cy="14" rx="9" ry="7"/><line x1="18" y1="28" x2="4" y2="20"/><line x1="54" y1="28" x2="68" y2="20"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Blusa de seda com laço</div>
+          <div class="prod-detail">Off-white · PP, P, M</div>
+          <div class="prod-price"><span class="orig">R$&nbsp;389,00</span>R$&nbsp;329,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Blusa%20de%20seda%20com%20laço." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-c">
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="56" height="96" viewBox="0 0 56 96" fill="none" stroke="#DCCBB0" stroke-width="1.5"><rect x="4" y="4" width="48" height="20" rx="2"/><path d="M4 24 L10 96 L28 96 L28 56"/><path d="M52 24 L46 96 L28 96 L28 56"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Calça alfaiataria</div>
+          <div class="prod-detail">Preto · 36 ao 44</div>
+          <div class="prod-price">R$&nbsp;549,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Calça%20alfaiataria." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-d">
+          <span class="badge-new">Novo</span>
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="72" height="80" viewBox="0 0 72 80" fill="none" stroke="#DCCBB0" stroke-width="1.5"><rect x="22" y="4" width="28" height="12" rx="2"/><path d="M22 16 L4 80 L68 80 L50 16 Z"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Saia midi evasê</div>
+          <div class="prod-detail">Verde musgo · P ao G</div>
+          <div class="prod-price">R$&nbsp;349,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Saia%20midi%20evasê." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-e">
+          <span class="badge-new">Novo</span>
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="72" height="96" viewBox="0 0 72 96" fill="none" stroke="#DCCBB0" stroke-width="1.5"><path d="M24 12 L12 24 L4 72 L68 72 L60 24 L48 12"/><ellipse cx="36" cy="10" rx="8" ry="6"/><line x1="4" y1="72" x2="10" y2="96"/><line x1="68" y1="72" x2="62" y2="96"/><line x1="10" y1="96" x2="62" y2="96"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Vestido wrap viscose</div>
+          <div class="prod-detail">Esmeralda · PP ao GG</div>
+          <div class="prod-price">R$&nbsp;359,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pelo%20Vestido%20wrap%20viscose." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-f">
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="56" height="96" viewBox="0 0 56 96" fill="none" stroke="#DCCBB0" stroke-width="1.5"><rect x="4" y="4" width="48" height="20" rx="2"/><path d="M4 24 L10 96 L28 96 L28 56"/><path d="M52 24 L46 96 L28 96 L28 56"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Calça wide leg bege</div>
+          <div class="prod-detail">Bege · 36 ao 44</div>
+          <div class="prod-price">R$&nbsp;489,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Calça%20wide%20leg%20bege." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-a">
+          <span class="badge-off">−20%</span>
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="72" height="96" viewBox="0 0 72 96" fill="none" stroke="#DCCBB0" stroke-width="1.5"><path d="M24 12 L12 24 L4 72 L68 72 L60 24 L48 12"/><ellipse cx="36" cy="10" rx="8" ry="6"/><line x1="4" y1="72" x2="10" y2="96"/><line x1="68" y1="72" x2="62" y2="96"/><line x1="10" y1="96" x2="62" y2="96"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Vestido seda alças finas</div>
+          <div class="prod-detail">Terracota · PP, P, M</div>
+          <div class="prod-price"><span class="orig">R$&nbsp;529,00</span>R$&nbsp;423,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pelo%20Vestido%20seda%20alças%20finas." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+      <a href="product.html" class="product-card">
+        <div class="prod-img tint-c">
+          <span class="badge-new">Novo</span>
+          <div class="prod-img-ph" aria-hidden="true">
+            <svg width="56" height="72" viewBox="0 0 56 72" fill="none" stroke="#DCCBB0" stroke-width="1.5"><path d="M28 12L10 22L4 72L52 72L46 22Z"/><ellipse cx="28" cy="10" rx="9" ry="7"/><line x1="10" y1="22" x2="2" y2="14"/><line x1="46" y1="22" x2="54" y2="14"/></svg>
+          </div>
+        </div>
+        <div class="prod-info">
+          <div class="prod-name">Blusa de tricô off-white</div>
+          <div class="prod-detail">Off-white · PP ao GG</div>
+          <div class="prod-price">R$&nbsp;289,00</div>
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Me%20interessei%20pela%20Blusa%20de%20tricô%20off-white." class="btn-prod-wpp" target="_blank" rel="noopener" onclick="event.stopPropagation()">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Quero esta peça
+          </a>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">Cambraia</a>
+      <p class="footer-tagline">Moda feminina com curadoria.<br>Atendimento pelo WhatsApp.</p>
+      <a href="https://wa.me/5583988886932" class="footer-wpp" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        +55 83 9888-6932
+      </a>
+    </div>
+    <div>
+      <p class="footer-col-title">Loja</p>
+      <ul class="footer-links">
+        <li><a href="collection.html">Novidades</a></li>
+        <li><a href="category.html?c=vestidos">Vestidos</a></li>
+        <li><a href="category.html?c=saias">Saias</a></li>
+        <li><a href="category.html?c=blusas-tops">Blusas &amp; tops</a></li>
+        <li><a href="category.html?c=calcas">Calças</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Coleções</p>
+      <ul class="footer-links">
+        <li><a href="collection.html?c=denim">Denim</a></li>
+        <li><a href="collection.html?c=alfaiataria">Alfaiataria</a></li>
+        <li><a href="collection.html?c=conjuntos">Conjuntos</a></li>
+        <li><a href="collection.html?c=festa">Festa</a></li>
+        <li><a href="collection.html?c=estacao">Estação</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Atendimento</p>
+      <ul class="footer-links">
+        <li><a href="stylist.html">Personal stylist</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20tenho%20uma%20dúvida." target="_blank" rel="noopener">Falar no WhatsApp</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria." target="_blank" rel="noopener">Agendar consultoria</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Cambraia. Todos os direitos reservados.</span>
+    <div class="footer-rule" aria-hidden="true"></div>
+  </div>
+</footer>
+
+<script>
+const trigger=document.getElementById('js-nav-trigger'),panel=document.getElementById('mega-panel');let closeTimer;
+function openPanel(){clearTimeout(closeTimer);panel.classList.add('open');trigger.setAttribute('aria-expanded','true')}
+function closePanel(){closeTimer=setTimeout(()=>{panel.classList.remove('open');trigger.setAttribute('aria-expanded','false')},140)}
+trigger?.addEventListener('mouseenter',openPanel);trigger?.addEventListener('mouseleave',closePanel);
+trigger?.addEventListener('click',()=>panel.classList.contains('open')?closePanel():openPanel());
+panel?.addEventListener('mouseenter',()=>clearTimeout(closeTimer));panel?.addEventListener('mouseleave',closePanel);
+const mobileNav=document.getElementById('mobile-nav');
+function openMob(){mobileNav.classList.add('open');mobileNav.removeAttribute('aria-hidden');document.body.style.overflow='hidden'}
+function closeMob(){mobileNav.classList.remove('open');mobileNav.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+document.getElementById('js-mob-open')?.addEventListener('click',openMob);
+document.getElementById('js-mob-close')?.addEventListener('click',closeMob);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanel();closeMob()}});
+document.querySelectorAll('[data-acc]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.dataset.acc,body=document.getElementById('acc-'+id),open=btn.classList.contains('open');
+    document.querySelectorAll('.mob-acc-btn').forEach(b=>b.classList.remove('open'));
+    document.querySelectorAll('.mob-acc-body').forEach(b=>b.classList.remove('open'));
+    if(!open){btn.classList.add('open');body?.classList.add('open')}
+  })
+});
+
+const collMeta={
+  novidades:{title:'Novidades',sub:'Chegou agora · Seleção semanal de Luiza Thomax',count:'24'},
+  denim:{title:'Denim',sub:'Calça, saia e mais — tudo em denim curado',count:'12'},
+  alfaiataria:{title:'Alfaiataria',sub:'Corte, estrutura e elegância atemporal',count:'18'},
+  conjuntos:{title:'Conjuntos',sub:'Dois a dois — combinações prontas',count:'8'},
+  festa:{title:'Festa',sub:'Para as noites que pedem uma peça especial',count:'16'},
+  estacao:{title:'Estação',sub:'As peças certas para a estação atual',count:'20'}
+};
+
+function setTab(el,id){
+  document.querySelectorAll('.coll-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const m=collMeta[id]||collMeta.novidades;
+  document.getElementById('hero-title').textContent=m.title;
+  document.getElementById('hero-sub').textContent=m.sub;
+  document.getElementById('hero-count').textContent=m.count;
+  document.getElementById('page-title').textContent=m.title+' · Cambraia';
+  history.replaceState(null,'',`?c=${id}`);
+}
+
+// Init from URL
+const p=new URLSearchParams(location.search);const c=p.get('c')||'novidades';
+const tabEl=document.querySelector(`.coll-tab[onclick*="'${c}'"]`);
+if(tabEl)setTab(tabEl,c);
+</script>
+</body>
+</html>

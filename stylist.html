@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Personal stylist — Luiza Thomax · Cambraia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+:root{--sand-50:#F4EFE6;--sand-100:#EDE3D2;--sand-200:#E7DBC8;--sand-300:#DCCBB0;--espresso:#241C17;--emerald:#0B5D46;--emerald-l:#1D9A72;--bordeaux:#7B1E3A;--gold:#C2A14D;--ink:#1A1A1A;--cream:#F4EFE6;--muted:#6B5E52;--font-d:'Cormorant Garamond',Georgia,serif;--font-b:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;--banner-h:40px;--header-h:68px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-b);background:var(--sand-200);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--emerald);outline-offset:3px;border-radius:2px}
+.sr-only{position:absolute;width:1px;height:1px;clip:rect(0,0,0,0);overflow:hidden}
+
+/* BANNER */
+.top-banner{position:sticky;top:0;z-index:110;background:var(--espresso);color:var(--cream);height:var(--banner-h);display:flex;align-items:center;justify-content:center;font-size:11px;letter-spacing:.09em}
+
+/* HEADER */
+.site-header{position:sticky;top:var(--banner-h);z-index:100;height:var(--header-h);background:var(--sand-200);border-bottom:1px solid var(--sand-300)}
+.header-inner{max-width:1440px;margin:0 auto;padding:0 24px;height:100%;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{font-family:var(--font-d);font-size:26px;font-weight:500;letter-spacing:.06em;color:var(--ink);text-decoration:none;flex-shrink:0}
+.nav-primary{display:none;align-items:center;gap:2px;list-style:none}
+@media(min-width:1024px){.nav-primary{display:flex}}
+.nav-link{font-size:13px;letter-spacing:.04em;color:var(--ink);text-decoration:none;padding:8px 14px;border-radius:3px;background:none;border:none;cursor:pointer;font-family:var(--font-b);transition:background .15s}
+.nav-link:hover,.nav-link.active{background:rgba(36,28,23,.07)}
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn-wpp-header{display:none;align-items:center;gap:8px;background:var(--emerald);color:#fff;font-size:13px;font-weight:500;letter-spacing:.04em;padding:9px 18px;border-radius:3px;text-decoration:none;transition:background .15s;white-space:nowrap}
+@media(min-width:640px){.btn-wpp-header{display:flex}}
+.btn-wpp-header:hover{background:var(--emerald-l)}
+.btn-wpp-header svg{width:15px;height:15px}
+.btn-menu{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;width:40px;height:40px;background:none;border:none;cursor:pointer;padding:8px}
+@media(min-width:1024px){.btn-menu{display:none}}
+.btn-menu span{display:block;width:20px;height:1.5px;background:var(--ink)}
+
+/* MEGA PANEL */
+.mega-panel{position:fixed;top:calc(var(--banner-h) + var(--header-h));left:0;width:100%;z-index:99;background:var(--sand-100);border-bottom:1px solid var(--sand-300);box-shadow:0 12px 48px rgba(36,28,23,.14);display:none;grid-template-columns:1fr 320px}
+.mega-panel.open{display:grid}
+.panel-left{padding:40px 48px 32px}
+.panel-cats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px 24px;margin-bottom:28px}
+.panel-cats-grid a{font-family:var(--font-d);font-size:19px;color:var(--ink);text-decoration:none;padding:8px 0;border-bottom:1px solid transparent;display:block;transition:color .15s,border-color .15s}
+.panel-cats-grid a:hover{color:var(--emerald);border-bottom-color:var(--gold)}
+.panel-cols{display:flex;gap:20px;flex-wrap:wrap;padding-top:20px;border-top:1px solid var(--sand-300)}
+.panel-cols a{font-size:12px;letter-spacing:.08em;color:var(--muted);text-decoration:none;padding:6px 0;transition:color .15s;border-bottom:1.5px solid transparent}
+.panel-cols a:hover{color:var(--emerald);border-bottom-color:var(--emerald)}
+.panel-right{background:var(--espresso);padding:40px 32px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden;min-height:280px}
+.panel-right-bg{position:absolute;inset:0;background:linear-gradient(160deg,#3a2d25 0%,var(--espresso) 100%)}
+.panel-right-content{position:relative;z-index:1}
+.panel-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:10px}
+.panel-title{font-family:var(--font-d);font-size:30px;font-style:italic;font-weight:400;color:var(--cream);line-height:1.15;margin-bottom:18px}
+.panel-cta{display:inline-flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.1em;color:var(--gold);text-decoration:none;transition:gap .15s}
+.panel-cta:hover{gap:14px}
+.panel-cta::after{content:'→'}
+
+/* MOBILE NAV */
+.mobile-nav{position:fixed;inset:0;z-index:200;background:var(--espresso);transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+.mobile-nav.open{transform:translateX(0)}
+.mob-nav-head{padding:16px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(194,161,77,.2);flex-shrink:0}
+.mob-logo{font-family:var(--font-d);font-size:22px;color:var(--cream);text-decoration:none}
+.btn-close{background:none;border:none;color:var(--cream);font-size:22px;cursor:pointer;padding:4px;line-height:1}
+.mob-nav-body{flex:1;overflow-y:auto}
+.mob-acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:18px 24px;background:none;border:none;border-bottom:1px solid rgba(255,255,255,.06);font-family:var(--font-d);font-size:22px;color:var(--cream);cursor:pointer;text-align:left}
+.mob-acc-btn .chev{width:16px;height:16px;color:var(--gold);transition:transform .2s;flex-shrink:0}
+.mob-acc-btn.open .chev{transform:rotate(90deg)}
+.mob-acc-body{display:none;padding:4px 24px 16px 42px;background:rgba(0,0,0,.18)}
+.mob-acc-body.open{display:block}
+.mob-acc-body a{display:block;padding:11px 0;font-size:15px;color:rgba(244,239,230,.75);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.05);transition:color .15s}
+.mob-acc-body a:hover{color:var(--gold)}
+.mob-plain-link{display:block;padding:18px 24px;font-family:var(--font-d);font-size:22px;color:var(--cream);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.06)}
+.mob-nav-foot{padding:24px;border-top:1px solid rgba(194,161,77,.2);flex-shrink:0}
+.mob-cta{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;background:var(--bordeaux);color:#fff;font-size:14px;font-weight:500;text-decoration:none;border-radius:3px;letter-spacing:.04em;transition:background .15s}
+.mob-cta:hover{background:#9B2548}
+
+/* BUTTONS */
+.btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--bordeaux);color:#fff;font-size:14px;font-weight:500;letter-spacing:.05em;padding:14px 28px;border-radius:3px;text-decoration:none;border:none;cursor:pointer;transition:background .15s,transform .1s}
+.btn-primary:hover{background:#9B2548}
+.btn-primary:active{transform:scale(.98)}
+.btn-ghost-light{display:inline-flex;align-items:center;gap:10px;background:transparent;color:var(--cream);font-size:14px;letter-spacing:.05em;padding:14px 28px;border-radius:3px;text-decoration:none;border:1px solid rgba(244,239,230,.38);transition:border-color .15s,background .15s}
+.btn-ghost-light:hover{border-color:var(--gold);background:rgba(194,161,77,.08)}
+
+/* STYLIST HERO */
+.st-hero{background:var(--espresso);padding:120px 24px 96px;position:relative;overflow:hidden}
+@media(min-width:768px){.st-hero{padding:140px 40px 120px}}
+@media(min-width:1280px){.st-hero{padding:160px 64px 140px}}
+.st-hero::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(ellipse,rgba(11,93,70,.18) 0%,transparent 70%);pointer-events:none}
+.st-hero-inner{max-width:1440px;margin:0 auto;position:relative}
+.st-hero-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.st-hero-name{font-family:var(--font-d);font-size:clamp(72px,12vw,160px);font-style:italic;font-weight:400;color:var(--cream);line-height:.88;margin-bottom:32px}
+.st-hero-divider{width:48px;height:1px;background:var(--gold);margin-bottom:32px}
+.st-hero-sub{font-size:16px;color:rgba(244,239,230,.6);max-width:420px;line-height:1.75;margin-bottom:44px}
+.st-hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+
+/* ABOUT */
+.st-about{background:var(--sand-200)}
+.st-about-inner{max-width:1440px;margin:0 auto;padding:80px 24px;display:grid;gap:56px;align-items:start}
+@media(min-width:768px){.st-about-inner{grid-template-columns:1fr 1fr;padding:96px 40px}}
+@media(min-width:1280px){.st-about-inner{grid-template-columns:460px 1fr;gap:96px;padding:120px 64px}}
+.st-photo{position:relative}
+.st-photo-main{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#3a2d25,#1a1008);border-radius:2px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.st-photo-accent{position:absolute;bottom:-18px;right:-18px;width:80px;height:80px;border:1px solid var(--gold);border-radius:2px;pointer-events:none}
+.st-photo-label{margin-top:32px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.st-bio-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--emerald);margin-bottom:12px}
+.st-bio-name{font-family:var(--font-d);font-size:clamp(36px,4.5vw,58px);font-weight:400;color:var(--ink);line-height:1.05;margin-bottom:6px}
+.st-bio-role{font-size:12px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:32px}
+.st-bio-divider{width:32px;height:1px;background:var(--gold);margin-bottom:32px}
+.st-bio-text{font-size:16px;line-height:1.85;color:var(--ink)}
+.st-bio-text p+p{margin-top:18px}
+.st-bio-cta{margin-top:44px;display:flex;gap:12px;flex-wrap:wrap}
+
+/* PHILOSOPHY */
+.st-philo{background:var(--espresso)}
+.st-philo-inner{max-width:1440px;margin:0 auto;padding:80px 24px;display:grid;gap:56px}
+@media(min-width:1024px){.st-philo-inner{grid-template-columns:1fr 1fr;gap:80px;padding:96px 64px;align-items:center}}
+.st-philo-quote{font-family:var(--font-d);font-size:clamp(26px,3.5vw,46px);font-style:italic;color:var(--cream);line-height:1.3}
+.st-philo-quote em{color:var(--gold);font-style:italic}
+.st-philo-text{font-size:15px;color:rgba(244,239,230,.65);line-height:1.85}
+.st-philo-text p+p{margin-top:16px}
+
+/* SERVICES */
+.st-services{background:var(--sand-100)}
+.st-services-inner{max-width:1440px;margin:0 auto;padding:80px 24px}
+@media(min-width:768px){.st-services-inner{padding:96px 40px}}
+@media(min-width:1280px){.st-services-inner{padding:96px 64px}}
+.sec-eyebrow{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
+.sec-title{font-family:var(--font-d);font-size:clamp(26px,4vw,44px);font-weight:400;color:var(--ink);line-height:1.15}
+.sec-title em{font-style:italic;color:var(--emerald)}
+.st-services-grid{display:grid;gap:2px;margin-top:48px}
+@media(min-width:768px){.st-services-grid{grid-template-columns:repeat(3,1fr)}}
+.st-service-item{padding:36px 32px;background:var(--sand-50);border-radius:2px}
+.st-service-num{font-family:var(--font-d);font-size:52px;font-style:italic;color:var(--gold);opacity:.4;line-height:1;margin-bottom:18px}
+.st-service-title{font-family:var(--font-d);font-size:22px;font-weight:400;color:var(--ink);margin-bottom:12px}
+.st-service-desc{font-size:14px;color:var(--muted);line-height:1.75}
+
+/* CTA BLOCK */
+.st-cta{background:var(--emerald)}
+.st-cta-inner{max-width:760px;margin:0 auto;padding:96px 24px;text-align:center}
+@media(min-width:768px){.st-cta-inner{padding:120px 40px}}
+.st-cta-eyebrow{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:18px}
+.st-cta-title{font-family:var(--font-d);font-size:clamp(30px,4.5vw,56px);font-style:italic;color:#fff;line-height:1.15;margin-bottom:18px}
+.st-cta-sub{font-size:15px;color:rgba(255,255,255,.7);margin-bottom:44px;line-height:1.75}
+.btn-wpp-cta{display:inline-flex;align-items:center;gap:12px;background:var(--bordeaux);color:#fff;font-size:15px;font-weight:500;letter-spacing:.04em;padding:18px 36px;border-radius:3px;text-decoration:none;transition:background .15s}
+.btn-wpp-cta:hover{background:#9B2548}
+.btn-wpp-cta svg{width:18px;height:18px;flex-shrink:0}
+
+/* FOOTER */
+footer{background:var(--espresso)}
+.footer-inner{max-width:1440px;margin:0 auto;padding:64px 24px 40px;display:grid;gap:40px}
+@media(min-width:768px){.footer-inner{grid-template-columns:2fr 1fr 1fr 1fr;padding:80px 40px 48px}}
+@media(min-width:1280px){.footer-inner{padding:80px 64px 48px}}
+.footer-logo{font-family:var(--font-d);font-size:30px;font-weight:500;letter-spacing:.06em;color:var(--cream);text-decoration:none;display:block;margin-bottom:14px}
+.footer-tagline{font-family:var(--font-d);font-size:15px;font-style:italic;color:rgba(244,239,230,.45);line-height:1.6;margin-bottom:22px}
+.footer-wpp{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--gold);text-decoration:none;transition:color .15s}
+.footer-wpp:hover{color:var(--cream)}
+.footer-col-title{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:18px}
+.footer-links{list-style:none}
+.footer-links li+li{margin-top:12px}
+.footer-links a{font-size:14px;color:rgba(244,239,230,.6);text-decoration:none;transition:color .15s}
+.footer-links a:hover{color:var(--cream)}
+.footer-bottom{max-width:1440px;margin:0 auto;padding:18px 24px;border-top:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+@media(min-width:1280px){.footer-bottom{padding:18px 64px}}
+.footer-copy{font-size:11px;color:rgba(244,239,230,.35)}
+.footer-rule{width:28px;height:1px;background:var(--gold);opacity:.45}
+</style>
+</head>
+<body>
+
+<div class="top-banner">Frete grátis em compras acima de R$&nbsp;399 &nbsp;·&nbsp; Entrega em todo o Brasil</div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Cambraia</a>
+    <nav aria-label="Navegação principal">
+      <ul class="nav-primary">
+        <li><button class="nav-link" id="js-nav-trigger" aria-expanded="false" aria-controls="mega-panel">Categorias</button></li>
+        <li><a href="collection.html" class="nav-link">Novidades</a></li>
+        <li><a href="stylist.html" class="nav-link active">Personal stylist</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo." class="btn-wpp-header" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar com a stylist
+      </a>
+      <button class="btn-menu" id="js-mob-open" aria-label="Abrir menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<div class="mega-panel" id="mega-panel" role="dialog" aria-label="Categorias">
+  <div class="panel-left">
+    <nav class="panel-cats-grid" aria-label="Categorias de produto">
+      <a href="category.html?c=vestidos">Vestidos</a>
+      <a href="category.html?c=saias">Saias</a>
+      <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+      <a href="category.html?c=calcas">Calças</a>
+      <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+      <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+      <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+      <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+      <a href="category.html?c=acessorios">Acessórios</a>
+    </nav>
+    <nav class="panel-cols" aria-label="Coleções">
+      <a href="collection.html?c=novidades">Novidades</a>
+      <a href="collection.html?c=denim">Denim</a>
+      <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+      <a href="collection.html?c=conjuntos">Conjuntos</a>
+      <a href="collection.html?c=festa">Festa</a>
+      <a href="collection.html?c=estacao">Estação</a>
+    </nav>
+  </div>
+  <div class="panel-right">
+    <div class="panel-right-bg" aria-hidden="true"></div>
+    <div class="panel-right-content">
+      <p class="panel-eyebrow">Em destaque</p>
+      <p class="panel-title">Alfaiataria<br>de verão</p>
+      <a href="collection.html?c=alfaiataria" class="panel-cta">Ver coleção</a>
+    </div>
+  </div>
+</div>
+
+<nav class="mobile-nav" id="mobile-nav" aria-label="Menu" aria-hidden="true">
+  <div class="mob-nav-head">
+    <a href="index.html" class="mob-logo">Cambraia</a>
+    <button class="btn-close" id="js-mob-close" aria-label="Fechar menu">✕</button>
+  </div>
+  <div class="mob-nav-body">
+    <div>
+      <button class="mob-acc-btn" data-acc="cats">Categorias
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"></polyline></svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cats">
+        <a href="category.html?c=vestidos">Vestidos</a>
+        <a href="category.html?c=saias">Saias</a>
+        <a href="category.html?c=blusas-tops">Blusas &amp; tops</a>
+        <a href="category.html?c=calcas">Calças</a>
+        <a href="category.html?c=shorts">Shorts &amp; bermudas</a>
+        <a href="category.html?c=casacos">Casacos &amp; jaquetas</a>
+        <a href="category.html?c=trico">Tricô &amp; suéteres</a>
+        <a href="category.html?c=macacoes">Macacões &amp; macaquinhos</a>
+        <a href="category.html?c=acessorios">Acessórios</a>
+      </div>
+    </div>
+    <div>
+      <button class="mob-acc-btn" data-acc="cols">Coleções
+        <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9,18 15,12 9,6"></polyline></svg>
+      </button>
+      <div class="mob-acc-body" id="acc-cols">
+        <a href="collection.html?c=novidades">Novidades</a>
+        <a href="collection.html?c=denim">Denim</a>
+        <a href="collection.html?c=alfaiataria">Alfaiataria</a>
+        <a href="collection.html?c=conjuntos">Conjuntos</a>
+        <a href="collection.html?c=festa">Festa</a>
+        <a href="collection.html?c=estacao">Estação</a>
+      </div>
+    </div>
+    <a href="stylist.html" class="mob-plain-link">Personal stylist</a>
+  </div>
+  <div class="mob-nav-foot">
+    <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo." class="mob-cta" target="_blank" rel="noopener">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Agendar com Luiza Thomax
+    </a>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section class="st-hero" aria-label="Luiza Thomax, personal stylist">
+    <div class="st-hero-inner">
+      <p class="st-hero-eyebrow">Personal stylist · Cambraia</p>
+      <h1 class="st-hero-name">Luiza<br>Thomax</h1>
+      <div class="st-hero-divider" aria-hidden="true"></div>
+      <p class="st-hero-sub">Oito anos de consultoria de imagem. Uma boutique curada à mão. Atendimento pelo WhatsApp, no seu tempo.</p>
+      <div class="st-hero-actions">
+        <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo." class="btn-primary" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Agendar horário
+        </a>
+        <a href="#sobre" class="btn-ghost-light">Conhecer a Luiza</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="st-about" id="sobre" aria-label="Sobre Luiza Thomax">
+    <div class="st-about-inner">
+      <div class="st-photo">
+        <div class="st-photo-main" role="img" aria-label="Foto de Luiza Thomax">
+          <svg width="110" height="150" viewBox="0 0 110 150" fill="none" stroke="#C2A14D" stroke-width="0.8" opacity="0.2">
+            <circle cx="55" cy="38" r="26"/>
+            <path d="M16 150 C16 108 94 108 94 150"/>
+          </svg>
+        </div>
+        <div class="st-photo-accent" aria-hidden="true"></div>
+        <p class="st-photo-label">Luiza Thomax — Personal stylist</p>
+      </div>
+      <div>
+        <p class="st-bio-eyebrow">Quem é</p>
+        <h2 class="st-bio-name">Luiza Thomax</h2>
+        <p class="st-bio-role">Consultora de estilo · Cambraia</p>
+        <div class="st-bio-divider" aria-hidden="true"></div>
+        <div class="st-bio-text">
+          <p>Com oito anos de experiência em consultoria de imagem, Luiza Thomax acredita que a roupa certa é aquela que faz você se sentir exatamente como você é — sem esforço, sem desconforto, sem dúvida.</p>
+          <p>Antes de fundar a Cambraia, trabalhou com edição de moda para revistas e styling para campanhas publicitárias. Esse olhar editorial — perceber o que faz uma peça funcionar em corpos reais — é o que ela traz para cada atendimento.</p>
+          <p>Ela seleciona pessoalmente cada peça da boutique. Não em tendência. Em você.</p>
+        </div>
+        <div class="st-bio-cta">
+          <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo." class="btn-primary" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Agendar uma consultoria
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section class="st-philo" aria-label="Filosofia de curadoria">
+    <div class="st-philo-inner">
+      <blockquote class="st-philo-quote">"Moda é o que você compra. <em>Estilo é o que você faz com ela.</em>"</blockquote>
+      <div class="st-philo-text">
+        <p>A Cambraia não é uma loja de departamento. Não tem mil opções para você se perder. Tem as peças certas — escolhidas com critério, pensadas para durar.</p>
+        <p>O papel da Luiza é ser o filtro que falta. Conhecer você, entender o que funciona no seu corpo e na sua vida, e apresentar só o que vai realmente entrar no seu guarda-roupa e ficar.</p>
+        <p>Atendimento no WhatsApp. Sem filas. Sem pressão. Do jeito que você prefere comprar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="st-services" aria-label="Serviços de consultoria">
+    <div class="st-services-inner">
+      <p class="sec-eyebrow">O que Luiza oferece</p>
+      <h2 class="sec-title">Consultoria <em>feita para você</em></h2>
+      <div class="st-services-grid">
+        <div class="st-service-item">
+          <div class="st-service-num">01</div>
+          <h3 class="st-service-title">Curadoria personalizada</h3>
+          <p class="st-service-desc">Luiza seleciona peças da boutique de acordo com o seu perfil, corpo e estilo de vida. Você recebe uma seleção com fotos e sugestões de combinação diretamente no WhatsApp.</p>
+        </div>
+        <div class="st-service-item">
+          <div class="st-service-num">02</div>
+          <h3 class="st-service-title">Consultoria de imagem</h3>
+          <p class="st-service-desc">Uma conversa aprofundada sobre quem você é e quer ser. Inclui análise de coloração pessoal, tipologia corporal e definição de estilo — tudo no seu ritmo.</p>
+        </div>
+        <div class="st-service-item">
+          <div class="st-service-num">03</div>
+          <h3 class="st-service-title">Styling para ocasiões</h3>
+          <p class="st-service-desc">Casamento, viagem, entrevista, evento especial. Luiza monta o look completo com as peças disponíveis na boutique e sugere combinações que funcionam de verdade.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="st-cta" aria-label="Agendar consultoria">
+    <div class="st-cta-inner">
+      <p class="st-cta-eyebrow">Pronto para começar</p>
+      <h2 class="st-cta-title">Agende sua consultoria com Luiza</h2>
+      <p class="st-cta-sub">Atendimento 100% pelo WhatsApp, no seu tempo. Sem compromisso — só uma conversa sobre moda e sobre você.</p>
+      <a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria%20de%20estilo." class="btn-wpp-cta" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Falar com Luiza agora
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <a href="index.html" class="footer-logo">Cambraia</a>
+      <p class="footer-tagline">Moda feminina com curadoria.<br>Atendimento pelo WhatsApp.</p>
+      <a href="https://wa.me/5583988886932" class="footer-wpp" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        +55 83 9888-6932
+      </a>
+    </div>
+    <div>
+      <p class="footer-col-title">Loja</p>
+      <ul class="footer-links">
+        <li><a href="collection.html">Novidades</a></li>
+        <li><a href="category.html?c=vestidos">Vestidos</a></li>
+        <li><a href="category.html?c=saias">Saias</a></li>
+        <li><a href="category.html?c=blusas-tops">Blusas &amp; tops</a></li>
+        <li><a href="category.html?c=calcas">Calças</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Coleções</p>
+      <ul class="footer-links">
+        <li><a href="collection.html?c=denim">Denim</a></li>
+        <li><a href="collection.html?c=alfaiataria">Alfaiataria</a></li>
+        <li><a href="collection.html?c=conjuntos">Conjuntos</a></li>
+        <li><a href="collection.html?c=festa">Festa</a></li>
+        <li><a href="collection.html?c=estacao">Estação</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Atendimento</p>
+      <ul class="footer-links">
+        <li><a href="stylist.html">Personal stylist</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20tenho%20uma%20dúvida." target="_blank" rel="noopener">Falar no WhatsApp</a></li>
+        <li><a href="https://wa.me/5583988886932?text=Olá%2C%20Luiza!%20Gostaria%20de%20agendar%20uma%20consultoria." target="_blank" rel="noopener">Agendar consultoria</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Cambraia. Todos os direitos reservados.</span>
+    <div class="footer-rule" aria-hidden="true"></div>
+  </div>
+</footer>
+
+<script>
+const trigger=document.getElementById('js-nav-trigger'),panel=document.getElementById('mega-panel');let closeTimer;
+function openPanel(){clearTimeout(closeTimer);panel.classList.add('open');trigger.setAttribute('aria-expanded','true')}
+function closePanel(){closeTimer=setTimeout(()=>{panel.classList.remove('open');trigger.setAttribute('aria-expanded','false')},140)}
+trigger?.addEventListener('mouseenter',openPanel);trigger?.addEventListener('mouseleave',closePanel);
+trigger?.addEventListener('click',()=>panel.classList.contains('open')?closePanel():openPanel());
+panel?.addEventListener('mouseenter',()=>clearTimeout(closeTimer));panel?.addEventListener('mouseleave',closePanel);
+const mobileNav=document.getElementById('mobile-nav');
+function openMob(){mobileNav.classList.add('open');mobileNav.removeAttribute('aria-hidden');document.body.style.overflow='hidden'}
+function closeMob(){mobileNav.classList.remove('open');mobileNav.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+document.getElementById('js-mob-open')?.addEventListener('click',openMob);
+document.getElementById('js-mob-close')?.addEventListener('click',closeMob);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closePanel();closeMob()}});
+document.querySelectorAll('[data-acc]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.dataset.acc,body=document.getElementById('acc-'+id),open=btn.classList.contains('open');
+    document.querySelectorAll('.mob-acc-btn').forEach(b=>b.classList.remove('open'));
+    document.querySelectorAll('.mob-acc-body').forEach(b=>b.classList.remove('open'));
+    if(!open){btn.classList.add('open');body?.classList.add('open')}
+  })
+});
+</script>
+</body>
+</html>
