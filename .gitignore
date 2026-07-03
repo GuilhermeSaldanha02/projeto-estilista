@@ -33,6 +33,12 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 
+# Windows reserved device names (não existem como arquivo, mas git pode detectá-los)
+nul
+con
+prn
+aux
+
 # Editor
 .vscode/
 .idea/
