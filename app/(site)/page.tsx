@@ -182,7 +182,7 @@ export default async function HomePage() {
               },
             ].map(step => (
               <div key={step.n} className="border-t border-cream-text/10 pt-6">
-                <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text/35 mb-4">
+                <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text/60 mb-4">
                   {step.n}
                 </p>
                 <h3 className="font-display text-xl font-light text-cream-text tracking-wide mb-3 [text-wrap:balance]">

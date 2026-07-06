@@ -15,7 +15,7 @@ export default function CuratorialNote({ note, byline }: Props) {
           {note}
         </blockquote>
         {byline && (
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink/50">
+          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink/70">
             {byline}
           </p>
         )}

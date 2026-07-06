@@ -155,7 +155,7 @@ function WaButton({ waHref, large = false }: { waHref: string | null; large?: bo
       href={waHref}
       target="_blank"
       rel="noopener noreferrer"
-      className={`inline-flex items-center justify-center gap-3 bg-esmeralda text-cream-text font-sans text-[11px] tracking-widest uppercase hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-esmeralda focus-visible:outline-offset-4 transition-opacity ${large ? 'px-12 py-4' : 'px-10 py-4'}`}
+      className={`inline-flex items-center justify-center gap-3 bg-esmeralda text-cream-text font-sans text-[11px] tracking-widest uppercase hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity ${large ? 'px-12 py-4' : 'px-10 py-4'}`}
     >
       {large && <WhatsAppIcon />}
       Agendar horário
@@ -180,7 +180,7 @@ function PadraoSection({ section }: { section: StylistSection }) {
         )}
         <div className="w-8 h-px bg-dourado/40 mb-8" />
         {section.body && (
-          <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink/75 [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink/60 [&_blockquote]:leading-relaxed [&_blockquote]:border-l-2 [&_blockquote]:border-dourado [&_blockquote]:pl-6 [&_blockquote]:my-6">
+          <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink/75 [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink/70 [&_blockquote]:leading-relaxed [&_blockquote]:my-6">
             <PortableText value={section.body} />
           </div>
         )}
