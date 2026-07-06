@@ -64,17 +64,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const product = await client.fetch<{
     title: string
+    inStock: boolean
     firstImage?: { asset?: { _ref: string }; alt?: string }
     description?: Array<{ _type: string; children?: Array<{ text?: string }> }>
   } | null>(
     `*[_type == "product" && slug.current == $slug][0]{
       title,
+      inStock,
       "firstImage": images[0] { asset, alt },
       description
     }`,
     { slug }
   )
-  if (!product) return { title: 'Peça não encontrada' }
+  if (!product || !product.inStock) return { title: 'Peça não encontrada' }
 
   const descText = product.description
     ? extractPlainText(product.description).slice(0, 160)
@@ -121,7 +123,7 @@ export default async function ProdutoPage({ params }: Props) {
     client.fetch<{ whatsappNumber?: string } | null>(settingsQuery),
   ])
 
-  if (!product) {
+  if (!product || !product.inStock) {
     const waScheduleHref = settings?.whatsappNumber
       ? `https://wa.me/${settings.whatsappNumber}?text=${encodeURIComponent('Oi! Gostaria de agendar um horário de personal styling.')}`
       : undefined
