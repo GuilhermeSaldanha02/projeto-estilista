@@ -68,7 +68,7 @@ export default async function HomePage() {
 
         {/* Gradiente lateral — garante legibilidade sobre qualquer frame do vídeo */}
         <div
-          className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-espresso/80 via-espresso/40 to-transparent"
           aria-hidden="true"
         />
 
