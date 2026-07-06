@@ -15,6 +15,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [megaOpen, setMegaOpen] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const megaTriggerRef = useRef<HTMLButtonElement>(null)
   const waHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : null
 
   function openMega() {
@@ -26,8 +27,18 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
     timerRef.current = setTimeout(() => setMegaOpen(false), 150)
   }
 
+  function closeMegaAndReturnFocus() {
+    clearTimeout(timerRef.current)
+    setMegaOpen(false)
+    megaTriggerRef.current?.focus()
+  }
+
   function handleBlur(e: React.FocusEvent<HTMLDivElement>) {
     if (!e.currentTarget.contains(e.relatedTarget)) closeMega()
+  }
+
+  function handleMegaKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === 'Escape') closeMegaAndReturnFocus()
   }
 
   return (
@@ -80,7 +91,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
             alt="LT Studio"
             width={55}
             height={30}
-            priority
+            loading="eager"
           />
         </Link>
 
@@ -100,8 +111,10 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
               onMouseEnter={openMega}
               onMouseLeave={closeMega}
               onBlur={handleBlur}
+              onKeyDown={handleMegaKeyDown}
             >
               <button
+                ref={megaTriggerRef}
                 aria-haspopup="true"
                 aria-expanded={megaOpen}
                 onFocus={openMega}

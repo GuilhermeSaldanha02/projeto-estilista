@@ -166,7 +166,7 @@ export default async function ProdutoPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Breadcrumb */}
-      <nav aria-label="Navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink/65">
+      <nav aria-label="Trilha de navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink/65">
         <Link href="/" className="hover:text-ink transition-colors">Início</Link>
         {product.category && (
           <>
