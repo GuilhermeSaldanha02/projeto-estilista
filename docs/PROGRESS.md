@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-01 (feat: "Como funciona" 3 passos na seção espresso da home)_
+_Última atualização: 2026-07-06 (fix/polish-balde-a — 6 tarefas do POLISH-FIXES aplicadas, PR aberto aguardando merge)_
 
 ---
 
@@ -341,6 +341,111 @@ e a faixa espresso abaixo. Sem card, sem borda — o texto é a identidade da se
 
 **POLISH VISUAL (cores, fontes, espaçamento, "cara de IA") = IMPECCABLE.**
 Etapa final, a rodar em sessão separada. NÃO fazer por prompt avulso.
+
+---
+
+### chore/impeccable-setup — Init + critique + 3 fixes do top-3 *(2026-07-03)*
+
+- `.claude/skills/impeccable/` instalado (skill de design com detector automático de
+  qualidade via hook pós-edição) + `.impeccable/design.json` (estado do sistema de design).
+- **Critique rodado em `app/(site)/page.tsx`:** nota **22/40** ("Acceptable"). Relatório em
+  `.impeccable/critique/2026-06-30T13-57-34Z__app-site-page-tsx.md`.
+  - P0: hero com dois CTAs de peso igual → paralisia de decisão.
+  - P1: sem voz editorial entre hero e grade de produtos.
+  - P1: sem reassurance no ponto de conversão WhatsApp.
+- **3 fixes do top-3 aplicados** (nas sessões seguintes, antes deste registro):
+  1. Hero com CTA dominante (resolve o P0 de dois CTAs de peso igual).
+  2. Seção "Nota da Stylist" criada (`feat/curatorial-note`) — resolve o P1 de voz
+     editorial, mas fica **VAZIA por padrão** (some da home) até a Luiza escrever o
+     texto no Studio. Ver Placeholders.
+  3. "Como funciona" — 3 passos antes do CTA de WhatsApp (`feat/como-funciona`) —
+     resolve o P1 de reassurance no ponto de conversão.
+- Demais achados do critique (P2 categoria sem filtro/voz, P3 eyebrow+divisória dourada
+  saturados, itens de menor prioridade) ficam para a próxima rodada de `/impeccable polish`.
+
+---
+
+### fix/polish-balde-a — Balde A do POLISH-FIXES (Fable) *(2026-07-06, PR aberto, não mesclado)*
+
+Seis tarefas do POLISH-FIXES, cada uma em commit próprio, **nesta ordem**:
+
+1. **1.1 fix — peça esgotada vendável por link direto:** `produto/[slug]/page.tsx`
+   trata `!product.inStock` igual a `!product` (EmptyState "saiu de cena" +
+   `generateMetadata` com title "Peça não encontrada", sem vazar OG image/preço).
+2. **1.2+1.3 fix/refactor — formatPrice com centavos + desduplicação** (feitas juntas,
+   por instrução): `lib/format.ts` (`formatPrice` novo: inteiro sem decimais,
+   com centavos sempre 2 casas) e `components/icons.tsx` (`WhatsAppIcon`, prop
+   `size` default 16, mantendo o 18 do header). Substituídas 4 cópias do SVG e 2
+   cópias do formatPrice por import. `grep "M17.472 14.382"` → 1 ocorrência.
+3. **2.2 fix — contrastes P1** (sem o P1-C eyebrow dourado, que fica para o Impeccable):
+   números do "Como funciona" `/35→/60`; byline da CuratorialNote `/50→/70`;
+   blockquote da seção padrão do /stylist perde a borda dourada lateral e sobe
+   para `/70`; foco do `WaButton` passa de `outline-esmeralda` para
+   `outline-cream-text` (visível sobre o próprio fundo esmeralda do botão).
+4. **4.1 fix — gradiente do hero:** `from-black/70 via-black/40` → `from-espresso/80
+   via-espresso/40`, mesma função de legibilidade, cor da paleta em vez de preto puro.
+5. **4.3 fix — acabamento a11y/perf:** breadcrumb do produto "Navegação" →
+   "Trilha de navegação"; mega-menu de Categorias fecha com Escape e devolve foco
+   ao gatilho; logo mobile no Nav perde `priority` (só o desktop precisa de
+   preload) e ganha `loading="eager"`.
+
+**Fora de escopo por decisão** (não tocados): 1.4 (offers), 2.1 (eyebrow dourado),
+Bloco 3 (features), Bloco 5 (tipografia) — ver Decisões.
+
+`npm run build` limpo após cada commit. Preços no Sanity ainda são todos `null`
+(catálogo de teste) — o formatPrice com centavos foi validado por execução direta
+da função (189.9 → "R$ 189,90", 189 → "R$ 189"), não por produto real no browser;
+quando a Luiza cadastrar preços com centavos, conferir visualmente no card e na
+página de produto. Gradiente do hero (item 4) só foi validado por build limpo —
+falta o dono confirmar legibilidade do texto sobre o vídeo/poster no browser.
+
+---
+
+## Decisões recentes (não reverter sem discutir)
+
+- **JSON-LD do produto fica SEM `offers`.** Decisão consciente: o site não é
+  e-commerce transacional, a venda fecha no WhatsApp. Não adicionar preço/oferta
+  estruturada só porque "SEO recomenda" — reintroduziria a promessa de compra no site.
+- **POLISH-FIXES (Fable) — só o "Balde A" foi executado** (bugs 1.1, 1.2, 1.3, 2.2,
+  4.1 e 4.3 — ver `fix/polish-balde-a` acima). Ficam **FORA por decisão**, não por
+  esquecimento:
+  - 1.4 (offers no JSON-LD) — mesma decisão do item acima.
+  - 2.1 (eyebrow dourado) — vai para o polish do Impeccable, não para o Balde A.
+  - Bloco 3 (features) — fora de escopo desta rodada.
+  - Bloco 5 (tipografia) — vai para o Impeccable.
+- **Próximo trabalho planejado:** mesclar `fix/polish-balde-a` → depois rodar
+  `/impeccable polish`.
+
+## Pendências — prioridade alta
+
+- **CTA sticky no mobile da página de produto** (item 3.1 do POLISH-FIXES): o CTA
+  principal de compra/contato fica abaixo da dobra no mobile — risco direto de
+  conversão perdida. Prioridade máxima para a próxima rodada de trabalho.
+
+---
+
+## Divergências de especificação (vs. PRD/SDD — registradas aqui, PRD/SDD não editados)
+
+- **Nome do produto:** o PRD antigo chama o projeto de "Estilista"; o nome real em
+  produção é **"LT Studio"** (rebrand aplicado em `feat/rebrand-lt-studio`). Toda
+  referência mental/tratativa com a dona deve usar "LT Studio".
+- **Fonte display:** o SDD §2 sugeria Fraunces; o projeto usa **Cormorant Garamond**
+  (`app/layout.tsx`). Divergência consciente. Ponto de atenção: revisar
+  `font-light` em headings pequenos se a leitura ficar frágil — Cormorant é mais
+  fina que Fraunces nesse peso.
+
+---
+
+## Placeholders / aguardando conteúdo real
+
+- **Logo:** `public/logo-lt.png` é de teste (rebrand Plano A). Definitiva em SVG
+  (champagne + versão escura) pendente da Luiza. Troca é pelo mesmo filename +
+  regenerar `app/icon.png`.
+- **Fotos de produto:** geradas por IA (Gemini), estúdio neutro — estruturais, não
+  definitivas.
+- **Nota da Stylist (home):** componente e schema prontos (`curatorNote` /
+  `curatorNoteByline` em `siteSettings`), mas o campo está **vazio** — a seção
+  não aparece até a Luiza escrever o texto no Studio.
 
 ---
 
