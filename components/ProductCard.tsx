@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
+import { formatPrice } from '@/lib/format'
 
 export type ProductCardData = {
   _id: string
@@ -13,14 +14,6 @@ export type ProductCardData = {
     hotspot?: { x: number; y: number; width: number; height: number } | null
     alt?: string
   } | null
-}
-
-function formatPrice(price: number) {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-    minimumFractionDigits: 0,
-  }).format(price)
 }
 
 export default function ProductCard({ product }: { product: ProductCardData }) {
