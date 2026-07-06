@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-01 (feat: "Como funciona" 3 passos na seção espresso da home)_
+_Última atualização: 2026-07-06 (auditoria — sincroniza PROGRESS com o estado real do repo: rebrand LT Studio, /stylist CMS, SEO, contraste e Impeccable já mergeados)_
 
 ---
 
@@ -341,6 +341,73 @@ e a faixa espresso abaixo. Sem card, sem borda — o texto é a identidade da se
 
 **POLISH VISUAL (cores, fontes, espaçamento, "cara de IA") = IMPECCABLE.**
 Etapa final, a rodar em sessão separada. NÃO fazer por prompt avulso.
+
+---
+
+### chore/impeccable-setup — Init + critique + 3 fixes do top-3 *(2026-07-03)*
+
+- `.claude/skills/impeccable/` instalado (skill de design com detector automático de
+  qualidade via hook pós-edição) + `.impeccable/design.json` (estado do sistema de design).
+- **Critique rodado em `app/(site)/page.tsx`:** nota **22/40** ("Acceptable"). Relatório em
+  `.impeccable/critique/2026-06-30T13-57-34Z__app-site-page-tsx.md`.
+  - P0: hero com dois CTAs de peso igual → paralisia de decisão.
+  - P1: sem voz editorial entre hero e grade de produtos.
+  - P1: sem reassurance no ponto de conversão WhatsApp.
+- **3 fixes do top-3 aplicados** (nas sessões seguintes, antes deste registro):
+  1. Hero com CTA dominante (resolve o P0 de dois CTAs de peso igual).
+  2. Seção "Nota da Stylist" criada (`feat/curatorial-note`) — resolve o P1 de voz
+     editorial, mas fica **VAZIA por padrão** (some da home) até a Luiza escrever o
+     texto no Studio. Ver Placeholders.
+  3. "Como funciona" — 3 passos antes do CTA de WhatsApp (`feat/como-funciona`) —
+     resolve o P1 de reassurance no ponto de conversão.
+- Demais achados do critique (P2 categoria sem filtro/voz, P3 eyebrow+divisória dourada
+  saturados, itens de menor prioridade) ficam para a próxima rodada de `/impeccable polish`.
+
+---
+
+## Decisões recentes (não reverter sem discutir)
+
+- **JSON-LD do produto fica SEM `offers`.** Decisão consciente: o site não é
+  e-commerce transacional, a venda fecha no WhatsApp. Não adicionar preço/oferta
+  estruturada só porque "SEO recomenda" — reintroduziria a promessa de compra no site.
+- **POLISH-FIXES (Fable) — só o "Balde A" será executado:** bugs 1.1, 1.2, 1.3, 2.2,
+  4.1 e 4.3. Ficam **FORA por decisão**, não por esquecimento:
+  - 1.4 (offers no JSON-LD) — mesma decisão do item acima.
+  - 2.1 (eyebrow dourado) — vai para o polish do Impeccable, não para o Balde A.
+  - Bloco 3 (features) — fora de escopo desta rodada.
+  - Bloco 5 (tipografia) — vai para o Impeccable.
+- **Próximo trabalho planejado:** executar o Balde A → depois rodar `/impeccable polish`.
+
+## Pendências — prioridade alta
+
+- **CTA sticky no mobile da página de produto** (item 3.1 do POLISH-FIXES): o CTA
+  principal de compra/contato fica abaixo da dobra no mobile — risco direto de
+  conversão perdida. Prioridade máxima para a próxima rodada de trabalho.
+
+---
+
+## Divergências de especificação (vs. PRD/SDD — registradas aqui, PRD/SDD não editados)
+
+- **Nome do produto:** o PRD antigo chama o projeto de "Estilista"; o nome real em
+  produção é **"LT Studio"** (rebrand aplicado em `feat/rebrand-lt-studio`). Toda
+  referência mental/tratativa com a dona deve usar "LT Studio".
+- **Fonte display:** o SDD §2 sugeria Fraunces; o projeto usa **Cormorant Garamond**
+  (`app/layout.tsx`). Divergência consciente. Ponto de atenção: revisar
+  `font-light` em headings pequenos se a leitura ficar frágil — Cormorant é mais
+  fina que Fraunces nesse peso.
+
+---
+
+## Placeholders / aguardando conteúdo real
+
+- **Logo:** `public/logo-lt.png` é de teste (rebrand Plano A). Definitiva em SVG
+  (champagne + versão escura) pendente da Luiza. Troca é pelo mesmo filename +
+  regenerar `app/icon.png`.
+- **Fotos de produto:** geradas por IA (Gemini), estúdio neutro — estruturais, não
+  definitivas.
+- **Nota da Stylist (home):** componente e schema prontos (`curatorNote` /
+  `curatorNoteByline` em `siteSettings`), mas o campo está **vazio** — a seção
+  não aparece até a Luiza escrever o texto no Studio.
 
 ---
 
