@@ -81,7 +81,7 @@ export default async function StylistPage() {
     <main>
 
       {/* ═══ HERO — nome, tagline e foto principal ═══ */}
-      <section className="bg-sand-100 py-20 md:py-28 px-5" aria-label="Apresentação">
+      <section className="bg-gradient-to-b from-sand-50 to-sand-100 py-20 md:py-28 px-5" aria-label="Apresentação">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
 
           {/* Foto principal */}
@@ -167,7 +167,7 @@ function WaButton({ waHref, large = false }: { waHref: string | null; large?: bo
 /* ── Seção padrão: texto, fundo claro ── */
 function PadraoSection({ section }: { section: StylistSection }) {
   return (
-    <section className="bg-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
+    <section className="bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
       <div className="max-w-2xl mx-auto">
         <FadeInSection>
           {section.eyebrow && (
@@ -195,7 +195,7 @@ function PadraoSection({ section }: { section: StylistSection }) {
 /* ── Seção com foto lateral ── */
 function FotoLadoSection({ section, reverse }: { section: StylistSection; reverse: boolean }) {
   return (
-    <section className="bg-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
+    <section className="bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
       <div
         className={`max-w-5xl mx-auto flex flex-col ${
           reverse ? 'md:flex-row-reverse' : 'md:flex-row'
@@ -308,7 +308,7 @@ function EtapasSection({ section }: { section: StylistSection }) {
 /* ── Destaque claro — citação itálica, fundo areia, botão WhatsApp (ex. "Vamos começar?") ── */
 function DestaqueClaroSection({ section, waHref }: { section: StylistSection; waHref: string | null }) {
   return (
-    <section className="bg-sand-200 py-24 md:py-36 px-5" aria-label={section.eyebrow ?? section.title}>
+    <section className="bg-gradient-to-b from-sand-100 to-sand-200 py-24 md:py-36 px-5" aria-label={section.eyebrow ?? section.title}>
       <div className="max-w-2xl mx-auto text-center">
         <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
         {section.body && (
@@ -357,7 +357,7 @@ function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
 /* ── Cards — grade de itens, fundo areia claro (ex. "Pra quem é") ── */
 function CardsSection({ section }: { section: StylistSection }) {
   return (
-    <section className="bg-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
+    <section className="bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
       <div className="max-w-4xl mx-auto">
         <FadeInSection>
           {section.eyebrow && (

@@ -7,7 +7,7 @@ interface Props {
 
 export default function CuratorialNote({ note, byline }: Props) {
   return (
-    <section className="bg-sand-100 py-28 md:py-40 px-5" aria-label="Nota da Stylist">
+    <section className="bg-gradient-to-b from-sand-50 to-sand-100 py-28 md:py-40 px-5" aria-label="Nota da Stylist">
       <div className="max-w-2xl mx-auto text-center">
         <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado-ink mb-5">
           Nota da Stylist
