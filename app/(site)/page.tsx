@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
-import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 import CuratorialNote from '@/components/CuratorialNote'
 import { WhatsAppIcon } from '@/components/icons'
 import { FadeInSection } from '@/components/FadeInSection'
@@ -15,21 +14,10 @@ export const metadata: Metadata = {
     'Moda feminina com olhar de personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
 }
 
-const productsQuery = `
-  *[_type == "product" && inStock == true]
-  | order(_createdAt desc)
-  [0...8] {
-    _id, title, "slug": slug.current, price,
-    "image": images[0] { asset, crop, hotspot, alt }
-  }
-`
 const settingsQuery = `*[_type == "siteSettings"][0]{ whatsappNumber, curatorNote, curatorNoteByline }`
 
 export default async function HomePage() {
-  const [products, settings] = await Promise.all([
-    client.fetch<ProductCardData[]>(productsQuery),
-    client.fetch<{ whatsappNumber?: string; curatorNote?: string; curatorNoteByline?: string } | null>(settingsQuery),
-  ])
+  const settings = await client.fetch<{ whatsappNumber?: string; curatorNote?: string; curatorNoteByline?: string } | null>(settingsQuery)
 
   const whatsappNumber = settings?.whatsappNumber
   const waScheduleMessage = 'Oi! Gostaria de agendar um horário de personal styling.'
@@ -86,7 +74,7 @@ export default async function HomePage() {
               Moda feminina com olhar de personal stylist
             </p>
 
-            <div className="flex flex-col items-start gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
               {/* CTA primário — borgonha, leva para novidades */}
               <Link
                 href="/colecao/novidades"
@@ -95,15 +83,16 @@ export default async function HomePage() {
                 Quero esta peça
               </Link>
 
-              {/* CTA secundário — link de texto, agendamento WhatsApp */}
+              {/* CTA secundário — esmeralda, agendamento WhatsApp */}
               {waScheduleHref && (
                 <a
                   href={waScheduleHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-[11px] tracking-widest uppercase text-cream-text/75 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4"
+                  className="inline-flex items-center justify-center gap-3 bg-esmeralda text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
                 >
-                  Agendar horário →
+                  <WhatsAppIcon size={14} />
+                  Agendar horário
                 </a>
               )}
             </div>
@@ -112,47 +101,7 @@ export default async function HomePage() {
       </section>
 
       {/* ═══════════════════════════════════════
-          2. NOVIDADES — grade de produtos recentes
-      ═══════════════════════════════════════ */}
-      {products.length > 0 && (
-        <section className="py-12 px-5 max-w-7xl mx-auto" aria-label="Novidades">
-          <div className="flex items-baseline justify-between mb-8">
-            <h2 className="font-display text-5xl md:text-6xl font-light text-ink tracking-tight">
-              Novidades
-            </h2>
-            <Link
-              href="/colecao/novidades"
-              className="font-sans text-[10px] tracking-widest uppercase text-ink/60 hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
-            >
-              ver todas →
-            </Link>
-          </div>
-
-          {products.length >= 4 ? (
-            <div className="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 md:gap-6">
-              {/* Peça em destaque — 2×2 em desktop, card normal em mobile/tablet */}
-              <div className="col-span-2 lg:col-span-2 lg:row-span-2">
-                <ProductCard product={products[0]} featured />
-              </div>
-              {products.slice(1, 4).map(product => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-              {products.slice(4).map(product => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {products.map(product => (
-                <ProductCard key={product._id} product={product} />
-              ))}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* ═══════════════════════════════════════
-          3. NOTA DA STYLIST — nota curatorial (exibida quando preenchida no CMS)
+          2. NOTA DA STYLIST — nota curatorial (exibida quando preenchida no CMS)
       ═══════════════════════════════════════ */}
       {settings?.curatorNote && (
         <CuratorialNote
