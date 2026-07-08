@@ -8,12 +8,14 @@
       "esmeralda-light": { "role": "primary",   "displayName": "Verde Atelier Claro",    "canonical": "#1D9A72", "tonalRamp": ["#041F14","#083322","#0B5D46","#1D9A72","#2CB886","#45CFA0","#73D9BB","#A4E8CF","#CEEEE4","#EBF9F5"] },
       "bordo":           { "role": "secondary", "displayName": "Borgonha",               "canonical": "#7B1E3A", "tonalRamp": ["#1A0410","#35091C","#571230","#7B1E3A","#9B2549","#BC3B5F","#D46A85","#E69DB3","#F2C8D5","#FBF0F3"] },
       "dourado":         { "role": "tertiary",  "displayName": "Fio de Ouro",            "canonical": "#C2A14D", "tonalRamp": ["#2A2008","#4A3A0F","#7A5E1A","#A07D28","#C2A14D","#D4BA73","#E1CC99","#EBDAB5","#F4ECCC","#FAF6E8"] },
+      "dourado-ink":     { "role": "tertiary",  "displayName": "Fio de Ouro — Texto",    "canonical": "#7A5E1A", "note": "Mesmo stop do tonal ramp do dourado (índice 2). Uso exclusivo: eyebrow/texto sobre fundo claro (sand-50/100/200), onde #C2A14D falha WCAG AA (~1.8-1.9:1). #C2A14D permanece o dourado padrão sobre fundo escuro (espresso) e para linha/ícone em qualquer fundo." },
       "espresso":        { "role": "neutral",   "displayName": "Espresso",               "canonical": "#241C17", "tonalRamp": ["#0A0806","#13100C","#1C1713","#241C17","#3A2E27","#524540","#7A7070","#A8A09C","#D0CBC8","#EDE9E7"] },
       "ink":             { "role": "neutral",   "displayName": "Tinta",                  "canonical": "#1A1A1A", "tonalRamp": ["#0A0A0A","#121212","#1A1A1A","#333333","#4D4D4D","#666666","#808080","#A6A6A6","#CCCCCC","#F2F2F2"] },
       "sand-200":        { "role": "neutral",   "displayName": "Areia Base",             "canonical": "#E7DBC8", "tonalRamp": ["#5C4E36","#7A6848","#9E8A62","#C0A87E","#D5BF9C","#E7DBC8","#EDE4D5","#F2EBE0","#F7F3EC","#FBF9F6"] },
       "sand-100":        { "role": "neutral",   "displayName": "Areia Clara",            "canonical": "#EDE3D2", "tonalRamp": ["#6A5A3D","#8C7A52","#B09E76","#CEB994","#DDD0B2","#EDE3D2","#F2EADC","#F5EFE5","#F9F5EF","#FDFCF8"] },
       "sand-50":         { "role": "neutral",   "displayName": "Areia Superfície / Creme","canonical": "#F4EFE6","tonalRamp": ["#7A6E57","#9E8E70","#C0AC8C","#D8C8A8","#EAE1CE","#F4EFE6","#F7F4EE","#FAF8F4","#FCFBF8","#FEFDFB"] }
     },
+    "typographyNote": "Fonte display trocada de Cormorant Garamond para Fraunces no redesign editorial de 2026-07-08 (mais contemporânea, contrastes de peso e curva 'wonky' — leitura mais fashion-forward). Ver app/layout.tsx.",
     "typographyMeta": {
       "display":  { "displayName": "Display — Hero",    "purpose": "H1 do hero. Declaração da marca. Nunca em outro contexto." },
       "headline": { "displayName": "Headline — Seções", "purpose": "H2 de seções. Serif leve, tracking moderado." },
@@ -25,7 +27,8 @@
     ],
     "motion": [
       { "name": "ease-hover-scale", "value": "transform 500ms ease", "purpose": "Image scale no hover de ProductCard. O único movimento em repouso→hover." },
-      { "name": "ease-opacity",     "value": "opacity 150ms ease",   "purpose": "Hover de botões (opacity-90) e links de navegação. Transição de estado mínima." }
+      { "name": "ease-opacity",     "value": "opacity 150ms ease",   "purpose": "Hover de botões (opacity-90) e links de navegação. Transição de estado mínima." },
+      { "name": "fade-in-viewport", "value": "opacity 400ms ease, transform 400ms ease (translateY 8px→0)", "purpose": "EXCEÇÃO documentada à Regra Flat/Motion (redesign editorial 2026-07-08). Único fade-in do site: dispara uma vez quando uma headline de seção entra em viewport (ver components/FadeInSection.tsx e .fade-in em globals.css). Sempre neutralizado por prefers-reduced-motion: reduce — não usar em mais nenhum contexto sem decisão explícita." }
     ],
     "breakpoints": [
       { "name": "md", "value": "768px", "purpose": "Principal breakpoint mobile→desktop. Header muda de layout, grid de produtos expande." },

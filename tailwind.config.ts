@@ -17,6 +17,7 @@ const config: Config = {
         'esmeralda-light':  'rgb(var(--esmeralda-light-rgb) / <alpha-value>)',
         bordo:              'rgb(var(--bordo-rgb) / <alpha-value>)',
         dourado:            'rgb(var(--dourado-rgb) / <alpha-value>)',
+        'dourado-ink':      'rgb(var(--dourado-ink-rgb) / <alpha-value>)',
         ink:                'rgb(var(--ink-rgb) / <alpha-value>)',
         'cream-text':       'rgb(var(--cream-text-rgb) / <alpha-value>)',
       },

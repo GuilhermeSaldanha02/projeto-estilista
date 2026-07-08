@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond } from 'next/font/google'
+import { Fraunces } from 'next/font/google'
 import './globals.css'
 
-const cormorant = Cormorant_Garamond({
+const fraunces = Fraunces({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600'],
   style: ['normal', 'italic'],
   variable: '--font-display',
   display: 'swap',
@@ -28,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={cormorant.variable}>
+    <html lang="pt-BR" className={fraunces.variable}>
       <body className="flex flex-col min-h-screen">
         {children}
       </body>

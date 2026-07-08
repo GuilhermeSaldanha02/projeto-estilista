@@ -15,6 +15,7 @@
   --esmeralda-light:   #1D9A72;
   --bordo:             #7B1E3A;
   --dourado:           #C2A14D;
+  --dourado-ink:       #7A5E1A; /* mesma família do dourado, stop escuro do ramp — só para texto/eyebrow sobre fundo claro (AA) */
 
   /* Texto */
   --ink:        #1A1A1A;
@@ -30,6 +31,7 @@
   --esmeralda-light-rgb: 29 154 114;
   --bordo-rgb:           123 30 58;
   --dourado-rgb:         194 161 77;
+  --dourado-ink-rgb:     122 94 26;
   --ink-rgb:             26 26 26;
   --cream-text-rgb:      244 239 230;
 
@@ -46,5 +48,25 @@
     background-color: var(--sand-200);
     color: var(--ink);
     font-family: var(--font-sans);
+  }
+}
+
+/* Única exceção de motion do sistema — fade-in de entrada em viewport (ver FadeInSection.tsx) */
+.fade-in {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
 }
