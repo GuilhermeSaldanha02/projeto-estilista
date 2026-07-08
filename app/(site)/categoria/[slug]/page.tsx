@@ -81,10 +81,15 @@ export default async function CategoriaPage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen py-10 px-5 max-w-7xl mx-auto">
-      <h1 className="font-display text-3xl md:text-4xl font-light text-ink tracking-wide mb-8">
-        {category.title}
-      </h1>
+    <main className="min-h-screen py-16 md:py-20 px-5 max-w-7xl mx-auto">
+      <div className="mb-10">
+        <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink/50 mb-3">
+          {products.length} {products.length === 1 ? 'peça' : 'peças'}
+        </p>
+        <h1 className="font-display text-5xl md:text-6xl font-light text-ink tracking-tight [text-wrap:balance]">
+          {category.title}
+        </h1>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {products.map(product => (

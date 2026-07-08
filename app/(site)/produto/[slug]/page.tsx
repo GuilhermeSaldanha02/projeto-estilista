@@ -188,7 +188,7 @@ export default async function ProdutoPage({ params }: Props) {
         <div className="flex flex-col gap-4">
           {/* Imagem principal */}
           {mainImage?.asset ? (
-            <div className="relative aspect-[3/4] overflow-hidden bg-sand-100">
+            <div className="relative aspect-[3/4] lg:aspect-[4/5] overflow-hidden bg-sand-100">
               <Image
                 src={urlFor(mainImage).width(900).height(1200).fit('crop').auto('format').url()}
                 alt={mainImage.alt ?? product.title}
@@ -199,7 +199,7 @@ export default async function ProdutoPage({ params }: Props) {
               />
             </div>
           ) : (
-            <div className="aspect-[3/4] bg-sand-100 flex items-center justify-center">
+            <div className="aspect-[3/4] lg:aspect-[4/5] bg-sand-100 flex items-center justify-center">
               <span className="font-sans text-[10px] tracking-widest uppercase text-ink/65">
                 Foto em breve
               </span>
@@ -227,7 +227,7 @@ export default async function ProdutoPage({ params }: Props) {
         </div>
 
         {/* ── COLUNA DE DETALHES ── */}
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8 md:gap-10">
           {/* Cabeçalho */}
           <div>
             {product.category && (
@@ -235,11 +235,11 @@ export default async function ProdutoPage({ params }: Props) {
                 {product.category.title}
               </p>
             )}
-            <h1 className="font-display text-3xl md:text-4xl font-light text-ink leading-tight">
+            <h1 className="font-display text-5xl md:text-6xl font-light text-ink tracking-tight leading-tight [text-wrap:balance]">
               {product.title}
             </h1>
             {product.price ? (
-              <p className="mt-3 font-sans text-base text-ink/70">
+              <p className="mt-4 font-sans text-xl md:text-2xl text-ink">
                 {formatPrice(product.price)}
               </p>
             ) : null}
