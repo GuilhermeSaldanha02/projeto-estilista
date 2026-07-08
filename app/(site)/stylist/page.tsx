@@ -83,8 +83,9 @@ export default async function StylistPage() {
     <main>
 
       {/* ═══ HERO — nome, tagline e foto principal ═══ */}
-      <section className="bg-gradient-to-b from-sand-50 to-sand-100 py-20 md:py-28 px-5" aria-label="Apresentação">
-        <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
+      <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-20 md:py-28 px-5" aria-label="Apresentação">
+        <SeamTransition from={EDGE.espresso} />
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
 
           {/* Foto principal */}
           <div className="w-full max-w-xs md:w-[40%] md:max-w-none shrink-0">
