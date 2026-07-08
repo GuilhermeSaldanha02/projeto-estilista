@@ -588,6 +588,25 @@ produtos em estoque reais; leitura da fonte Fraunces nos tamanhos novos
   foto de produto é proibido), não lacuna.
 - Build limpo após as correções. Ainda falta validação visual do dono.
 
+**2ª rodada de feedback — "ainda parece tudo em blocos, sem degradê entre as
+cores"**: o dono queria transição suave de cor ENTRE seções vizinhas de
+famílias diferentes (ex. Nota da Stylist clara → Personal Styling escura),
+o que a `CLAUDE.md §5` proibia explicitamente ("nunca areia → outra
+família"). Perguntei e o dono **autorizou abrir exceção** — registrada em
+`CLAUDE.md §5` e `.impeccable/design.json` ("A Regra do Degradê Familiar"):
+cruzamento de família passa a ser permitido, mas só como uma "costura"
+curta (~96–160px) na emenda entre duas seções, nunca como fundo de seção
+inteira. Implementado em `components/SeamTransition.tsx` (overlay absoluto
+que esmaece a cor da seção anterior até transparente sobre o topo da seção
+atual) + `lib/colors.ts` (valores hex literais, necessários porque o
+gradiente é aplicado via `style` inline, não classe Tailwind). Aplicado na
+home e no `/stylist` — neste último a ordem das seções é definida
+dinamicamente pela dona no CMS, então a cor de entrada de cada seção é
+calculada em runtime a partir da borda inferior resolvida da seção anterior
+(`STYLIST_SECTION_BOTTOM_EDGE` em `lib/colors.ts`). PDP e Categoria/Novidades
+não usam costura entre blocos claro/escuro pois não têm essa alternância.
+Build limpo. Ainda falta validação visual do dono.
+
 ---
 
 ## Decisões recentes (não reverter sem discutir)
