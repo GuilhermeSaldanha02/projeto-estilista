@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-06 (fix/polish-balde-a — 6 tarefas do POLISH-FIXES aplicadas, PR aberto aguardando merge)_
+_Última atualização: 2026-07-08 (redesign editorial — branch `redesign/fable-review`)_
 
 ---
 
@@ -401,6 +401,174 @@ falta o dono confirmar legibilidade do texto sobre o vídeo/poster no browser.
 
 ---
 
+### /impeccable polish — `app/(site)/page.tsx` *(2026-07-07)*
+
+Rodada de polish planejada (ver Decisões abaixo). Ambiente sem navegador/Puppeteer
+disponível nesta sessão — verificação foi por leitura de código, detector estático
+(zero findings antes e depois) e inspeção do HTML compilado (dev server + build de
+produção), não por captura visual real. Falta o dono confirmar no navegador.
+
+**Achados do critique original (score 22/40) já resolvidos em rodadas anteriores:**
+P0 dois CTAs de peso igual, P1 voz editorial (Nota da Stylist), P1 reassurance
+(Como funciona). Restava desta rodada: heading semântico incorreto no card de
+produto e contraste abaixo do limiar documentado no DESIGN.md.
+
+**Mudanças:**
+1. **`components/ProductCard.tsx`** — título do produto `h2` → `h3`. A home tem
+   `h1` (hero) → `h2` ("Novidades") → título de produto; usar `h2` de novo
+   quebrava a hierarquia (achado "Consistency and Standards" do critique).
+   Confirmado no HTML compilado: 1 `h1`, 2 `h2`, N `h3` (8 produtos + 3 passos).
+2. **Hero (`page.tsx`)** — eyebrow "Personal Stylist" `opacity-70` → `opacity-75`
+   e CTA secundário "Agendar horário →" `text-cream-text/60` → `/75`. O DESIGN.md
+   documenta `cream-text/75` como o limiar testado e aprovado sobre espresso; `/60`
+   e `/70` ficavam abaixo dele (mesma classe de bug já corrigida em outros pontos
+   no `fix/polish-balde-a`, mas esta instância do hero não estava no lote).
+3. **Hero subheadline** — `max-w-xs` → `max-w-xs md:max-w-sm`. Critique original
+   apontava que `max-w-xs` desperdiçava o espaço do hero em telas grandes; mobile
+   mantém a largura original.
+4. **H2 "Um olhar profissional para o seu estilo"** — ganhou `[text-wrap:balance]`,
+   consistente com os demais headings/blockquotes do sistema que já usam a regra.
+
+**Decidido não tocar (fora de escopo ou requer decisão do dono):**
+- **Eyebrow + divisória dourada** (item 2.1 do POLISH-FIXES, apontado como P3 no
+  critique): na home são só 2 ocorrências (seção Personal Styling + Nota da
+  Stylist), dentro do limite de "3 por tela" que o próprio DESIGN.md define para
+  esse padrão. Não é scaffolding reflexo aqui — é o sistema nomeado funcionando
+  como documentado. Nada para corrigir nesta página.
+- **Copy do CTA principal do hero** ("Quero esta peça" → leva para a coleção
+  "Novidades", não para uma peça específica): mesmo texto que o CTA de produto
+  individual usa (`ProductCard`), mas aqui aponta para uma listagem, não uma peça.
+  Pode ler como promessa quebrada. Não mudei sem validar com a dona — é decisão
+  de voz de marca, não bug técnico.
+- **Motion de entrada no hero:** o CLAUDE.md previa Framer Motion "com parcimônia
+  no hero", mas a lib não está instalada e não há nenhuma animação de entrada em
+  nenhuma página do site (convenção atual é zero motion). Adicionar a dependência
+  é decisão maior que um polish pontual — não fiz sem perguntar.
+
+`npm run build` limpo (30 páginas, sem erros de tipo). Detector do Impeccable:
+zero findings antes e depois das mudanças.
+
+---
+
+### /impeccable polish — `app/(site)/stylist/page.tsx` *(2026-07-07)*
+
+Polish de higiene por instrução explícita do dono: coerente com a home já polida,
+sem redesenhar, guarda-corpo de opacidade restrito a `/60`, `/70`, `/75` (histórico
+de texto invisível com valores novos, 3 ocorrências anteriores). Mesma limitação
+de ambiente da rodada anterior: sem navegador disponível, verificação por leitura
+de código + detector estático (zero findings antes/depois) + `npm run build` limpo
+(30 páginas). Falta o dono confirmar contraste no browser, como pedido.
+
+**Mudanças aplicadas:**
+1. **Placeholder "Foto em breve"** (hero e `FotoLadoSection`) — `text-ink/40` →
+   `text-ink/75`. Mesma classe de bug já corrigida no `ProductCard.tsx` da home
+   (`/30` → `/65`, 1,85:1 → 4,92:1 ✓); aqui usei `/75` (dentro do guarda-corpo
+   pedido) em vez de `/65` — estritamente mais escuro/contraste maior, então
+   também aprovado.
+2. **Divisória do hero** — `bg-dourado` (100%, sem modificador) → `bg-dourado/40`.
+   Único divisor do arquivo fora do padrão; todo o resto do site (esta página e a
+   home) usa `/40` para essa linha decorativa.
+3. **Hierarquia de heading em `CardsSection`** — título do item era `<p>`, virou
+   `<h3>` (a seção já tem `<h2>`). Mesmo fix de "Consistency and Standards" do
+   `ProductCard.tsx` na rodada anterior.
+4. **`[text-wrap:balance]`** adicionado a todos os headings do arquivo (`h1` do
+   hero + os 5 `h2` de seção), replicando o padrão já aplicado na home.
+
+**Encontrado mas NÃO corrigido — decisão do dono necessária:**
+- **Eyebrow dourado sobre fundo claro é ilegível.** `PadraoSection`,
+  `FotoLadoSection` e `CardsSection` usam `text-dourado` (100%, sem opacidade) para
+  o eyebrow em cima de `sand-100`/`sand-200`. Contraste calculado ≈ **1,87:1**
+  (precisa de 4,5:1 para texto de 10px) — falha grave, provavelmente o mesmo
+  "P1-C eyebrow dourado" que o critique original adiou para o Impeccable.
+  **Não dá para resolver com opacidade** — dourado já é claro, reduzir opacidade
+  sobre fundo claro só piora o contraste. A correção real exige trocar a COR do
+  texto do eyebrow nessas 3 variações (ex.: usar `text-ink` ou `text-espresso` só
+  no texto, mantendo o dourado na linha/ícone) — o que esbarra no guarda-corpo
+  "não redesenhar" e na regra do DESIGN.md de que dourado é a cor exclusiva de
+  eyebrow. Por isso não toquei sem validar. As mesmas seções sobre fundo
+  `bg-espresso` (`EtapasSection`, `TransformacaoEscuraSection`) não têm esse
+  problema — dourado sobre espresso tem ótimo contraste.
+
+---
+
+### redesign/fable-review — Redesign editorial completo *(2026-07-08, branch aberta, não mesclada)*
+
+Revisão de design completa pedida pelo dono ("básico, sem graça, batido" → nível
+editorial/premium). Diagnóstico: o sistema documentado em `.impeccable/design.json`
+já era correto (flat, dourado escasso, peso único, cantos retos) — o problema era
+**subaplicação por excesso de cautela** (toda seção `py-16`, todo H2 `text-3xl/4xl`,
+grid sempre simétrico). O redesign manteve quase integralmente as regras de
+cor/forma/peso e concentrou a mudança em escala tipográfica, ritmo vertical
+variável, assimetria e uso mais ousado (não mais frequente) do dourado/itálico.
+Plano completo em `C:\Users\danin\.claude\plans\voc-o-fable-optimized-karp.md`.
+
+**Decisões validadas com o dono antes de codar:**
+1. Fonte display: Cormorant Garamond → **Fraunces** (`app/layout.tsx`).
+2. Fix de contraste do eyebrow dourado (bug WCAG AA conhecido desde o polish
+   anterior, ver seção `/impeccable polish` acima): novo token **`dourado-ink`
+   (#7A5E1A)**, mesmo stop do tonal ramp já documentado, para eyebrow/texto sobre
+   fundo claro; `#C2A14D` continua padrão sobre fundo escuro/linha/ícone.
+   `PadraoSection` e `CardsSection` do stylist ganharam fundo `sand-100` explícito
+   (antes herdavam o `sand-200` do body) — resolve contraste e dá ritmo.
+3. Motion: fade-in único (opacity+translateY 8px, 400ms) em headlines de seção ao
+   entrar em viewport, incluído como **exceção documentada** à Regra Flat/Motion
+   (`components/FadeInSection.tsx` + `.fade-in` em `globals.css`), sempre
+   neutralizado por `prefers-reduced-motion`.
+4. Mosaico de grid (peça em destaque maior): só na Home nesta fase; Categoria/
+   Novidades ficam só com tipografia/espaçamento, mosaico é fase 2 experimental.
+
+**Mudanças por arquivo:**
+- `app/layout.tsx` — fonte Fraunces.
+- `app/globals.css` — token `--dourado-ink`/`--dourado-ink-rgb`; classes `.fade-in`.
+- `tailwind.config.ts` — cor `dourado-ink`.
+- `.impeccable/design.json` — documentado o novo token, a exceção de motion, e a
+  troca de fonte.
+- `app/(site)/page.tsx` — hero com escala tipográfica dramática (`text-9xl` em
+  desktop), tagline em itálico serif, bloco de texto mais estreito (`lg:max-w-md`);
+  grid de Novidades com mosaico condicional (peça 1 em destaque 2×2 quando
+  `products.length >= 4`, senão grid uniforme); Personal Styling com H2 maior e
+  numerais 01/02/03 dourados grandes (`text-6xl/7xl`) substituindo o texto pequeno
+  anterior.
+- `app/(site)/stylist/page.tsx` — hero com foto fluida (`md:w-[40%]`) e H1 maior;
+  as 7 variantes de seção (`PadraoSection`, `FotoLadoSection`, `EtapasSection`,
+  `TransformacaoEscuraSection`, `DestaqueClaroSection`, `CardsSection`) com escala
+  tipográfica subida um degrau, ritmo vertical variável (`py-24` a `py-40`
+  conforme o peso narrativo da seção), numerais do `EtapasSection` ampliados, e
+  `CardsSection` perdeu a borda (`border-sand-300/40`) em favor de tonal layering
+  puro — schema/campos Sanity consumidos continuam idênticos.
+- `components/CuratorialNote.tsx` — blockquote maior e itálico, ritmo mais generoso.
+- `components/ProductCard.tsx` — preço `text-xs`→`text-sm`, padding maior, nova
+  prop `featured` (título maior, mesmo componente/dados) para o card de destaque
+  do mosaico.
+- `app/(site)/categoria/[slug]/page.tsx` e `colecao/novidades/page.tsx` — H1 maior,
+  contagem de peças como eyebrow textual (`products.length`, sem campo novo),
+  espaçamento maior; grid permanece simétrico nesta fase.
+- `app/(site)/produto/[slug]/page.tsx` — H1 e preço maiores, imagem principal
+  `lg:aspect-[4/5]`, mais respiro entre blocos de detalhe. JSON-LD sem `offers`,
+  `inStock`, breadcrumb: intocados.
+- `components/layout/Nav.tsx` — só tipografia (tracking dos links, tamanho do
+  painel "Em destaque" do mega-menu); mecânica de hover-intent/timers/Escape/aria
+  confirmada intocada.
+- `components/layout/Footer.tsx` — mais respiro vertical, borda `border-t-2` → `border-t`.
+
+**Build:** `npm run build` limpo, 30 páginas geradas, zero erro de tipo/lint.
+
+**Não implementado nesta rodada (fase 2/3 do plano, adiado deliberadamente):**
+- Itálico como "assinatura" em mais pontos da página (1 frase-âncora por página).
+- Mosaico de grid replicado em Categoria/Novidades — aguarda validação do padrão
+  na Home com dados reais (fotos definitivas, contagens reais de estoque).
+- Segunda foto no hover do ProductCard — precisa de fotos reais (atuais são
+  placeholder de IA) e mudança de query (`images[1]`).
+
+**Validação pendente (dono, no browser):** escala tipográfica em todas as
+páginas; contraste do eyebrow dourado no stylist (`PadraoSection`/`FotoLadoSection`/
+`CardsSection`) sobre `sand-100`; robustez do mosaico da home com 1–3 vs. 4+
+produtos em estoque reais; leitura da fonte Fraunces nos tamanhos novos
+(`text-8xl`/`text-9xl`); mega-menu e cascata mobile comportando-se como antes;
+`prefers-reduced-motion` desativando o fade-in. Nenhum deploy foi feito.
+
+---
+
 ## Decisões recentes (não reverter sem discutir)
 
 - **JSON-LD do produto fica SEM `offers`.** Decisão consciente: o site não é
@@ -414,7 +582,8 @@ falta o dono confirmar legibilidade do texto sobre o vídeo/poster no browser.
   - Bloco 3 (features) — fora de escopo desta rodada.
   - Bloco 5 (tipografia) — vai para o Impeccable.
 - **Próximo trabalho planejado:** mesclar `fix/polish-balde-a` → depois rodar
-  `/impeccable polish`.
+  `/impeccable polish`. *(Feito em 2026-07-07, ver seção acima — resultado: fixes
+  pequenos de hierarquia/contraste/tipografia; nada de estrutural mudou.)*
 
 ## Pendências — prioridade alta
 
@@ -429,10 +598,9 @@ falta o dono confirmar legibilidade do texto sobre o vídeo/poster no browser.
 - **Nome do produto:** o PRD antigo chama o projeto de "Estilista"; o nome real em
   produção é **"LT Studio"** (rebrand aplicado em `feat/rebrand-lt-studio`). Toda
   referência mental/tratativa com a dona deve usar "LT Studio".
-- **Fonte display:** o SDD §2 sugeria Fraunces; o projeto usa **Cormorant Garamond**
-  (`app/layout.tsx`). Divergência consciente. Ponto de atenção: revisar
-  `font-light` em headings pequenos se a leitura ficar frágil — Cormorant é mais
-  fina que Fraunces nesse peso.
+- ~~**Fonte display:** o SDD §2 sugeria Fraunces; o projeto usa Cormorant Garamond~~ —
+  **resolvido em 2026-07-08**: trocado para **Fraunces** no redesign editorial (decisão
+  do dono), alinhando com o SDD original. Ver seção "redesign/fable-review" abaixo.
 
 ---
 
