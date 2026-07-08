@@ -4,6 +4,7 @@ import { client } from '@/sanity/lib/client'
 import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 import CuratorialNote from '@/components/CuratorialNote'
 import { WhatsAppIcon } from '@/components/icons'
+import { FadeInSection } from '@/components/FadeInSection'
 
 // ISR — produtos e settings vêm do Sanity; 60s para refletir publicações sem rebuild
 export const revalidate = 60
@@ -72,16 +73,16 @@ export default async function HomePage() {
           aria-hidden="true"
         />
 
-        {/* Conteúdo — alinhado à esquerda onde há espaço negativo no vídeo */}
+        {/* Conteúdo — alinhado à esquerda, deslocado para deixar respiro negativo à direita */}
         <div className="relative z-10 h-full min-h-[inherit] flex flex-col justify-center px-8 md:px-16 lg:px-24 py-16">
-          <div className="max-w-lg">
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text mb-5 opacity-70">
+          <div className="max-w-md">
+            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text mb-5 opacity-75">
               Personal Stylist
             </p>
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-light text-cream-text tracking-[0.2em] uppercase leading-none mb-5">
+            <h1 className="font-display text-7xl md:text-8xl lg:text-9xl font-light text-cream-text tracking-tight uppercase leading-none mb-6">
               LT Studio
             </h1>
-            <p className="font-sans text-sm md:text-base text-cream-text tracking-wide leading-relaxed mb-8 max-w-xs opacity-90">
+            <p className="font-display text-xl md:text-2xl font-light italic text-cream-text leading-snug mb-8 max-w-xs md:max-w-sm opacity-90">
               Moda feminina com olhar de personal stylist
             </p>
 
@@ -100,7 +101,7 @@ export default async function HomePage() {
                   href={waScheduleHref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-sans text-[11px] tracking-widest uppercase text-cream-text/60 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4"
+                  className="font-sans text-[11px] tracking-widest uppercase text-cream-text/75 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4"
                 >
                   Agendar horário →
                 </a>
@@ -114,9 +115,9 @@ export default async function HomePage() {
           2. NOVIDADES — grade de produtos recentes
       ═══════════════════════════════════════ */}
       {products.length > 0 && (
-        <section className="py-14 px-5 max-w-7xl mx-auto" aria-label="Novidades">
+        <section className="py-12 px-5 max-w-7xl mx-auto" aria-label="Novidades">
           <div className="flex items-baseline justify-between mb-8">
-            <h2 className="font-display text-3xl md:text-4xl font-light text-ink tracking-wide">
+            <h2 className="font-display text-5xl md:text-6xl font-light text-ink tracking-tight">
               Novidades
             </h2>
             <Link
@@ -127,11 +128,26 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {products.map(product => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
+          {products.length >= 4 ? (
+            <div className="grid grid-cols-2 lg:grid-cols-4 lg:grid-rows-2 gap-4 md:gap-6">
+              {/* Peça em destaque — 2×2 em desktop, card normal em mobile/tablet */}
+              <div className="col-span-2 lg:col-span-2 lg:row-span-2">
+                <ProductCard product={products[0]} featured />
+              </div>
+              {products.slice(1, 4).map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+              {products.slice(4).map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+              {products.map(product => (
+                <ProductCard key={product._id} product={product} />
+              ))}
+            </div>
+          )}
         </section>
       )}
 
@@ -148,15 +164,17 @@ export default async function HomePage() {
       {/* ═══════════════════════════════════════
           4. PERSONAL STYLIST — apresentação + CTA agendamento
       ═══════════════════════════════════════ */}
-      <section className="bg-espresso py-20 md:py-28 px-5" aria-label="Personal Styling">
+      <section className="bg-espresso py-24 md:py-36 px-5" aria-label="Personal Styling">
         <div className="max-w-3xl mx-auto text-center">
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-5">
-            Personal Styling
-          </p>
-          <div className="w-6 h-px bg-dourado/40 mx-auto mb-6" />
-          <h2 className="font-display text-3xl md:text-4xl font-light text-cream-text tracking-wide mb-6">
-            Um olhar profissional para o seu estilo
-          </h2>
+          <FadeInSection>
+            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-5">
+              Personal Styling
+            </p>
+            <div className="w-6 h-px bg-dourado/40 mx-auto mb-6" />
+            <h2 className="font-display text-5xl md:text-6xl font-light text-cream-text tracking-tight mb-6 [text-wrap:balance]">
+              Um olhar profissional para o seu estilo
+            </h2>
+          </FadeInSection>
           <p className="font-sans text-sm text-cream-text/75 leading-relaxed mb-14 max-w-prose mx-auto">
             Do consultório de moda ao look do dia a dia: encontramos juntas as peças certas
             para a sua vida, seu corpo e o que você quer comunicar com a roupa.
@@ -182,7 +200,7 @@ export default async function HomePage() {
               },
             ].map(step => (
               <div key={step.n} className="border-t border-cream-text/10 pt-6">
-                <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text/60 mb-4">
+                <p aria-hidden className="font-display text-6xl md:text-7xl font-light text-dourado/50 leading-none mb-4 select-none">
                   {step.n}
                 </p>
                 <h3 className="font-display text-xl font-light text-cream-text tracking-wide mb-3 [text-wrap:balance]">
