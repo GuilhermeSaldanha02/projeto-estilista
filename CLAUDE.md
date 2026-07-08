@@ -48,7 +48,9 @@ Base areia clara, drama concentrado em poucos pontos.
 | `--ink` | `#1A1A1A` | texto sobre claro |
 | `--cream-text` | `#F4EFE6` | texto sobre espresso |
 
-**Regra do degradê (importante):** degradê só dentro da família areia (ex.: `--sand-100` → `--sand-200`), sutil, restrito a hero e faixas. Nunca areia → outra família (vira lama). Nunca degradê atrás de foto de produto (suja a leitura da roupa). Gradiente forte é sinal de "cara de IA" — evite.
+**Regra do degradê (importante):** degradê dentro da família areia (ex.: `--sand-100` → `--sand-200`) é o padrão para textura de fundo dentro de uma seção — sutil, restrito a hero e faixas. Nunca degradê atrás de foto de produto (suja a leitura da roupa). Gradiente forte e genérico é sinal de "cara de IA" — evite.
+
+**Exceção aprovada (2026-07-08) — costura entre seções:** degradê cruzando família de cor (ex. areia → espresso) é permitido, mas SÓ como transição curta e localizada na emenda entre duas seções vizinhas (uma faixa de ~96–160px que esmaece a cor da seção anterior até transparente sobre o início da seção seguinte) — nunca como fundo de uma seção inteira. Ver `components/SeamTransition.tsx`. Objetivo: suavizar o corte seco bloco-a-bloco entre faixas claras e escuras, não introduzir gradiente decorativo genérico.
 
 ## 6. Catálogo: modelo de dados (a regra que impede duplicata)
 
