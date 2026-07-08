@@ -99,7 +99,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         <div className="hidden md:flex items-center gap-8">
           <Link
             href="/stylist"
-            className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2"
+            className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
             onClick={() => setMegaOpen(false)}
           >
             Stylist
@@ -118,7 +118,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 aria-haspopup="true"
                 aria-expanded={megaOpen}
                 onFocus={openMega}
-                className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[10px] tracking-widest uppercase transition-opacity py-2"
+                className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
               >
                 Categorias
               </button>
@@ -138,7 +138,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                       <Link
                         key={cat._id}
                         href={`/categoria/${cat.slug}`}
-                        className="text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 font-sans text-sm tracking-wide uppercase transition-opacity outline-none focus-visible:underline"
+                        className="text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 font-sans text-sm tracking-[0.15em] uppercase transition-opacity outline-none focus-visible:underline"
                         onClick={() => setMegaOpen(false)}
                       >
                         {cat.title}
@@ -154,7 +154,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                     <div className="w-6 h-px bg-dourado/40" />
                     <Link
                       href="/colecao/novidades"
-                      className="font-display text-[1.4rem] font-light italic text-cream-text hover:text-dourado focus:text-dourado transition-colors text-center outline-none focus-visible:underline"
+                      className="font-display text-2xl md:text-3xl font-light italic text-cream-text hover:text-dourado focus:text-dourado transition-colors text-center outline-none focus-visible:underline"
                       onClick={() => setMegaOpen(false)}
                     >
                       Novidades

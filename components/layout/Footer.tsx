@@ -2,8 +2,8 @@ import Image from 'next/image'
 
 export default function Footer() {
   return (
-    <footer className="bg-espresso border-t-2 border-dourado">
-      <div className="px-5 py-10 text-center">
+    <footer className="bg-espresso border-t border-dourado">
+      <div className="px-5 py-16 md:py-20 text-center">
         <div className="flex justify-center mb-2">
           <Image
             src="/logo-lt.png"
