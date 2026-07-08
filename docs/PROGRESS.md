@@ -567,6 +567,27 @@ produtos em estoque reais; leitura da fonte Fraunces nos tamanhos novos
 (`text-8xl`/`text-9xl`); mega-menu e cascata mobile comportando-se como antes;
 `prefers-reduced-motion` desativando o fade-in. Nenhum deploy foi feito.
 
+**Correções após 1ª rodada de feedback do dono no browser** *(mesmo dia)*:
+- **Mosaico de grid da home era bug, não só gosto** — o card em destaque (2×2)
+  e os cards normais ao lado tinham alturas que não batiam (o CSS grid não
+  garantia isso), resultando em desalinhamento visível nos prints. Em vez de
+  depurar o grid, a seção Novidades **saiu da home por decisão do dono**
+  (continua em `/colecao/novidades` e acessível pelo CTA primário do hero).
+- **CTA de agendamento no hero** — era link de texto ("Agendar horário →"),
+  virou botão sólido esmeralda do mesmo peso visual do CTA primário bordô
+  (dono pediu explicitamente um botão, não só texto).
+- **"Ficou sem visual/degradê"** — dono apontou que, fora o hero (vídeo), o
+  resto da página ficou piso/cru: títulos grandes soltos sobre fundo liso,
+  sem textura. Fix dentro da regra já documentada (degradê só na família
+  areia, restrito a faixas): Categoria/Novidades ganharam faixa de cabeçalho
+  com degradê `sand-100→sand-200` + linha dourada antes do H1; hero e seções
+  claras do `/stylist` (`PadraoSection`, `FotoLadoSection`, `CardsSection`,
+  `DestaqueClaroSection`) e a `CuratorialNote` trocaram fundo liso por
+  degradê sutil dentro da mesma família. PDP ficou de fora de propósito —
+  fundo liso perto de foto de produto é regra do sistema (gradiente sobre
+  foto de produto é proibido), não lacuna.
+- Build limpo após as correções. Ainda falta validação visual do dono.
+
 ---
 
 ## Decisões recentes (não reverter sem discutir)
