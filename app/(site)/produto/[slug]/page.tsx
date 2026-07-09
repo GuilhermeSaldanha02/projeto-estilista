@@ -160,7 +160,7 @@ export default async function ProdutoPage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen py-10 px-5 max-w-6xl mx-auto">
+    <main className="min-h-screen pt-10 pb-28 md:pb-10 px-5 max-w-6xl mx-auto">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -279,6 +279,23 @@ export default async function ProdutoPage({ params }: Props) {
           )}
         </div>
       </div>
+
+      {/* CTA sticky mobile: garante o WhatsApp acima da dobra em telas pequenas
+          (o botão inline acima permanece para quem rola até o fim) */}
+      {waHref ? (
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-sand-50/95 backdrop-blur-sm border-t border-dourado/30 px-5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Quero esta peça ${product.title} (atalho fixo)`}
+            className="flex w-full items-center justify-center gap-3 bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase py-4 hover:bg-bordo/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-2 transition-colors"
+          >
+            <WhatsAppIcon />
+            Quero esta peça
+          </a>
+        </div>
+      ) : null}
     </main>
   )
 }

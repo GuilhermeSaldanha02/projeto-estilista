@@ -62,7 +62,17 @@ export const product = defineType({
       name: 'description',
       title: 'Descrição',
       type: 'array',
-      of: [{ type: 'block' }],
+      // Só parágrafo e citação — evita títulos soltos (h1–h4) sem estilo do
+      // design system dentro do corpo. Negrito/itálico e listas seguem padrão.
+      of: [
+        {
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'Citação', value: 'blockquote' },
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'inStock',
