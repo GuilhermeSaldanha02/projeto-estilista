@@ -1,5 +1,6 @@
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import SmoothScroll from '@/components/SmoothScroll'
 
 export default function SiteLayout({
   children,
@@ -8,6 +9,7 @@ export default function SiteLayout({
 }) {
   return (
     <>
+      <SmoothScroll />
       <Header />
       {/* div, não main — as páginas filhas já declaram seu próprio <main> */}
       <div className="flex-1 pt-16 md:pt-[72px]">
