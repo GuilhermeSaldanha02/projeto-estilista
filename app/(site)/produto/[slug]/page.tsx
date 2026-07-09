@@ -288,6 +288,7 @@ export default async function ProdutoPage({ params }: Props) {
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`Quero esta peça ${product.title} (atalho fixo)`}
             className="flex w-full items-center justify-center gap-3 bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase py-4 hover:bg-bordo/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-2 transition-colors"
           >
             <WhatsAppIcon />

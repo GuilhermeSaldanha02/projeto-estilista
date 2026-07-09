@@ -24,8 +24,10 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
     mobileTriggerRef.current?.focus()
   }
 
+  // No container raiz (ancestral comum do hambúrguer e do drawer): assim o Escape
+  // funciona mesmo com o foco ainda no botão, que é irmão — não ancestral — do <nav>.
   function handleMobileKeyDown(e: React.KeyboardEvent<HTMLElement>) {
-    if (e.key === 'Escape') closeMobileAndReturnFocus()
+    if (mobileOpen && e.key === 'Escape') closeMobileAndReturnFocus()
   }
 
   function openMega() {
@@ -56,7 +58,10 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
      * Mobile:  grid-cols-[1fr_auto_1fr] → hamburger | logo (centro) | WA
      * Desktop: grid-cols-[auto_1fr_auto] → logo (esq) | links (centro) | WA
      */
-    <div className="h-full grid grid-cols-[1fr_auto_1fr] md:grid-cols-[auto_1fr_auto] items-center px-5 md:px-10 gap-x-6">
+    <div
+      onKeyDown={handleMobileKeyDown}
+      className="h-full grid grid-cols-[1fr_auto_1fr] md:grid-cols-[auto_1fr_auto] items-center px-5 md:px-10 gap-x-6"
+    >
 
       {/* ── COL 1: mobile=hamburger, desktop=logo ── */}
       <div className="flex items-center">
@@ -201,7 +206,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         <nav
           role="navigation"
           aria-label="Menu principal"
-          onKeyDown={handleMobileKeyDown}
+          data-lenis-prevent
           className="md:hidden absolute inset-x-0 top-16 z-40 bg-espresso border-t border-dourado/25 shadow-2xl max-h-[calc(100dvh-64px)] overflow-y-auto"
         >
           {categories.length === 0 ? (
