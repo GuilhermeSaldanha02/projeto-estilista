@@ -42,7 +42,7 @@ export default async function NovidadesPage() {
       <div className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-16 md:py-20 px-5">
         <SeamTransition from={EDGE.espresso} />
         <div className="relative z-10 max-w-7xl mx-auto">
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink/50 mb-4">
+          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink/70 mb-4">
             {products.length} {products.length === 1 ? 'peça' : 'peças'}
           </p>
           <div className="w-10 h-px bg-dourado/40 mb-5" />

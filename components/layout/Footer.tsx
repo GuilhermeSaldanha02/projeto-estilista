@@ -13,7 +13,7 @@ export default function Footer() {
             className="opacity-80"
           />
         </div>
-        <p className="font-sans text-cream-text/40 text-[10px] tracking-widest uppercase">
+        <p className="font-sans text-cream-text/70 text-[10px] tracking-widest uppercase">
           Moda Feminina · Personal Styling
         </p>
       </div>

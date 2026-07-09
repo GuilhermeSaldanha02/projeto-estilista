@@ -16,7 +16,17 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
   const [megaOpen, setMegaOpen] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const megaTriggerRef = useRef<HTMLButtonElement>(null)
+  const mobileTriggerRef = useRef<HTMLButtonElement>(null)
   const waHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : null
+
+  function closeMobileAndReturnFocus() {
+    setMobileOpen(false)
+    mobileTriggerRef.current?.focus()
+  }
+
+  function handleMobileKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+    if (e.key === 'Escape') closeMobileAndReturnFocus()
+  }
 
   function openMega() {
     clearTimeout(timerRef.current)
@@ -53,6 +63,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
 
         {/* Mobile: hambúrguer */}
         <button
+          ref={mobileTriggerRef}
           className="md:hidden text-cream-text p-1 -ml-1"
           aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
           aria-expanded={mobileOpen}
@@ -175,7 +186,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Falar pelo WhatsApp"
-            className="flex items-center gap-2 text-cream-text/65 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2"
+            className="flex items-center gap-2 p-2 -mr-2 md:p-0 md:mr-0 text-cream-text/65 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2"
           >
             <WhatsAppIcon size={18} />
             <span className="hidden md:inline font-sans text-[10px] tracking-widest uppercase">
@@ -190,10 +201,11 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         <nav
           role="navigation"
           aria-label="Menu principal"
+          onKeyDown={handleMobileKeyDown}
           className="md:hidden absolute inset-x-0 top-16 z-40 bg-espresso border-t border-dourado/25 shadow-2xl max-h-[calc(100dvh-64px)] overflow-y-auto"
         >
           {categories.length === 0 ? (
-            <p className="px-6 py-5 font-sans text-cream-text/35 text-sm">
+            <p className="px-6 py-5 font-sans text-cream-text/70 text-sm">
               Nenhuma categoria disponível.
             </p>
           ) : (
