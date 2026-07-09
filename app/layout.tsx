@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Fraunces } from 'next/font/google'
+import { Fraunces, Hanken_Grotesk, Schibsted_Grotesk, Familjen_Grotesk } from 'next/font/google'
 import './globals.css'
 
 const fraunces = Fraunces({
@@ -7,6 +7,27 @@ const fraunces = Fraunces({
   weight: ['300', '400', '500', '600'],
   style: ['normal', 'italic'],
   variable: '--font-display',
+  display: 'swap',
+})
+
+// Candidatas à fonte de corpo (Fase 1 — comparação em /dev-fontes, ver PROGRESS).
+// Nenhuma delas troca --font-sans ainda; ficam disponíveis só para a página de teste.
+const hankenGrotesk = Hanken_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-hanken',
+  display: 'swap',
+})
+const schibstedGrotesk = Schibsted_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-schibsted',
+  display: 'swap',
+})
+const familjenGrotesk = Familjen_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-familjen',
   display: 'swap',
 })
 
@@ -28,7 +49,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="pt-BR" className={fraunces.variable}>
+    <html
+      lang="pt-BR"
+      className={`${fraunces.variable} ${hankenGrotesk.variable} ${schibstedGrotesk.variable} ${familjenGrotesk.variable}`}
+    >
       <body className="flex flex-col min-h-screen">
         {children}
       </body>
