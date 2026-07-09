@@ -66,7 +66,17 @@ export const stylistProfile = defineType({
               title: 'Conteúdo',
               description: 'Para o layout "Etapas", escreva uma lista ordenada (1. 2. 3…).',
               type: 'array',
-              of: [{ type: 'block' }],
+              // Só parágrafo e citação — sem títulos soltos (h1–h4). Listas
+              // (inclusive a numerada das "Etapas") e negrito/itálico seguem padrão.
+              of: [
+                {
+                  type: 'block',
+                  styles: [
+                    { title: 'Normal', value: 'normal' },
+                    { title: 'Citação', value: 'blockquote' },
+                  ],
+                },
+              ],
               hidden: ({ parent }) => parent?.layout === 'cards',
             }),
             defineField({
@@ -134,20 +144,8 @@ export const stylistProfile = defineType({
         }),
       ],
     }),
-    defineField({
-      name: 'whatsappNumber',
-      title: 'Número do WhatsApp',
-      type: 'string',
-      description: 'Somente dígitos com DDI. Ex.: 5511999990000',
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: 'bookingMessage',
-      title: 'Mensagem de agendamento',
-      type: 'string',
-      description: 'Texto pré-preenchido no WhatsApp ao clicar em "Agendar horário".',
-      initialValue: 'Oi! Quero agendar um horário de personal styling.',
-      validation: (rule) => rule.required(),
-    }),
+    // NOTA: whatsappNumber e bookingMessage foram removidos daqui — a página
+    // /stylist usa siteSettings.whatsappNumber e uma mensagem fixa. Campos
+    // obrigatórios que o site ignorava só bloqueavam a publicação (auditoria A2).
   ],
 })
