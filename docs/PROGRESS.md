@@ -1,7 +1,34 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-08 (retomada + Fase 0 — na `main`)_
+_Última atualização: 2026-07-09 (Fase C — branch `feat/hero-momento-assinatura`)_
+
+---
+
+## Redesign da home — tese e fases (2026-07-09, debatido com agente especialista de design)
+
+O dono rejeitou a solução minimalista de só remover a costura de degradê ("está feio")
+e pediu um REDESIGN de verdade, à altura das 39 referências de elite entregues (barra
+aspiracional), sem 3D/WebGL. Tese do especialista, adotada: **"capítulos dirigidos, não
+blocos empilhados"** — em repouso cada seção continua chapada (honra o DESIGN.md: "a
+faixa não levanta sobre a areia"); o que muda é que ENTRAR em cada seção vira uma
+batida coreografada pelo scroll (Lenis+Framer), e as emendas ganham tipografia composta
++ respiro, não degradê. Diagnóstico da faixa cinza: `SeamTransition from={EDGE.espresso}`
+esmaecia um marrom escuro quase sem croma sobre a areia clara — matematicamente vira
+taupe barrento, não é ajuste de valor, é o conceito errado.
+
+Fases (pequenas, validar no navegador entre elas):
+- **Fase C — Hero (momento-assinatura):** CONCLUÍDA nesta sessão, ver abaixo.
+- **Fase D — Nota da Stylist ("sala clara"):** pull-quote grande, itálico, assimétrico
+  (flush-left), respiro generoso, revelação por linha. Depende de 1 frase real da Luiza
+  (hoje é placeholder "Nota de exemplo").
+- **Fase E — Personal Styling (quebrar o monólito):** o bloco espresso de ~1300px no
+  mobile ganha ritmo/assimetria interna + entrada coreografada na emenda claro→escuro.
+  Elite pleno aqui depende de retrato real da stylist (hoje não existe).
+- **Fase F — passada de motion + docs:** consolidar, aposentar `SeamTransition`/`EDGE`
+  também no `/stylist` e no header de categoria/novidades, só então revogar a exceção
+  do CLAUDE.md §5 e do design.json (ainda NÃO revogada — usada em `page.tsx` Personal
+  Styling e nas 7 seções do `/stylist`; revogar só quando não sobrar nenhum uso).
 
 ---
 
@@ -186,6 +213,45 @@ Sanity/Next). Não rodei `audit fix` (pode quebrar; não pedido). Registrar como
 
 _Working tree ainda NÃO commitado. Contém também `.claude/skills/impeccable/` (tooling,
 E9 → commit separado) e o `.claude/launch.json` novo (config de preview desta sessão)._
+
+### Fase C — CONCLUÍDA (2026-07-09, branch `feat/hero-momento-assinatura`): momento-assinatura do hero
+
+Debatido com agente especialista de design (ver "Redesign da home" acima) antes de
+implementar — recomendação: vídeo (não máscara tipográfica) como protagonista, por
+hierarquia da marca ("a foto é o argumento; o texto é a confirmação") e por ser o único
+asset real e premium do projeto.
+
+- **`components/HeroSignature.tsx`** (novo, client): extrai o hero de `page.tsx`. Duas
+  camadas de motion via Framer, ambas desligadas sob `prefers-reduced-motion`
+  (`useReducedMotion`):
+  1. **Entrada escalonada no load:** eyebrow → wordmark → tagline → CTAs, stagger 80ms,
+     ease out-expo `[0.16,1,0.3,1]`, 900ms cada.
+  2. **Parallax discreto no scroll** (`useScroll`+`useTransform` amarrado ao próprio
+     `sectionRef`): vídeo `scale` 1→1.15 + `y` 0→-6% (scale dá folga pro translate sem
+     revelar borda, container é `overflow-hidden`); escurecimento uniforme 0→0.5 de
+     opacidade na saída (em vez de reduzir a opacidade do próprio vídeo — evita revelar
+     o fundo por trás); texto sobe um pouco mais (`y` 0→-14%) para separação de planos.
+- **Wordmark vira lockup intencional:** "LT" / "Studio" em `<span>`s separados,
+  `block md:inline` — duas linhas deliberadas no mobile (antes quebrava por acaso no
+  texto corrido), linha única no desktop. `text-[clamp(3.5rem,15vw,9rem)]`.
+- **Removida a costura da emenda hero→Nota** (`CuratorialNote.tsx` perdeu
+  `<SeamTransition from={EDGE.espresso}/>`): era a faixa cinza barrenta que o dono
+  apontou. Corte limpo — taupe quente do vídeo encontra o sand-50 quente da Nota.
+  **Escopo desta fase é só essa emenda**; a costura de `page.tsx` (Personal Styling) e
+  as 7 do `/stylist` ficam para a Fase F (ver acima).
+- _Verificado:_ `tsc --noEmit` EXIT=0; navegador em 1280px (wordmark linha única,
+  `spans display:inline`) e 375px (lockup 2 linhas, `spans display:block`, hero
+  full-width `375×748`); parallax confirmado por inspeção (`scroll 560px` →
+  `video transform: matrix(1.10, …, -29.28)`, `darken opacity: 0.335`); Nota sem
+  gradiente-costura (`temFaixaGradiente:false`); zero erro de console.
+  **Screenshot da ferramenta de preview com artefato de escala nesta sessão**
+  (mostrou canvas cortado) — validação feita por medição de DOM
+  (`getBoundingClientRect`/`getComputedStyle`), que é a fonte confiável aqui.
+  **Caminho `prefers-reduced-motion` não testável nesta ferramenta** (sem emulação
+  disponível) — guard segue o mesmo padrão já validado do `SmoothScroll.tsx`; falta o
+  dono confirmar no sistema operacional com "reduzir movimento" ativado.
+- Code review por agente antes do merge do PR anterior pegou um bug real de Escape que
+  eu tinha validado errado (fix já mergeado) — reforça manter o passo de review.
 
 ---
 
