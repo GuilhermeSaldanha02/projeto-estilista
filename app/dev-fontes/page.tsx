@@ -1,6 +1,9 @@
 import type { Metadata } from 'next'
 
-export const metadata: Metadata = { title: 'Comparação de fontes (temporário)' }
+export const metadata: Metadata = {
+  title: 'Comparação de fontes (temporário)',
+  robots: { index: false, follow: false },
+}
 
 // Página TEMPORÁRIA de comparação — Fase 1 do redesign (ver docs/PROGRESS.md).
 // Não faz parte do site; remover depois que a fonte do corpo for escolhida.
