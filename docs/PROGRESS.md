@@ -1,7 +1,191 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-08 (redesign editorial — branch `redesign/fable-review`)_
+_Última atualização: 2026-07-08 (retomada + Fase 0 — na `main`)_
+
+---
+
+## Fase 0 — Reconciliação (2026-07-08, retomada sob diretrizes-em-andamento v2)
+
+_Releitura de CLAUDE.md + PROGRESS.md, `git status`/`git log`, e checagem de
+baseline (build + navegador desktop **e mobile 375px**) antes de qualquer edição._
+
+### Divergências doc × repo encontradas (corrigidas aqui)
+1. **Branch fantasma (classe E4).** O cabeçalho e a seção `redesign/fable-review`
+   diziam "branch aberta, não mesclada". **Falso:** essa branch NÃO existe; todo o
+   redesign editorial + costura/degradê está na **`main`** (HEAD `4c6d9cd`,
+   sincronizada com `origin/main`). Corrigido o cabeçalho. Nada a mesclar.
+2. **Nota da Stylist não está vazia (classe E4, conteúdo).** PROGRESS afirma que
+   `curatorNote` está vazio e a seção some. **Na tela renderiza placeholder**
+   "Nota de exemplo — a Luiza escreve aqui" / byline "LUIZA THOMAZ". Há texto de
+   exemplo no Sanity (ou um fallback) — a seção NÃO está oculta. A verificar com a dona.
+3. **Working tree sujo (classe E9).** Apenas `.claude/skills/impeccable/` (9 arquivos
+   de tooling do agente) modificado + `.claude/launch.json` novo (config de preview,
+   criado nesta sessão). Nenhuma mudança de código de produto pendente. Commit destes
+   fica separado do código (E9), quando for o caso.
+
+### Baseline (2026-07-08)
+- **Build:** `npm run build` **limpo** — 30 páginas (7 categorias, 14 produtos), zero
+  erro de tipo/lint. Obs.: rodar build com o `next dev --turbopack` no ar corrompe o
+  `.next` compartilhado (ENOENT em `[turbopack]_runtime.js`) → parar o dev antes de buildar.
+- **Desktop (navegador):** home, `/categoria/vestidos`, `/produto/vestido-bordo` e
+  `/stylist` renderizam de verdade (não são tela de erro). Design desktop está
+  **coerente e polido** — editorial, Fraunces, paleta areia/espresso/bordô/esmeralda.
+- **Mobile 375px:**
+  - Hero: cabe, CTAs visíveis; "LT STUDIO" quebra em 2 linhas (aceitável, um pouco tosco).
+  - Menu: drawer vertical funciona (categorias + Novidades + Stylist + CTAs).
+  - PDP: CTA WhatsApp a ~786px do topo → **acima da dobra em phone de 812px, mas
+    ABAIXO em phone de ~667px** (iPhone SE/8). Confirma a pendência "CTA sticky mobile".
+  - Seção "Personal Styling" da home = **1295px** de espresso (bloco escuro muito
+    longo) — candidato à queixa de "tudo em blocos".
+  - `/stylist`: faixa espresso vazia acima da foto do hero.
+- **Falsos alarmes descartados (não são bugs):** "Internal Server Error" na PDP =
+  concorrência build×dev (erro de processo, não de código); imagem da PDP "em branco"
+  = carregamento lento do Sanity CDN, a imagem renderiza.
+
+### Leitura estratégica
+O desktop **não** está "todo errado" — está polido. Mas na retomada o dono respondeu:
+- **Alvo:** "tudo — quero agentes revisando tudo, do design (se necessário um novo)
+  até a parte técnica."
+- **Natureza:** "Direção — não é esse estilo." (Rejeita o rumo editorial atual.)
+
+### Mandato desta fase (definido com o dono, 2026-07-08)
+Revisão ampla (design + técnico) com subagentes, possível **novo design**, servindo às
+DUAS frentes: **loja** (vitrine de peças) **+ consultoria** de personal stylist.
+
+### ⚠️ Conflito registrado — referências vs. INEGOCIÁVEL do projeto (regra E7/E8)
+O dono entregou `todas_referencias_compiladas.pdf`: **39 sites 3D/WebGL de elite**
+(Bruno Simon, Lusion, Active Theory, Obys, Merci Michel, Unseen, Robin Payot; curadoria
+Awwwards/FWA). Stack listada: **Three.js/WebGL, React Three Fiber, GSAP/ScrollTrigger,
+Lenis, shaders GLSL, modelos .glb**. Observações:
+1. **Proveniência suspeita:** o PDF se intitula "Sites 3D e WebGL de Elite" e lista
+   Three.js Journey/Spline/.glb — é o perfil EXATO do projeto irmão `C:\dentista-3d`
+   (o de Three.js). O CLAUDE.md do Estilista nunca menciona 3D. A confirmar com o dono
+   se o *calibre/energia* é o alvo ou algo literal (não assumir).
+2. **Colisão com o INEGOCIÁVEL:** CLAUDE.md §4/§7 fixam mobile-first + carregamento
+   rápido + funil WhatsApp como não-negociáveis ("a maioria das clientes está no
+   celular"; "vitrine lenta = cliente perdida"). Bruno Simon/Lusion são *desktop
+   showpieces onde o site É o produto*. Aqui o produto é roupa + serviço de styling, o
+   funil é WhatsApp, a cliente está no celular, e **não existem assets 3D** (só fotos
+   chapadas de IA). Adoção literal briga com o modelo de negócio que o próprio dono escreveu.
+3. **Caminho recomendado (a validar):** extrair a *essência* dessas referências —
+   coreografia de scroll (Lenis + reveals GSAP com parcimônia), ousadia tipográfica,
+   UM momento-assinatura de "wow", direção de arte mais rica — sobre um esqueleto
+   convencional e mobile-rápido. É "marcante na pele" turbinado, DENTRO da filosofia
+   atual, não contra ela. Full-immersive fica como escolha do dono se ele aceitar o
+   custo de perf/assets/escopo/conversão. Split inteligente: mais ambição nas
+   superfícies de MARCA (hero, /stylist/consultoria); catálogo/PDP rápidos e diretos.
+
+### Plano de revisão "tudo" — separado por dependência de direção (advisor)
+- **Independe da direção (começa já):** auditoria técnica — perf, a11y, correção,
+  código morto, saúde de build/config, defeitos de responsividade mobile, as
+  divergências da Fase 0. Rodando em subagente nesta sessão.
+- **Depende da direção (aguarda a resposta de calibre):** crítica de design das telas
+  atuais e o plano de redesign. Não escrever antes da decisão — seria retrabalho.
+
+### Direção de design DECIDIDA (dono, 2026-07-08): "Essência elite, esqueleto rápido"
+
+Adotar a *essência* das referências de elite SEM 3D/WebGL e SEM sacrificar o
+INEGOCIÁVEL (mobile-first, rápido, funil WhatsApp). Não é redesenhar contra a filosofia
+atual — é turbinar "marcante na pele, convencional no esqueleto".
+
+**Princípios:**
+- **Movimento como coreografia, não enfeite:** smooth scroll (Lenis, ~poucos KB) +
+  reveals de entrada sóbrios ao rolar (já há o padrão `FadeInSection`). SEMPRE
+  respeitar `prefers-reduced-motion` (regra já existente).
+- **Ousadia tipográfica e direção de arte:** escala, assimetria, ritmo editorial,
+  numerais grandes — concentrado nas superfícies de MARCA.
+- **UM momento-assinatura de "wow"** (proposta: o hero). Tratamento de vídeo com
+  parallax/scroll ou revelação por máscara. **Sem WebGL/3D** (não há assets; custo mobile).
+- **Split por superfície (protege o funil):**
+  - *Marca/emoção* (hero da home, `/stylist`/consultoria): ambição máxima.
+  - *Transação/navegação* (categoria, produto/PDP): rápido, limpo, sem fricção,
+    CTA WhatsApp proeminente (corrigir o abaixo-da-dobra no mobile → CTA sticky).
+- **Dupla função explícita:** o site é loja (ver peça → WhatsApp) **e** consultoria
+  (apresentar o styling → agendar). Navegação tem que deixar as duas óbvias.
+- **Piso de performance mensurável:** sem libs 3D pesadas; motion barato de GPU;
+  imagens sempre via `next/image` + Sanity.
+
+**Decisão técnica a confirmar:** Lenis (smooth scroll) — sim. Lib de motion: manter
+Framer Motion (escolha do CLAUDE.md §3, ainda não instalada) para reveals + Lenis para
+o scroll; GSAP/ScrollTrigger só se um scroll-scrub de assinatura exigir. (Recomendação.)
+
+**Sequência em fases pequenas (§8 — validar no navegador entre cada):**
+- **Fase A — técnica (rodando):** auditoria por subagente → aplicar Balde A
+  (perf/a11y/bugs) + CTA sticky na PDP mobile + faixas espresso vazias/seções longas.
+  Independe da direção; entra primeiro.
+- **Fase B — fundação de motion:** Lenis + smooth scroll global + reduced-motion.
+- **Fase C — momento-assinatura no hero:** 1 proposta, validar no navegador antes de espalhar.
+- **Fase D — direção de arte nas superfícies de marca:** home + `/stylist`.
+- **Fase E — dupla função / IA de navegação:** loja e consultoria óbvias; revisar nav/rotas.
+- Cada fase: spec de 4 linhas (atual/alvo/invariantes/fronteira), verificação no
+  navegador (mobile real), evidência aqui.
+
+### Fase A — CONCLUÍDA (2026-07-08, validada no navegador mobile 375px)
+
+Auditoria técnica por subagente (relatório triado A/B/C). Aplicados os itens do
+Balde A que independem de decisão de negócio. Invariante respeitada: nenhuma mudança
+de direção visual/marca — só a11y, código morto e ergonomia mobile.
+
+- **A1 — contraste WCAG AA** (classe de bug recorrente do projeto): label "N peças" em
+  `categoria/[slug]/page.tsx` e `colecao/novidades/page.tsx` `text-ink/50→/70`;
+  `Footer.tsx` `cream-text/40→/70`; mensagem de menu vazio em `Nav.tsx` `/35→/70`.
+  _Verificado:_ footer `rgba(244,239,230,0.7)`, label categoria `rgba(26,26,26,0.7)`.
+- **A3 — código morto proibido:** removido `sanityLoader` + JSDoc que mandava usá-lo como
+  `loader` prop (padrão já banido nas REGRAS — reintrodução do bug de runtime RSC).
+  `sanity/lib/image.ts` agora só exporta `urlFor`. _Verificado:_ categoria e PDP
+  renderizam com imagens do Sanity, zero erro de console.
+- **A4 — alvo de toque (WCAG 2.5.8):** link WhatsApp do header ganhou `p-2 -mr-2` no
+  mobile (`md:p-0`). _Verificado:_ área de toque **34×34px** (era 18×18).
+- **A5 — Escape no menu mobile:** `Nav.tsx` ganhou `mobileTriggerRef` +
+  `handleMobileKeyDown` — fecha com Escape e devolve foco ao hambúrguer (simetria com o
+  mega-menu desktop). _Verificado:_ menu fecha e `activeElement` volta ao hambúrguer.
+- **A6 — CTA sticky mobile na PDP** (era a pendência nº 1): barra `fixed bottom-0
+  md:hidden` com `env(safe-area-inset-bottom)` + `pb-28` no `<main>` para não cobrir o
+  conteúdo; botão inline mantido. _Verificado:_ barra fixada no rodapé da viewport,
+  CTA de 49px acima da dobra sem rolar.
+
+_Nota: a ferramenta de screenshot travou nesta sessão; verificação feita por inspeção
+de DOM (getComputedStyle/getBoundingClientRect) + teste de interação, mais precisa que
+captura para valores de CSS. Falta o dono confirmar a olho no celular real._
+
+### Limpeza da auditoria (A2/B1/B3 + higiene) — CONCLUÍDA (2026-07-08, aprovado pelo dono)
+
+- **A2/B1 — campos-fantasma do Studio removidos:** `stylistProfile` perdeu
+  `whatsappNumber`/`bookingMessage` (obrigatórios que só bloqueavam publicação; o site
+  usa `siteSettings.whatsappNumber` + mensagem fixa — confirmado por grep + leitura da
+  query). `siteSettings` perdeu `topBarText`/`topBarLink`/`heroVideo`/`heroPoster`
+  (nenhuma tela lia; hero é `/public/hero.mp4` por regra). Dados órfãos no Sanity são
+  inofensivos. _Se um dia quisermos barra de aviso ou hero via CMS, recriar de propósito._
+- **B3 — editor de texto travado:** `product.description` e `section.body` do
+  `stylistProfile` agora só permitem estilos **Normal + Citação** (`of: [{ type:'block',
+  styles:[...] }]`). Some o risco de `<h1>` solto sem estilo do design system. Listas
+  (inclusive a numerada das "Etapas") e negrito/itálico seguem no padrão default.
+- **Higiene (Balde C):** arquivo `nul` apagado; 5 wireframes `.html` movidos da raiz para
+  `wireframes/` via `git mv` (histórico preservado).
+- _Verificado:_ `npx tsc --noEmit` EXIT=0; site e schemas type-clean; páginas renderizam.
+
+### Fase B — CONCLUÍDA (2026-07-08): fundação de movimento (scroll suave)
+
+Primeiro passo da direção "essência elite, esqueleto rápido". Invariante: nada de layout
+mudou; só o *comportamento* do scroll.
+
+- Instalados `lenis` + `framer-motion` (Framer fica para os reveals ricos das Fases C/D;
+  o projeto já tem `FadeInSection` via CSS/IntersectionObserver para reveals simples).
+- **`components/SmoothScroll.tsx`** (client): inicia o Lenis com loop de rAF, montado no
+  `app/(site)/layout.tsx`. **Respeita `prefers-reduced-motion`** — se o usuário pediu
+  menos movimento, o Lenis NÃO inicia e o scroll nativo é preservado (regra do sistema).
+- CSS recomendado do Lenis adicionado ao `globals.css` (evita conflito de
+  `scroll-behavior`/overflow).
+- _Verificado:_ home carrega com `<html class="… lenis">`, `lenisActive:true`, zero erro
+  de console; `tsc --noEmit` EXIT=0. Falta o dono sentir o scroll no navegador/celular
+  e confirmar o caminho reduced-motion (guard de código, não testável via preview aqui).
+
+**Vulnerabilidades npm:** o `npm install` reportou 23 vulns (pré-existentes, árvore
+Sanity/Next). Não rodei `audit fix` (pode quebrar; não pedido). Registrar como pendência.
+
+_Working tree ainda NÃO commitado. Contém também `.claude/skills/impeccable/` (tooling,
+E9 → commit separado) e o `.claude/launch.json` novo (config de preview desta sessão)._
 
 ---
 
@@ -491,7 +675,7 @@ de código + detector estático (zero findings antes/depois) + `npm run build` l
 
 ---
 
-### redesign/fable-review — Redesign editorial completo *(2026-07-08, branch aberta, não mesclada)*
+### redesign/fable-review — Redesign editorial completo *(2026-07-08, JÁ NA `main` — ver Fase 0; a branch homônima não existe mais)*
 
 Revisão de design completa pedida pelo dono ("básico, sem graça, batido" → nível
 editorial/premium). Diagnóstico: o sistema documentado em `.impeccable/design.json`
