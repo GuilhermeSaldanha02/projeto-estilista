@@ -1,7 +1,96 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-09 (Fase C — branch `feat/hero-momento-assinatura`)_
+_Última atualização: 2026-07-09 (checkpoint de redesign completo — pós Fase C)_
+
+---
+
+## CHECKPOINT — Redesign completo decidido (2026-07-09)
+
+Depois da Fase C, o dono revisou o site e disse "não estou gostando" — pediu para
+acionar o agente de planejamento + um revisor de sistema, ler/atualizar os docs, e
+reportar antes de qualquer novo código. Os dois agentes convergiram, independentemente:
+**o esqueleto está certo; o problema é sequenciamento** — motion/hero foram polidos
+antes de resolver estrutura e conteúdo. Nenhum dos dois recomendou refatorar tudo.
+
+**Mesmo assim, decisão final do dono (dele, não dos agentes — registrado como tal):
+refatorar o design inteiro** (páginas, menu, cor, tipografia), inspirado numa nova
+referência que ele mandou (`3dgallery-eqrvxb8t.manus.space`) — **confirmado por ele
+como sendo a MESMA galeria das 39 referências 3D/WebGL de antes**, não um mockup
+próprio. Confirmou de novo: **"continua só a essência (sem 3D)"** — agora aplicada ao
+site INTEIRO, não só ao hero.
+
+**Achados das duas auditorias (planejamento + revisor de sistema), consolidados:**
+1. Home de uma loja não mostra nenhum produto.
+2. Placeholder rodando ao vivo (Nota da Stylist texto de exemplo; "FOTO EM BREVE" no `/stylist`).
+3. Bloco espresso "Personal Styling" é monólito de ~1300px no mobile.
+4. Costura de degradê só foi removida na emenda hero→Nota; o resto ainda vaza.
+5. PDP esquelética (mas o template já suporta preço/descrição/galeria — é falta de
+   conteúdo real no catálogo de teste, não falta de estrutura).
+6. **Hierarquia de navegação inverte o funil confirmado pelo dono:** ele definiu
+   **consultoria/personal styling como funil PRINCIPAL** (loja é vitrine de gosto que
+   alimenta o contato) — mas hoje a estrutura prioriza a loja.
+7. CTA do hero mente (leva a uma listagem, não a uma peça).
+8. Tags/coleções (Denim, Alfaiataria, Festa...) não têm nenhuma tela de descoberta.
+9. "PERSONAL STYLIST"/"Personal Styling" em inglês em duas telas de marca.
+10. **Achado grave de drift:** a Fase E planejada em 08/07 era estrutural ("dupla função
+    / IA de navegação"); em 09/07 foi silenciosamente redefinida para uma tarefa de
+    layout ("quebrar o monólito"). Motion tomou o lugar de resolver estrutura.
+11. PRD.md/SDD.md desatualizados (nome antigo "Estilista", schema removido, padrão de
+    imagem banido ainda recomendado).
+
+**Recomendação do agente de design (aceita pelo dono) — paleta evoluída:**
+_"O sistema não está sem polish — está polido demais dentro da estética errada."_
+Fraunces leve + areia + fio dourado + eyebrow tracked é a gramática do editorial-IA.
+- **Esmeralda promovida a protagonista** (ativo mais raro/diferenciado da marca).
+- **`porcelana`** (`#F5F3EE`) substitui a superfície dominante; **`areia`** única
+  (`#E9E1D3`) colapsa os 3 tons quase-idênticos que nunca deixavam a costura fechar.
+- **`verde-profundo`** (`#083D2C`) novo, para superfícies de marca "tomadas" pelo verde.
+- **Dourado só sobre fundo escuro** (nunca mais eyebrow sobre claro — mata o tell de
+  "cara de IA" E o bug de contraste histórico no mesmo movimento).
+- Tipografia: **o corpo de texto nunca foi escolhido** (era a fonte padrão do sistema)
+  — esse é o elo fraco de alta confiança, independente de qualquer outra decisão.
+  Fraunces (display) fica, mas com mais peso/ousadia (a "Regra do Peso Único" 300 faz
+  tudo sussurrar — revisar nos tamanhos de display).
+- **Menu/IA:** CTA "Agendar styling" (esmeralda, botão, não ícone) no header; nav
+  reordenada Consultoria → Vitrine → Novidades; "Stylist" vira "Consultoria" em PT-BR;
+  drawer mobile inverte a pilha (agendar+consultoria no topo); hero com CTA honesto.
+
+**Roteirista (rascunhos, marcados [RASCUNHO], sem fato inventado):** Nota da Stylist
+(2 opções), lista "Como funciona", citação de fechamento, template de descrição de PDP,
+3 opções de eyebrow PT-BR. **Achado técnico:** a Q6 ("o que a Luiza não faz") não tem
+pra onde ir no schema atual — `body` fica `hidden` quando `layout === 'cards'` e a
+`CardsSection` só imprime `items[]`. Schema precisa de ajuste (card #5 ou seção própria).
+
+**Decisão de sequenciamento do dono:** o que depende da Luiza (foto real, Q&A real)
+fica para o FIM; enquanto isso, usar os rascunhos do roteirista como conteúdo modelo.
+
+**Decisões travadas nesta sessão (perguntas ao dono):**
+- Paleta evoluída: **aprovada como proposta.**
+- Fonte do corpo: **decidir vendo 3 opções no navegador** (Hanken Grotesk, Schibsted
+  Grotesk, Familjen Grotesk) — página temporária `/dev-fontes` criada para isso.
+- Fraunces (display): **mantém, com mais peso/ousadia** nos títulos.
+
+### Fase 1 (redesign) — CONCLUÍDA nesta sessão: tokens de cor + candidatas de fonte
+
+- **`app/globals.css`:** valores de `sand-50` → porcelana (`#F5F3EE`); `sand-100/200/300`
+  colapsados no mesmo tom areia (`#E9E1D3` — `sand-300` nunca foi usado em nenhum
+  componente, confirmado por grep, colapsar é seguro). Nomes de classe Tailwind
+  intocados (nenhum componente precisou mudar). Novo token `verde-profundo`
+  (`#083D2C`) adicionado, ainda sem uso (pronto para Fases 3/4).
+- **`tailwind.config.ts`:** aliases semânticos `porcelana`/`areia`/`verde-profundo`
+  adicionados (mesmas variáveis CSS — código futuro pode usar os nomes novos).
+- **`app/layout.tsx` + `/dev-fontes` (página temporária):** 3 fontes de corpo candidatas
+  carregadas via `next/font/google` (Hanken Grotesk, Schibsted Grotesk, Familjen
+  Grotesk), nenhuma delas troca `--font-sans` ainda — só disponíveis na página de
+  comparação. Página mostra as 3 sobre porcelana e espresso, com texto real do site,
+  + swatches da paleta nova.
+- _Verificado:_ `tsc --noEmit` EXIT=0; build limpo (31 páginas, incluindo `/dev-fontes`);
+  navegador confirma as 3 `font-family` computadas distintas e os hex dos swatches
+  batendo com os tokens; home renderiza sem regressão, zero erro de console.
+- **Pendência:** dono precisa abrir `/dev-fontes` no navegador e escolher a fonte do
+  corpo. Depois disso: aplicar a fonte escolhida como `--font-sans` real, apagar
+  `/dev-fontes`, e seguir para o ajuste de peso do Fraunces (Fase 2).
 
 ---
 
@@ -211,10 +300,11 @@ mudou; só o *comportamento* do scroll.
 **Vulnerabilidades npm:** o `npm install` reportou 23 vulns (pré-existentes, árvore
 Sanity/Next). Não rodei `audit fix` (pode quebrar; não pedido). Registrar como pendência.
 
-_Working tree ainda NÃO commitado. Contém também `.claude/skills/impeccable/` (tooling,
-E9 → commit separado) e o `.claude/launch.json` novo (config de preview desta sessão)._
+_Fase B foi commitada e mesclada na `main` via PR #19 (`feat/auditoria-e-scroll-suave`,
+merge `0cf92e8`). Segue sem commitar apenas o tooling do agente: `.claude/skills/impeccable/`
+(E9 → commit separado) e o `.claude/launch.json` (config de preview)._
 
-### Fase C — CONCLUÍDA (2026-07-09, branch `feat/hero-momento-assinatura`): momento-assinatura do hero
+### Fase C — CONCLUÍDA (2026-07-09, mesclada na `main` via PR #20 — branch `feat/hero-momento-assinatura`, hoje remote-only): momento-assinatura do hero
 
 Debatido com agente especialista de design (ver "Redesign da home" acima) antes de
 implementar — recomendação: vídeo (não máscara tipográfica) como protagonista, por
@@ -615,7 +705,7 @@ Etapa final, a rodar em sessão separada. NÃO fazer por prompt avulso.
 
 ---
 
-### fix/polish-balde-a — Balde A do POLISH-FIXES (Fable) *(2026-07-06, PR aberto, não mesclado)*
+### fix/polish-balde-a — Balde A do POLISH-FIXES (Fable) *(2026-07-06, mesclado na `main` via PR #18 — merge `a3a1948`)*
 
 Seis tarefas do POLISH-FIXES, cada uma em commit próprio, **nesta ordem**:
 
