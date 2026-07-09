@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import CuratorialNote from '@/components/CuratorialNote'
+import HeroSignature from '@/components/HeroSignature'
 import { WhatsAppIcon } from '@/components/icons'
 import { FadeInSection } from '@/components/FadeInSection'
 import { SeamTransition } from '@/components/SeamTransition'
@@ -31,76 +31,10 @@ export default async function HomePage() {
     <main>
 
       {/* ═══════════════════════════════════════
-          1. HERO — vídeo de fundo, texto à esquerda
+          1. HERO — momento-assinatura (Fase C): wordmark lockup, entrada
+             escalonada e parallax discreto no scroll. Ver HeroSignature.tsx.
       ═══════════════════════════════════════ */}
-      <section
-        className="relative overflow-hidden min-h-[calc(100vh-64px)] md:min-h-[calc(100vh-72px)]"
-        aria-label="Hero"
-      >
-        {/* Poster estático — visível somente em prefers-reduced-motion: reduce */}
-        <div
-          className="hidden motion-reduce:block absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: 'url(/hero-poster.jpg)' }}
-          aria-hidden="true"
-        />
-
-        {/* Vídeo de fundo — oculto em prefers-reduced-motion: reduce */}
-        <video
-          className="absolute inset-0 w-full h-full object-cover motion-reduce:hidden"
-          src="/hero.mp4"
-          poster="/hero-poster.jpg"
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-hidden="true"
-          preload="none"
-        />
-
-        {/* Gradiente lateral — garante legibilidade sobre qualquer frame do vídeo */}
-        <div
-          className="absolute inset-0 bg-gradient-to-r from-espresso/80 via-espresso/40 to-transparent"
-          aria-hidden="true"
-        />
-
-        {/* Conteúdo — alinhado à esquerda, deslocado para deixar respiro negativo à direita */}
-        <div className="relative z-10 h-full min-h-[inherit] flex flex-col justify-center px-8 md:px-16 lg:px-24 py-16">
-          <div className="max-w-md">
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text mb-5 opacity-75">
-              Personal Stylist
-            </p>
-            <h1 className="font-display text-7xl md:text-8xl lg:text-9xl font-light text-cream-text tracking-tight uppercase leading-none mb-6">
-              LT Studio
-            </h1>
-            <p className="font-display text-xl md:text-2xl font-light italic text-cream-text leading-snug mb-8 max-w-xs md:max-w-sm opacity-90">
-              Moda feminina com olhar de personal stylist
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-              {/* CTA primário — borgonha, leva para novidades */}
-              <Link
-                href="/colecao/novidades"
-                className="inline-flex items-center justify-center bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
-              >
-                Quero esta peça
-              </Link>
-
-              {/* CTA secundário — esmeralda, agendamento WhatsApp */}
-              {waScheduleHref && (
-                <a
-                  href={waScheduleHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-3 bg-esmeralda text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
-                >
-                  <WhatsAppIcon size={14} />
-                  Agendar horário
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSignature waScheduleHref={waScheduleHref} />
 
       {/* ═══════════════════════════════════════
           2. NOTA DA STYLIST — nota curatorial (exibida quando preenchida no CMS)

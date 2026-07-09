@@ -1,6 +1,4 @@
 import { FadeInSection } from '@/components/FadeInSection'
-import { SeamTransition } from '@/components/SeamTransition'
-import { EDGE } from '@/lib/colors'
 
 interface Props {
   note: string
@@ -13,7 +11,9 @@ export default function CuratorialNote({ note, byline }: Props) {
       className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-28 md:py-40 px-5"
       aria-label="Nota da Stylist"
     >
-      <SeamTransition from={EDGE.espresso} />
+      {/* Sem costura na emenda hero→Nota (removida — lia como faixa cinza barrenta;
+          ver PROGRESS "Fase C"). Corte limpo: taupe quente do vídeo encontra o
+          sand-50 quente da Nota. Redesign completo desta seção é a Fase D. */}
       <div className="relative z-10 max-w-2xl mx-auto text-center">
         <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado-ink mb-5">
           Nota da Stylist
