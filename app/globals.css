@@ -3,16 +3,24 @@
 @tailwind utilities;
 
 :root {
-  /* Família areia (superfícies) */
-  --sand-50:  #F4EFE6;
-  --sand-100: #EDE3D2;
-  --sand-200: #E7DBC8;
-  --sand-300: #DCCBB0;
+  /* Paleta evoluída (Fase 1 do redesign — ver docs/PROGRESS.md).
+     Nomes de classe Tailwind (sand-50/100/200/300) NÃO mudaram — só os valores
+     por trás deles — para não obrigar a tocar todo componente nesta fase.
+     sand-50 agora É "porcelana" (superfície dominante, quase neutra);
+     sand-100/200/300 colapsam no MESMO tom "areia" (eram 3 tons a ~0.5 de
+     valor um do outro — quase indistinguíveis, e a causa raiz de a "costura"
+     entre seções nunca fechar limpo). sand-300 nunca foi usado em componente
+     nenhum (confirmado por grep) — colapsar é seguro. */
+  --sand-50:  #F5F3EE; /* porcelana */
+  --sand-100: #E9E1D3; /* areia (única) */
+  --sand-200: #E9E1D3; /* areia (única) — antes um tom mais escuro, agora igual ao 100 */
+  --sand-300: #E9E1D3; /* areia (única) — dead token antes disto, mantido por compatibilidade */
 
   /* Escuro e acentos */
   --espresso:          #241C17;
   --esmeralda:         #0B5D46;
   --esmeralda-light:   #1D9A72;
+  --verde-profundo:    #083D2C; /* NOVO — superfícies de marca "tomadas" pelo verde (Fase 3/4) */
   --bordo:             #7B1E3A;
   --dourado:           #C2A14D;
   --dourado-ink:       #7A5E1A; /* mesma família do dourado, stop escuro do ramp — só para texto/eyebrow sobre fundo claro (AA) */
@@ -22,13 +30,14 @@
   --cream-text: #F4EFE6;
 
   /* Canais RGB para o modificador /N do Tailwind (valores idênticos acima) */
-  --sand-50-rgb:         244 239 230;
-  --sand-100-rgb:        237 227 210;
-  --sand-200-rgb:        231 219 200;
-  --sand-300-rgb:        220 203 176;
+  --sand-50-rgb:         245 243 238;
+  --sand-100-rgb:        233 225 211;
+  --sand-200-rgb:        233 225 211;
+  --sand-300-rgb:        233 225 211;
   --espresso-rgb:        36 28 23;
   --esmeralda-rgb:       11 93 70;
   --esmeralda-light-rgb: 29 154 114;
+  --verde-profundo-rgb:  8 61 44;
   --bordo-rgb:           123 30 58;
   --dourado-rgb:         194 161 77;
   --dourado-ink-rgb:     122 94 26;
