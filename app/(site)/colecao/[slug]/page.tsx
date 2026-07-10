@@ -28,8 +28,13 @@ const productsQuery = `
   }
 `
 
-// "novidades" fica de fora — já é uma rota estática própria (app/colecao/novidades/page.tsx)
-// com copy e query bespoke; gerar aqui também colidiria no build.
+// ⚠️ NÃO REMOVER "slug.current != 'novidades'": testado empiricamente que, se este
+// slug entrar em generateStaticParams, a rota dinâmica SOBRESCREVE SILENCIOSAMENTE
+// a página estática de app/colecao/novidades/page.tsx (build passa sem erro/warning;
+// só falha em runtime, servindo "Coleção não encontrada." no lugar da home de
+// novidades). Sem essa exclusão, cadastrar uma Coleção chamada "Novidades" no Studio
+// (nome plausível — é um dos exemplos do próprio schema collection.ts) derruba a
+// página em produção sem nenhum sinal de erro.
 const allCollectionSlugsQuery = `
   *[_type == "collection" && slug.current != "novidades"
     && count(*[_type == "product" && references(^._id) && inStock == true]) > 0
