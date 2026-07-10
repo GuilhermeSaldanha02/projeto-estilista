@@ -1,7 +1,50 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-10 (debate consenso + item 2/3 do plano — IA/funil/home)_
+_Última atualização: 2026-07-10 (item 4 do plano — descoberta de tags)_
+
+---
+
+### Item 4 — CONCLUÍDO: tela de descoberta de tags/coleções
+
+Nova rota `app/(site)/colecao/[slug]/page.tsx`, espelhando exatamente o padrão de
+`categoria/[slug]` (mesmo layout: faixa com contagem+título, grid uniforme, EmptyState
+para "não encontrada"/"sem peças"). GROQ: `$slug in tags[]->slug.current` (tags é array
+de referência a `collection`, diferente de `category` que é referência única). Exclui
+"novidades" do `generateStaticParams` — já é rota estática própria
+(`colecao/novidades/page.tsx`) com copy/query bespoke.
+
+**⚠️ Correção (achado do code review do PR #24, testado empiricamente, não suposição):**
+a frase original aqui dizia "Next.js resolve a rota estática antes da dinâmica, sem
+conflito" — **isso está ERRADO e foi removido.** O revisor forçou `generateStaticParams`
+a incluir `"novidades"` e rodou `next build` + `next start` reais: a rota dinâmica
+**sobrescreve silenciosamente** a estática, sem warning de build, sem erro de tipo. Se
+algum dia alguém cadastrar no Studio uma Coleção chamada "Novidades" (nome plausível —
+é um dos exemplos do próprio schema `collection.ts`), a página de novidades do site
+passa a mostrar "Coleção não encontrada." em produção, silenciosamente. A exclusão
+`slug.current != "novidades"` na query (linha ~34 do arquivo) é a ÚNICA defesa —
+não é redundante, é obrigatória. Ponto único de falha: se essa linha for removida num
+refactor futuro (inclusive por parecer "redundante"), o bug volta sem nenhum sinal.
+
+**Achado mais fundo que a auditoria original:** não é só "falta tela" — **não existe
+nenhum documento `collection` cadastrado no Sanity** (confirmado por query direta:
+`*[_type=="collection"]` retorna `[]`). O schema e a descrição ("Novidades, Denim,
+Alfaiataria, Conjuntos, Festa, Estação…") existem, mas nenhuma tag foi criada, então
+nenhum produto tem `tags` preenchido. **A tela agora existe e funciona** (testada com
+slug inexistente → "Coleção não encontrada.", comportamento correto); falta o dado.
+
+**Pendência (mesma raiz do item 1):** cadastrar as coleções e marcar as tags nos
+produtos é ação no Sanity Studio — mesmo bloqueio de acesso do item 1 (dono não
+autorizado ainda). **Escopo desta implementação foi só o template/rota — não criei
+nenhum link de navegação novo apontando para `/colecao/[tag]`** (não fazia parte do
+pedido do consenso, e é uma decisão de IA/design própria — onde essas tags aparecem no
+menu ou nas páginas de produto — que não foi briefada; fica para quando houver tags
+reais para decidir isso com conteúdo de verdade na mão).
+
+_Verificado:_ `tsc --noEmit` EXIT=0; build de produção limpo, `/colecao/[slug]` gerada
+como SSG sem sub-rotas (zero coleções), `/colecao/novidades` continua estática e
+separada; navegador confirma `/colecao/denim` (slug de teste, inexistente) renderiza
+"Coleção não encontrada." sem erro de console.
 
 ---
 
