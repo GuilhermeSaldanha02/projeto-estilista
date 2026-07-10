@@ -127,15 +127,8 @@ export default function HeroSignature({ waScheduleHref }: Props) {
             variants={item}
             className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
           >
-            {/* CTA primário — borgonha, leva para novidades */}
-            <Link
-              href="/colecao/novidades"
-              className="inline-flex items-center justify-center bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
-            >
-              Quero esta peça
-            </Link>
-
-            {/* CTA secundário — esmeralda, agendamento WhatsApp */}
+            {/* CTA primário — esmeralda, agendamento WhatsApp. Consultoria é o funil
+                principal do negócio (confirmado pelo dono) — vem primeiro. */}
             {waScheduleHref && (
               <a
                 href={waScheduleHref}
@@ -147,6 +140,15 @@ export default function HeroSignature({ waScheduleHref }: Props) {
                 Agendar horário
               </a>
             )}
+
+            {/* CTA secundário — borgonha, leva à coleção. Rótulo corrigido: prometia
+                "esta peça" (singular) mas sempre levou a uma listagem. */}
+            <Link
+              href="/colecao/novidades"
+              className="inline-flex items-center justify-center bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
+            >
+              Ver novidades
+            </Link>
           </motion.div>
         </motion.div>
       </motion.div>
