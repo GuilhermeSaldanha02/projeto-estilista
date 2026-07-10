@@ -36,10 +36,6 @@ const config: Config = {
           'Roboto',
           'sans-serif',
         ],
-        // Candidatas à fonte de corpo — só para /dev-fontes (Fase 1), ver PROGRESS.md
-        hanken: ['var(--font-hanken)', 'sans-serif'],
-        schibsted: ['var(--font-schibsted)', 'sans-serif'],
-        familjen: ['var(--font-familjen)', 'sans-serif'],
       },
     },
   },

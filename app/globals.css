@@ -45,7 +45,9 @@
   --cream-text-rgb:      244 239 230;
 
   /* Fontes */
-  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  /* Corpo — Schibsted Grotesk (decidida na Fase 1 do redesign, ver PROGRESS.md),
+     com a pilha de sistema como fallback antes de carregar. */
+  --font-sans: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
 @layer base {
