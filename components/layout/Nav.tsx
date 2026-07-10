@@ -18,6 +18,10 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
   const megaTriggerRef = useRef<HTMLButtonElement>(null)
   const mobileTriggerRef = useRef<HTMLButtonElement>(null)
   const waHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : null
+  const waScheduleMessage = 'Oi! Gostaria de agendar um horário de personal styling.'
+  const waScheduleHref = whatsappNumber
+    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waScheduleMessage)}`
+    : null
 
   function closeMobileAndReturnFocus() {
     setMobileOpen(false)
@@ -111,14 +115,14 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
           />
         </Link>
 
-        {/* Desktop: Stylist + Categorias */}
+        {/* Desktop: Consultoria (funil principal) + Vitrine — nessa ordem */}
         <div className="hidden md:flex items-center gap-8">
           <Link
             href="/stylist"
             className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
             onClick={() => setMegaOpen(false)}
           >
-            Stylist
+            Consultoria
           </Link>
 
           {categories.length > 0 && (
@@ -136,14 +140,14 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 onFocus={openMega}
                 className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
               >
-                Categorias
+                Vitrine
               </button>
 
               {/* Mega-menu: colunas distribuídas sem vão */}
               {megaOpen && (
                 <div
                   role="navigation"
-                  aria-label="Categorias"
+                  aria-label="Vitrine"
                   className="fixed inset-x-0 top-[72px] z-50 flex bg-espresso border-t border-dourado/25 shadow-2xl"
                   onMouseEnter={openMega}
                   onMouseLeave={closeMega}
@@ -183,20 +187,31 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         </div>
       </div>
 
-      {/* ── COL 3: WhatsApp ── */}
+      {/* ── COL 3: CTA de agendamento (desktop) / WhatsApp compacto (mobile) ──
+          Cor e sólido carregam a hierarquia do CTA; a fonte permanece o sans do
+          chrome (nunca Fraunces aqui — decisão do agente de design). Cantos retos:
+          sem rounded, por regra do design system (DESIGN.md — "cantos retos sem
+          rádio... não adicionar border-radius a nenhum elemento interativo"). */}
       <div className="flex items-center justify-end">
+        {waScheduleHref && (
+          <a
+            href={waScheduleHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden md:inline-flex items-center bg-esmeralda text-cream-text font-sans text-[11px] font-medium tracking-[0.18em] uppercase px-5 py-2.5 hover:bg-esmeralda/90 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2"
+          >
+            Agendar styling
+          </a>
+        )}
         {waHref && (
           <a
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Falar pelo WhatsApp"
-            className="flex items-center gap-2 p-2 -mr-2 md:p-0 md:mr-0 text-cream-text/65 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2"
+            className="md:hidden flex items-center gap-2 p-2 -mr-2 text-cream-text/65 hover:text-cream-text transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2"
           >
             <WhatsAppIcon size={18} />
-            <span className="hidden md:inline font-sans text-[10px] tracking-widest uppercase">
-              WhatsApp
-            </span>
           </a>
         )}
       </div>
@@ -209,14 +224,43 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
           data-lenis-prevent
           className="md:hidden absolute inset-x-0 top-16 z-40 bg-espresso border-t border-dourado/25 shadow-2xl max-h-[calc(100dvh-64px)] overflow-y-auto"
         >
-          {categories.length === 0 ? (
-            <p className="px-6 py-5 font-sans text-cream-text/70 text-sm">
-              Nenhuma categoria disponível.
-            </p>
-          ) : (
-            <ul>
-              {categories.map((cat, i) => (
-                <li key={cat._id} className={i > 0 ? 'border-t border-white/5' : ''}>
+          <ul>
+            {/* Agendar + Consultoria no topo — funil principal do negócio primeiro
+                (pilha invertida em relação à hierarquia antiga, que priorizava a loja) */}
+            {waScheduleHref && (
+              <li className="border-b border-esmeralda/25">
+                <a
+                  href={waScheduleHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between px-6 py-[1.1rem] text-esmeralda-light hover:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Agendar styling
+                  <span className="text-esmeralda-light/60 text-xs" aria-hidden="true">→</span>
+                </a>
+              </li>
+            )}
+            <li className="border-b border-white/5">
+              <Link
+                href="/stylist"
+                className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
+                onClick={() => setMobileOpen(false)}
+              >
+                Consultoria
+                <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
+              </Link>
+            </li>
+
+            {categories.length === 0 ? (
+              <li className="border-t border-white/5">
+                <p className="px-6 py-5 font-sans text-cream-text/70 text-sm">
+                  Nenhuma categoria disponível.
+                </p>
+              </li>
+            ) : (
+              categories.map(cat => (
+                <li key={cat._id} className="border-t border-white/5">
                   <Link
                     href={`/categoria/${cat.slug}`}
                     className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
@@ -226,29 +270,19 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                     <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
                   </Link>
                 </li>
-              ))}
-              <li className="border-t border-dourado/20">
-                <Link
-                  href="/colecao/novidades"
-                  className="flex items-center justify-between px-6 py-[1.1rem] text-dourado hover:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Novidades
-                  <span className="text-dourado/45 text-xs" aria-hidden="true">→</span>
-                </Link>
-              </li>
-              <li className="border-t border-white/5">
-                <Link
-                  href="/stylist"
-                  className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
-                  onClick={() => setMobileOpen(false)}
-                >
-                  Stylist
-                  <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
-                </Link>
-              </li>
-            </ul>
-          )}
+              ))
+            )}
+            <li className="border-t border-dourado/20">
+              <Link
+                href="/colecao/novidades"
+                className="flex items-center justify-between px-6 py-[1.1rem] text-dourado hover:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
+                onClick={() => setMobileOpen(false)}
+              >
+                Novidades
+                <span className="text-dourado/45 text-xs" aria-hidden="true">→</span>
+              </Link>
+            </li>
+          </ul>
         </nav>
       )}
     </div>
