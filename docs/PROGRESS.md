@@ -1,7 +1,84 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-09 (checkpoint de redesign completo — pós Fase C)_
+_Última atualização: 2026-07-10 (debate consenso + item 2/3 do plano — IA/funil/home)_
+
+---
+
+## Debate consenso (2026-07-10) — "estrutura primeiro" vs. "seguir o redesign"
+
+O dono pediu 2 agentes especializados para debater (posições opostas, 2 rounds:
+posição → réplica → consenso) em vez de responder diretamente às perguntas de
+calibre. **Nota de anomalia:** a 1ª tentativa do agente "seguir o redesign" devolveu
+uma resposta corrompida (falsa mensagem de sistema, zero uso de ferramenta) —
+descartada, relançada do zero antes de prosseguir.
+
+**Consenso alcançado pelos dois lados (fila única, priorizada):**
+1. Matar placeholder ao vivo (Nota da Stylist) — **BLOQUEADO**, ver abaixo.
+2. IA de navegação + CTA honesto + peso do Fraunces no header, um único commit.
+3. Produto de volta na home, grid uniforme (sem mosaico) — junto com o item 2.
+4. `/colecao/[tag]` no template de categoria existente — trilha paralela.
+5. Fase 3+ do redesign visual segue normalmente.
+6. PRD/SDD reconciliados no mesmo lote (não "quando sobrar tempo").
+
+**Desacordo residual (não forçado a consenso):** adiantar peso/cor da Fase 3 em
+páginas não afetadas (categoria, produto) em paralelo aos itens 1-4, ou manter
+sequencial estrito. Dono não respondeu ainda — tratando como sequencial por padrão.
+
+### Item 1 — BLOQUEADO: sem acesso de escrita ao Sanity
+Não há token de escrita em `.env.local` (só `NEXT_PUBLIC_*`, chaves de leitura). O
+Studio (`/studio`) exige login (Google/GitHub/e-mail) — o dono tentou logar e o
+Sanity recusou ("não autoriza"), provavelmente porque a conta dele não está convidada
+como membro do projeto no sanity.io (ação fora do Claude Code — dono precisa resolver
+no painel do Sanity ou pedir convite a quem criou o projeto). **Enquanto isso não for
+resolvido, o placeholder "Nota de exemplo — a Luiza escreve aqui" continua ao vivo.**
+Ação pendente do dono: em `/studio` → "Configurações do Site" → campo "Nota da
+Stylist" → apagar o texto de teste e publicar vazio (esconde a seção, comportamento
+já documentado no schema) OU colar uma frase real da Luiza.
+
+### Itens 2+3 — CONCLUÍDOS (branch `feat/ia-navegacao-funil-honesto`)
+
+Consultado o agente de design antes de implementar (regra da casa: design → sempre
+especialista) sobre a ambiguidade "peso do Fraunces no header/menu" — **decisão:
+chrome de navegação continua sans** (Schibsted), nunca Fraunces; o ganho de presença
+vem do CTA sólido esmeralda, não da fonte. Serifar "Consultoria"/"Vitrine" quebraria o
+único tell que separa navegação de conteúdo editorial. Também corrigido: a proposta do
+agente usava `rounded-full` no botão novo — **descartado**, contradiz regra dura do
+DESIGN.md ("cantos retos sem rádio — não adicionar border-radius a nenhum elemento
+interativo"). Botão saiu com cantos retos (`0px` confirmado no navegador).
+
+**`components/layout/Nav.tsx`:**
+- "Stylist" → **"Consultoria"** (mesmo href `/stylist`), continua primeiro na ordem.
+- "Categorias" → **"Vitrine"** (label do trigger do mega-menu e `aria-label` do painel).
+- COL 3 do header: link de WhatsApp genérico (só ícone) substituído por **botão sólido
+  esmeralda "Agendar styling"** no desktop (mensagem de agendamento, não contato
+  genérico); mobile mantém o ícone compacto (`md:hidden`) — o CTA de agendar
+  proeminente mora no drawer, não espremido na coluna estreita do header mobile.
+- Drawer mobile reordenado: **Agendar styling → Consultoria** no topo (antes: Stylist
+  era o último item) → Vitrine (categorias) → Novidades, igual antes.
+
+**`components/HeroSignature.tsx`:**
+- CTAs invertidos: **esmeralda "Agendar horário" agora primeiro** (funil principal
+  confirmado pelo dono é a consultoria, não a loja).
+- CTA bordô renomeado de "Quero esta peça" (mentia — sempre levou a uma listagem) para
+  **"Ver novidades"** (honesto, bate com o destino `/colecao/novidades`).
+
+**`app/(site)/page.tsx`:**
+- Grade de produtos **de volta na home**, entre o Hero e a Nota da Stylist. Grid
+  **uniforme** (`grid-cols-2 md:grid-cols-3 lg:grid-cols-4`), **sem** o mosaico 2×2
+  destacado que causou o bug de alinhamento original (commit `0640831`). Mesma query
+  de 8 produtos (`inStock == true`, mais recentes primeiro) que alimentava a versão
+  antiga; link "ver todas →" para `/colecao/novidades`.
+
+_Verificado:_ `tsc --noEmit` EXIT=0; build de produção limpo (30 páginas); navegador
+confirma nav desktop `["Consultoria","Vitrine","Agendar styling"]`, hero CTAs
+`["Agendar horário","Ver novidades"]`, `href` do botão de agendar com a mensagem
+correta codificada, `border-radius: 0px` no botão, drawer mobile na ordem
+`Agendar styling → Consultoria → categorias → Novidades`, home com 8 cards de
+produto, zero erro de console.
+
+**Pendente (próximos passos, não feitos nesta sessão):** item 4 (`/colecao/[tag]`),
+item 6 (reconciliar PRD/SDD), e destravar o item 1 (acesso Sanity).
 
 ---
 
