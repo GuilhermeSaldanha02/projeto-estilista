@@ -1,5 +1,11 @@
 # PRD — Vitrine de roupa feminina + personal stylist
 
+> **Nome real em produção: "LT Studio"** (rebrand aplicado em `feat/rebrand-lt-studio`,
+> ver `docs/PROGRESS.md`). Este documento é agnóstico de marca de propósito — os
+> conceitos abaixo valem independente do nome — mas toda referência a "a loja"/"o
+> site" no dia a dia deve usar "LT Studio". _(Reconciliado em 2026-07-10 — item 6 do
+> plano de retomada.)_
+
 ## 1. Problema
 
 Uma personal stylist quer (a) mostrar as roupas que vende e (b) converter visitantes em duas ações: comprar uma peça e agendar um atendimento de styling. Hoje isso depende de Instagram e mensagens soltas, sem um lugar próprio que organize o catálogo e direcione o contato. O diferencial do negócio é a **pessoa** — a stylist —, não a loja em si. A loja existe para alimentar o contato com ela.
@@ -41,7 +47,12 @@ Produto = 1 categoria + N tags. Categoria sem estoque some do menu (regra sazona
 
 ## 7. Features do v1 (MVP — o mínimo para lançar e começar a converter)
 
-- **Home:** hero com vídeo em loop mudo de fundo + faixa fixa no topo + entradas para as coleções; segunda dobra já destacando a stylist.
+- **Home:** hero com vídeo em loop mudo de fundo + entradas para as coleções; segunda
+  dobra já destacando a stylist. _(A "faixa fixa no topo" desta lista original nunca
+  foi construída — os campos de schema que a sustentariam (`topBarText`/`topBarLink`)
+  foram removidos por não terem consumidor no código; sem nenhuma tela lendo isso,
+  virou dívida de doc. Se a faixa for desejada, é decisão nova, não recuperação de algo
+  que existia.)_
 - **Seção/página da personal stylist:** sobre ela + botão "Agendar horário" (→ WhatsApp).
 - **Navegação cascata:** menu com as categorias em um painel (coluna de tipos + bloco escuro de novidade); vira acordeão no mobile.
 - **Página de categoria** (1 template, serve as 9 categorias): grade de produtos, escaneável.
