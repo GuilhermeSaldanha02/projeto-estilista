@@ -60,7 +60,7 @@ export default async function HomePage() {
       {products.length > 0 && (
         <section className="py-16 md:py-20 px-5 max-w-7xl mx-auto" aria-label="Novidades">
           <div className="flex items-baseline justify-between mb-8">
-            <h2 className="font-display text-5xl md:text-6xl font-light text-ink tracking-tight">
+            <h2 className="font-display text-5xl md:text-6xl font-medium text-ink tracking-tight">
               Novidades
             </h2>
             <Link
@@ -92,15 +92,15 @@ export default async function HomePage() {
       {/* ═══════════════════════════════════════
           4. PERSONAL STYLING — apresentação + CTA agendamento
       ═══════════════════════════════════════ */}
-      <section className="relative bg-espresso py-24 md:py-36 px-5" aria-label="Personal Styling">
+      <section className="relative bg-espresso py-24 md:py-36 px-5" aria-label="Consultoria de Estilo">
         {settings?.curatorNote && <SeamTransition from={EDGE.sand100} />}
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <FadeInSection>
             <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-5">
-              Personal Styling
+              Consultoria de Estilo
             </p>
             <div className="w-6 h-px bg-dourado/40 mx-auto mb-6" />
-            <h2 className="font-display text-5xl md:text-6xl font-light text-cream-text tracking-tight mb-6 [text-wrap:balance]">
+            <h2 className="font-display text-5xl md:text-6xl font-medium text-cream-text tracking-tight mb-6 [text-wrap:balance]">
               Um olhar profissional para o seu estilo
             </h2>
           </FadeInSection>

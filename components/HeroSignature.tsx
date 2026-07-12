@@ -103,14 +103,16 @@ export default function HeroSignature({ waScheduleHref }: Props) {
             variants={item}
             className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text mb-5 opacity-75"
           >
-            Personal Stylist
+            Consultoria de Estilo
           </motion.p>
 
           {/* Wordmark: lockup intencional em 2 linhas no mobile ("LT" / "STUDIO"),
-              linha única no desktop — antes quebrava por acaso no wrap do texto corrido. */}
+              linha única no desktop — antes quebrava por acaso no wrap do texto corrido.
+              font-semibold (Fase 3 do redesign): momento-assinatura merece presença —
+              300 nesse tamanho de display era exatamente o "sussurro" a corrigir. */}
           <motion.h1
             variants={item}
-            className="font-display font-light text-cream-text tracking-tight uppercase leading-[0.85] md:leading-none text-[clamp(3.5rem,15vw,9rem)] mb-6"
+            className="font-display font-semibold text-cream-text tracking-tight uppercase leading-[0.85] md:leading-none text-[clamp(3.5rem,15vw,9rem)] mb-6"
           >
             <span className="block md:inline">LT</span>{' '}
             <span className="block md:inline">Studio</span>
