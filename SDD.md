@@ -1,5 +1,8 @@
 # SDD — Documento de design técnico
 
+> **Nome real em produção: "LT Studio"** (ver `PRD.md`). _Reconciliado com o código em
+> 2026-07-10 — item 6 do plano de retomada._
+
 Como o PRD é construído. Pressupõe o `CLAUDE.md` (tokens, guardrails, taxonomia).
 
 ## 1. Arquitetura
@@ -26,10 +29,14 @@ Dona (stylist) ──edita──▶ Sanity Studio (CMS + login dela)
 - Next.js 15 (App Router), TypeScript
 - Tailwind CSS; tokens de marca como CSS variables em `globals.css` e mapeados no `tailwind.config`
 - Sanity (CMS headless) + `@sanity/client` + `next-sanity`
-- `next/image` com loader do Sanity Image CDN
-- Framer Motion (mínimo)
+- `next/image` com URL do Sanity Image CDN **já dimensionada** como `src`
+  (`urlFor(img).width(W).height(H).fit('crop').auto('format').url()`) — **nunca**
+  `loader`/`sanityLoader` como prop: essa abordagem foi tentada, quebra no boundary
+  RSC (Server→Client) em runtime, e foi removida (ver REGRAS em `docs/PROGRESS.md`).
+- Framer Motion + Lenis (scroll suave) — decidido na Fase B do redesign (2026-07-08)
 - Vercel (preview por PR)
-- Fontes sugeridas (decisão final no Open Design): display serifada com caráter (ex.: Fraunces) + UI sans limpa (ex.: Geist/Inter), via `next/font`
+- Fontes **decididas** (Fase 1 do redesign, 2026-07-09/10): display **Fraunces**
+  (serifada, leve) + corpo **Schibsted Grotesk**, ambas via `next/font/google`
 
 ## 3. Modelo de dados (schemas do Sanity)
 
@@ -46,8 +53,13 @@ Dona (stylist) ──edita──▶ Sanity Studio (CMS + login dela)
 
 **category** — `title`, `slug`, `order` (ordem no menu)
 **collection** — `title`, `slug` (Novidades, Denim, Alfaiataria, Conjuntos, Festa, Estação)
-**stylistProfile** (singleton) — `name`, `photo`, `bio` (portable text), `whatsappNumber`, `bookingMessage`
-**siteSettings** (singleton) — `whatsappNumber`, `heroVideo`, `heroPoster`, `topBarText`, `topBarLink`
+**stylistProfile** (singleton) — `name`, `tagline`, `photo`, `sections` (array de seções
+  CMS-driven: `eyebrow`/`title`/`body`/`image`/`layout`/`items[]`, 7 layouts visuais).
+  _`bio`, `whatsappNumber` e `bookingMessage` existiram e foram removidos — a página
+  usa `siteSettings.whatsappNumber` + mensagem de agendamento fixa no código._
+**siteSettings** (singleton) — `whatsappNumber`, `curatorNote`, `curatorNoteByline`.
+  _`heroVideo`/`heroPoster`/`topBarText`/`topBarLink` existiram e foram removidos —
+  nenhuma tela os lia; o vídeo do hero é arquivo estático em `/public`, por regra._
 
 ## 4. Rotas (poucos templates, muitas instâncias)
 
@@ -71,7 +83,9 @@ Dona (stylist) ──edita──▶ Sanity Studio (CMS + login dela)
 
 Formato: `https://wa.me/<NUMERO>?text=<mensagem_url_encoded>`. Número e mensagens-base vêm do Sanity (`siteSettings`/`stylistProfile`).
 
-- **Botão de peça:** `text = "Oi! Tenho interesse na peça {title} ({url})."`
+- **Botão de peça:** `text = "Oi! Tenho interesse na peça {title}."` _(sem `{url}` —
+  o código nunca incluiu a URL; CLAUDE.md §7 é a fonte de verdade aqui, esta linha
+  estava desatualizada)_
 - **Botão de agendamento:** `text = "Oi! Quero agendar um horário de personal styling."`
 
 Os dois textos são diferentes de propósito: ao cair no celular da dona, ela já sabe se é sobre produto ou sobre styling.
