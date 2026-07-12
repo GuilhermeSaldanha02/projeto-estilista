@@ -1,7 +1,36 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-10 (item 4 do plano — descoberta de tags)_
+_Última atualização: 2026-07-10 (item 6 — fila do consenso concluída)_
+
+---
+
+### Item 6 — CONCLUÍDO: PRD/SDD reconciliados (PR #25)
+
+Corrigido no `PRD.md`/`SDD.md`: nome real "LT Studio" (nenhum dos dois citava nome
+nenhum); loader do Sanity banido ainda recomendado no SDD §2; fontes desatualizadas
+(Geist/Inter → Fraunces + Schibsted Grotesk, já decididas); campos de schema removidos
+ainda documentados (`stylistProfile.bio/whatsappNumber/bookingMessage`,
+`siteSettings.heroVideo/heroPoster/topBarText/topBarLink`); mensagem de WhatsApp de
+produto com `(url)` que o código nunca teve; feature "faixa fixa no topo" do PRD §7
+que nunca foi construída. _Verificado por grep direto contra os schemas/código reais
+(o code-review por agente bateu no limite de sessão no meio da checagem — completei
+os 5 pontos restantes manualmente; todos bateram)._
+
+## Fila do consenso do debate — STATUS FINAL (2026-07-10)
+
+| # | Item | Status |
+|---|---|---|
+| 1 | Matar placeholder ao vivo (Nota da Stylist) | 🔴 Bloqueado — acesso ao Sanity Studio |
+| 2 | IA de navegação + CTA honesto + peso Fraunces | ✅ PR #23 |
+| 3 | Produto de volta na home (grid uniforme) | ✅ PR #23 |
+| 4 | Descoberta de tags (`/colecao/[slug]`) | ✅ PR #24 (tela pronta; zero tags cadastradas) |
+| 5 | Fase 3+ do redesign visual | Não iniciado |
+| 6 | Reconciliar PRD/SDD | ✅ PR #25 |
+
+Único item bloqueado é o 1 (dono precisa resolver acesso ao Sanity, fora do Claude
+Code). Todo o resto que dependia só de código está feito. Próximo: Fase 3+ do
+redesign visual, ou destravar o item 1 — decisão do dono.
 
 ---
 
