@@ -71,7 +71,7 @@
       "name": "Eyebrow Label",
       "kind": "custom",
       "description": "Rótulo de categoria em dourado. Precede títulos de seção. Nunca em todo seção.",
-      "html": "<p class=\"ds-eyebrow\">Personal Styling</p>",
+      "html": "<p class=\"ds-eyebrow\">Consultoria de Estilo</p>",
       "css": ".ds-eyebrow { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10px; font-weight: 400; letter-spacing: 0.4em; text-transform: uppercase; color: #C2A14D; margin: 0 0 16px; }"
     },
     {

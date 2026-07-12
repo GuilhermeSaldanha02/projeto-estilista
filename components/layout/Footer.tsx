@@ -14,7 +14,7 @@ export default function Footer() {
           />
         </div>
         <p className="font-sans text-cream-text/70 text-[10px] tracking-widest uppercase">
-          Moda Feminina · Personal Styling
+          Moda Feminina · Consultoria de Estilo
         </p>
       </div>
     </footer>
