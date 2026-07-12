@@ -123,15 +123,30 @@ Paleta de contraste dramático: a família areia domina as superfícies, o espre
 
 ### Hierarchy
 
-- **Display — Hero** (300, 5xl–7xl / 48–72px, clamp, line-height 1.0, tracking 0.2em, uppercase): Só no hero H1. A LT Studio como declaração, não como título.
-- **Headline — Seções** (300, 3xl–4xl / 30–36px, line-height 1.2, tracking-wide ~0.05em): H2 de seções de conteúdo. Serif leve, nunca bold.
-- **Title — Produto / Stylist** (300, lg–xl / 18–20px, line-height 1.3): Nomes de produto nos cards, nome da stylist no hero. Mantém o peso leve.
+- **Display — Hero** (**600**, `clamp(3.5rem,15vw,9rem)`, line-height 0.85–1.0, tracking 0.2em,
+  uppercase): Só o wordmark "LT STUDIO" do hero da home. O momento-assinatura do site;
+  peso subiu de 300 na Fase 3 do redesign — 300 nesse tamanho lia como fraqueza, não
+  delicadeza (ver Regra do Peso Único, revisada).
+- **Headline — Página/Seções** (**500**, 4xl–7xl / 36–72px, line-height 1.2, tracking-wide
+  ~0.05em): H1 de página (categoria, coleção, produto, nome da stylist no `/stylist`) e
+  H2 de seções de conteúdo (home, `/stylist`). Serif com presença, nunca bold.
+- **Title — Produto** (300, lg / 18px, line-height 1.3): só os nomes de produto nos
+  cards (`ProductCard.tsx`) — tier pequena e numerosa, mantém o peso leve de propósito
+  (não é o headline da tela).
 - **Body** (400, sm / 14px, line-height 1.6, tracking-wide ~0.05em, máx 65ch): Texto de parágrafo em seções da stylist e descrições. Legibilidade sobre elegância quando em conflito.
 - **Label** (400, 10–11px, tracking-widest ~0.4em ou tracking-[0.4em], uppercase, sem-serif): O alfabeto do sistema de navegação e eyebrows. Categorizações, botões, links de ação, preços. Disciplina visível.
 
 ### Named Rules
 
-**A Regra do Peso Único.** Display e headline são sempre `font-light` (300). Nunca bold ou semibold em display serif — o peso contradiz o ponto de vista da stylist. Ênfase em display vem do tamanho e do espaçamento, não do peso.
+**A Regra do Peso Único — REVISADA (Fase 3 do redesign, 2026-07-10).** Headline de
+página/seção usa `font-medium` (500); o momento-assinatura do hero usa `font-semibold`
+(600) — nunca `font-bold`. _Por quê:_ `font-light` (300) em todo display fazia "tudo
+sussurrar" — na escala do redesign ("essência elite"), 300 lia como fraqueza, não
+delicadeza. **Continua leve, de propósito:** taglines e citações em itálico,
+blockquotes de Portable Text, numerais decorativos, títulos de card de produto e o
+headline do EmptyState — são momentos de apoio/quietude, não o headline principal da
+tela, e o peso 300 ainda é a voz certa aí. Ênfase segue vindo principalmente de
+tamanho e espaçamento; peso agora é uma segunda ferramenta, não banida.
 
 **A Regra do Label Imutável.** Labels (`text-[10px]` ou `text-[11px]`, `tracking-widest`, `uppercase`) são a voz do sistema, não da stylist. Não misturar com prose, não aumentar a fonte "para melhorar a leitura", não remover o tracking. Se precisar de texto maior que 11px como label, é um title, não um label.
 
