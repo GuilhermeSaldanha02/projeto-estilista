@@ -110,9 +110,9 @@ export default async function StylistPage() {
           {/* Texto do hero */}
           <div className="flex-1 text-center md:text-left">
             <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-esmeralda mb-4">
-              Personal Stylist
+              Consultoria de Estilo
             </p>
-            <h1 className="font-display text-6xl md:text-7xl font-light text-ink tracking-tight mb-5 [text-wrap:balance]">
+            <h1 className="font-display text-6xl md:text-7xl font-medium text-ink tracking-tight mb-5 [text-wrap:balance]">
               {profile?.name ?? 'Em breve'}
             </h1>
             {profile?.tagline && (
@@ -189,7 +189,7 @@ function PadraoSection({ section, seamFrom }: { section: StylistSection; seamFro
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-4xl md:text-5xl font-light text-ink tracking-tight mb-8 [text-wrap:balance]">
+            <h2 className="font-display text-4xl md:text-5xl font-medium text-ink tracking-tight mb-8 [text-wrap:balance]">
               {section.title}
             </h2>
           )}
@@ -243,7 +243,7 @@ function FotoLadoSection({ section, reverse, seamFrom }: { section: StylistSecti
               </p>
             )}
             {section.title && (
-              <h2 className="font-display text-4xl md:text-5xl font-light text-ink tracking-tight mb-8 [text-wrap:balance]">
+              <h2 className="font-display text-4xl md:text-5xl font-medium text-ink tracking-tight mb-8 [text-wrap:balance]">
                 {section.title}
               </h2>
             )}
@@ -303,7 +303,7 @@ function EtapasSection({ section, seamFrom }: { section: StylistSection; seamFro
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-4xl md:text-5xl font-light text-cream-text tracking-tight mb-4 [text-wrap:balance]">
+            <h2 className="font-display text-4xl md:text-5xl font-medium text-cream-text tracking-tight mb-4 [text-wrap:balance]">
               {section.title}
             </h2>
           )}
@@ -353,7 +353,7 @@ function TransformacaoEscuraSection({ section, seamFrom }: { section: StylistSec
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-5xl md:text-6xl font-light text-cream-text tracking-tight mb-6 [text-wrap:balance]">
+            <h2 className="font-display text-5xl md:text-6xl font-medium text-cream-text tracking-tight mb-6 [text-wrap:balance]">
               {section.title}
             </h2>
           )}
@@ -384,7 +384,7 @@ function CardsSection({ section, seamFrom }: { section: StylistSection; seamFrom
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-4xl md:text-5xl font-light text-ink tracking-tight mb-4 [text-wrap:balance]">
+            <h2 className="font-display text-4xl md:text-5xl font-medium text-ink tracking-tight mb-4 [text-wrap:balance]">
               {section.title}
             </h2>
           )}

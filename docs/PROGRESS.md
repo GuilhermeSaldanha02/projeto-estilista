@@ -1,7 +1,54 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-10 (item 6 — fila do consenso concluída)_
+_Última atualização: 2026-07-10 (Fase 3 do redesign — peso dos headlines + PT-BR)_
+
+---
+
+### Fase 3 — CONCLUÍDA: peso/ousadia dos headlines + item 9 (inglês → PT-BR)
+
+Consultado o agente de design para sequenciar o que fazer com o Sanity ainda bloqueado
+(regra da casa). Decisão: peso dos headlines é o maior efeito visual/estrutural por
+esforço que não depende de nenhuma palavra da Luiza e fecha 100% (nada "esperando
+foto") — ao contrário das Fases D/E do plano antigo, que ficam de fora por dependerem
+de conteúdo real bloqueado (ver abaixo).
+
+**`font-light` (300) → `font-medium` (500)** em headlines de página/seção: h1 de
+`categoria/[slug]`, `colecao/novidades`, `colecao/[slug]`, `produto/[slug]`, nome da
+stylist em `/stylist`; h2 de "Novidades" e "Um olhar profissional..." na home; 5 h2 de
+seção do `/stylist` (Padrao/FotoLado/Transformacao/Etapas/Cards).
+
+**`font-light` (300) → `font-semibold` (600)** só no wordmark "LT STUDIO" do hero da
+home (`HeroSignature.tsx`) — o momento-assinatura merece a maior presença da escala.
+
+**Deixado leve (300), de propósito** — momentos de apoio/quietude, não o headline
+principal: taglines e citações em itálico, blockquotes de Portable Text, numerais
+decorativos (`01`/`02`/`03`), títulos de card de produto (`ProductCard.tsx`, `text-lg`)
+e o headline do `EmptyState`. Confirmado que nenhum desses foi tocado.
+
+**Item 9 (inglês → PT-BR):** "Personal Stylist"/"Personal Styling" (eyebrow do hero,
+eyebrow da seção Personal Styling na home, eyebrow do `/stylist`) → **"Consultoria de
+Estilo"**, termo único e consistente nos 3 pontos de marca. `aria-label` das duas
+seções também traduzido para coerência (não eram visíveis, mas mantém tudo em PT-BR).
+
+**Docs atualizados** (senão um agente futuro reverte o peso novo achando bug):
+`DESIGN.md` §3 (escala tipográfica + "Regra do Peso Único", ambas revisadas com o
+porquê e o que continua leve) e `.impeccable/design.json` (`rules[]` e `dos[]`).
+
+_Verificado:_ `tsc --noEmit` EXIT=0; build de produção limpo (30 páginas); navegador
+confirma pesos computados — hero `h1: 600`, home `h2: 500` (Novidades e Personal
+Styling), categoria `h1: 500`, `/stylist` `h1: 500` + 4 `h2: 500` + tagline itálica
+`300` (intacta) + eyebrow "Consultoria de Estilo"; título de card de produto `300`
+(intacto); zero erro de console em todas as telas testadas.
+
+**Fica de fora desta fase (Backlog B, bloqueado por conteúdo real):**
+- Fase D (Nota da Stylist "sala clara") — pull-quote sem a frase real da Luiza só
+  produziria uma seção bonita ao redor de um placeholder.
+- Fase E (quebrar o monólito do Personal Styling) — ritmo interno pleno depende do
+  retrato real da stylist; adiantar layout sem a foto arrisca refação.
+- Fase F (aposentar `SeamTransition`/`EDGE` no `/stylist` e headers de categoria/
+  novidades, revogar a exceção de degradê do CLAUDE.md §5) — candidata natural a
+  próxima fase: puro código, sem depender de conteúdo, mas payload visual menor.
 
 ---
 

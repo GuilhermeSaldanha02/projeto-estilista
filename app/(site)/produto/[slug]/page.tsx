@@ -235,7 +235,7 @@ export default async function ProdutoPage({ params }: Props) {
                 {product.category.title}
               </p>
             )}
-            <h1 className="font-display text-5xl md:text-6xl font-light text-ink tracking-tight leading-tight [text-wrap:balance]">
+            <h1 className="font-display text-5xl md:text-6xl font-medium text-ink tracking-tight leading-tight [text-wrap:balance]">
               {product.title}
             </h1>
             {product.price ? (
