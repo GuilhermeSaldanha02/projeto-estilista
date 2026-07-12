@@ -1,7 +1,52 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-10 (Fase 3 do redesign — peso dos headlines + PT-BR)_
+_Última atualização: 2026-07-10 (item 1 DESBLOQUEADO — acesso de escrita ao Sanity)_
+
+---
+
+### Item 1 — CONCLUÍDO: acesso ao Sanity destravado + placeholder morto
+
+**Como foi destravado:** o dono não conseguiu logar no Studio (`/studio`, exige conta
+convidada como membro do projeto — segue sem resolver), mas gerou um **token de API**
+direto em sanity.io/manage (permissão Editor) e passou para o agente. Token vive em
+`.env.local` como `SANITY_API_TOKEN` (sem prefixo `NEXT_PUBLIC_`, nunca exposto ao
+client, arquivo fora do git — confirmado via `git check-ignore`). Isso dá ao agente
+escrita programática no Sanity **sem precisar do login do Studio**.
+
+**Achado ao investigar:** o placeholder "Nota de exemplo — a Luiza escreve aqui"
+existia em DOIS documentos — o publicado (`siteSettings`, que o site lê) e um rascunho
+(`drafts.siteSettings`) — ambos com o mesmo texto de teste. Corrigir só o publicado
+teria deixado o rascunho pronto para "reverter" o fix se alguém o publicasse de novo
+sem querer.
+
+**Os rascunhos originais do "roteirista" (mencionados no checkpoint 09/07) se perderam**
+na compactação de contexto entre sessões — nenhum arquivo os continha, só a menção de
+que existiam. Precisou refazer o trabalho: um agente redator gerou 3 novas opções
+[RASCUNHO] (ângulos: escutar a cliente / autenticidade / transformação), sem nenhum
+fato de negócio inventado (só nome, papel e voz da Luiza, já confirmados). O dono pediu
+para decidir com um agente **qual converte mais** — um segundo agente (foco em
+estratégia de conversão/funil) escolheu a **Opção 1** ("Antes de escolher uma peça, eu
+escuto você...") por ser a única que abre uma pergunta em vez de fechar uma frase e
+faz ponte direta para o CTA de agendamento logo abaixo; ajustou "começa em" → "começa
+por" (gramática).
+
+**Escrito nos dois documentos** (`siteSettings` + `drafts.siteSettings`) via script
+Node temporário (criado dentro do projeto para resolver `node_modules`, **apagado
+logo depois** — nunca ficou rastreado no git). `curatorNoteByline` ("Luiza Thomaz")
+mantido, já era real.
+
+_Verificado:_ navegador confirma `blockquote` da home com o texto novo, zero
+placeholder, zero erro de console.
+
+**⚠️ Ainda é conteúdo-modelo, marcado como tal na origem** (mesma lógica autorizada
+pelo dono em 09/07: "o que depende da Luiza fica para o FIM"). Quando ela tiver uma
+frase própria, é só sobrescrever `curatorNote` de novo — agora o agente tem o caminho
+técnico pronto (script + token) para fazer isso a qualquer momento, sem depender do
+login do Studio.
+
+**Item 1 da fila do consenso: FECHADO.** Único bloqueio que restava na lista original
+está resolvido.
 
 ---
 
