@@ -16,12 +16,15 @@
       "sand-100":        { "role": "neutral",   "displayName": "Paper Deep",             "canonical": "#EBE4D6" },
       "sand-50":         { "role": "neutral",   "displayName": "Paper",                  "canonical": "#F5F1EA", "note": "Fundo dominante do corpo — 'paper', mais neutro que a 'porcelana' anterior." }
     },
-    "typographyNote": "Fonte display trocada de Cormorant Garamond para Fraunces no redesign editorial de 2026-07-08 (mais contemporânea, contrastes de peso e curva 'wonky' — leitura mais fashion-forward). Ver app/layout.tsx.",
+    "typographyNote": "Display: Cormorant Garamond -> Fraunces (2026-07-08). Corpo: fonte de sistema -> Schibsted Grotesk (Fase 1 do redesign, 2026-07-09/10). Escala reescrita por completo em 5 níveis no redesign de 2026-07-13 (ver typographyMeta e 'A Regra do Peso Único').",
     "typographyMeta": {
-      "display":  { "displayName": "Display — Hero",    "purpose": "H1 do hero. Declaração da marca. Nunca em outro contexto." },
-      "headline": { "displayName": "Headline — Seções", "purpose": "H2 de seções. Serif leve, tracking moderado." },
-      "label":    { "displayName": "Label — Sistema",   "purpose": "Navegação, eyebrows, botões, preços. Anônimo e preciso." },
-      "body":     { "displayName": "Body — Conteúdo",   "purpose": "Texto corrido. Sans, legível, máx 65ch." }
+      "assinatura": { "displayName": "Assinatura",       "purpose": "clamp(4rem,15vw,8.5rem), peso 450, tracking -0.02em. Só o wordmark do hero da home. 1 por site.", "font": "display" },
+      "editorial":  { "displayName": "Editorial",        "purpose": "clamp(2.5rem,6vw,4.25rem), peso 400, itálico. Pull-quote da Nota da Stylist. Máx 1 por página; a maioria das páginas não tem nenhum.", "font": "display" },
+      "h1":         { "displayName": "H1 — Página",      "purpose": "clamp(2rem,4vw,2.75rem), peso 450. Categoria, coleção, produto, nome da stylist.", "font": "display" },
+      "h2":         { "displayName": "H2 — Seção",       "purpose": "clamp(1.5rem,3vw,2rem), peso 450. Subseções da home e /stylist.", "font": "display" },
+      "label":      { "displayName": "Label — Sistema",  "purpose": "10-11px, peso 400, tracking 0.2-0.4em, uppercase. Navegação, eyebrows, botões, preços.", "font": "sans" },
+      "numeral":    { "displayName": "Numeral decorativo", "purpose": "text-sm/14px, peso 400, tracking 0.2em, sem uppercase. Exceção ao Label — não é um tier de display. Índice 01/02/03 do Personal Styling e das Etapas do /stylist.", "font": "sans" },
+      "body":       { "displayName": "Body — Conteúdo",  "purpose": "text-sm/14px, peso 400. Texto corrido, máx 65ch.", "font": "sans" }
     },
     "shadows": [
       { "name": "overlay", "value": "0 25px 50px -12px rgba(0,0,0,0.5)", "purpose": "Apenas para overlays flutuantes (mega-menu, mobile drawer). Proibido em cards e seções." }
@@ -102,7 +105,7 @@
       { "name": "A Regra do Dourado Escasso",   "body": "O dourado só vive em linhas (h-px), ícones e eyebrow text. Nunca como fundo, nunca como texto de parágrafo, nunca em botão. Três pontos na mesma tela é o máximo — DISCIPLINA ATIVA desde 2026-07-13 (o sistema chegou a violar com 5 pontos numa tela; tratar recorrência como bug, não estética).", "section": "colors" },
       { "name": "A Regra do Degradê Familiar",  "body": "Gradiente dentro da família areia é o padrão para textura de fundo de seção. Gradiente sobre foto de produto é proibido, sempre. Gradiente cruzando família de cor (areia → espresso) é proibido — a exceção de 'costura' de 2026-07-08 foi revogada em 2026-07-12 (virava faixa taupe suja). Transição entre seções = corte limpo, nunca emenda esmaecida.", "section": "colors" },
       { "name": "A Regra Espresso x Verde-Profundo (2026-07-12) — REVOGADA 2026-07-13", "body": "Verde-profundo foi cortado do sistema por completo (era a mesma rampa tonal da esmeralda, 'verde sobre verde' sem separação real). Espresso volta a ser o único escuro de seção inteira do sistema. Não recriar verde-profundo sem decisão nova e explícita do dono.", "section": "colors" },
-      { "name": "A Regra do Peso Único",        "body": "REVISADA 2026-07-10 (Fase 3 do redesign): headline de página/seção (h1/h2) usa font-medium (500); o wordmark do hero da home usa font-semibold (600) — nunca font-bold. Motivo: font-light (300) em todo display fazia 'tudo sussurrar', lendo como fraqueza na escala do redesign 'essência elite'. Continua leve, de propósito: taglines/citações em itálico, blockquotes de Portable Text, numerais decorativos, títulos de card de produto e o headline do EmptyState (momentos de apoio, não o headline principal). Ênfase segue vindo principalmente de tamanho e espaçamento — peso é ferramenta adicional, não banida.", "section": "typography" },
+      { "name": "A Regra do Peso Único",        "body": "REESCRITA 2026-07-13, supera a versão de 2026-07-10. A versão anterior subiu para font-medium(500)/font-semibold(600) achando que 300 'sussurrava' -- mas a SOMA com o resto do sistema (numerais 96px, heading idêntico repetido em 6 páginas) leu como 'estourado' para o dono (achado do Crítico no redesign completo). Correção: peso 400-450 em todo display, nunca 500/600/bold -- o TAMANHO carrega a presença, não o peso. Escassez de tamanho (1 Assinatura por site, 1 Editorial no máximo por página, maioria das páginas sem Editorial) é o que resolve 'estourado' de verdade.", "section": "typography" },
       { "name": "A Regra do Label Imutável",    "body": "Labels (text-[10px]/[11px], tracking-widest, uppercase) são a voz do sistema. Não misturar com prose, não aumentar a fonte, não remover o tracking.", "section": "typography" },
       { "name": "A Regra Flat-por-Default",     "body": "Todo elemento em repouso é plano. Sombra indica overlay (menu, dialog, toast) — nunca para 'dar profundidade' a card ou seção.", "section": "elevation" }
     ],

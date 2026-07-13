@@ -159,37 +159,50 @@ proibido — suja a roupa.
 
 ## 3. Typography: Serif Leve, Sans Preciso
 
-**Display Font:** `var(--font-display)`, Georgia, Times New Roman, serif
-**Body/UI Font:** System stack — `-apple-system`, `BlinkMacSystemFont`, `Segoe UI`, `Roboto`, sans-serif
+**Display Font:** Fraunces (`var(--font-display)`), Georgia, Times New Roman, serif
+**Body/UI Font:** Schibsted Grotesk (`var(--font-sans)`), sistema como fallback
 
-**Character:** O display carrega autoridade editorial — luz, espaçado, nunca comprimido. O sans é o contraponto: preciso, anônimo, funcional. O contraste de família (serif display + humanist sans) é intencional e não deve ser substituído por dois sans-serifs similares.
+**Character:** O display carrega autoridade editorial — leve, espaçado, nunca
+comprimido. O sans é o contraponto: preciso, anônimo, funcional. O contraste de
+família (serif display + humanist sans) é intencional. **Guardrail (2026-07-13):
+Fraunces é dona de TODO momento display/editorial; Schibsted nunca aparece maior
+que corpo/label** — o modo de falha a proibir é usar os dois como display.
 
-### Hierarchy
+### Hierarquia — 5 níveis (REESCRITA 2026-07-13, ver "Regra do Peso Único" abaixo)
 
-- **Display — Hero** (**600**, `clamp(3.5rem,15vw,9rem)`, line-height 0.85–1.0, tracking 0.2em,
-  uppercase): Só o wordmark "LT STUDIO" do hero da home. O momento-assinatura do site;
-  peso subiu de 300 na Fase 3 do redesign — 300 nesse tamanho lia como fraqueza, não
-  delicadeza (ver Regra do Peso Único, revisada).
-- **Headline — Página/Seções** (**500**, 4xl–7xl / 36–72px, line-height 1.2, tracking-wide
-  ~0.05em): H1 de página (categoria, coleção, produto, nome da stylist no `/stylist`) e
-  H2 de seções de conteúdo (home, `/stylist`). Serif com presença, nunca bold.
-- **Title — Produto** (300, lg / 18px, line-height 1.3): só os nomes de produto nos
-  cards (`ProductCard.tsx`) — tier pequena e numerosa, mantém o peso leve de propósito
-  (não é o headline da tela).
-- **Body** (400, sm / 14px, line-height 1.6, tracking-wide ~0.05em, máx 65ch): Texto de parágrafo em seções da stylist e descrições. Legibilidade sobre elegância quando em conflito.
-- **Label** (400, 10–11px, tracking-widest ~0.4em ou tracking-[0.4em], uppercase, sem-serif): O alfabeto do sistema de navegação e eyebrows. Categorizações, botões, links de ação, preços. Disciplina visível.
+Escala fluida (`clamp()`), razão brutal entre o tier Assinatura e o Label — só UM
+momento gigante por site, não vários headlines parecidos competindo.
+
+- **Assinatura** (`clamp(4rem,15vw,8.5rem)`, peso **450**, tracking `-0.02em`,
+  uppercase): só o wordmark "LT STUDIO" do hero da home. 1 por site.
+- **Editorial** (`clamp(2.5rem,6vw,4.25rem)`, peso **400**, itálico): o pull-quote
+  da Nota da Stylist (`CuratorialNote.tsx`). **Escassez por regra dura: no máximo 1
+  por página, e a MAIORIA das páginas não tem nenhum.**
+- **H1 — Página** (`clamp(2rem,4vw,2.75rem)`, peso **450**): título de categoria,
+  coleção, produto, nome da stylist no `/stylist`. Nunca sobe além disso.
+- **H2 — Seção** (`clamp(1.5rem,3vw,2rem)`, peso **450**): subseções da home e do
+  `/stylist`. Visivelmente menor que H1 — hierarquia real entre níveis, não o
+  mesmo tamanho universal.
+- **Corpo** (400, `text-sm`/14px, line-height 1.6, máx 65ch, Schibsted).
+- **Label** (400, 10–11px, tracking `0.2em`–`0.4em`, uppercase, Schibsted):
+  nav, eyebrows, preços, CTAs.
+
+**Numerais decorativos** (ex.: "01/02/03" do Personal Styling e das Etapas do
+`/stylist`) NÃO são um tier de display — são label pequeno (`text-sm`, tracking
+largo, `cream-text/50` sobre escuro). Eliminados os 96px/72px anteriores
+(`PersonalStyling.tsx`), que eram maiores que qualquer headline real do site —
+o pior ofensor medido pelo Crítico no redesign 2026-07-13.
 
 ### Named Rules
 
-**A Regra do Peso Único — REVISADA (Fase 3 do redesign, 2026-07-10).** Headline de
-página/seção usa `font-medium` (500); o momento-assinatura do hero usa `font-semibold`
-(600) — nunca `font-bold`. _Por quê:_ `font-light` (300) em todo display fazia "tudo
-sussurrar" — na escala do redesign ("essência elite"), 300 lia como fraqueza, não
-delicadeza. **Continua leve, de propósito:** taglines e citações em itálico,
-blockquotes de Portable Text, numerais decorativos, títulos de card de produto e o
-headline do EmptyState — são momentos de apoio/quietude, não o headline principal da
-tela, e o peso 300 ainda é a voz certa aí. Ênfase segue vindo principalmente de
-tamanho e espaçamento; peso agora é uma segunda ferramenta, não banida.
+**A Regra do Peso Único — REESCRITA (redesign 2026-07-13, supera a versão de
+2026-07-10).** A versão anterior subiu para `font-medium`(500)/`font-semibold`(600)
+achando que 300 "sussurrava" — mas a SOMA dessas decisões com o resto do sistema
+(numerais gigantes, heading idêntico repetido em 6 páginas) leu como "estourado"
+para o dono. **Correção: peso 400–450 em todo display, nunca 500/600/bold — o
+TAMANHO carrega a presença, não o peso.** Escassez de tamanho (só 1 Assinatura, só
+1 Editorial por página, a maioria das páginas sem Editorial nenhum) é o que
+resolve "estourado" de verdade, não o peso.
 
 **A Regra do Label Imutável.** Labels (`text-[10px]` ou `text-[11px]`, `tracking-widest`, `uppercase`) são a voz do sistema, não da stylist. Não misturar com prose, não aumentar a fonte "para melhorar a leitura", não remover o tracking. Se precisar de texto maior que 11px como label, é um title, não um label.
 

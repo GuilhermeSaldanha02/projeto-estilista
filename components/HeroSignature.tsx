@@ -107,12 +107,14 @@ export default function HeroSignature({ waScheduleHref }: Props) {
           </motion.p>
 
           {/* Wordmark: lockup intencional em 2 linhas no mobile ("LT" / "STUDIO"),
-              linha única no desktop — antes quebrava por acaso no wrap do texto corrido.
-              font-semibold (Fase 3 do redesign): momento-assinatura merece presença —
-              300 nesse tamanho de display era exatamente o "sussurro" a corrigir. */}
+              linha única no desktop. Nível "Assinatura" (Fase 2 do redesign
+              2026-07-13, único lugar do site que usa esse tier): peso 450 e
+              tracking negativo — não font-semibold/600 (Fase 3 de 07-10, revertida:
+              o tamanho já carrega a presença; peso mais alto lia como "estourado"
+              somado ao resto do sistema, achado do Crítico). */}
           <motion.h1
             variants={item}
-            className="font-display font-semibold text-cream-text tracking-tight uppercase leading-[0.85] md:leading-none text-[clamp(3.5rem,15vw,9rem)] mb-6"
+            className="font-display font-[450] text-cream-text tracking-[-0.02em] uppercase leading-[0.85] md:leading-none text-[clamp(4rem,15vw,8.5rem)] mb-6"
           >
             <span className="block md:inline">LT</span>{' '}
             <span className="block md:inline">Studio</span>

@@ -1,7 +1,7 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-13 (redesign completo — dono não gostou; Fase 1: paleta)_
+_Última atualização: 2026-07-13 (redesign completo — Fase 2: tipografia)_
 
 ---
 
@@ -103,6 +103,70 @@ só no frame estático testado.
 **Próximo:** Fase 2 (tipografia) — escala em 5 níveis, escassez do tier Editorial,
 cortar os numerais 96px, revisar se a Schibsted precisa da mesma contenção que a
 paleta acabou de ganhar.
+
+---
+
+### Fase 2 (redesign completo) — CONCLUÍDA: tipografia em 5 níveis
+
+Implementada a escala definida pelo Diretor no debate de 13/07: **Assinatura**
+(wordmark do hero) / **Editorial** (pull-quote da Nota da Stylist) / **H1**
+(título de página) / **H2** (heading de seção) / **Corpo** / **Label** — cada
+tier com `clamp()`, peso e tracking próprios, documentados em `DESIGN.md` §3 e
+espelhados em `.impeccable/design.json` (schema `typographyMeta` expandido de 4
+para 6 chaves).
+
+**Mudanças por arquivo:**
+- `HeroSignature.tsx` — wordmark: `font-semibold text-[clamp(3.5rem,15vw,9rem)]`
+  → `font-[450] tracking-[-0.02em] text-[clamp(4rem,15vw,8.5rem)]` (Assinatura).
+- `CuratorialNote.tsx` — pull-quote: `font-light text-[clamp(2.75rem,5.5vw,5rem)]`
+  → `font-normal text-[clamp(2.5rem,6vw,4.25rem)]` (Editorial).
+- `PersonalStyling.tsx` — numeral decorativo dos 3 passos: `font-display
+  text-7xl md:text-8xl font-light text-dourado/50` (96px, maior que qualquer
+  headline real — o achado central do Crítico) → `font-sans text-sm
+  tracking-[0.2em] text-cream-text/50` (Label); heading "Um olhar profissional…"
+  rebaixado de `text-5xl md:text-6xl font-medium` para tier H2.
+- `stylist/page.tsx` — H1 (nome da stylist) e 5 headings de seção rebaixados
+  para os tiers H1/H2; numeral do `EtapasSection` recebeu o mesmo tratamento
+  visual de label pequeno do `PersonalStyling`, além de zero-padding via
+  `padStart` (mudou de `{index + 1}` para `String(index + 1).padStart(2, '0')}`
+  — o `PersonalStyling` já tinha os numerais zero-padded como strings estáticas
+  no array `STEPS` desde antes desta fase, não usa `padStart`).
+- `categoria/[slug]`, `colecao/[slug]`, `colecao/novidades`, `produto/[slug]`,
+  `page.tsx` (home) — H1/H2 de página rebaixados de `text-5xl md:text-6xl
+  font-medium` (60px repetido em 6 arquivos, achado do Crítico) para os tiers
+  correspondentes.
+
+**Decisão conscientemente adiada:** o Diretor sugeriu subir o corpo de texto de
+14px para 15px por legibilidade; não entrou nesta fase porque toca todo
+`text-sm` do site (risco de regressão de layout maior que o ganho) — fica
+registrado como candidato pontual para a Fase 3 (Estrutura) ou uma sessão
+dedicada, não esquecido.
+
+**Verificação:** `tsc --noEmit` (erro pré-existente e não relacionado —
+`app/layout.tsx` não resolve tipos do `globals.css`, confirmado idêntico na
+`main` sem stash das mudanças desta fase); build de produção limpo
+(`npm run build`, exit 0); navegador — medido via `getComputedStyle` em
+desktop (1280px) e mobile (375px) para wordmark, H2 "Novidades", numeral do
+`PersonalStyling`, H1 de `/categoria/vestidos` e o pull-quote da Nota da
+Stylist — todos batendo com os `clamp()` especificados (em mobile, a maioria
+já está no piso do clamp, como esperado).
+
+**Achado do code review (PR #35), corrigido antes do merge:** a Fraunces
+estava carregada em `app/layout.tsx` com pesos estáticos discretos
+(`weight: ['300','400','500','600']`, não variável). `font-[450]` — usado no
+wordmark e em todo H1/H2 — não tinha face exata nesse conjunto; o algoritmo de
+casamento de peso do CSS (para alvo entre 400–500) sobe primeiro até o próximo
+peso disponível, então **todo `font-[450]` renderizava de fato como peso 500**
+— o peso que a própria "Regra do Peso Único" desta fase proíbe. Anulava
+silenciosamente o propósito central da Fase 2, e o método de verificação
+(`getComputedStyle`) não pegava isso porque reporta o valor declarado, não a
+face física usada. Corrigido trocando para `weight: 'variable'`; confirmado no
+CSS buildado (`@font-face` agora declara `font-weight:100 900`, um range, não
+um valor único) e revalidado no navegador. O review também encontrou o Label
+documentado como peso 500 em `DESIGN.md`/`design.json` sem nenhuma mudança de
+código correspondente (o código nunca teve peso explícito nos labels, sempre
+~400) — corrigido nos dois documentos — e uma descrição imprecisa do
+zero-padding dos numerais (ver acima).
 
 ---
 
