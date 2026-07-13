@@ -99,4 +99,14 @@ html.lenis body {
     transform: none;
     transition: none;
   }
+
+  /* Rede de segurança em CSS puro para a revelação por cláusula da Nota da Stylist
+     (CuratorialNote.tsx) — o guard useReducedMotion() é JS; se JS falhar/atrasar,
+     esta regra garante que o texto não fique preso em opacity:0 (achado de code
+     review do PR #30). !important necessário: o estado inicial vem inline via
+     Framer Motion (SSR), que sempre vence CSS externo sem !important. */
+  .curatorial-note-clause {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
