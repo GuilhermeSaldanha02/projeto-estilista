@@ -81,7 +81,9 @@ html.lenis body {
   pointer-events: none;
 }
 
-/* Única exceção de motion do sistema — fade-in de entrada em viewport (ver FadeInSection.tsx) */
+/* Fade-in de entrada em viewport (ver FadeInSection.tsx) — um dos contextos de
+   motion sancionados do sistema (ver DESIGN.md / design.json para a lista completa:
+   hero, Nota da Stylist, Personal Styling). */
 .fade-in {
   opacity: 0;
   transform: translateY(8px);
@@ -106,6 +108,13 @@ html.lenis body {
      review do PR #30). !important necessário: o estado inicial vem inline via
      Framer Motion (SSR), que sempre vence CSS externo sem !important. */
   .curatorial-note-clause {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Mesma rede de segurança em CSS puro para o reveal em 4 beats do
+     Personal Styling (PersonalStyling.tsx, Fase E). */
+  .styling-reveal-item {
     opacity: 1 !important;
     transform: none !important;
   }
