@@ -55,8 +55,9 @@ export default function CuratorialNote({ note, byline }: Props) {
             animate={reduceMotion || inView ? 'visible' : 'hidden'}
           >
             {clauses.map((text, i) => (
-              <motion.span key={i} variants={clause} className="block">
+              <motion.span key={i} variants={clause} className="curatorial-note-clause block">
                 {text}
+                {i < clauses.length - 1 ? ' ' : ''}
               </motion.span>
             ))}
           </motion.blockquote>
