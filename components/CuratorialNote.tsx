@@ -49,7 +49,7 @@ export default function CuratorialNote({ note, byline }: Props) {
 
           <motion.blockquote
             ref={ref}
-            className="font-display italic font-light text-ink text-[clamp(2.75rem,5.5vw,5rem)] leading-[1.05] tracking-tight text-left [text-wrap:pretty] mb-8"
+            className="font-display italic font-normal text-ink text-[clamp(2.5rem,6vw,4.25rem)] leading-[1.05] tracking-tight text-left [text-wrap:pretty] mb-8"
             variants={container}
             initial={reduceMotion ? 'visible' : 'hidden'}
             animate={reduceMotion || inView ? 'visible' : 'hidden'}

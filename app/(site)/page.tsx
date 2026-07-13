@@ -57,7 +57,7 @@ export default async function HomePage() {
       {products.length > 0 && (
         <section className="py-16 md:py-20 px-5 max-w-7xl mx-auto" aria-label="Novidades">
           <div className="flex items-baseline justify-between mb-8">
-            <h2 className="font-display text-5xl md:text-6xl font-medium text-ink tracking-tight">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight">
               Novidades
             </h2>
             <Link

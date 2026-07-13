@@ -71,7 +71,7 @@ export default function PersonalStyling({ waScheduleHref }: Props) {
             Consultoria de Estilo
           </p>
           <div className="w-12 h-px bg-dourado/40 mb-6" />
-          <h2 className="font-display text-5xl md:text-6xl font-medium text-cream-text tracking-tight mb-6 [text-wrap:pretty]">
+          <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-cream-text tracking-tight mb-6 [text-wrap:pretty]">
             Um olhar profissional para o seu estilo
           </h2>
         </motion.div>
@@ -97,7 +97,7 @@ export default function PersonalStyling({ waScheduleHref }: Props) {
               >
                 <p
                   aria-hidden
-                  className="font-display text-7xl md:text-8xl font-light text-dourado/50 leading-none mb-4 select-none"
+                  className="font-sans text-sm tracking-[0.2em] text-cream-text/50 mb-4 select-none"
                 >
                   {step.n}
                 </p>

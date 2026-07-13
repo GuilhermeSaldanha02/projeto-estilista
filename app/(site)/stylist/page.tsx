@@ -109,7 +109,7 @@ export default async function StylistPage() {
             <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-esmeralda mb-4">
               Consultoria de Estilo
             </p>
-            <h1 className="font-display text-6xl md:text-7xl font-medium text-ink tracking-tight mb-5 [text-wrap:balance]">
+            <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight mb-5 [text-wrap:balance]">
               {profile?.name ?? 'Em breve'}
             </h1>
             {profile?.tagline && (
@@ -177,7 +177,7 @@ function PadraoSection({ section }: { section: StylistSection }) {
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-4xl md:text-5xl font-medium text-ink tracking-tight mb-8 [text-wrap:balance]">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight mb-8 [text-wrap:balance]">
               {section.title}
             </h2>
           )}
@@ -230,7 +230,7 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
               </p>
             )}
             {section.title && (
-              <h2 className="font-display text-4xl md:text-5xl font-medium text-ink tracking-tight mb-8 [text-wrap:balance]">
+              <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight mb-8 [text-wrap:balance]">
                 {section.title}
               </h2>
             )}
@@ -267,9 +267,9 @@ function EtapasSection({ section }: { section: StylistSection }) {
         <li className="flex gap-6 items-start text-left">
           <span
             aria-hidden
-            className="font-display text-5xl md:text-6xl font-light text-dourado/50 leading-none w-16 shrink-0 select-none"
+            className="font-sans text-sm tracking-[0.2em] text-cream-text/50 w-8 shrink-0 pt-2 select-none"
           >
-            {index + 1}
+            {String(index + 1).padStart(2, '0')}
           </span>
           <div className="font-sans text-sm text-cream-text/75 tracking-wide leading-relaxed flex-1 pt-2">
             {children}
@@ -289,7 +289,7 @@ function EtapasSection({ section }: { section: StylistSection }) {
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-4xl md:text-5xl font-medium text-cream-text tracking-tight mb-4 [text-wrap:balance]">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-cream-text tracking-tight mb-4 [text-wrap:balance]">
               {section.title}
             </h2>
           )}
@@ -337,7 +337,7 @@ function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-5xl md:text-6xl font-medium text-cream-text tracking-tight mb-6 [text-wrap:balance]">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-cream-text tracking-tight mb-6 [text-wrap:balance]">
               {section.title}
             </h2>
           )}
@@ -367,7 +367,7 @@ function CardsSection({ section }: { section: StylistSection }) {
             </p>
           )}
           {section.title && (
-            <h2 className="font-display text-4xl md:text-5xl font-medium text-ink tracking-tight mb-4 [text-wrap:balance]">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight mb-4 [text-wrap:balance]">
               {section.title}
             </h2>
           )}

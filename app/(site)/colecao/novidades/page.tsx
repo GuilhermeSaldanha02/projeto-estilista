@@ -43,7 +43,7 @@ export default async function NovidadesPage() {
             {products.length} {products.length === 1 ? 'peça' : 'peças'}
           </p>
           <div className="w-10 h-px bg-dourado/40 mb-5" />
-          <h1 className="font-display text-5xl md:text-6xl font-medium text-ink tracking-tight">
+          <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight">
             Novidades
           </h1>
         </div>
