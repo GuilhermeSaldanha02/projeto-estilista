@@ -1,7 +1,36 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-12 (Fase D — Nota da Stylist "sala clara" + verde-profundo reservado)_
+_Última atualização: 2026-07-12 (foto real da Luiza cadastrada — seção "Como cheguei até aqui")_
+
+---
+
+### Conteúdo — CONCLUÍDO: foto real da seção "Como cheguei até aqui"
+
+Levantamento por query direta no Sanity (não por suposição): das 5 seções do
+`/stylist`, só **1** tinha campo de imagem vazio — "Como cheguei até aqui"
+(layout `foto-esquerda`). As outras 4 (`cards`, `etapas`, `transformacao-escura`,
+`destaque-claro`) não usam campo de imagem, nada a cadastrar ali. O hero do
+`/stylist` já tinha foto real desde antes desta sessão.
+
+O dono forneceu a foto (arquivo colado no chat → salvo em `public/` como staging
+→ lido, subido como asset no Sanity via script Node temporário usando o token de
+API, anexado ao campo `image` da seção via `_key`, com `alt` descritivo). Script e
+o PNG de staging apagados logo depois — nunca ficaram rastreados no git (mesmo
+padrão do item 1: usar `/public` só como ponte temporária de arquivo, nunca como
+destino final de imagem de conteúdo, que vive no Sanity CDN).
+
+**Achado:** só existe a versão publicada de `stylistProfile` (sem rascunho
+pendente) — diferente do `siteSettings`, que tinha os dois. Script tentou
+atualizar `drafts.stylistProfile` e falhou com "documento não encontrado",
+esperado e inofensivo (nada a fazer ali).
+
+_Verificado:_ navegador confirma a foto real renderizando na seção "Como cheguei
+até aqui" do `/stylist` (era "Foto em breve"), zero erro de console.
+
+**Pendência de conteúdo, não mais bloqueio técnico:** o agente agora sabe fazer
+esse fluxo completo (upload + anexo via API) sempre que uma foto nova chegar —
+não depende mais do login do Studio.
 
 ---
 
