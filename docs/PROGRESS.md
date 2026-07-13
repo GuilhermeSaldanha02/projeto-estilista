@@ -1,7 +1,42 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-10 (item 1 DESBLOQUEADO — acesso de escrita ao Sanity)_
+_Última atualização: 2026-07-12 (Fase F — costura removida do site inteiro)_
+
+---
+
+### Fase F — CONCLUÍDA: costura removida do site inteiro + exceção revogada
+
+Motivada por reclamação direta do dono ("ainda existe degradê de cores do branco com
+o marrom e está feio"), confirmada visualmente em `/categoria/[slug]` e `/stylist`
+(a faixa suja aparecia logo abaixo do header fixo — por isso ele descreveu como
+"menu"). Era a mesma costura da Fase C (hero), só que nos 11 pontos que aquela fase
+não tocou. Consultado o agente de design de novo antes de executar (regra da casa):
+decisão foi corte limpo puro, sem substituto — bandas de categoria/coleção não
+precisam de `FadeInSection` (estão acima da dobra, já visíveis no load).
+
+**Removido `<SeamTransition>` de 11 pontos:**
+`categoria/[slug]`, `colecao/novidades`, `colecao/[slug]` (1 cada — cabeçalho), home
+`page.tsx` (seção Personal Styling), e as **7** ocorrências do `/stylist` (uma por
+variante de seção). No `/stylist` também removido o cálculo de `prevEdge`/`seamFrom`
+(a lógica que calculava a cor de entrada de cada seção dinamicamente, já que a ordem é
+definida pela dona no CMS) — as 6 funções de seção perderam a prop `seamFrom`.
+
+**Arquivos órfãos apagados:** `components/SeamTransition.tsx` e `lib/colors.ts`
+inteiros (confirmado por grep: zero consumidor restante).
+
+**Exceção revogada:** `CLAUDE.md §5` e `.impeccable/design.json` ("A Regra do Degradê
+Familiar") — a exceção de 2026-07-08 que autorizava cruzamento de família de cor como
+"costura" foi formalmente revogada. Regra volta a ser: **nunca degradê cruzando
+família de cor**, sem nuance. Ritmo entre seções agora é só corte limpo + entrada
+coreografada por scroll (Lenis/Framer/`FadeInSection`), consistente com a tese "capítulos
+dirigidos, não blocos empilhados" adotada na Fase C — agora aplicada ao site inteiro,
+não só à home.
+
+_Verificado:_ `tsc --noEmit` EXIT=0; build de produção limpo (30 páginas); navegador
+confirma corte seco (sem faixa cinza) em `/categoria/vestidos` e em 3 emendas
+diferentes do `/stylist` (clara→clara, clara→escura via "O Processo"), zero erro de
+console.
 
 ---
 
