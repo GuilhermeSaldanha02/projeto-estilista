@@ -65,8 +65,8 @@ styling"); CTA secundário do hero renomeado de "Ver novidades" para "Ver coleç
   `paper`/`paper-deep` (não usados em nenhum componente, troca segura); classe
   `ink-soft` adicionada; `verde-profundo` removido.
 - **Substituição global:** `text-ink/65`, `/70`, `/75` → `text-ink-soft` em 8
-  arquivos (20 ocorrências) — mata os modificadores de opacidade soltos que
-  falhavam AA em alguns pontos.
+  arquivos (21 ocorrências — corrigido de "20" após o code review contar de novo)
+  — mata os modificadores de opacidade soltos que falhavam AA em alguns pontos.
 - **`components/PersonalStyling.tsx`:** `bg-verde-profundo` → `bg-espresso`
   (volta a ser o único escuro da home; a reestruturação do "Como funciona" fica
   para a Fase 3 — estrutura).
@@ -90,6 +90,15 @@ categoria em `rgb(107,97,82)` (ink-soft), seção Personal Styling em
 `rgb(36,28,23)` (espresso, não mais verde-profundo), CTA "Agendar horário" sólido
 esmeralda + "Ver coleção" em contorno cream-text (não mais dois botões cheios
 competindo); zero erro de console.
+
+**Achado do code review (não-bloqueante, registrado para acompanhar):** o CTA
+"Ver coleção" antes tinha `bg-bordo` opaco — contraste garantido matematicamente.
+Agora, em contorno, o texto/borda `cream-text` fica direto sobre vídeo+gradiente
+(sem piso opaco próprio) — o contraste real depende do frame do vídeo naquele
+ponto. Isso replica o padrão já aceito no resto do hero (eyebrow/h1/tagline já
+fazem a mesma coisa), não é uma categoria de risco nova — mas é uma garantia a
+menos especificamente neste botão. Vale conferir visualmente em vídeo real, não
+só no frame estático testado.
 
 **Próximo:** Fase 2 (tipografia) — escala em 5 níveis, escassez do tier Editorial,
 cortar os numerais 96px, revisar se a Schibsted precisa da mesma contenção que a
