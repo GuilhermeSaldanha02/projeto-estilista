@@ -1,7 +1,51 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-12 (foto real da Luiza cadastrada — seção "Como cheguei até aqui")_
+_Última atualização: 2026-07-12 (Fase E — Personal Styling quebra o monólito)_
+
+---
+
+### Fase E — CONCLUÍDA (verificação parcial — ver nota de limitação): Personal Styling quebra o monólito
+
+Consultado o agente de design antes de implementar (regra da casa). Decisão: sem foto
+nova nesta seção (a foto que chegou foi para "Como cheguei até aqui", outra seção do
+`/stylist`) — nada de slot de imagem "esperando foto".
+
+**`components/PersonalStyling.tsx`** (novo, extraído de `page.tsx`, client component):
+- **Cor:** `bg-espresso` → `bg-verde-profundo` — primeiro uso real do token reservado
+  na Fase D (ver "A Regra Espresso × Verde-Profundo" no DESIGN.md). Texto `cream-text`/
+  `dourado` mantidos (contraste calculado equivalente ao espresso pelo agente de design).
+- **Layout assimétrico:** `grid-cols-12`; header/intro/CTA em `col-span-12 md:col-span-7`
+  flush-left (linha dourada `w-12`, sem `mx-auto`); "Como funciona" ocupa a largura toda
+  (`col-span-12`) com ritmo em escada no desktop (2º passo `md:mt-12`, 3º `md:mt-24`);
+  numerais `text-6xl md:text-7xl` → `text-7xl md:text-8xl` (maiores também no mobile,
+  não só desktop — são o ritmo vertical do bloco).
+- **Motion:** reveal em 4 beats (header, intro, grupo dos 3 passos, CTA) via
+  `useInView(once:true, margin:'-10% 0px')` + stagger 0.12 — mesmo vocabulário da
+  Fase D. Guard duplo: `useReducedMotion()` (JS) + `.styling-reveal-item` no bloco
+  `@media (prefers-reduced-motion: reduce)` do `globals.css` (rede de segurança CSS,
+  mesmo padrão exigido pelo review do PR #30).
+- **`DESIGN.md`/`design.json`:** nota de "único fade-in do site" corrigida — agora lista
+  os 3 contextos de motion sancionados (hero, Nota da Stylist, Personal Styling).
+
+**⚠️ Nota de limitação de verificação desta sessão:** o servidor `Claude_Preview`
+(usado em toda verificação anterior desta sessão) desconectou no meio do trabalho.
+A ferramenta alternativa (`Claude_Browser`) apresentou instabilidade real neste
+ambiente — `computer{screenshot}` deu timeout repetido, e um teste direto de
+`IntersectionObserver` nativo (sem Framer) não disparou nem o callback inicial em
+2s, mesmo com overlap geométrico confirmado por `getBoundingClientRect`. Diagnóstico:
+falha do ambiente de automação (provável falta de loop de composição/rendering),
+não bug de código — o mesmo hook (`useInView`, mesmas opções) já foi validado
+funcionando na Fase D com a ferramenta anterior, e o `threshold` padrão do Framer
+(`amount: "some"` → 0) deveria disparar em qualquer sobreposição, confirmado lendo
+o código-fonte instalado.
+**O que FOI verificado nesta sessão:** `tsc --noEmit` EXIT=0; build de produção
+limpo (30 páginas); cor `rgb(8,61,44)` = `#083D2C` confirmada via `getComputedStyle`;
+4 elementos `.styling-reveal-item` confirmados no DOM, todos em `opacity:0` antes
+de rolar (comportamento inicial correto); zero erro de console.
+**O que NÃO foi possível verificar ao vivo:** a transição real 0→1 ao rolar até a
+seção. Pedido explícito ao dono: conferir pessoalmente no navegador se a seção
+Personal Styling aparece (não fica presa invisível) e se o reveal ocorre ao rolar.
 
 ---
 
