@@ -1,7 +1,41 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-12 (Fase F — costura removida do site inteiro)_
+_Última atualização: 2026-07-12 (Fase D — Nota da Stylist "sala clara" + verde-profundo reservado)_
+
+---
+
+### Fase D — CONCLUÍDA: Nota da Stylist vira "sala clara"
+
+Desbloqueada pelo item 1 (texto real da Luiza já publicado no Sanity). Antes de
+implementar, achado de ponta solta: o token `--verde-profundo` (criado na Fase 1,
+"pronto para Fases 3/4") **nunca foi usado em nenhum componente** — confirmado por
+grep. Consultado o agente de design sobre os dois pontos (destino do token +
+execução da Fase D):
+
+- **`verde-profundo` reservado para a Fase E** (bloco Personal Styling da home), não
+  aqui — ele é a ÚNICA superfície de seção inteira "tomada pelo verde" (distinto do
+  espresso, que é chrome/escuro neutro). Regra nova registrada em `DESIGN.md` ("A
+  Regra Espresso × Verde-Profundo") e espelhada no `.impeccable/design.json`, para um
+  agente futuro não tentar "consertar" a aparente cor escura duplicada.
+- **`components/CuratorialNote.tsx` reescrito:** vira client component. Layout
+  `grid-cols-12`, blockquote em `col-span-8` (flush-left, assimétrico — o vazio à
+  direita é o respiro). Fundo `bg-sand-50` sólido (achatado, sem degradê — coerente
+  com o corte-limpo da Fase F). Tipografia `text-[clamp(2.75rem,5.5vw,5rem)]
+  leading-[1.05] text-left [text-wrap:pretty]` (trocado de `[text-wrap:balance]`,
+  que é para texto centralizado). Removido `<FadeInSection>` (duplicaria animação
+  com o stagger novo).
+- **Revelação por cláusula:** o texto é dividido em cláusulas
+  (`note.split(/(?<=[.—])\s+/)`) — a frase real vira 3 — cada uma um
+  `<motion.span>` dentro de um único `<blockquote>` (acessibilidade: leitor de tela
+  lê a citação inteira, não fragmentos). Dispara com `useInView(once:true)`, não no
+  load (diferente do hero) — stagger 120ms, ease `[0.16,1,0.3,1]`, `y:12→0`, guard
+  `useReducedMotion`.
+
+_Verificado:_ `tsc --noEmit` EXIT=0; build de produção limpo (30 páginas); navegador
+confirma as 3 cláusulas em `opacity:0` fora de viewport (scrollY 0) e `opacity:1`
+dentro (scrollY 2500), zero erro de console; mobile 375px com layout flush-left
+legível (`sectionWidth` bate com `innerWidth`, sem overflow).
 
 ---
 
