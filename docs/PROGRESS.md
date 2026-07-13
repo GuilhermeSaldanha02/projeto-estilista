@@ -14,7 +14,12 @@ nova nesta seção (a foto que chegou foi para "Como cheguei até aqui", outra s
 **`components/PersonalStyling.tsx`** (novo, extraído de `page.tsx`, client component):
 - **Cor:** `bg-espresso` → `bg-verde-profundo` — primeiro uso real do token reservado
   na Fase D (ver "A Regra Espresso × Verde-Profundo" no DESIGN.md). Texto `cream-text`/
-  `dourado` mantidos (contraste calculado equivalente ao espresso pelo agente de design).
+  `dourado` mantidos. **Correção (code review do PR #32, recalculado via fórmula WCAG,
+  não repetir a suposição de "equivalente"):** `cream-text` sobre `verde-profundo` é
+  10,70:1 (era 14,63:1 sobre espresso — folgado nos dois). `dourado` sobre
+  `verde-profundo` é **4,96:1** — passa AA (4,5:1) mas com margem bem mais apertada que
+  os 6,78:1 do espresso (queda de ~27%). Ainda válido, não regressão que exija fix, só
+  a margem de segurança encolheu — vale monitorar se o token entrar em mais contextos.
 - **Layout assimétrico:** `grid-cols-12`; header/intro/CTA em `col-span-12 md:col-span-7`
   flush-left (linha dourada `w-12`, sem `mx-auto`); "Como funciona" ocupa a largura toda
   (`col-span-12`) com ritmo em escada no desktop (2º passo `md:mt-12`, 3º `md:mt-24`);
