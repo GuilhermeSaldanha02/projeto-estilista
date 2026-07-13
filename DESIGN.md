@@ -87,35 +87,75 @@ O ritmo da página alterna entre faixas espresso (escuras, confiantes) e areia (
 
 ## 2. Colors: A Paleta do Atelier
 
-Paleta de contraste dramático: a família areia domina as superfícies, o espresso ancora os extremos, e três acentos exercem funções precisas e distintas.
+**Reduzida no redesign de 2026-07-13** (decisão de 3 agentes em loop + o dono — ver
+`docs/PROGRESS.md`, "Direção final do redesign visual"). Tese: quase-monocromático
+quente + 2 acentos funcionais (não 1) — a "Regra das Três Funções" sobrevive por
+decisão explícita do dono, mas `verde-profundo` foi cortado por completo (era a
+mesma rampa tonal da esmeralda — "verde sobre verde" sem separação real) e o
+dourado passou de "regra ignorada" para disciplina ativa (o sistema chegou a violar
+o próprio teto de 3 pontos por tela, medido em 5).
 
 ### Primary
-- **Verde Atelier** (`#0B5D46`): Esmeralda. A cor dominante da marca. Reservada para CTAs de agendamento/WhatsApp e detalhes de presença da stylist. Carrega o peso da confiança e da relação pessoal. Usado com espaço — nunca como fundo de seção inteira.
-- **Verde Atelier Claro** (`#1D9A72`): Esmeralda-light. Apenas para estados de hover sobre elementos esmeralda. Nunca em repouso.
-- **Verde-Profundo** (`#083D2C`): tom mais escuro da tonal ramp da esmeralda — reservado (Fase E) como a ÚNICA superfície de seção inteira "tomada pelo verde" (ex. o bloco Personal Styling da home), sem queimar a esmeralda brilhante como fundo. Ver "A Regra Espresso × Verde-Profundo" abaixo.
+- **Verde Atelier** (`#0B5D46`): Esmeralda. Acento de **agendamento/relacionamento**
+  (o funil principal do negócio). Carrega o peso da confiança. Usado com espaço —
+  nunca como fundo de seção inteira.
+- **Verde Atelier Claro** (`#1D9A72`): Esmeralda-light. Apenas hover sobre elementos
+  esmeralda. Nunca em repouso.
 
 ### Secondary
-- **Borgonha** (`#7B1E3A`): Bordô. O CTA de produto — "Quero esta peça". Alto contraste sobre areia. Aparece no hero e nos cards de produto. Ousadia e desejo concentrados.
+- **Borgonha** (`#7B1E3A`): Bordô. Acento de **produto/desejo** — "Quero esta peça".
+  Mantido (não cortado) para preservar a Regra das Três Funções. **Nunca aparece com
+  o mesmo peso visual que a esmeralda no mesmo componente** — ver o "Don't" novo
+  abaixo; é o erro que já aconteceu uma vez no hero.
 
 ### Tertiary
-- **Fio de Ouro** (`#C2A14D`): Dourado. Exclusivo para linhas divisórias, ícones e eyebrows. Nunca como fundo ou texto corrido. A sua escassez é o que o torna precioso.
+- **Fio de Ouro** (`#C2A14D`): Dourado. Exclusivo para linhas divisórias, ícones e
+  eyebrows. Nunca como fundo ou texto corrido. **Disciplina ativa, não sugestão:**
+  se aparecer em mais de 3 pontos na mesma tela, é bug a corrigir, não estilo.
 
 ### Neutral
-- **Espresso** (`#241C17`): O escuro. Header, footer, faixas de seção dramáticas. Textura quente de café torrado, não o frio de um preto puro.
-- **Tinta** (`#1A1A1A`): Texto sobre fundo claro. Ligeiramente mais suave que o espresso; evita dureza de preto puro sobre areia.
-- **Areia Base** (`#E7DBC8`): O fundo dominante do corpo. Quente, receptivo, nunca beige genérico — a escolha da stylist, não do template.
-- **Areia Clara** (`#EDE3D2`): Fundo de seções alternadas claras, hero da página stylist.
-- **Areia Superfície / Creme** (`#F4EFE6`): Fundo de cards de produto e texto sobre espresso. O mesmo hex (`--sand-50` = `--cream-text`) — a areia mais clara como creme para texto em fundo escuro.
+- **Espresso** (`#241C17`): o único escuro de seção inteira do sistema (header,
+  footer, e no máximo 1 seção de conteúdo por página). Textura quente de café
+  torrado, não o frio de um preto puro.
+- **Tinta** (`#1A1A1A`): texto primário sobre fundo claro.
+- **Tinta Suave** (`#6B6152`, token `ink-soft`): texto secundário/legendas sobre
+  fundo claro — **substitui os modificadores `text-ink/65`, `/70`, `/75`** que
+  ficavam abaixo de AA em alguns pontos. AA verificado: 5.45:1 sobre `--sand-50`.
+  Nunca usar opacidade solta em `ink` de novo — é este token ou nada.
+- **Paper** (`#F5F1EA`, token `sand-50`): fundo dominante do corpo. Papel quente,
+  quieto — não branco de tela nem beige de template.
+- **Paper Deep** (`#EBE4D6`, tokens `sand-100`/`sand-200`/`sand-300` — todos o
+  mesmo valor agora): único segundo tom de papel, para alternância sutil de seção
+  clara. (Antes eram 3 tons quase indistinguíveis; colapsados de propósito.)
+- **Creme** (`#F4EFE6`, token `cream-text`): texto sobre espresso.
+
+### ~~Verde-Profundo~~ — CORTADO (2026-07-13)
+
+Existiu como `#083D2C`, tom mais escuro da rampa tonal da própria esmeralda.
+Causava "verde sobre verde" sem separação real (o CTA esmeralda dentro de um fundo
+verde-profundo quase não se distinguia) e competia com o espresso como um segundo
+"escuro de seção inteira" sem necessidade. **Removido do sistema — não redefinido.**
+A "Regra Espresso × Verde-Profundo" (2026-07-12) está revogada; não recriar essa cor
+sem decisão nova e explícita do dono.
 
 ### Named Rules
 
-**A Regra das Três Funções.** Esmeralda é confiança e agendamento. Borgonha é desejo e produto. Dourado é detalhe e linha. Os três nunca aparecem juntos no mesmo elemento e nunca trocam de função. Um botão borgonha nunca agenda; um botão esmeralda nunca leva ao produto.
+**A Regra das Três Funções.** Esmeralda é confiança e agendamento. Borgonha é desejo
+e produto. Dourado é detalhe e linha. Os três nunca trocam de função — um botão
+borgonha nunca agenda, um botão esmeralda nunca leva ao produto. **Correção nova
+(2026-07-13):** quando bordô e esmeralda aparecem na MESMA tela (ex. os dois CTAs do
+hero), eles NUNCA têm o mesmo peso visual/tamanho — um é primário (sólido,
+dominante), o outro é secundário (contorno/menor). Nunca dois botões cheios do
+mesmo tamanho lado a lado — isso é "cores brigando", não hierarquia.
 
-**A Regra do Dourado Escasso.** O dourado (`#C2A14D`) só vive em linhas (`h-px`), ícones e eyebrow text. Nunca como fundo, nunca como texto de parágrafo, nunca em botão. Se ele aparece em mais de três pontos na mesma tela, há um a mais.
+**A Regra do Dourado Escasso.** O dourado (`#C2A14D`) só vive em linhas (`h-px`),
+ícones e eyebrow text. Nunca como fundo, nunca como texto de parágrafo, nunca em
+botão. **Se ele aparece em mais de três pontos na mesma tela, há um a mais** — isto
+já foi violado uma vez (5 pontos numa tela só); tratar como bug, não estética.
 
-**A Regra do Degradê Familiar.** Gradiente só dentro da família areia (sand-50 → sand-200), sutil. Nunca areia → esmeralda, areia → espresso, ou qualquer cruzamento de família. Gradiente sobre foto de produto é proibido — suja a roupa.
-
-**A Regra Espresso × Verde-Profundo (2026-07-12).** As duas cores escuras da marca não competem — têm papéis distintos e não se substituem: **espresso é chrome/escuro neutro** (header, footer, bandas genéricas, qualquer seção "escura" sem intenção de marca específica); **verde-profundo é a ÚNICA superfície reservada para o momento de marca da consultoria** (hoje só planejado para a Fase E — Personal Styling da home). Nunca as duas lado a lado tentando "combinar" — a fronteira entre uma seção espresso e uma verde-profundo é corte limpo, igual a qualquer outra emenda (nunca degradê cruzando família — ver regra acima). Texto sobre verde-profundo usa os mesmos tokens de espresso (`cream-text`, `dourado`) — zero decisão nova ali.
+**A Regra do Degradê Familiar.** Gradiente só dentro da família areia (sand-50 →
+sand-100), sutil. Nunca cruzando família de cor. Gradiente sobre foto de produto é
+proibido — suja a roupa.
 
 ## 3. Typography: Serif Leve, Sans Preciso
 

@@ -42,7 +42,7 @@ export default function ProductCard({
             />
           ) : (
             <div className="absolute inset-0 bg-sand-200 flex items-center justify-center">
-              <span className="font-sans text-[10px] tracking-widest uppercase text-ink/65">
+              <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft">
                 Foto em breve
               </span>
             </div>
@@ -59,7 +59,7 @@ export default function ProductCard({
             {product.title}
           </h3>
           {product.price ? (
-            <p className="font-sans text-sm text-ink/65">{formatPrice(product.price)}</p>
+            <p className="font-sans text-sm text-ink-soft">{formatPrice(product.price)}</p>
           ) : null}
           {/* span, não Link/button aninhado — card inteiro já é o <Link> */}
           <span className="mt-1 inline-block font-sans text-[10px] tracking-widest uppercase text-bordo group-hover:text-espresso transition-colors">

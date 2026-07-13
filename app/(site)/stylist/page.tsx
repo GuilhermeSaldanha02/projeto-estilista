@@ -97,7 +97,7 @@ export default async function StylistPage() {
               />
             ) : (
               <div className="w-full aspect-[3/4] bg-ink/10 flex items-center justify-center">
-                <span className="font-sans text-[10px] tracking-widest uppercase text-ink/75 text-center px-4">
+                <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft text-center px-4">
                   Foto em breve
                 </span>
               </div>
@@ -113,7 +113,7 @@ export default async function StylistPage() {
               {profile?.name ?? 'Em breve'}
             </h1>
             {profile?.tagline && (
-              <p className="font-display text-xl md:text-2xl font-light italic text-ink/70 leading-snug mb-8">
+              <p className="font-display text-xl md:text-2xl font-light italic text-ink-soft leading-snug mb-8">
                 {profile.tagline}
               </p>
             )}
@@ -184,7 +184,7 @@ function PadraoSection({ section }: { section: StylistSection }) {
         </FadeInSection>
         <div className="w-8 h-px bg-dourado/40 mb-8" />
         {section.body && (
-          <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink/75 [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink/70 [&_blockquote]:leading-relaxed [&_blockquote]:my-6">
+          <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:my-6">
             <PortableText value={section.body} />
           </div>
         )}
@@ -214,7 +214,7 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
             />
           ) : (
             <div className="w-full aspect-[3/4] bg-ink/10 flex items-center justify-center">
-              <span className="font-sans text-[10px] tracking-widest uppercase text-ink/75 text-center px-4">
+              <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft text-center px-4">
                 Foto em breve
               </span>
             </div>
@@ -237,7 +237,7 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
           </FadeInSection>
           <div className="w-8 h-px bg-dourado/40 mb-8" />
           {section.body && (
-            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink/75 [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4">
+            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4">
               <PortableText value={section.body} />
             </div>
           )}
@@ -314,7 +314,7 @@ function DestaqueClaroSection({ section, waHref }: { section: StylistSection; wa
         <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
         {section.body && (
           <FadeInSection>
-            <div className="[&_p]:font-display [&_p]:text-3xl md:[&_p]:text-4xl [&_p]:font-light [&_p]:italic [&_p]:text-ink/65 [&_p]:leading-snug [&_p]:mb-6 mb-10">
+            <div className="[&_p]:font-display [&_p]:text-3xl md:[&_p]:text-4xl [&_p]:font-light [&_p]:italic [&_p]:text-ink-soft [&_p]:leading-snug [&_p]:mb-6 mb-10">
               <PortableText value={section.body} />
             </div>
           </FadeInSection>
@@ -380,7 +380,7 @@ function CardsSection({ section }: { section: StylistSection }) {
                 <h3 className="font-display text-lg font-light text-ink tracking-wide mb-2">
                   {item.titulo}
                 </h3>
-                <p className="font-sans text-sm text-ink/65 tracking-wide leading-relaxed">
+                <p className="font-sans text-sm text-ink-soft tracking-wide leading-relaxed">
                   {item.subtitulo}
                 </p>
               </li>

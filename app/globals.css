@@ -3,45 +3,48 @@
 @tailwind utilities;
 
 :root {
-  /* Paleta evoluída (Fase 1 do redesign — ver docs/PROGRESS.md).
-     Nomes de classe Tailwind (sand-50/100/200/300) NÃO mudaram — só os valores
-     por trás deles — para não obrigar a tocar todo componente nesta fase.
-     sand-50 agora É "porcelana" (superfície dominante, quase neutra);
-     sand-100/200/300 colapsam no MESMO tom "areia" (eram 3 tons a ~0.5 de
-     valor um do outro — quase indistinguíveis, e a causa raiz de a "costura"
-     entre seções nunca fechar limpo). sand-300 nunca foi usado em componente
-     nenhum (confirmado por grep) — colapsar é seguro. */
-  --sand-50:  #F5F3EE; /* porcelana */
-  --sand-100: #E9E1D3; /* areia (única) */
-  --sand-200: #E9E1D3; /* areia (única) — antes um tom mais escuro, agora igual ao 100 */
-  --sand-300: #E9E1D3; /* areia (única) — dead token antes disto, mantido por compatibilidade */
+  /* Paleta reduzida (redesign 2026-07-13 — ver docs/PROGRESS.md, "Direção final
+     do redesign visual"). Decidida por 3 agentes (Explorador de referências +
+     Crítico do site atual + Diretor de Design), em loop, com 2 pontos arbitrados
+     pelo dono. Tese: quase-monocromático quente + 2 acentos funcionais (não 1) —
+     bordô (produto) e esmeralda (agendamento) continuam distintos por decisão do
+     dono (preserva "A Regra das Três Funções"); dourado continua existindo mas
+     DISCIPLINADO (máx. 3 pontos por tela — antes violava com 5), não eliminado.
+     `verde-profundo` é a única cor CORTADA por completo (era a mesma rampa tonal
+     da esmeralda, criava "verde sobre verde" sem separação — ver PR da Fase E).
+     Nomes de classe Tailwind (sand-50/100/200/300) continuam funcionando — só os
+     valores mudam — para não obrigar a tocar todo componente nesta fase. */
+  --sand-50:  #F5F1EA; /* "paper" — fundo dominante, mais neutro que a porcelana anterior */
+  --sand-100: #EBE4D6; /* "paper-deep" (única) — colapsa 100/200/300 num só tom */
+  --sand-200: #EBE4D6; /* paper-deep */
+  --sand-300: #EBE4D6; /* paper-deep — dead token, mantido por compatibilidade */
 
   /* Escuro e acentos */
-  --espresso:          #241C17;
-  --esmeralda:         #0B5D46;
+  --espresso:          #241C17; /* único escuro de seção inteira do sistema */
+  --esmeralda:         #0B5D46; /* acento — agendamento/relacionamento (funil principal) */
   --esmeralda-light:   #1D9A72;
-  --verde-profundo:    #083D2C; /* NOVO — superfícies de marca "tomadas" pelo verde (Fase 3/4) */
-  --bordo:             #7B1E3A;
-  --dourado:           #C2A14D;
+  --bordo:             #7B1E3A; /* acento — produto/desejo. Nunca lado a lado com esmeralda no mesmo peso visual (ver HeroSignature.tsx) */
+  --dourado:           #C2A14D; /* disciplinado: máx. 3 pontos por tela, só linha/ícone/eyebrow */
   --dourado-ink:       #7A5E1A; /* mesma família do dourado, stop escuro do ramp — só para texto/eyebrow sobre fundo claro (AA) */
 
   /* Texto */
   --ink:        #1A1A1A;
+  --ink-soft:   #6B6152; /* NOVO — substitui os modificadores text-ink/65,/70,/75 espalhados (que ficavam abaixo de AA em alguns pontos). AA verificado: 5.45:1 sobre --sand-50. */
   --cream-text: #F4EFE6;
 
   /* Canais RGB para o modificador /N do Tailwind (valores idênticos acima) */
-  --sand-50-rgb:         245 243 238;
-  --sand-100-rgb:        233 225 211;
-  --sand-200-rgb:        233 225 211;
-  --sand-300-rgb:        233 225 211;
+  --sand-50-rgb:         245 241 234;
+  --sand-100-rgb:        235 228 214;
+  --sand-200-rgb:        235 228 214;
+  --sand-300-rgb:        235 228 214;
   --espresso-rgb:        36 28 23;
   --esmeralda-rgb:       11 93 70;
   --esmeralda-light-rgb: 29 154 114;
-  --verde-profundo-rgb:  8 61 44;
   --bordo-rgb:           123 30 58;
   --dourado-rgb:         194 161 77;
   --dourado-ink-rgb:     122 94 26;
   --ink-rgb:             26 26 26;
+  --ink-soft-rgb:        107 97 82;
   --cream-text-rgb:      244 239 230;
 
   /* Fontes */
