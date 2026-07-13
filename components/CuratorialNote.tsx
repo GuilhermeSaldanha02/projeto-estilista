@@ -63,7 +63,7 @@ export default function CuratorialNote({ note, byline }: Props) {
           </motion.blockquote>
 
           {byline && (
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink/70">
+            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft">
               {byline}
             </p>
           )}

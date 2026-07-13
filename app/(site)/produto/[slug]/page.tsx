@@ -166,7 +166,7 @@ export default async function ProdutoPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Breadcrumb */}
-      <nav aria-label="Trilha de navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink/65">
+      <nav aria-label="Trilha de navegação" className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink-soft">
         <Link href="/" className="hover:text-ink transition-colors">Início</Link>
         {product.category && (
           <>
@@ -180,7 +180,7 @@ export default async function ProdutoPage({ params }: Props) {
           </>
         )}
         <span aria-hidden="true">›</span>
-        <span className="text-ink/70">{product.title}</span>
+        <span className="text-ink-soft">{product.title}</span>
       </nav>
 
       <div className="grid md:grid-cols-2 gap-10 lg:gap-16">
@@ -200,7 +200,7 @@ export default async function ProdutoPage({ params }: Props) {
             </div>
           ) : (
             <div className="aspect-[3/4] lg:aspect-[4/5] bg-sand-100 flex items-center justify-center">
-              <span className="font-sans text-[10px] tracking-widest uppercase text-ink/65">
+              <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft">
                 Foto em breve
               </span>
             </div>
@@ -231,7 +231,7 @@ export default async function ProdutoPage({ params }: Props) {
           {/* Cabeçalho */}
           <div>
             {product.category && (
-              <p className="font-sans text-[10px] tracking-widest uppercase text-ink/65 mb-2">
+              <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft mb-2">
                 {product.category.title}
               </p>
             )}
@@ -250,7 +250,7 @@ export default async function ProdutoPage({ params }: Props) {
 
           {/* Descrição */}
           {product.description && product.description.length > 0 && (
-            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink/75 [&_p]:leading-relaxed [&_p]:mb-3 [&_strong]:font-medium [&_em]:italic">
+            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:leading-relaxed [&_p]:mb-3 [&_strong]:font-medium [&_em]:italic">
               <PortableText value={product.description} />
             </div>
           )}
@@ -272,7 +272,7 @@ export default async function ProdutoPage({ params }: Props) {
           {product.category && (
             <Link
               href={`/categoria/${product.category.slug}`}
-              className="font-sans text-[10px] tracking-widest uppercase text-ink/65 hover:text-ink transition-colors mt-2"
+              className="font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors mt-2"
             >
               ← Ver mais em {product.category.title}
             </Link>

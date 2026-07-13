@@ -62,7 +62,7 @@ export default async function HomePage() {
             </h2>
             <Link
               href="/colecao/novidades"
-              className="font-sans text-[10px] tracking-widest uppercase text-ink/70 hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
+              className="font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
             >
               ver todas →
             </Link>
