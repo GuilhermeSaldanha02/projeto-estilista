@@ -40,8 +40,9 @@ const STEPS = [
 
 /**
  * Fase E do redesign — quebra o monólito do bloco de consultoria. Fundo
- * verde-profundo (não espresso — ver DESIGN.md "Regra Espresso × Verde-
- * Profundo": esta é a única superfície de marca reservada para essa cor).
+ * espresso: `verde-profundo` foi cortado do sistema no redesign de 2026-07-13
+ * (era a mesma rampa tonal da esmeralda — "verde sobre verde" no CTA, sem
+ * separação real). Esta seção volta a ser o único momento escuro da home.
  * Layout assimétrico flush-left (header/intro/CTA em col-span-7 de 12; o
  * vazio à direita é o respiro); "Como funciona" ocupa a largura toda com
  * ritmo em escada entre os 3 passos. Entrada em 4 beats ao rolar até aqui
@@ -54,7 +55,7 @@ export default function PersonalStyling({ waScheduleHref }: Props) {
 
   return (
     <section
-      className="relative bg-verde-profundo py-24 md:py-36 px-5"
+      className="relative bg-espresso py-24 md:py-36 px-5"
       aria-label="Consultoria de Estilo"
     >
       <motion.div

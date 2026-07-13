@@ -143,12 +143,21 @@ export default function HeroSignature({ waScheduleHref }: Props) {
               </a>
             )}
 
-            {/* CTA secundário — borgonha, leva à coleção. Rótulo "Ver coleção" (não
+            {/* CTA secundário — contorno, leva à coleção. Rótulo "Ver coleção" (não
                 "Ver novidades"): a home já tem uma seção "Novidades" logo abaixo do
-                hero — repetir a palavra aqui lia como redundante/confuso. */}
+                hero — repetir a palavra aqui lia como redundante/confuso.
+                Tratamento em CONTORNO (não sólido): a "Regra das Três Funções"
+                (DESIGN.md) exige que bordô e esmeralda nunca tenham o mesmo peso
+                visual quando coexistem — dois botões cheios do mesmo tamanho lia
+                como "cores brigando" (achado do redesign 2026-07-13). Contorno em
+                cream-text (não bordô): sobre o fundo escuro do hero, bordô como
+                texto/borda ficaria ~1,5:1 de contraste (duas cores escuras) —
+                reprovaria AA. Bordô sólido continua no PDP/EmptyState (fundo claro,
+                onde já funciona bem); aqui a hierarquia vem do sólido×contorno, não
+                da cor. */}
             <Link
               href="/colecao/novidades"
-              className="inline-flex items-center justify-center bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
+              className="inline-flex items-center justify-center border border-cream-text/40 text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:bg-cream-text/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-colors"
             >
               Ver coleção
             </Link>
