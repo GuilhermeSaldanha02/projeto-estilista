@@ -184,7 +184,7 @@ momento gigante por site, não vários headlines parecidos competindo.
   `/stylist`. Visivelmente menor que H1 — hierarquia real entre níveis, não o
   mesmo tamanho universal.
 - **Corpo** (400, `text-sm`/14px, line-height 1.6, máx 65ch, Schibsted).
-- **Label** (**500**, 10–11px, tracking `0.2em`–`0.4em`, uppercase, Schibsted):
+- **Label** (400, 10–11px, tracking `0.2em`–`0.4em`, uppercase, Schibsted):
   nav, eyebrows, preços, CTAs.
 
 **Numerais decorativos** (ex.: "01/02/03" do Personal Styling e das Etapas do

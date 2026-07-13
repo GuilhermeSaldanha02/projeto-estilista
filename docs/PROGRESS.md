@@ -126,8 +126,11 @@ para 6 chaves).
   tracking-[0.2em] text-cream-text/50` (Label); heading "Um olhar profissional…"
   rebaixado de `text-5xl md:text-6xl font-medium` para tier H2.
 - `stylist/page.tsx` — H1 (nome da stylist) e 5 headings de seção rebaixados
-  para os tiers H1/H2; numeral do `EtapasSection` recebeu o mesmo tratamento do
-  `PersonalStyling` (Label + zero-padding `01`/`02`/`03` via `padStart`).
+  para os tiers H1/H2; numeral do `EtapasSection` recebeu o mesmo tratamento
+  visual de label pequeno do `PersonalStyling`, além de zero-padding via
+  `padStart` (mudou de `{index + 1}` para `String(index + 1).padStart(2, '0')}`
+  — o `PersonalStyling` já tinha os numerais zero-padded como strings estáticas
+  no array `STEPS` desde antes desta fase, não usa `padStart`).
 - `categoria/[slug]`, `colecao/[slug]`, `colecao/novidades`, `produto/[slug]`,
   `page.tsx` (home) — H1/H2 de página rebaixados de `text-5xl md:text-6xl
   font-medium` (60px repetido em 6 arquivos, achado do Crítico) para os tiers
@@ -147,6 +150,23 @@ desktop (1280px) e mobile (375px) para wordmark, H2 "Novidades", numeral do
 `PersonalStyling`, H1 de `/categoria/vestidos` e o pull-quote da Nota da
 Stylist — todos batendo com os `clamp()` especificados (em mobile, a maioria
 já está no piso do clamp, como esperado).
+
+**Achado do code review (PR #35), corrigido antes do merge:** a Fraunces
+estava carregada em `app/layout.tsx` com pesos estáticos discretos
+(`weight: ['300','400','500','600']`, não variável). `font-[450]` — usado no
+wordmark e em todo H1/H2 — não tinha face exata nesse conjunto; o algoritmo de
+casamento de peso do CSS (para alvo entre 400–500) sobe primeiro até o próximo
+peso disponível, então **todo `font-[450]` renderizava de fato como peso 500**
+— o peso que a própria "Regra do Peso Único" desta fase proíbe. Anulava
+silenciosamente o propósito central da Fase 2, e o método de verificação
+(`getComputedStyle`) não pegava isso porque reporta o valor declarado, não a
+face física usada. Corrigido trocando para `weight: 'variable'`; confirmado no
+CSS buildado (`@font-face` agora declara `font-weight:100 900`, um range, não
+um valor único) e revalidado no navegador. O review também encontrou o Label
+documentado como peso 500 em `DESIGN.md`/`design.json` sem nenhuma mudança de
+código correspondente (o código nunca teve peso explícito nos labels, sempre
+~400) — corrigido nos dois documentos — e uma descrição imprecisa do
+zero-padding dos numerais (ver acima).
 
 ---
 

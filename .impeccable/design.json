@@ -22,7 +22,8 @@
       "editorial":  { "displayName": "Editorial",        "purpose": "clamp(2.5rem,6vw,4.25rem), peso 400, itálico. Pull-quote da Nota da Stylist. Máx 1 por página; a maioria das páginas não tem nenhum.", "font": "display" },
       "h1":         { "displayName": "H1 — Página",      "purpose": "clamp(2rem,4vw,2.75rem), peso 450. Categoria, coleção, produto, nome da stylist.", "font": "display" },
       "h2":         { "displayName": "H2 — Seção",       "purpose": "clamp(1.5rem,3vw,2rem), peso 450. Subseções da home e /stylist.", "font": "display" },
-      "label":      { "displayName": "Label — Sistema",  "purpose": "10-11px, peso 500, tracking 0.2-0.4em, uppercase. Navegação, eyebrows, botões, preços, numerais de índice.", "font": "sans" },
+      "label":      { "displayName": "Label — Sistema",  "purpose": "10-11px, peso 400, tracking 0.2-0.4em, uppercase. Navegação, eyebrows, botões, preços.", "font": "sans" },
+      "numeral":    { "displayName": "Numeral decorativo", "purpose": "text-sm/14px, peso 400, tracking 0.2em, sem uppercase. Exceção ao Label — não é um tier de display. Índice 01/02/03 do Personal Styling e das Etapas do /stylist.", "font": "sans" },
       "body":       { "displayName": "Body — Conteúdo",  "purpose": "text-sm/14px, peso 400. Texto corrido, máx 65ch.", "font": "sans" }
     },
     "shadows": [
