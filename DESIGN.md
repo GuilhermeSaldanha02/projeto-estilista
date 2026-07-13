@@ -92,6 +92,7 @@ Paleta de contraste dramático: a família areia domina as superfícies, o espre
 ### Primary
 - **Verde Atelier** (`#0B5D46`): Esmeralda. A cor dominante da marca. Reservada para CTAs de agendamento/WhatsApp e detalhes de presença da stylist. Carrega o peso da confiança e da relação pessoal. Usado com espaço — nunca como fundo de seção inteira.
 - **Verde Atelier Claro** (`#1D9A72`): Esmeralda-light. Apenas para estados de hover sobre elementos esmeralda. Nunca em repouso.
+- **Verde-Profundo** (`#083D2C`): tom mais escuro da tonal ramp da esmeralda — reservado (Fase E) como a ÚNICA superfície de seção inteira "tomada pelo verde" (ex. o bloco Personal Styling da home), sem queimar a esmeralda brilhante como fundo. Ver "A Regra Espresso × Verde-Profundo" abaixo.
 
 ### Secondary
 - **Borgonha** (`#7B1E3A`): Bordô. O CTA de produto — "Quero esta peça". Alto contraste sobre areia. Aparece no hero e nos cards de produto. Ousadia e desejo concentrados.
@@ -113,6 +114,8 @@ Paleta de contraste dramático: a família areia domina as superfícies, o espre
 **A Regra do Dourado Escasso.** O dourado (`#C2A14D`) só vive em linhas (`h-px`), ícones e eyebrow text. Nunca como fundo, nunca como texto de parágrafo, nunca em botão. Se ele aparece em mais de três pontos na mesma tela, há um a mais.
 
 **A Regra do Degradê Familiar.** Gradiente só dentro da família areia (sand-50 → sand-200), sutil. Nunca areia → esmeralda, areia → espresso, ou qualquer cruzamento de família. Gradiente sobre foto de produto é proibido — suja a roupa.
+
+**A Regra Espresso × Verde-Profundo (2026-07-12).** As duas cores escuras da marca não competem — têm papéis distintos e não se substituem: **espresso é chrome/escuro neutro** (header, footer, bandas genéricas, qualquer seção "escura" sem intenção de marca específica); **verde-profundo é a ÚNICA superfície reservada para o momento de marca da consultoria** (hoje só planejado para a Fase E — Personal Styling da home). Nunca as duas lado a lado tentando "combinar" — a fronteira entre uma seção espresso e uma verde-profundo é corte limpo, igual a qualquer outra emenda (nunca degradê cruzando família — ver regra acima). Texto sobre verde-profundo usa os mesmos tokens de espresso (`cream-text`, `dourado`) — zero decisão nova ali.
 
 ## 3. Typography: Serif Leve, Sans Preciso
 
