@@ -12,18 +12,19 @@ const config: Config = {
         'sand-100':         'rgb(var(--sand-100-rgb) / <alpha-value>)',
         'sand-200':         'rgb(var(--sand-200-rgb) / <alpha-value>)',
         'sand-300':         'rgb(var(--sand-300-rgb) / <alpha-value>)',
-        // Aliases semânticos da paleta evoluída — mesmos valores de sand-50/100,
-        // nomes novos para código futuro (Fases 3+). sand-* continua funcionando.
-        porcelana:          'rgb(var(--sand-50-rgb) / <alpha-value>)',
-        areia:              'rgb(var(--sand-100-rgb) / <alpha-value>)',
+        // Aliases semânticos da paleta reduzida (redesign 2026-07-13) — mesmos
+        // valores de sand-50/100, nomes novos para código futuro. sand-* continua
+        // funcionando (nenhum componente precisou mudar nesta fase).
+        paper:              'rgb(var(--sand-50-rgb) / <alpha-value>)',
+        'paper-deep':       'rgb(var(--sand-100-rgb) / <alpha-value>)',
         espresso:           'rgb(var(--espresso-rgb) / <alpha-value>)',
         esmeralda:          'rgb(var(--esmeralda-rgb) / <alpha-value>)',
         'esmeralda-light':  'rgb(var(--esmeralda-light-rgb) / <alpha-value>)',
-        'verde-profundo':   'rgb(var(--verde-profundo-rgb) / <alpha-value>)',
         bordo:              'rgb(var(--bordo-rgb) / <alpha-value>)',
         dourado:            'rgb(var(--dourado-rgb) / <alpha-value>)',
         'dourado-ink':      'rgb(var(--dourado-ink-rgb) / <alpha-value>)',
         ink:                'rgb(var(--ink-rgb) / <alpha-value>)',
+        'ink-soft':         'rgb(var(--ink-soft-rgb) / <alpha-value>)',
         'cream-text':       'rgb(var(--cream-text-rgb) / <alpha-value>)',
       },
       fontFamily: {
