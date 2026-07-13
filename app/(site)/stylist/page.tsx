@@ -5,8 +5,6 @@ import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { WhatsAppIcon } from '@/components/icons'
 import { FadeInSection } from '@/components/FadeInSection'
-import { SeamTransition } from '@/components/SeamTransition'
-import { EDGE, STYLIST_SECTION_BOTTOM_EDGE } from '@/lib/colors'
 
 export const revalidate = 60
 
@@ -84,7 +82,6 @@ export default async function StylistPage() {
 
       {/* ═══ HERO — nome, tagline e foto principal ═══ */}
       <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-20 md:py-28 px-5" aria-label="Apresentação">
-        <SeamTransition from={EDGE.espresso} />
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-10 md:gap-16">
 
           {/* Foto principal */}
@@ -127,34 +124,26 @@ export default async function StylistPage() {
       </section>
 
       {/* ═══ SEÇÕES DINÂMICAS ═══ */}
-      {(() => {
-        // Costura entre seções vizinhas (SeamTransition) — a ordem é definida
-        // dinamicamente pela dona no Studio, então a cor de entrada de cada
-        // seção é a borda inferior resolvida da seção anterior (hero inclusa).
-        let prevEdge: string = EDGE.sand100 // borda inferior do hero
-        return profile?.sections?.map((section) => {
-          const layout = section.layout ?? 'padrao'
-          const seamFrom = prevEdge
-          prevEdge = STYLIST_SECTION_BOTTOM_EDGE[layout] ?? EDGE.sand100
-          switch (layout) {
-            case 'foto-esquerda':
-              return <FotoLadoSection key={section._key} section={section} reverse={false} seamFrom={seamFrom} />
-            case 'foto-direita':
-              return <FotoLadoSection key={section._key} section={section} reverse={true} seamFrom={seamFrom} />
-            case 'etapas':
-              return <EtapasSection key={section._key} section={section} seamFrom={seamFrom} />
-            case 'transformacao-escura':
-              return <TransformacaoEscuraSection key={section._key} section={section} seamFrom={seamFrom} />
-            case 'destaque-claro':
-            case 'destaque-escuro': // alias de compatibilidade — docs Sanity antigos
-              return <DestaqueClaroSection key={section._key} section={section} waHref={waHref} seamFrom={seamFrom} />
-            case 'cards':
-              return <CardsSection key={section._key} section={section} seamFrom={seamFrom} />
-            default:
-              return <PadraoSection key={section._key} section={section} seamFrom={seamFrom} />
-          }
-        })
-      })()}
+      {profile?.sections?.map((section) => {
+        const layout = section.layout ?? 'padrao'
+        switch (layout) {
+          case 'foto-esquerda':
+            return <FotoLadoSection key={section._key} section={section} reverse={false} />
+          case 'foto-direita':
+            return <FotoLadoSection key={section._key} section={section} reverse={true} />
+          case 'etapas':
+            return <EtapasSection key={section._key} section={section} />
+          case 'transformacao-escura':
+            return <TransformacaoEscuraSection key={section._key} section={section} />
+          case 'destaque-claro':
+          case 'destaque-escuro': // alias de compatibilidade — docs Sanity antigos
+            return <DestaqueClaroSection key={section._key} section={section} waHref={waHref} />
+          case 'cards':
+            return <CardsSection key={section._key} section={section} />
+          default:
+            return <PadraoSection key={section._key} section={section} />
+        }
+      })}
 
     </main>
   )
@@ -177,10 +166,9 @@ function WaButton({ waHref, large = false }: { waHref: string | null; large?: bo
 }
 
 /* ── Seção padrão: texto, fundo claro ── */
-function PadraoSection({ section, seamFrom }: { section: StylistSection; seamFrom?: string }) {
+function PadraoSection({ section }: { section: StylistSection }) {
   return (
     <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
-      {seamFrom && <SeamTransition from={seamFrom} />}
       <div className="relative z-10 max-w-2xl mx-auto">
         <FadeInSection>
           {section.eyebrow && (
@@ -206,10 +194,9 @@ function PadraoSection({ section, seamFrom }: { section: StylistSection; seamFro
 }
 
 /* ── Seção com foto lateral ── */
-function FotoLadoSection({ section, reverse, seamFrom }: { section: StylistSection; reverse: boolean; seamFrom?: string }) {
+function FotoLadoSection({ section, reverse }: { section: StylistSection; reverse: boolean }) {
   return (
     <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
-      {seamFrom && <SeamTransition from={seamFrom} />}
       <div
         className={`relative z-10 max-w-5xl mx-auto flex flex-col ${
           reverse ? 'md:flex-row-reverse' : 'md:flex-row'
@@ -261,7 +248,7 @@ function FotoLadoSection({ section, reverse, seamFrom }: { section: StylistSecti
 }
 
 /* ── Seção etapas numeradas (fundo espresso) ── */
-function EtapasSection({ section, seamFrom }: { section: StylistSection; seamFrom?: string }) {
+function EtapasSection({ section }: { section: StylistSection }) {
   /*
    * Números robustos para dois formatos de conteúdo Sanity:
    * - Lista numerada (listType:'number'): listItem.number usa {index+1} explícito
@@ -294,7 +281,6 @@ function EtapasSection({ section, seamFrom }: { section: StylistSection; seamFro
 
   return (
     <section className="relative bg-espresso py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
-      {seamFrom && <SeamTransition from={seamFrom} />}
       <div className="relative z-10 max-w-3xl mx-auto">
         <FadeInSection>
           {section.eyebrow && (
@@ -321,10 +307,9 @@ function EtapasSection({ section, seamFrom }: { section: StylistSection; seamFro
 }
 
 /* ── Destaque claro — citação itálica, fundo areia, botão WhatsApp (ex. "Vamos começar?") ── */
-function DestaqueClaroSection({ section, waHref, seamFrom }: { section: StylistSection; waHref: string | null; seamFrom?: string }) {
+function DestaqueClaroSection({ section, waHref }: { section: StylistSection; waHref: string | null }) {
   return (
     <section className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-24 md:py-36 px-5" aria-label={section.eyebrow ?? section.title}>
-      {seamFrom && <SeamTransition from={seamFrom} />}
       <div className="relative z-10 max-w-2xl mx-auto text-center">
         <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
         {section.body && (
@@ -341,10 +326,9 @@ function DestaqueClaroSection({ section, waHref, seamFrom }: { section: StylistS
 }
 
 /* ── Destaque escuro — clímax da página, fundo espresso, todo texto em creme (ex. "O que muda") ── */
-function TransformacaoEscuraSection({ section, seamFrom }: { section: StylistSection; seamFrom?: string }) {
+function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
   return (
     <section className="relative bg-espresso py-28 md:py-40 px-5" aria-label={section.eyebrow ?? section.title}>
-      {seamFrom && <SeamTransition from={seamFrom} />}
       <div className="relative z-10 max-w-2xl mx-auto text-center">
         <FadeInSection>
           {section.eyebrow && (
@@ -372,10 +356,9 @@ function TransformacaoEscuraSection({ section, seamFrom }: { section: StylistSec
 }
 
 /* ── Cards — grade de itens, fundo areia claro (ex. "Pra quem é") ── */
-function CardsSection({ section, seamFrom }: { section: StylistSection; seamFrom?: string }) {
+function CardsSection({ section }: { section: StylistSection }) {
   return (
     <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
-      {seamFrom && <SeamTransition from={seamFrom} />}
       <div className="relative z-10 max-w-4xl mx-auto">
         <FadeInSection>
           {section.eyebrow && (

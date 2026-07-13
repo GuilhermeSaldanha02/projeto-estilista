@@ -6,8 +6,6 @@ import HeroSignature from '@/components/HeroSignature'
 import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 import { WhatsAppIcon } from '@/components/icons'
 import { FadeInSection } from '@/components/FadeInSection'
-import { SeamTransition } from '@/components/SeamTransition'
-import { EDGE } from '@/lib/colors'
 
 // ISR — produtos e settings vêm do Sanity; 60s para refletir publicações sem rebuild
 export const revalidate = 60
@@ -93,7 +91,6 @@ export default async function HomePage() {
           4. PERSONAL STYLING — apresentação + CTA agendamento
       ═══════════════════════════════════════ */}
       <section className="relative bg-espresso py-24 md:py-36 px-5" aria-label="Consultoria de Estilo">
-        {settings?.curatorNote && <SeamTransition from={EDGE.sand100} />}
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <FadeInSection>
             <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-5">
