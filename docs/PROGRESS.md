@@ -1,7 +1,99 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-12 (Fase E — Personal Styling quebra o monólito)_
+_Última atualização: 2026-07-13 (redesign completo — dono não gostou; Fase 1: paleta)_
+
+---
+
+## Redesign completo (2026-07-13) — dono viu o site ao vivo e não gostou
+
+Depois de toda a fila de fases anteriores concluída, o dono navegou pelo site e
+apontou, na hora: "Agendar horário" + "Agendar styling" duplicados; "Ver
+novidades" logo acima de uma seção "Novidades"; **tipografia muito grande,
+estourada**; **muita coisa repetida**; **muitas cores brigando**. Pediu para
+"ignorar o padrão e a estrutura feita no início" e repensar — com liberdade total
+sobre cor/tipografia/estrutura, mas com os fundamentos de negócio (mobile-first,
+rápido, funil WhatsApp, sem 3D) **intocáveis** (confirmado por ele).
+
+**Bugs corrigidos na hora (PR #33), sem precisar de debate:** rótulo de CTA de
+agendamento unificado para "Agendar horário" nos 3 lugares (nav dizia "Agendar
+styling"); CTA secundário do hero renomeado de "Ver novidades" para "Ver coleção"
+(repetia a palavra do heading "Novidades" logo abaixo).
+
+### O processo pedido pelo dono: 3 agentes, em loop, decisão final dele
+
+1. **Explorador de Referências** — navegou de verdade a galeria de 179 sites
+   (`3dgallery-eqrvxb8t.manus.space` — confirmado: é um ÍNDICE, não um design
+   único) + amostra real de 6 sites (Lusion, Obys, Zajno, Utsubo, Active Theory,
+   Merci-Michel). Achado central: a essência de elite é CONTENÇÃO — 1 fonte peso
+   400, escala ~10:1 entre headline e label, paleta quase-monocromática (2 cores
+   + no máx. 1 acento), motion via IntersectionObserver simples (não 3D).
+2. **Crítico** — auditou o site atual ao vivo, quantificou os 3 achados do dono
+   com arquivo:linha: numerais decorativos 96px (`PersonalStyling.tsx:99`) maiores
+   que qualquer headline real; `verde-profundo` é literalmente o mesmo tom da
+   esmeralda mais escuro (botão esmeralda dentro de fundo verde-profundo, quase
+   sem separação); heading idêntico 60px repetido em 6 arquivos; andaime
+   eyebrow+linha+heading repetido ~10×; dourado em 5 pontos numa tela que a
+   própria regra do sistema limita a 3.
+3. **Diretor de Design** — propôs a direção nova, ancorada nos dois relatórios.
+
+### Loop de reação (cada agente reagiu à proposta do outro)
+
+- Explorador: concordou com a paleta reduzida; discordou em parte da tipografia
+  (2 fontes só funciona se a Schibsted for tratada com a mesma contenção medida);
+  questionou se o tier H1 de ~40px dilui o efeito "só uma coisa é gigante".
+- Crítico: concordou com numerais/verde-profundo/escala/1-seção-escura; **discordou
+  da eliminação total de dourado e bordô** — o achado original era DOSAGEM (5
+  pontos contra teto de 3), não que a cor estivesse errada; cortar bordô destrói a
+  "Regra das Três Funções" (código de cor produto×agendamento) e empurra a
+  diferenciação de volta pro tamanho/peso — a mesma alavanca que já estourou.
+
+### Decisão final do dono (arbitrando a discordância)
+
+- **Dourado: disciplinar (máx. 3/tela), não eliminar.**
+- **Bordô: manter como 2ª cor funcional** (produto=bordô, agendamento=esmeralda),
+  com a hierarquia corrigida (nunca mesmo peso visual lado a lado).
+- Fatiamento da implementação: **cores → tipografia → estrutura**, cada fase
+  validada no navegador antes da próxima.
+
+### Fase 1 (redesign completo) — CONCLUÍDA: paleta reduzida
+
+- **`app/globals.css`:** `sand-50` → `#F5F1EA` ("paper"); `sand-100/200/300`
+  colapsados em `#EBE4D6` ("paper-deep", único). Novo token `--ink-soft: #6B6152`
+  (AA 5.45:1 sobre paper). `--verde-profundo` removido por completo.
+- **`tailwind.config.ts`:** aliases `porcelana`/`areia` renomeados para
+  `paper`/`paper-deep` (não usados em nenhum componente, troca segura); classe
+  `ink-soft` adicionada; `verde-profundo` removido.
+- **Substituição global:** `text-ink/65`, `/70`, `/75` → `text-ink-soft` em 8
+  arquivos (20 ocorrências) — mata os modificadores de opacidade soltos que
+  falhavam AA em alguns pontos.
+- **`components/PersonalStyling.tsx`:** `bg-verde-profundo` → `bg-espresso`
+  (volta a ser o único escuro da home; a reestruturação do "Como funciona" fica
+  para a Fase 3 — estrutura).
+- **`components/HeroSignature.tsx`:** hierarquia bordô×esmeralda corrigida — CTA
+  "Ver coleção" (bordô) vira contorno em `cream-text` (não sólido bordô: sobre o
+  fundo escuro do hero, bordô como texto/borda daria ~1,5:1 de contraste, reprova
+  AA — duas cores escuras próximas). "Agendar horário" (esmeralda) continua sólido,
+  primário. Bordô sólido é preservado no PDP/EmptyState, onde já funciona bem
+  sobre fundo claro.
+- **`DESIGN.md` + `.impeccable/design.json`:** reescritos — paleta documentada
+  com os hex reais (também corrige valores que já estavam desatualizados desde a
+  Fase 1 original de 08/07 e nunca tinham sido sincronizados); "Regra Espresso ×
+  Verde-Profundo" marcada revogada; "Regra das Três Funções" ganha a correção de
+  hierarquia; "Regra do Dourado Escasso" marcada como disciplina ativa (não
+  sugestão).
+
+_Verificado:_ `tsc --noEmit` EXIT=0; build de produção limpo (30 páginas, 1 retry
+por timeout de rede transitório buscando fontes do Google — não relacionado ao
+código); navegador confirma `body` em `rgb(235,228,214)` (paper-deep), label de
+categoria em `rgb(107,97,82)` (ink-soft), seção Personal Styling em
+`rgb(36,28,23)` (espresso, não mais verde-profundo), CTA "Agendar horário" sólido
+esmeralda + "Ver coleção" em contorno cream-text (não mais dois botões cheios
+competindo); zero erro de console.
+
+**Próximo:** Fase 2 (tipografia) — escala em 5 níveis, escassez do tier Editorial,
+cortar os numerais 96px, revisar se a Schibsted precisa da mesma contenção que a
+paleta acabou de ganhar.
 
 ---
 
