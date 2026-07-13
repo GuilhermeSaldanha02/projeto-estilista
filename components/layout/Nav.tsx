@@ -200,7 +200,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
             rel="noopener noreferrer"
             className="hidden md:inline-flex items-center bg-esmeralda text-cream-text font-sans text-[11px] font-medium tracking-[0.18em] uppercase px-5 py-2.5 hover:bg-esmeralda/90 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2"
           >
-            Agendar styling
+            Agendar horário
           </a>
         )}
         {waHref && (
@@ -236,7 +236,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                   className="flex items-center justify-between px-6 py-[1.1rem] text-esmeralda-light hover:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
                   onClick={() => setMobileOpen(false)}
                 >
-                  Agendar styling
+                  Agendar horário
                   <span className="text-esmeralda-light/60 text-xs" aria-hidden="true">→</span>
                 </a>
               </li>

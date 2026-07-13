@@ -143,13 +143,14 @@ export default function HeroSignature({ waScheduleHref }: Props) {
               </a>
             )}
 
-            {/* CTA secundário — borgonha, leva à coleção. Rótulo corrigido: prometia
-                "esta peça" (singular) mas sempre levou a uma listagem. */}
+            {/* CTA secundário — borgonha, leva à coleção. Rótulo "Ver coleção" (não
+                "Ver novidades"): a home já tem uma seção "Novidades" logo abaixo do
+                hero — repetir a palavra aqui lia como redundante/confuso. */}
             <Link
               href="/colecao/novidades"
               className="inline-flex items-center justify-center bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
             >
-              Ver novidades
+              Ver coleção
             </Link>
           </motion.div>
         </motion.div>
