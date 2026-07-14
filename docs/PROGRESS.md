@@ -1,7 +1,89 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (correções de desktop pós-Fase 3, ver seção logo abaixo)_
+_Última atualização: 2026-07-14 (Fase 3.1 — "A História" com cor composicional e movimento real)_
+
+---
+
+## Fase 3.1 — "A História" repensada: cor composicional + movimento real (2026-07-14)
+
+Depois das correções de desktop (seção abaixo), o dono olhou de novo e viu a
+mesma composição de sempre: *"não está com nenhum efeito das referências que
+mandei... parece que tá se perdendo em loop."* Pediu explicitamente uma 2ª
+rodada de agentes, "em loop", com poder de pensamento mais forte.
+
+**2ª rodada de 3 agentes (modelo Opus):**
+1. **Explorador de Referências** — desta vez foi atrás de **lojas de moda
+   reais** (Ganni, Jacquemus, Reformation, Farm Rio, Toteme, Nanushka, The
+   Attico), não portfólios de agência (erro da 1ª rodada de 13/07). Achados
+   confirmados navegando de verdade, lendo o DOM via JS: nenhuma delas usa
+   scroll-hijack (GSAP/Lenis/Locomotive/AOS testados via JS, todos `false`)
+   — o movimento real vem de vídeo de produto e carrossel; cor forte vem da
+   fotografia/produto, nunca de bloco CSS chapado; impacto tipográfico vem
+   de sans bold caixa-alta ou serif pequeno-com-voz, nunca itálico
+   monumental; o padrão "sobre a marca" mais transferível é o da
+   Reformation — foto+bio ousados mas com CTA de volta à conversão.
+2. **Crítico** — auditou meu protótipo v1 (fundo bordô full-screen +
+   `position:sticky`) e achou o bug real: `overflow:hidden` no
+   container mata o `sticky` por completo (regra do CSS: sticky pina
+   relativo ao ancestral com scroll mais próximo). Resultado: **zero
+   pinagem**, ~750px de bordô vazio rolável sem nada acontecer —
+   reproduzindo exatamente o "loop" que o dono reclamou. Também confirmou
+   que 144px (o título do protótipo v1) é maior que o maior tier
+   tipográfico do site inteiro (Assinatura, teto 136px).
+3. **Diretor** — sintetizou os dois relatórios numa especificação concreta:
+   cor como bloco atrás da foto (não lavagem atrás do texto), parallax
+   contínuo sem sticky (~18-22% de amplitude), tipografia no tier H1/H2 já
+   estabelecido, CTA de agendamento fechando a seção como âncora comercial.
+
+**Protótipo v2** (artifact isolado, validado antes de tocar no código):
+implementei a especificação, corrigi 2 bugs próprios no processo (transform
+redundante conflitando com a animação de `top`; amplitude de scroll
+insuficiente por falta de espaço de rolagem no harness de teste), confirmei
+via medição real de scroll (~17,5% de amplitude, dentro da faixa), sem
+overflow em mobile/desktop, orçamento de dourado em 2/3 pontos.
+
+**Implementação real** (`app/(site)/stylist/page.tsx`, `FotoLadoSection` +
+novo `components/stylist/PhotoParallax.tsx`):
+- Bloco `bordo` (gradiente para `#4A1123`) sangrando por uma borda, atrás da
+  foto — nunca lavagem full-screen atrás do texto.
+- `PhotoParallax`: foto 122% da altura da moldura, `top` animado de -11% a
+  9% conforme a seção passa pela viewport. Contenção via `overflow:hidden`
+  **na moldura da foto**, não na seção (diferente do bug do protótipo v1).
+- **Achado real durante a implementação**: o parallax não se movia com o
+  scroll nativo (`window.addEventListener('scroll', ...)`) porque o **Lenis**
+  (scroll suave, restaurado no PR #37) intercepta o scroll e **não dispara o
+  evento nativo `'scroll'`** de forma confiável — confirmado instrumentando
+  um contador (`scrollY` mudava, o evento nunca disparava). Corrigido
+  trocando para polling via `requestAnimationFrame`, ligado/desligado por
+  `IntersectionObserver` (só roda enquanto a seção está perto da viewport).
+  **Isto é uma lição geral do projeto**: qualquer efeito futuro
+  scroll-dependente precisa considerar o Lenis e preferir rAF/polling a
+  ouvir o evento `'scroll'` diretamente.
+- Título/H2 no tier já estabelecido (32px, `SectionHeading` existente) —
+  sem pull-quote itálico: o Diretor previu esse momento como "voz da
+  stylist", mas não existe campo de citação no schema do Sanity hoje;
+  fabricar uma frase seria conteúdo inventado. Registrado como possível
+  próximo passo se/quando a Luiza fornecer uma frase real.
+- CTA "Agendar horário" (`WaButton` já existente) fechando a seção.
+- Hairline dourada no topo da seção (via novo prop `topHairline` do
+  `SectionShell`) + eyebrow = 2 pontos do orçamento de dourado (máx. 3).
+
+**Verificação:** `tsc --noEmit` (erro pré-existente de sempre, não
+relacionado); `npm run build` limpo; navegador em mobile (375px, sem
+overflow) e desktop (1440px, sem overflow, título 32px, CTA presente).
+**Limitação registrada:** a aba de automação desta sessão ficou com o
+compositor suspenso (`document.visibilityState: "hidden"`,
+`document.hasFocus(): false`) — o mesmo artefato já documentado na Fase E
+(12/07). Isso impede `requestAnimationFrame`/`IntersectionObserver` de
+disparar automaticamente NESSA aba especificamente, então o disparo
+automático do parallax não pôde ser confirmado ao vivo nesta sessão. O que
+foi confirmado, isolado dessa limitação: a escrita do DOM funciona
+corretamente (`imgWrap.style.top` movendo de -52,97px a +43,33px = ~96px,
+batendo com os ~20% de amplitude especificados), e o padrão
+IntersectionObserver+rAF é uma técnica padrão e amplamente suportada — o
+disparo automático deve funcionar normalmente num navegador real (sem a
+suspensão de compositor). Vale confirmar visualmente assim que possível.
 
 ---
 
