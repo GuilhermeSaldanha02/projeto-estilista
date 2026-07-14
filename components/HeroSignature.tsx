@@ -3,11 +3,6 @@
 import { useRef } from 'react'
 import Link from 'next/link'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import { WhatsAppIcon } from '@/components/icons'
-
-interface Props {
-  waScheduleHref: string | null
-}
 
 // out-expo — entrada com peso, sem quicar (padrão de motion da direção "essência elite")
 const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const
@@ -29,7 +24,7 @@ const item = {
  *  2) Parallax discreto no scroll (vídeo desloca/escala devagar, escurece na saída).
  * O vídeo continua sendo o protagonista — o texto confirma (DESIGN.md §1).
  */
-export default function HeroSignature({ waScheduleHref }: Props) {
+export default function HeroSignature() {
   const sectionRef = useRef<HTMLElement>(null)
   const reduceMotion = useReducedMotion()
 
@@ -127,39 +122,19 @@ export default function HeroSignature({ waScheduleHref }: Props) {
             Moda feminina com olhar de personal stylist
           </motion.p>
 
-          <motion.div
-            variants={item}
-            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
-          >
-            {/* CTA primário — esmeralda, agendamento WhatsApp. Consultoria é o funil
-                principal do negócio (confirmado pelo dono) — vem primeiro. */}
-            {waScheduleHref && (
-              <a
-                href={waScheduleHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-esmeralda text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
-              >
-                <WhatsAppIcon size={14} />
-                Agendar horário
-              </a>
-            )}
-
-            {/* CTA secundário — contorno, leva à coleção. Rótulo "Ver coleção" (não
-                "Ver novidades"): a home já tem uma seção "Novidades" logo abaixo do
-                hero — repetir a palavra aqui lia como redundante/confuso.
-                Tratamento em CONTORNO (não sólido): a "Regra das Três Funções"
-                (DESIGN.md) exige que bordô e esmeralda nunca tenham o mesmo peso
-                visual quando coexistem — dois botões cheios do mesmo tamanho lia
-                como "cores brigando" (achado do redesign 2026-07-13). Contorno em
-                cream-text (não bordô): sobre o fundo escuro do hero, bordô como
-                texto/borda ficaria ~1,5:1 de contraste (duas cores escuras) —
-                reprovaria AA. Bordô sólido continua no PDP/EmptyState (fundo claro,
-                onde já funciona bem); aqui a hierarquia vem do sólido×contorno, não
-                da cor. */}
+          <motion.div variants={item}>
+            {/* CTA único do hero (2026-07-14): o "Agendar horário" verde foi removido
+                daqui — nav e footer já mostram o CTA de agendamento sempre visível,
+                e ter os dois juntos na primeira tela lia como duplicado (feedback do
+                dono ao ver o site em desktop). "Ver coleção" (não "Ver novidades":
+                a home já tem uma seção "Novidades" logo abaixo do hero, repetir a
+                palavra lia como redundante) vira sólido agora que é o único CTA —
+                não precisa mais ceder hierarquia a um botão vizinho. Bordô sólido é
+                a cor de função "produto/desejo" (Regra das Três Funções, DESIGN.md);
+                cream-text sobre bordô sólido dá ~8,8:1 de contraste, bem acima de AA. */}
             <Link
               href="/colecao/novidades"
-              className="inline-flex items-center justify-center border border-cream-text/40 text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:bg-cream-text/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-colors"
+              className="inline-flex items-center justify-center bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:opacity-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-opacity"
             >
               Ver coleção
             </Link>

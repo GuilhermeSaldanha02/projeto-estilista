@@ -48,7 +48,7 @@ export default async function HomePage() {
           1. HERO — momento-assinatura (Fase C): wordmark lockup, entrada
              escalonada e parallax discreto no scroll. Ver HeroSignature.tsx.
       ═══════════════════════════════════════ */}
-      <HeroSignature waScheduleHref={waScheduleHref} />
+      <HeroSignature />
 
       {/* ═══════════════════════════════════════
           2. NOVIDADES — grade de produtos (grid uniforme, sem mosaico).
