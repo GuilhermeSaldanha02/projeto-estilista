@@ -69,9 +69,12 @@ export default function ProductCatalog({
   const Heading = headingLevel
 
   return (
-    <>
+    <section aria-label={title}>
       {/* Cabeçalho único: título + contador + filtro/sort no mesmo bloco —
-          antes eram 2 blocos de página inteira separados (achado do dono). */}
+          antes eram 2 blocos de página inteira separados (achado do dono).
+          <section aria-label> aqui (não na <div> de antes): achado do code
+          review do PR #42 -- a home usava <section aria-label="Novidades">
+          antes desta refatoração, perdido na troca para ProductCatalog. */}
       <div className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-16 md:py-20 px-5">
         <div className="relative z-10 max-w-7xl mx-auto">
           <Heading className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight [text-wrap:balance]">
@@ -150,6 +153,6 @@ export default function ProductCatalog({
           </div>
         )}
       </div>
-    </>
+    </section>
   )
 }
