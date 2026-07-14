@@ -42,8 +42,12 @@ export function PhotoParallax({ src, alt }: { src: string; alt: string }) {
     }
 
     const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        // Usa a última entrada, não a primeira: sob jank o browser pode
+        // entregar vários registros da mesma seção numa única chamada
+        // (achado do code review do PR #38) -- só o estado mais recente importa.
+        const isIntersecting = entries[entries.length - 1].isIntersecting
+        if (isIntersecting) {
           rafId = requestAnimationFrame(update)
         } else {
           cancelAnimationFrame(rafId)

@@ -282,8 +282,13 @@ function PadraoSection({ section }: { section: StylistSection }) {
  * recorde de 144px), e CTA de agendamento fechando a seção -- a âncora
  * comercial que faltava para não ler como portfólio de agência.
  *
- * Hairline dourada no topo + eyebrow = 2 pontos do orçamento de dourado
- * (máx. 3/tela). Sem pull-quote itálico: o Diretor previu esse momento como
+ * Hairline dourada no topo + eyebrow + a linha do próprio SectionHeading =
+ * 3 pontos do orçamento de dourado (máx. 3/tela, DESIGN.md) -- no teto,
+ * sem margem. Achado do code review do PR #38: o comentário original desta
+ * seção contava só 2, esquecendo a linha que o SectionHeading já desenha
+ * (variant="full"). Conferir visualmente que não há sobreposição perceptível
+ * com o dourado de seções vizinhas durante a transição de scroll. Sem
+ * pull-quote itálico: o Diretor previu esse momento como
  * a "voz da stylist", mas não existe campo de citação no schema do Sanity
  * hoje -- fabricar uma frase seria conteúdo inventado. Fica registrado como
  * possível próximo passo se/quando a Luiza fornecer uma frase real.
@@ -297,7 +302,7 @@ function FotoLadoSection({ section, reverse, waHref }: { section: StylistSection
     <SectionShell tone="paper-deep" maxWidth="max-w-6xl" padding="py-24 md:py-32" topHairline ariaLabel={section.eyebrow ?? section.title}>
       <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
         {/* Texto */}
-        <div className={`order-2 ${reverse ? 'md:order-2' : 'md:order-1'}`}>
+        <div className={`order-2 ${reverse ? 'md:order-1' : 'md:order-2'}`}>
           <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-7" lineMargin="mb-7" />
           {section.body && (
             <div className="[&_p]:font-sans [&_p]:text-[15px] [&_p]:text-ink [&_p]:leading-relaxed [&_p]:mb-8 [&_blockquote]:font-sans [&_blockquote]:text-[15px] [&_blockquote]:text-ink [&_blockquote]:leading-relaxed [&_blockquote]:mb-8">
@@ -308,7 +313,7 @@ function FotoLadoSection({ section, reverse, waHref }: { section: StylistSection
         </div>
 
         {/* Cor + foto */}
-        <div className={`order-1 ${reverse ? 'md:order-1' : 'md:order-2'}`}>
+        <div className={`order-1 ${reverse ? 'md:order-2' : 'md:order-1'}`}>
           <FadeInSection>
             <div className="relative max-w-[420px] mx-auto md:mx-0">
               <div
