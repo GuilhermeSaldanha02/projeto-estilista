@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import ProductCard, { type ProductCardData } from '@/components/ProductCard'
+import { type ProductCardData } from '@/components/ProductCard'
+import SortableProductGrid from '@/components/catalog/SortableProductGrid'
 import EmptyState from '@/components/EmptyState'
 
 // ISR — SDD §1: catálogo reflete o que a dona publica sem rebuild manual
@@ -95,11 +96,7 @@ export default async function CategoriaPage({ params }: Props) {
       </div>
 
       <div className="py-10 px-5 max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.map(product => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
+        <SortableProductGrid products={products} />
       </div>
     </main>
   )

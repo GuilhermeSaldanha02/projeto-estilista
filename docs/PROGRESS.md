@@ -1,7 +1,40 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (Fase 4 — "Vitrine em Movimento": hero + nav)_
+_Última atualização: 2026-07-14 (Fase 4c — filtros e ordenação no catálogo)_
+
+---
+
+## Fase 4c — "As opções": filtro por categoria + ordenação no catálogo (2026-07-14)
+
+Depois de hero (#39) e nav (#40), perguntei diretamente o que "as opções" do
+pedido original de remodelação significava (em vez de chutar) — o dono
+confirmou: filtros/ordenação no catálogo, que hoje não existe nenhum.
+Também confirmei que a verificação é só via `npm run dev` local — não há
+deploy publicado (sem `vercel.json`/`netlify.toml`, sem homepage no repo do
+GitHub).
+
+Antes disso, avaliei e decidi **não** aplicar o painel bordô do hero/nav em
+categoria e produto: repetiria o bloco de cor em toda página de listagem
+(o oposto de "cor escassa"), e na página de produto competiria com a própria
+foto da peça — o `DESIGN.md` já proíbe "gradiente sobre foto de produto"
+("suja a roupa"). As duas páginas continuam corretamente quietas.
+
+**Implementado:** `components/catalog/SortableProductGrid.tsx` (client,
+compartilhado por `/categoria/[slug]`, `/colecao/[slug]` e
+`/colecao/novidades`). Ordenação (mais recentes / menor preço / maior preço)
+roda sobre a lista já buscada no servidor, sem round-trip. Chips de filtro
+por categoria só aparecem quando a lista de fato mistura 2+ categorias —
+em `/categoria/[slug]` (já vem de uma categoria só) eles nunca renderizam;
+em `/colecao/[slug]` e `/colecao/novidades` (cruzam categorias) aparecem.
+Isso exigiu adicionar `categorySlug`/`categoryTitle` às queries GROQ dessas
+duas rotas (categoria/[slug] não precisou).
+
+Verificado: filtro por categoria funciona (testado clicando "Calças" em
+`/colecao/novidades`, reduz de 12 para 2 peças corretamente), sort não
+quebra com preços ausentes (dado de seed atual não tem `price` em nenhum
+produto — o sort degrada bem, sem NaN nem crash, mantém ordem original).
+Build limpo, sem erros de console.
 
 ---
 

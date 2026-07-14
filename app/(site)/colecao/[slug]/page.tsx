@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 import EmptyState from '@/components/EmptyState'
+import SortableProductGrid, { type FilterableProduct } from '@/components/catalog/SortableProductGrid'
 
 // ISR — mesmo padrão de categoria/[slug]
 export const revalidate = 60
@@ -18,11 +18,16 @@ const collectionQuery = `
 
 // Tag é array de referência (product.tags[]->collection) — "$slug in tags[]->slug.current"
 // filtra produtos que têm essa coleção entre as suas, sem exigir categoria única.
+// categorySlug/categoryTitle: só para os chips de filtro do SortableProductGrid
+// (uma coleção pode misturar várias categorias — filtro só faz sentido aqui,
+// não em /categoria/[slug], que já chega de uma categoria só).
 const productsQuery = `
   *[_type == "product" && $slug in tags[]->slug.current && inStock == true]
   | order(_createdAt desc) {
     _id, title, "slug": slug.current, price,
-    "image": images[0] { asset, crop, hotspot, alt }
+    "image": images[0] { asset, crop, hotspot, alt },
+    "categorySlug": category->slug.current,
+    "categoryTitle": category->title
   }
 `
 
@@ -60,7 +65,7 @@ export default async function ColecaoPage({ params }: Props) {
 
   const [collection, products] = await Promise.all([
     client.fetch<CollectionDoc | null>(collectionQuery, { slug }),
-    client.fetch<ProductCardData[]>(productsQuery, { slug }),
+    client.fetch<FilterableProduct[]>(productsQuery, { slug }),
   ])
 
   if (!collection) {
@@ -104,11 +109,7 @@ export default async function ColecaoPage({ params }: Props) {
       </div>
 
       <div className="py-10 px-5 max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.map(product => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
+        <SortableProductGrid products={products} />
       </div>
     </main>
   )
