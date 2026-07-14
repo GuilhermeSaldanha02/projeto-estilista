@@ -279,6 +279,27 @@ produtos leria como lavagem repetida, o oposto do "cor escassa" que fez a
 Fase 3.1 funcionar; a nav já é sólida, acessível e sem bug reportado, então
 não foi mexida para não introduzir risco de legibilidade sem ganho real.
 
+**Extensão à nav (mesma Fase 4, commit seguinte).** O header é uma barra fixa
+e sólida — nunca sobrepõe o vídeo do hero (`app/(site)/layout.tsx` reserva
+`pt-16`/`pt-[72px]` de espaço acima do conteúdo), então mexer no header não
+carrega o risco de legibilidade sobre vídeo instável que fez eu descartar a
+transparência-sobre-hero. Duas mudanças seguras: (1) o bloco destaque do
+mega-menu vai de `bg-ink` para o mesmo gradiente bordô do painel do hero
+(`from-bordo to-[#4A1123]`), estendendo a linguagem de cor composicional para
+a nav; (2) o menu mobile ganha entrada escalonada (stagger) nos links, mesma
+lógica de `container`/`item` do hero, sob `useReducedMotion`.
+
+**Achado de contraste: dourado sobre bordô nunca passa AA, nem a 100% de
+opacidade.** Medido via cálculo WCAG relativo (não estimativa): dourado
+(`#C2A14D`) sobre `bordo` (`#7B1E3A`) = 4.07:1, abaixo do mínimo 4.5:1 para
+texto normal — mesmo no ponto mais escuro do gradiente (`#4A1123`) sobe só
+a 6.09:1, então o risco é real na metade "clara" do painel. **Regra nova:
+nunca usar `text-dourado` sobre superfície bordô — usar `cream-text`.** O
+dourado continua seguro sobre `espresso`/`ink` (fundos quase-pretos, onde já
+era usado) e como linha/ícone decorativo (não é texto, WCAG não se aplica).
+Isso já derrubou o eyebrow do hero (ver acima) e o texto do bloco destaque da
+nav — ambos trocados para `cream-text`.
+
 ## 4. Elevation
 
 O sistema é plano por design, não por omissão. Profundidade vem de tonal layering — alternância de superfícies (areia clara, areia base, espresso) em vez de sombras. Uma faixa espresso não levanta sobre a areia: substitui o terreno.

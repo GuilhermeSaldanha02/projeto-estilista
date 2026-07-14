@@ -1,7 +1,37 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (Fase 4 — "Vitrine em Movimento": remodelação do hero)_
+_Última atualização: 2026-07-14 (Fase 4 — "Vitrine em Movimento": hero + nav)_
+
+---
+
+## Fase 4b — Nav ganha a mesma linguagem de cor + movimento (2026-07-14)
+
+Depois do hero (PR #39, verificado pelo dono direto na API do GitHub — não só
+no disco local), segui para nav/menus, também pedidos explicitamente no
+pivô de remodelação total. Achado importante antes de mexer: o header é uma
+barra fixa e sólida que **nunca sobrepõe o vídeo do hero** (`layout.tsx`
+reserva `pt-16`/`pt-[72px]` de espaço acima do conteúdo) — então o risco de
+legibilidade que me fez descartar "nav transparente sobre o hero" não existe
+aqui. Duas mudanças, ambas em `components/layout/Nav.tsx`:
+
+1. **Bloco destaque do mega-menu**: de `bg-ink` para o mesmo gradiente bordô
+   do painel do hero — estende a cor composicional para a nav.
+2. **Drawer mobile**: entrada escalonada nos links (`framer-motion`,
+   `useReducedMotion`), mesmo padrão do hero.
+
+**Achado de contraste que virou regra nova (ver DESIGN.md):** calculei WCAG
+de verdade (não estimativa) — dourado sobre bordô é 4,07:1, abaixo do mínimo
+AA de 4,5:1, mesmo a 100% de opacidade. Isso já tinha derrubado o eyebrow do
+hero no code review do PR #39; aqui trocou o texto do bloco destaque (antes
+`text-dourado`) para `cream-text`. Regra geral registrada: **dourado nunca
+como texto sobre bordô** — só sobre espresso/ink, ou como linha/ícone
+decorativo.
+
+Verificado: mega-menu abre com o gradiente correto, drawer mobile abre com
+todos os 10 itens e a animação assenta (`opacity:1, transform:none`), Escape
+fecha o drawer e devolve foco ao botão hambúrguer (comportamento de
+acessibilidade pré-existente, intacto). Build limpo.
 
 ---
 

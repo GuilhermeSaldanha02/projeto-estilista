@@ -3,8 +3,21 @@
 import { useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { motion, useReducedMotion } from 'framer-motion'
 import type { NavCategory } from './Header'
 import { WhatsAppIcon } from '@/components/icons'
+
+// Fase 4 (Vitrine em Movimento) — mesmo padrão de entrada escalonada do
+// HeroSignature.tsx, reaproveitado aqui para o drawer mobile.
+const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const
+const menuContainer = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },
+}
+const menuItem = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: EASE_OUT_EXPO } },
+}
 
 interface NavProps {
   categories: NavCategory[]
@@ -12,6 +25,7 @@ interface NavProps {
 }
 
 export default function Nav({ categories, whatsappNumber }: NavProps) {
+  const reduceMotion = useReducedMotion()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [megaOpen, setMegaOpen] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
@@ -166,15 +180,19 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                     ))}
                   </div>
 
-                  {/* Bloco destaque */}
-                  <div className="w-56 shrink-0 bg-ink flex flex-col items-center justify-center gap-4 py-12 px-6">
-                    <span className="font-sans text-[9px] text-dourado tracking-[0.3em] uppercase">
+                  {/* Bloco destaque — Fase 4: mesmo gradiente bordô do painel do
+                      hero (cor composicional estendida à nav). Texto em
+                      cream-text, não dourado: dourado sobre bordô mede 4,07:1
+                      de contraste (abaixo do mínimo AA 4,5:1), ver DESIGN.md
+                      "A Regra do Selo de Fundo". */}
+                  <div className="w-56 shrink-0 bg-gradient-to-br from-bordo to-[#4A1123] flex flex-col items-center justify-center gap-4 py-12 px-6">
+                    <span className="font-sans text-[9px] text-cream-text/75 tracking-[0.3em] uppercase">
                       Em destaque
                     </span>
-                    <div className="w-6 h-px bg-dourado/40" />
+                    <div className="w-6 h-px bg-cream-text/30" />
                     <Link
                       href="/colecao/novidades"
-                      className="font-display text-2xl md:text-3xl font-light italic text-cream-text hover:text-dourado focus:text-dourado transition-colors text-center outline-none focus-visible:underline"
+                      className="font-display text-2xl md:text-3xl font-light italic text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 transition-opacity text-center outline-none focus-visible:underline"
                       onClick={() => setMegaOpen(false)}
                     >
                       Novidades
@@ -216,7 +234,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         )}
       </div>
 
-      {/* ── Mobile menu: lista vertical ── */}
+      {/* ── Mobile menu: lista vertical, entrada escalonada (Fase 4) ── */}
       {mobileOpen && (
         <nav
           role="navigation"
@@ -224,11 +242,15 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
           data-lenis-prevent
           className="md:hidden absolute inset-x-0 top-16 z-40 bg-espresso border-t border-dourado/25 shadow-2xl max-h-[calc(100dvh-64px)] overflow-y-auto"
         >
-          <ul>
+          <motion.ul
+            variants={menuContainer}
+            initial={reduceMotion ? 'visible' : 'hidden'}
+            animate="visible"
+          >
             {/* Agendar + Consultoria no topo — funil principal do negócio primeiro
                 (pilha invertida em relação à hierarquia antiga, que priorizava a loja) */}
             {waScheduleHref && (
-              <li className="border-b border-esmeralda/25">
+              <motion.li variants={menuItem} className="border-b border-esmeralda/25">
                 <a
                   href={waScheduleHref}
                   target="_blank"
@@ -239,9 +261,9 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                   Agendar horário
                   <span className="text-esmeralda-light/60 text-xs" aria-hidden="true">→</span>
                 </a>
-              </li>
+              </motion.li>
             )}
-            <li className="border-b border-white/5">
+            <motion.li variants={menuItem} className="border-b border-white/5">
               <Link
                 href="/stylist"
                 className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
@@ -250,17 +272,17 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 Consultoria
                 <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
               </Link>
-            </li>
+            </motion.li>
 
             {categories.length === 0 ? (
-              <li className="border-t border-white/5">
+              <motion.li variants={menuItem} className="border-t border-white/5">
                 <p className="px-6 py-5 font-sans text-cream-text/70 text-sm">
                   Nenhuma categoria disponível.
                 </p>
-              </li>
+              </motion.li>
             ) : (
               categories.map(cat => (
-                <li key={cat._id} className="border-t border-white/5">
+                <motion.li key={cat._id} variants={menuItem} className="border-t border-white/5">
                   <Link
                     href={`/categoria/${cat.slug}`}
                     className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
@@ -269,10 +291,10 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                     {cat.title}
                     <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
                   </Link>
-                </li>
+                </motion.li>
               ))
             )}
-            <li className="border-t border-dourado/20">
+            <motion.li variants={menuItem} className="border-t border-dourado/20">
               <Link
                 href="/colecao/novidades"
                 className="flex items-center justify-between px-6 py-[1.1rem] text-dourado hover:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
@@ -281,8 +303,8 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 Novidades
                 <span className="text-dourado/45 text-xs" aria-hidden="true">→</span>
               </Link>
-            </li>
-          </ul>
+            </motion.li>
+          </motion.ul>
         </nav>
       )}
     </div>
