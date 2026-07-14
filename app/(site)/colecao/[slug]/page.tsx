@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import ProductCard, { type ProductCardData } from '@/components/ProductCard'
 import EmptyState from '@/components/EmptyState'
+import SortableProductGrid, { type FilterableProduct } from '@/components/catalog/SortableProductGrid'
 
 // ISR — mesmo padrão de categoria/[slug]
 export const revalidate = 60
@@ -18,11 +18,16 @@ const collectionQuery = `
 
 // Tag é array de referência (product.tags[]->collection) — "$slug in tags[]->slug.current"
 // filtra produtos que têm essa coleção entre as suas, sem exigir categoria única.
+// categorySlug/categoryTitle: só para os chips de filtro do SortableProductGrid
+// (uma coleção pode misturar várias categorias — filtro só faz sentido aqui,
+// não em /categoria/[slug], que já chega de uma categoria só).
 const productsQuery = `
   *[_type == "product" && $slug in tags[]->slug.current && inStock == true]
   | order(_createdAt desc) {
     _id, title, "slug": slug.current, price,
-    "image": images[0] { asset, crop, hotspot, alt }
+    "image": images[0] { asset, crop, hotspot, alt },
+    "categorySlug": category->slug.current,
+    "categoryTitle": category->title
   }
 `
 
@@ -60,7 +65,7 @@ export default async function ColecaoPage({ params }: Props) {
 
   const [collection, products] = await Promise.all([
     client.fetch<CollectionDoc | null>(collectionQuery, { slug }),
-    client.fetch<ProductCardData[]>(productsQuery, { slug }),
+    client.fetch<FilterableProduct[]>(productsQuery, { slug }),
   ])
 
   if (!collection) {
@@ -91,12 +96,10 @@ export default async function ColecaoPage({ params }: Props) {
 
   return (
     <main className="min-h-screen">
+      {/* Sem eyebrow/linha aqui: contador de peças agora é dinâmico e mora
+          dentro de SortableProductGrid (achado do code review do PR #41). */}
       <div className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-16 md:py-20 px-5">
         <div className="relative z-10 max-w-7xl mx-auto">
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-4">
-            {products.length} {products.length === 1 ? 'peça' : 'peças'}
-          </p>
-          <div className="w-10 h-px bg-dourado/40 mb-5" />
           <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight [text-wrap:balance]">
             {collection.title}
           </h1>
@@ -104,11 +107,9 @@ export default async function ColecaoPage({ params }: Props) {
       </div>
 
       <div className="py-10 px-5 max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.map(product => (
-            <ProductCard key={product._id} product={product} />
-          ))}
-        </div>
+        {/* key={slug}: força remount ao navegar entre coleções diferentes,
+            mesmo motivo do categoria/[slug]. */}
+        <SortableProductGrid key={slug} products={products} />
       </div>
     </main>
   )
