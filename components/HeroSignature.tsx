@@ -91,8 +91,13 @@ export default function HeroSignature() {
         />
       </div>
 
-      {/* Camada 2+3: painel bordô — selo de fundo + texto/CTA legível */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-bordo to-[#4A1123] flex items-end px-8 md:px-12 pb-16 md:pb-20 pt-10">
+      {/* Camada 2+3: painel bordô — selo de fundo + texto/CTA legível.
+          SEM overflow-hidden aqui de propósito: o selo abaixo sangra pela
+          costura para dentro da coluna do vídeo (achado do code review do
+          PR #39 — um overflow-hidden aqui cortava até metade do glifo e
+          o "bleed" nunca aparecia de verdade). Contenção de borda continua
+          garantida pelo overflow-hidden da <section> pai. */}
+      <div className="relative bg-gradient-to-br from-bordo to-[#4A1123] flex items-end px-8 md:px-12 pb-16 md:pb-20 pt-10">
         {/* Selo de fundo: decorativo, nunca lido — aria-hidden, não é heading */}
         <motion.span
           style={sealMotionStyle}
@@ -110,9 +115,13 @@ export default function HeroSignature() {
           initial={reduceMotion ? 'visible' : 'hidden'}
           animate="visible"
         >
+          {/* Cream, não dourado: dourado em cima do painel bordô mede ~4:1
+              mesmo a 100% de opacidade (achado do code review do PR #39) —
+              abaixo do mínimo AA de 4.5:1 para texto normal. Cream/75 sobre
+              bordô já media ~8,8:1 antes desta fase; mantém o padrão. */}
           <motion.p
             variants={item}
-            className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-5 opacity-90"
+            className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text mb-5 opacity-75"
           >
             Consultoria de Estilo
           </motion.p>
