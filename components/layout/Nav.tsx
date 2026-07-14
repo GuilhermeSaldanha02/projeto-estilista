@@ -221,6 +221,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         <nav
           role="navigation"
           aria-label="Menu principal"
+          data-lenis-prevent
           className="md:hidden absolute inset-x-0 top-16 z-40 bg-espresso border-t border-dourado/25 shadow-2xl max-h-[calc(100dvh-64px)] overflow-y-auto"
         >
           <ul>
