@@ -231,6 +231,23 @@ escuras competindo lado a lado, achado do Crítico. `etapas` virou seção
 clara (`paper`); `transformacao-escura` continua o único clímax escuro da
 página, na penúltima posição antes do CTA final.
 
+**A Regra da Cor Composicional (Fase 3.1, 2026-07-14).** Depois do dono
+rejeitar duas rodadas de redesign por parecerem "sem efeito das
+referências" e depois "portfólio de agência, não loja", uma 2ª rodada de
+3 agentes (Explorador de varejo real — Ganni, Jacquemus, Reformation, Farm
+Rio — + Crítico + Diretor) resolveu a tensão entre "cor ousada" e "ainda
+parecer loja": **cor forte nunca é lavagem chapada full-screen atrás do
+texto — ela vem da composição com a FOTO** (bloco de cor atrás/ao redor da
+foto, grade de cor quente e sutil na própria imagem — nunca duotone duro,
+que lê como projeto de agência). Ver `FotoLadoSection` em
+`app/(site)/stylist/page.tsx` ("A História"): bloco `bordo` sangrando por
+uma borda só, foto com `PhotoParallax` por cima, CTA de agendamento
+fechando a seção (a âncora comercial que faltava). Movimento real de scroll
+sim, mas nunca via `position:sticky`/scroll-hijack — nenhuma referência de
+varejo usa essa técnica, e foi o que quebrou o desktop na 1ª tentativa
+(`overflow:hidden` no ancestral mata o `sticky` por completo). Ver
+`components/stylist/PhotoParallax.tsx`.
+
 ## 4. Elevation
 
 O sistema é plano por design, não por omissão. Profundidade vem de tonal layering — alternância de superfícies (areia clara, areia base, espresso) em vez de sombras. Uma faixa espresso não levanta sobre a areia: substitui o terreno.
