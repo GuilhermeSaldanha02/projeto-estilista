@@ -113,12 +113,10 @@ export default async function StylistPage() {
               {profile?.name ?? 'Em breve'}
             </h1>
             {profile?.tagline && (
-              <p className="font-display text-xl md:text-2xl font-light italic text-ink-soft leading-snug mb-8">
+              <p className="font-display text-xl md:text-2xl font-light italic text-ink-soft leading-snug">
                 {profile.tagline}
               </p>
             )}
-            <div className="w-10 h-px bg-dourado/40 mx-auto md:mx-0 mb-8" />
-            <WaButton waHref={waHref} />
           </div>
         </div>
       </section>
@@ -301,7 +299,7 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
         <div className="flex-1">
           <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-8" lineMargin="mb-8" />
           {section.body && (
-            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4">
+            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-ink-soft [&_blockquote]:tracking-wide [&_blockquote]:leading-relaxed [&_blockquote]:mb-4">
               <PortableText value={section.body} />
             </div>
           )}
@@ -344,7 +342,7 @@ function EtapasSection({ section }: { section: StylistSection }) {
   }
 
   return (
-    <SectionShell tone="paper" maxWidth="max-w-3xl" ariaLabel={section.eyebrow ?? section.title}>
+    <SectionShell tone="paper" maxWidth="max-w-3xl" padding="py-20 md:py-28" ariaLabel={section.eyebrow ?? section.title}>
       <SectionHeading tone="paper" title={section.title} variant="title-only" titleMargin="mb-10" />
       {section.body && (
         <div className="space-y-8">
@@ -363,7 +361,7 @@ function DestaqueClaroSection({ section, waHref }: { section: StylistSection; wa
       <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
       {section.body && (
         <FadeInSection>
-          <div className="[&_p]:font-display [&_p]:text-3xl md:[&_p]:text-4xl [&_p]:font-light [&_p]:italic [&_p]:text-ink-soft [&_p]:leading-snug [&_p]:mb-6 mb-10">
+          <div className="[&_p]:font-display [&_p]:text-3xl md:[&_p]:text-4xl [&_p]:font-light [&_p]:italic [&_p]:text-ink-soft [&_p]:leading-snug [&_p]:mb-6 [&_blockquote]:font-display [&_blockquote]:text-3xl md:[&_blockquote]:text-4xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink-soft [&_blockquote]:leading-snug [&_blockquote]:mb-6 mb-10">
             <PortableText value={section.body} />
           </div>
         </FadeInSection>
@@ -379,9 +377,12 @@ function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
     <SectionShell tone="dark" padding="py-28 md:py-40" align="center" ariaLabel={section.eyebrow ?? section.title}>
       <SectionHeading tone="dark" eyebrow={section.eyebrow} title={section.title} align="center" titleMargin="mb-6" lineMargin="mb-8" lineWidth="w-6" />
       {section.body && (
-        /* text-cream-text no wrapper garante que TODOS os elementos filhos herdam a cor clara,
-           sem depender de seletores [&_p] que não cobrem listas nem outros tipos de bloco */
-        <div className="text-cream-text [&_p]:font-display [&_p]:text-xl md:[&_p]:text-2xl [&_p]:font-light [&_p]:italic [&_p]:leading-snug [&_p]:mb-4 [&_li]:font-sans [&_li]:text-sm [&_li]:leading-relaxed [&_li]:mb-2">
+        /* text-cream-text no wrapper garante que a COR herda para qualquer tipo de bloco.
+           Tamanho/peso/itálico precisam de [&_p] E [&_blockquote] -- o corpo do Sanity às
+           vezes serializa como blockquote em vez de parágrafo (achado 2026-07-14: "Como
+           cheguei até aqui" e "Vamos começar?" vieram como blockquote, ficaram sem estilo
+           nenhum até este fix, lidos pelo dono como "fonte desconfigurada"). */
+        <div className="text-cream-text [&_p]:font-display [&_p]:text-xl md:[&_p]:text-2xl [&_p]:font-light [&_p]:italic [&_p]:leading-snug [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:leading-snug [&_blockquote]:mb-4 [&_li]:font-sans [&_li]:text-sm [&_li]:leading-relaxed [&_li]:mb-2">
           <PortableText value={section.body} />
         </div>
       )}
@@ -392,7 +393,7 @@ function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
 /* ── Cards — grade de itens, fundo areia claro (ex. "Pra quem é") ── */
 function CardsSection({ section }: { section: StylistSection }) {
   return (
-    <SectionShell tone="paper" maxWidth="max-w-4xl" ariaLabel={section.eyebrow ?? section.title}>
+    <SectionShell tone="paper" maxWidth="max-w-4xl" padding="py-20 md:py-28" ariaLabel={section.eyebrow ?? section.title}>
       <SectionHeading tone="paper" title={section.title} variant="title-only" titleMargin="mb-10" />
       {section.items && section.items.length > 0 && (
         <ul className="grid grid-cols-1 md:grid-cols-2 gap-5 list-none p-0 m-0">

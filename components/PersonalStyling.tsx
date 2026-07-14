@@ -85,15 +85,13 @@ export default function PersonalStyling({ waScheduleHref }: Props) {
           para a sua vida, seu corpo e o que você quer comunicar com a roupa.
         </motion.p>
 
-        {/* Beat 3 — Como funciona, os 3 passos como um grupo único, em escada no desktop */}
+        {/* Beat 3 — Como funciona, os 3 passos como um grupo único, alinhados no desktop */}
         <motion.div variants={item} className="styling-reveal-item col-span-12">
           <div className="grid md:grid-cols-3 gap-y-12 md:gap-x-8 md:gap-y-0 mb-16 md:mb-20 text-left">
-            {STEPS.map((step, i) => (
+            {STEPS.map((step) => (
               <div
                 key={step.n}
-                className={`border-t border-cream-text/10 pt-6 ${
-                  i === 1 ? 'md:mt-12' : i === 2 ? 'md:mt-24' : ''
-                }`}
+                className="border-t border-cream-text/10 pt-6"
               >
                 <p
                   aria-hidden

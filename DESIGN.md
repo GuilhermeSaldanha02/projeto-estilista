@@ -143,10 +143,14 @@ sem decisão nova e explícita do dono.
 **A Regra das Três Funções.** Esmeralda é confiança e agendamento. Borgonha é desejo
 e produto. Dourado é detalhe e linha. Os três nunca trocam de função — um botão
 borgonha nunca agenda, um botão esmeralda nunca leva ao produto. **Correção nova
-(2026-07-13):** quando bordô e esmeralda aparecem na MESMA tela (ex. os dois CTAs do
-hero), eles NUNCA têm o mesmo peso visual/tamanho — um é primário (sólido,
-dominante), o outro é secundário (contorno/menor). Nunca dois botões cheios do
-mesmo tamanho lado a lado — isso é "cores brigando", não hierarquia.
+(2026-07-13):** quando bordô e esmeralda aparecem na MESMA tela, eles NUNCA têm o
+mesmo peso visual/tamanho — um é primário (sólido, dominante), o outro é secundário
+(contorno/menor). Nunca dois botões cheios do mesmo tamanho lado a lado — isso é
+"cores brigando", não hierarquia. **Nota (2026-07-14):** o hero da home não tem mais
+os dois CTAs juntos (o de agendamento foi removido — nav já cobre isso sempre
+visível); "Ver coleção" agora é o único CTA do hero e pode ser sólido bordô sem
+precisar ceder a ninguém. A regra de hierarquia acima continua valendo em qualquer
+tela onde bordô e esmeralda voltem a coexistir.
 
 **A Regra do Dourado Escasso.** O dourado (`#C2A14D`) só vive em linhas (`h-px`),
 ícones e eyebrow text. Nunca como fundo, nunca como texto de parágrafo, nunca em
@@ -296,7 +300,7 @@ Componente único do sistema: o quadrado escuro à direita do mega-menu. `bg-ink
 - **Don't** fazer o site parecer fast fashion genérico (Shein, Renner): nenhuma grade lotada, nenhum preço em destaque na hero, nenhuma promoção "X% OFF" como elemento visual.
 - **Don't** fazer o site parecer loja de departamento (C&A, Riachuelo): sem identidade de template, sem curadoria perdida em volume de produtos, sem prioridade à função sobre ao ponto de vista.
 - **Don't** usar `box-shadow` fora de overlays (mega-menu, mobile drawer) — sombra indica flutuação; elementos em repouso não flutuam.
-- **Don't** colocar dois CTAs diferentes no mesmo momento de decisão — nunca bordô e esmeralda lado a lado em contexto ambíguo. Quando estão juntos (hero), a hierarquia é clara: bordô principal, esmeralda secundário.
+- **Don't** colocar dois CTAs diferentes no mesmo momento de decisão — nunca bordô e esmeralda lado a lado em contexto ambíguo. Se algum dia coexistirem de novo, a hierarquia precisa ficar clara: um sólido/dominante, o outro contorno/secundário — nunca dois botões cheios do mesmo peso (o hero da home não tem mais os dois juntos desde 2026-07-14).
 - **Don't** usar `font-bold` ou `font-semibold` em display serif — ênfase vem de escala e tracking, não de peso.
 - **Don't** criar uma nova cor de acento sem aprovação — o sistema tem três funções (esmeralda, bordô, dourado) e não precisa de uma quarta.
 - **Don't** usar eyebrow em toda seção por reflexo — o tracking-[0.4em] uppercase é o padrão atual, mas só justificado quando há um rótulo de categoria real. Não é scaffolding de layout.

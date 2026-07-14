@@ -37,7 +37,7 @@ export default function CuratorialNote({ note, byline }: Props) {
 
   return (
     <section
-      className="relative bg-sand-50 py-32 md:py-48 px-6"
+      className="relative bg-sand-50 py-24 md:py-32 px-6"
       aria-label="Nota da Stylist"
     >
       <div className="max-w-6xl mx-auto grid grid-cols-12">

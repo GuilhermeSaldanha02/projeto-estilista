@@ -1,7 +1,83 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-13 (redesign completo — Fase 2: tipografia)_
+_Última atualização: 2026-07-14 (correções de desktop pós-Fase 3, ver seção logo abaixo)_
+
+---
+
+## Correções de desktop pós-Fase 3 (2026-07-14) — Fases 1-3 só tinham sido validadas mobile-first/1280px
+
+O dono viu o site em desktop (telas maiores) e apontou 6 problemas, com prints
+reais da home e do `/stylist`. Metodologia: 3 eram bugs técnicos claros (corrigidos
+direto), 3 tocavam decisão de negócio/gosto (arbitrados via pergunta ao dono antes
+de mexer) — mesmo padrão desta sessão de separar "bug" de "decisão do dono".
+
+**Arbitrado pelo dono:**
+1. **CTA duplicado (nav + hero)** — "Hero perde o botão verde, mantém só 'Ver
+   coleção'" (opção escolhida, não a recomendada por mim). Nav vira o único
+   agendamento sempre visível.
+2. **Onde estava "desconfigurado"** — "os dois" (seção Consultoria de Estilo na
+   home E a página `/stylist`), confirmado com prints de ambos.
+3. **Scroll suave (Lenis)** — trazer de volta (escolhido, ver detalhe abaixo). O
+   corte na Fase 3 foi avaliado como precipitado: era recomendação do Diretor,
+   nunca confirmada pelo dono para o contexto real; e Lenis era parte real da
+   sensação de "rolar e a página transicionar" que o dono via nos sites de
+   referência, não peso morto.
+
+**Bugs técnicos corrigidos direto:**
+
+4. **`HeroSignature.tsx`** — removido o CTA "Agendar horário" (esmeralda) do
+   hero da home; "Ver coleção" promovido de contorno para sólido bordô (só
+   precisava ceder hierarquia enquanto coexistia com o outro botão — agora é o
+   único CTA do hero, ~8,8:1 de contraste cream-text/bordô). `waScheduleHref`
+   removido do componente (não usado mais); `app/(site)/page.tsx` não passa mais
+   essa prop para `HeroSignature`.
+5. **`PersonalStyling.tsx`** — removido o efeito "escada" dos 3 passos
+   (`md:mt-12`/`md:mt-24`), pré-existente desde a Fase E (12/07), nunca notado
+   porque as verificações anteriores desta sessão foram só mobile/1280px. O
+   dono leu como desalinhamento quebrado, não como ritmo intencional.
+6. **`CuratorialNote.tsx`** — padding `py-32 md:py-48` (192px) → `py-24 md:py-32`
+   (128px). Medido: em 1920/2560px a citação (limitada por `clamp()`/max-width)
+   ocupava só 45,8% da altura da seção — o resto era padding fixo, lendo como
+   vão vazio enorme antes da próxima seção. Depois do fix: 68,3%, estável em
+   qualquer largura ≥ ~1130px (testado 1440/1920/2560px).
+7. **Bug real de conteúdo — blockquote sem estilo.** Investigando "fontes
+   desconfiguradas" no `/stylist`, descobri que o corpo (`section.body`) de
+   3 seções (`foto-esquerda`/"Como cheguei até aqui", `transformacao-escura`/
+   "O que muda", `destaque-claro`/"Vamos começar?") serializa do Sanity como
+   `<blockquote>`, não `<p>` — mas o CSS que estiliza o corpo usava só o
+   seletor `[&_p]:...`, que não atinge `blockquote`. Resultado: essas 3 citações
+   renderizavam SEM NENHUM estilo (sem `font-sans`/`font-display`, sem
+   tamanho, sem cor, sem itálico) — herdando o que calhasse do contexto, lido
+   pelo dono como "fonte desconfigurada". `PadraoSection` já cobria os dois
+   seletores (por isso nunca deu problema ali); as outras 3 seções + o corpo do
+   produto (`produto/[slug]/page.tsx`, sem blockquote populado ainda, mas
+   igualmente frágil) ganharam `[&_blockquote]:...` espelhando o `[&_p]`.
+8. **3 CTAs no `/stylist`** — Nav + botão do hero da página + CTA final de
+   "Vamos começar?" apareciam juntos. Removida a linha dourada + `WaButton` do
+   hero de `/stylist` (mesma lógica do item 4: nav já cobre o agendamento
+   sempre visível). Ficam 2: nav + CTA final (padrão igual ao da home).
+9. **Espaço sobrando em `etapas`/`cards`** — seções mais curtas (lista de 4
+   itens, grade) usavam o mesmo padding das seções com prosa longa. Reduzido de
+   `py-24 md:py-32` para `py-20 md:py-28` nas duas, alinhado ao papel
+   "utilitário" que essas seções já tinham na Fase 3 (Regra do Andaime Único).
+
+**Verificação:** `tsc --noEmit` (erro pré-existente de sempre, não relacionado);
+`npm run build` limpo; navegador — `getComputedStyle`/`getBoundingClientRect` em
+1280/1440/1920/2560px confirmando: proporção de conteúdo das seções, alinhamento
+dos 3 passos, contagem e posição dos CTAs, `fontFamily`/`fontSize`/`color`
+computados dos 3 blockquotes antes inertes. **Limitação registrada:** a captura
+de screenshot (`computer{screenshot}`) ficou indisponível a sessão inteira desta
+rodada — toda verificação visual final veio de prints reais enviados pelo dono
+mais medições DOM, não de screenshot próprio.
+
+**Lição para não repetir:** as Fases 1-3 foram verificadas majoritariamente em
+375px (mobile) e 1280px (`resize_window preset:"desktop"`) — nunca em telas
+reais de desktop (1440-2560px, o que o dono realmente usa). Ritmo vertical
+(padding) e efeitos de layout que dependem de proporção viewport/conteúdo
+(clamps atingindo o teto, colunas com max-width) só quebram visivelmente acima
+de ~1280px. Verificação futura de qualquer mudança de layout/tipografia deve
+incluir pelo menos um desktop real (1440 ou 1920), não só o preset.
 
 ---
 
@@ -170,7 +246,7 @@ zero-padding dos numerais (ver acima).
 
 ---
 
-### Fase 3 (redesign completo) — CONCLUÍDA: estrutura do /stylist + corte do Lenis
+### Fase 3 (redesign completo) — CONCLUÍDA: estrutura do /stylist (Lenis restaurado em 2026-07-14, ver nota no item 3)
 
 Última fase do plano de 3 (cores → tipografia → estrutura). Escopo: o andaime
 eyebrow+linha+heading repetido (achado do Crítico, ~10× no site, 5× só no
@@ -212,12 +288,18 @@ não uma preservação 1:1.
   completo. Reduz o combo eyebrow+linha+H2 de 5 para 2 ocorrências no scroll
   da página (mais o hero, que é estruturalmente diferente — tem h1 e foto).
 
-**3. Lenis removido.** `components/SmoothScroll.tsx` deletado, import e uso
-retirados de `app/(site)/layout.tsx`, dependência `lenis` desinstalada do
-`package.json`. Alinhado ao fundamento intocável de "mobile-first, rápido" —
-scroll suave via JS custava peso e rAF contínuo sem ganho que justificasse
-against o objetivo de velocidade. Scroll nativo do navegador a partir de
-agora.
+**3. Lenis removido — depois RESTAURADO (2026-07-14).** Removido nesta fase
+(`components/SmoothScroll.tsx` deletado, uso retirado de `app/(site)/layout.tsx`,
+dependência desinstalada), avaliando como peso morto frente ao fundamento
+"mobile-first, rápido". **Correção no dia seguinte:** o dono revisou o site em
+desktop e perguntou pela sensação de "rolar e a página transicionar" que via
+nos sites de referência — o Lenis (scroll suave com easing, já guardado por
+`prefers-reduced-motion`) era parte real dessa sensação, não peso morto sem
+função. Restaurado por completo (arquivo, uso, CSS, dependência) via
+`git checkout` do commit anterior à remoção. Lição: a recomendação do Diretor
+de cortar Lenis nunca tinha sido confirmada pelo dono para o contexto real do
+`/stylist`+home — era uma recomendação de agente, não decisão do dono; tratá-la
+como decidida foi prematuro.
 
 **Fora de escopo desta fase:** consolidar as 7 funções de seção num único
 componente `StylistSection(tone, variant)` totalmente genérico foi avaliado e
@@ -1638,13 +1720,9 @@ Build limpo. Ainda falta validação visual do dono.
 - ~~**Fonte display:** o SDD §2 sugeria Fraunces; o projeto usa Cormorant Garamond~~ —
   **resolvido em 2026-07-08**: trocado para **Fraunces** no redesign editorial (decisão
   do dono), alinhando com o SDD original. Ver seção "redesign/fable-review" abaixo.
-- **Scroll suave (Lenis):** o SDD §? menciona "Framer Motion + Lenis (scroll suave)"
-  como decisão da Fase B (2026-07-08). **Revogado na Fase 3 do redesign completo
-  (2026-07-13):** Lenis foi cortado do sistema (`components/SmoothScroll.tsx`
-  deletado, dependência desinstalada) — priorizando o fundamento intocável de
-  "mobile-first, rápido" sobre o ganho estético do scroll customizado. Framer
-  Motion continua para as entradas coreografadas (`FadeInSection` etc.); só o
-  scroll global voltou a ser o nativo do navegador.
+- ~~**Scroll suave (Lenis):** cortado na Fase 3 (2026-07-13)~~ — **restaurado em
+  2026-07-14** a pedido do dono (ver "Fase 3" acima). Sem divergência: o SDD
+  continua valendo como estava.
 
 ---
 
