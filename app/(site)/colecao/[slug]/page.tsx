@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import EmptyState from '@/components/EmptyState'
-import SortableProductGrid, { type FilterableProduct } from '@/components/catalog/SortableProductGrid'
+import ProductCatalog, { type FilterableProduct } from '@/components/catalog/ProductCatalog'
 
 // ISR — mesmo padrão de categoria/[slug]
 export const revalidate = 60
@@ -18,7 +18,7 @@ const collectionQuery = `
 
 // Tag é array de referência (product.tags[]->collection) — "$slug in tags[]->slug.current"
 // filtra produtos que têm essa coleção entre as suas, sem exigir categoria única.
-// categorySlug/categoryTitle: só para os chips de filtro do SortableProductGrid
+// categorySlug/categoryTitle: só para os chips de filtro do ProductCatalog
 // (uma coleção pode misturar várias categorias — filtro só faz sentido aqui,
 // não em /categoria/[slug], que já chega de uma categoria só).
 const productsQuery = `
@@ -96,21 +96,9 @@ export default async function ColecaoPage({ params }: Props) {
 
   return (
     <main className="min-h-screen">
-      {/* Sem eyebrow/linha aqui: contador de peças agora é dinâmico e mora
-          dentro de SortableProductGrid (achado do code review do PR #41). */}
-      <div className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-16 md:py-20 px-5">
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight [text-wrap:balance]">
-            {collection.title}
-          </h1>
-        </div>
-      </div>
-
-      <div className="py-10 px-5 max-w-7xl mx-auto">
-        {/* key={slug}: força remount ao navegar entre coleções diferentes,
-            mesmo motivo do categoria/[slug]. */}
-        <SortableProductGrid key={slug} products={products} />
-      </div>
+      {/* key={slug}: força remount ao navegar entre coleções diferentes,
+          mesmo motivo do categoria/[slug]. */}
+      <ProductCatalog key={slug} title={collection.title} products={products} />
     </main>
   )
 }

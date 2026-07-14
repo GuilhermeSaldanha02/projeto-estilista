@@ -1,7 +1,56 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (Fase 4c — filtros e ordenação no catálogo)_
+_Última atualização: 2026-07-14 (Fase 4d — harmonia do cabeçalho + Novidades unificado)_
+
+---
+
+## Fase 4d — Cabeçalho coeso + Novidades consolidado (2026-07-14)
+
+O dono mandou print real da página `/categoria/saias` rodando no `npm run dev`
+dele (não um mockup) e apontou dois problemas concretos:
+
+1. **"Na home tem Novidades e na nav também tem Novidades, só que um tem
+   filtro e outro não."** A home mostrava uma prévia simples (8 peças, sem
+   filtro); `/colecao/novidades` tinha a versão completa (12 peças, filtro +
+   ordenação da Fase 4c). Perguntei se deveria unificar ou manter diferentes;
+   o dono confirmou: **trazer a versão completa (com filtros) para a home,
+   eliminando a versão simples.**
+
+2. **"Tem o nome da peça solto, a quantidade de peças solta, o filtro
+   solto — não tá harmônico."** Causa raiz: título (`h1`, dentro do banner
+   sand-gradient) e contador+filtro+sort (dentro de `SortableProductGrid`,
+   `py-10` abaixo) viviam em **duas seções de página inteira separadas por um
+   vão grande**, sem nenhum elemento visual ligando as duas — exatamente o
+   que a Fase 4c introduziu ao mover o contador para dentro do componente sem
+   reconsiderar o layout ao redor.
+
+**Correção:** `SortableProductGrid` virou `components/catalog/ProductCatalog.tsx`
+— agora o componente recebe `title` e renderiza título + contador + filtro/sort
+**no mesmo bloco** (mesmo banner sand-gradient, gaps de 16-24px entre os
+elementos, não gaps de seção inteira). O grid de produtos abre uma seção nova
+abaixo, com seu próprio respiro. `headingLevel` (`'h1' | 'h2'`, default `'h1'`)
+permite embutir o componente numa página que já tem seu próprio `h1` — a home
+usa `headingLevel="h2"` porque o `h1` real da página é o do hero
+(`HeroSignature`); nunca dois `h1` na mesma página.
+
+A home (`app/(site)/page.tsx`) trocou sua grade simples de 8 peças por
+`&lt;ProductCatalog title="Novidades" products={products} headingLevel="h2" /&gt;`
+com a mesma query de 12 peças + `categorySlug`/`categoryTitle` de
+`/colecao/novidades` — agora as duas telas mostram exatamente a mesma coisa,
+filtro incluso. O link "ver todas →" foi removido da home (não fazia mais
+sentido — já mostra tudo); a rota `/colecao/novidades` continua existindo
+(link direto do mega-menu da nav, `docs/PROGRESS.md`/Fase 4b) e agora tem
+conteúdo idêntico ao da home por construção (mesmo componente, mesma query).
+
+Verificado: exatamente 1 `h1` na home (`document.querySelectorAll('h1')`
+→ 1, o do hero), `h2` "Novidades" com os 7 chips de categoria funcionando,
+gaps do cabeçalho (título→contador 16px, contador→filtro 24px) em vez dos
+`py-16`/`py-10` de seção inteira de antes, testado em 375px e no viewport
+padrão. Build limpo. **Servidor de verificação rodou numa porta separada
+(3050), não na 3000 — essa já estava em uso pelo `npm run dev` do próprio
+dono (a mesma sessão do print que ele mandou), e eu não devo derrubar a
+sessão dele pra rodar minhas checagens.**
 
 ---
 

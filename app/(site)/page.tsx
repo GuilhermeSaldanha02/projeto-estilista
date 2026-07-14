@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import CuratorialNote from '@/components/CuratorialNote'
 import HeroSignature from '@/components/HeroSignature'
 import PersonalStyling from '@/components/PersonalStyling'
-import ProductCard, { type ProductCardData } from '@/components/ProductCard'
+import ProductCatalog, { type FilterableProduct } from '@/components/catalog/ProductCatalog'
 
 // ISR — produtos e settings vêm do Sanity; 60s para refletir publicações sem rebuild
 export const revalidate = 60
@@ -15,15 +14,20 @@ export const metadata: Metadata = {
     'Moda feminina com olhar de personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
 }
 
-// Grid UNIFORME — sem mosaico/featured (o mosaico 2x2 foi removido antes por bug de
-// altura entre o card destacado e os normais, ver commit 0640831). Reintroduzido por
-// decisão estrutural: a home de uma loja não pode deixar de mostrar nenhum produto.
+// Fase 4d: a home usava uma grade simples (8 peças, sem filtro) enquanto
+// /colecao/novidades tinha a versão completa (12 peças, filtro por categoria
+// + ordenação) — o dono viu as duas ao vivo e achou a inconsistência estranha
+// ("um tem filtro e outro não"), pediu pra trazer a versão completa pra home.
+// Mesma query/limite de /colecao/novidades (12, categorySlug/categoryTitle
+// para os chips) -- ProductCatalog é o mesmo componente das duas.
 const productsQuery = `
   *[_type == "product" && inStock == true]
   | order(_createdAt desc)
-  [0...8] {
+  [0...12] {
     _id, title, "slug": slug.current, price,
-    "image": images[0] { asset, crop, hotspot, alt }
+    "image": images[0] { asset, crop, hotspot, alt },
+    "categorySlug": category->slug.current,
+    "categoryTitle": category->title
   }
 `
 
@@ -31,7 +35,7 @@ const settingsQuery = `*[_type == "siteSettings"][0]{ whatsappNumber, curatorNot
 
 export default async function HomePage() {
   const [products, settings] = await Promise.all([
-    client.fetch<ProductCardData[]>(productsQuery),
+    client.fetch<FilterableProduct[]>(productsQuery),
     client.fetch<{ whatsappNumber?: string; curatorNote?: string; curatorNoteByline?: string } | null>(settingsQuery),
   ])
 
@@ -51,29 +55,13 @@ export default async function HomePage() {
       <HeroSignature />
 
       {/* ═══════════════════════════════════════
-          2. NOVIDADES — grade de produtos (grid uniforme, sem mosaico).
+          2. NOVIDADES — mesmo ProductCatalog de /colecao/novidades (filtro +
+             ordenação inclusos). headingLevel="h2": o h1 da página já é o do
+             hero (HeroSignature) -- nunca dois h1 na mesma página.
              A home de uma loja não pode deixar de mostrar produto nenhum.
       ═══════════════════════════════════════ */}
       {products.length > 0 && (
-        <section className="py-16 md:py-20 px-5 max-w-7xl mx-auto" aria-label="Novidades">
-          <div className="flex items-baseline justify-between mb-8">
-            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight">
-              Novidades
-            </h2>
-            <Link
-              href="/colecao/novidades"
-              className="font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
-            >
-              ver todas →
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-            {products.map(product => (
-              <ProductCard key={product._id} product={product} />
-            ))}
-          </div>
-        </section>
+        <ProductCatalog title="Novidades" products={products} headingLevel="h2" />
       )}
 
       {/* ═══════════════════════════════════════
