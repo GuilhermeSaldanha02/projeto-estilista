@@ -189,9 +189,11 @@ momento gigante por site, não vários headlines parecidos competindo.
 
 **Numerais decorativos** (ex.: "01/02/03" do Personal Styling e das Etapas do
 `/stylist`) NÃO são um tier de display — são label pequeno (`text-sm`, tracking
-largo, `cream-text/50` sobre escuro). Eliminados os 96px/72px anteriores
-(`PersonalStyling.tsx`), que eram maiores que qualquer headline real do site —
-o pior ofensor medido pelo Crítico no redesign 2026-07-13.
+largo), na cor do tom local (`cream-text/50` sobre escuro, `ink-soft` sobre
+claro — ver "Etapas" abaixo, que virou seção clara na Fase 3). Eliminados os
+96px/72px anteriores (`PersonalStyling.tsx`), que eram maiores que qualquer
+headline real do site — o pior ofensor medido pelo Crítico no redesign
+2026-07-13.
 
 ### Named Rules
 
@@ -205,6 +207,25 @@ TAMANHO carrega a presença, não o peso.** Escassez de tamanho (só 1 Assinatur
 resolve "estourado" de verdade, não o peso.
 
 **A Regra do Label Imutável.** Labels (`text-[10px]` ou `text-[11px]`, `tracking-widest`, `uppercase`) são a voz do sistema, não da stylist. Não misturar com prose, não aumentar a fonte "para melhorar a leitura", não remover o tracking. Se precisar de texto maior que 11px como label, é um title, não um label.
+
+**A Regra do Andaime Único (Fase 3, 2026-07-13).** O combo "eyebrow +
+linha dourada + H2" é o rótulo de abertura de uma seção — não é decoração
+obrigatória. Usar nas seções que abrem um novo assunto narrativo (ex.:
+`foto-esquerda`/`foto-direita` — primeira seção de conteúdo real de uma
+página) ou que marcam o clímax (`transformacao-escura`). Seções utilitárias
+— grade (`cards`) e lista numerada (`etapas`) — já sinalizam sua identidade
+pelo próprio layout; usam só o H2, sem eyebrow nem linha. Antes da Fase 3,
+o combo se repetia em 5 das 6 seções do `/stylist` numa mesma rolagem — o
+"muita coisa repetida" apontado pelo dono. Ver `SectionHeading` em
+`app/(site)/stylist/page.tsx` (`variant: 'full' | 'title-only'`).
+
+**A Regra de Uma Seção Escura por Página (Fase 3, 2026-07-13).** No máximo
+1 seção com fundo `espresso` por página — o momento escuro é o clímax, não
+um estado que se repete. `/stylist` tinha `etapas` (fundo escuro) seguida
+imediatamente por `transformacao-escura` (fundo escuro) — duas seções
+escuras competindo lado a lado, achado do Crítico. `etapas` virou seção
+clara (`paper`); `transformacao-escura` continua o único clímax escuro da
+página, na penúltima posição antes do CTA final.
 
 ## 4. Elevation
 

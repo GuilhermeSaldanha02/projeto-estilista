@@ -170,6 +170,74 @@ zero-padding dos numerais (ver acima).
 
 ---
 
+### Fase 3 (redesign completo) — CONCLUÍDA: estrutura do /stylist + corte do Lenis
+
+Última fase do plano de 3 (cores → tipografia → estrutura). Escopo: o andaime
+eyebrow+linha+heading repetido (achado do Crítico, ~10× no site, 5× só no
+scroll do `/stylist`), a colisão de duas seções escuras adjacentes, e a
+decisão já tomada de cortar o Lenis.
+
+**Achado confirmado ao vivo antes de mexer:** consultei o Sanity real
+(`stylistProfile.sections`) e confirmei que `etapas` e `transformacao-escura`
+estão de fato lado a lado no conteúdo publicado (posições 3 e 4 de 5) — não
+era um risco teórico do componente, era um bug ativo na página no ar.
+
+**1. Refatoração das 7 seções do `/stylist` (`app/(site)/stylist/page.tsx`).**
+Extraídos `SectionShell` (wrapper `<section>`+container, tom/padding/aria-label)
+e `SectionHeading` (eyebrow+linha+H2, tom-aware) — antes duplicados
+byte-a-byte em `PadraoSection`, `FotoLadoSection`, `EtapasSection`,
+`DestaqueClaroSection`, `TransformacaoEscuraSection` e `CardsSection`. Cada
+seção agora só declara o que de fato varia (prosa, foto lateral, etapas
+numeradas, cards, citação centralizada). Margens por seção passadas
+explicitamente (`titleMargin`/`lineMargin`/`lineWidth`) para preservar os
+valores originais onde o andaime completo foi mantido (`Padrao`/`FotoLado`:
+título `mb-8`; `TransformacaoEscura`: título `mb-6`, linha `w-6` — achado do
+code review, a extração tinha hardcoded a linha em `w-8` e quebrado essa
+única seção centralizada que a usava). Em `Etapas`/`Cards`, que perderam a
+linha (ver item 3), o título usa `mb-10` — não é o `mb-4` original do título
+sozinho, é o espaço que antes pertencia à linha removida, redistribuído para
+dar respiro ao corpo sem o marcador visual da linha. Espaçamento revisado,
+não uma preservação 1:1.
+
+**2. Duas mudanças de design, aplicadas sobre a base já unificada:**
+- **Uma seção escura por página** (nova regra em `DESIGN.md`/`design.json`):
+  `etapas` virou seção clara (`tone="paper"`, era `bg-espresso`) — numeral e
+  corpo de texto trocaram `cream-text/50`/`cream-text/75` por `ink-soft`.
+  `transformacao-escura` continua o único clímax escuro da página, mantendo
+  sua posição (penúltima, antes do CTA final).
+- **Andaime reduzido** (nova regra "Andaime Único"): `etapas` e `cards` — as
+  duas seções utilitárias (lista numerada, grade) — perderam o eyebrow e a
+  linha dourada, ficando só com o H2 (`variant="title-only"`). `foto-esquerda`
+  (abre a narrativa) e `transformacao-escura` (clímax) mantiveram o andaime
+  completo. Reduz o combo eyebrow+linha+H2 de 5 para 2 ocorrências no scroll
+  da página (mais o hero, que é estruturalmente diferente — tem h1 e foto).
+
+**3. Lenis removido.** `components/SmoothScroll.tsx` deletado, import e uso
+retirados de `app/(site)/layout.tsx`, dependência `lenis` desinstalada do
+`package.json`. Alinhado ao fundamento intocável de "mobile-first, rápido" —
+scroll suave via JS custava peso e rAF contínuo sem ganho que justificasse
+against o objetivo de velocidade. Scroll nativo do navegador a partir de
+agora.
+
+**Fora de escopo desta fase:** consolidar as 7 funções de seção num único
+componente `StylistSection(tone, variant)` totalmente genérico foi avaliado e
+descartado — `FotoLadoSection` (foto+texto lado a lado) e `CardsSection`
+(grade) têm estruturas de corpo genuinamente diferentes o bastante para que
+forçá-las num switch único geraria um componente mais difícil de ler do que
+a extração feita (`SectionShell`+`SectionHeading` compartilhados, corpo
+próprio por seção). A duplicação real (o andaime) foi eliminada; a
+duplicação restante é estrutural, não texto repetido.
+
+**Verificação:** `tsc --noEmit` (mesmo erro pré-existente de `globals.css`,
+não relacionado); `npm run build` limpo antes e depois de cada mudança
+(refatoração, tom claro do `etapas`, corte do Lenis); navegador — TODO
+confirmar visualmente as 5 seções reais do `/stylist` com o conteúdo do
+Sanity ao vivo, incluindo a transição `foto-esquerda`(clara) →
+`etapas`(clara, era escura) → `transformacao-escura`(escura) →
+`destaque-claro`(clara).
+
+---
+
 ### Fase E — CONCLUÍDA (verificação parcial — ver nota de limitação): Personal Styling quebra o monólito
 
 Consultado o agente de design antes de implementar (regra da casa). Decisão: sem foto
@@ -1570,6 +1638,13 @@ Build limpo. Ainda falta validação visual do dono.
 - ~~**Fonte display:** o SDD §2 sugeria Fraunces; o projeto usa Cormorant Garamond~~ —
   **resolvido em 2026-07-08**: trocado para **Fraunces** no redesign editorial (decisão
   do dono), alinhando com o SDD original. Ver seção "redesign/fable-review" abaixo.
+- **Scroll suave (Lenis):** o SDD §? menciona "Framer Motion + Lenis (scroll suave)"
+  como decisão da Fase B (2026-07-08). **Revogado na Fase 3 do redesign completo
+  (2026-07-13):** Lenis foi cortado do sistema (`components/SmoothScroll.tsx`
+  deletado, dependência desinstalada) — priorizando o fundamento intocável de
+  "mobile-first, rápido" sobre o ganho estético do scroll customizado. Framer
+  Motion continua para as entradas coreografadas (`FadeInSection` etc.); só o
+  scroll global voltou a ser o nativo do navegador.
 
 ---
 

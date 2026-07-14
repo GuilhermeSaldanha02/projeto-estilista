@@ -165,40 +165,116 @@ function WaButton({ waHref, large = false }: { waHref: string | null; large?: bo
   )
 }
 
+type Tone = 'paper' | 'paper-deep' | 'dark'
+
+/*
+ * Fase 3 do redesign (13/07): as 7 seções do /stylist repetiam byte a byte o
+ * mesmo andaime "eyebrow + linha dourada + H2" (achado do Crítico — ~10x no
+ * site, 5x só nesta página). SectionShell/SectionHeading extraem essa casca
+ * comum (tom, padding, aria-label, eyebrow/linha/título) uma única vez; cada
+ * seção só declara o corpo que de fato varia (prosa, foto, etapas, cards,
+ * citação). `scaffold="title-only"` é a válvula de escape para as seções
+ * "utilitárias" (grade/lista) que não precisam repetir o rótulo eyebrow+linha
+ * — ver "A Regra do Andaime Único" em DESIGN.md.
+ */
+function toneClasses(tone: Tone) {
+  switch (tone) {
+    case 'dark':
+      return { bg: 'bg-espresso', eyebrow: 'text-dourado', title: 'text-cream-text' }
+    case 'paper-deep':
+      return { bg: 'bg-gradient-to-b from-sand-100 to-sand-200', eyebrow: 'text-dourado-ink', title: 'text-ink' }
+    default:
+      return { bg: 'bg-gradient-to-b from-sand-50 to-sand-100', eyebrow: 'text-dourado-ink', title: 'text-ink' }
+  }
+}
+
+function SectionShell({
+  tone,
+  maxWidth = 'max-w-2xl',
+  padding = 'py-24 md:py-32',
+  align = 'left',
+  ariaLabel,
+  children,
+}: {
+  tone: Tone
+  maxWidth?: string
+  padding?: string
+  align?: 'left' | 'center'
+  ariaLabel?: string
+  children: React.ReactNode
+}) {
+  return (
+    <section className={`relative ${toneClasses(tone).bg} ${padding} px-5`} aria-label={ariaLabel}>
+      <div className={`relative z-10 ${maxWidth} mx-auto ${align === 'center' ? 'text-center' : ''}`}>
+        {children}
+      </div>
+    </section>
+  )
+}
+
+function SectionHeading({
+  tone,
+  eyebrow,
+  title,
+  variant = 'full',
+  align = 'left',
+  titleMargin = 'mb-8',
+  lineMargin = 'mb-8',
+  lineWidth = 'w-8',
+}: {
+  tone: Tone
+  eyebrow?: string
+  title?: string
+  variant?: 'full' | 'title-only'
+  align?: 'left' | 'center'
+  titleMargin?: string
+  lineMargin?: string
+  lineWidth?: string
+}) {
+  const { eyebrow: eyebrowColor, title: titleColor } = toneClasses(tone)
+  const showEyebrowAndLine = variant === 'full'
+
+  return (
+    <>
+      <FadeInSection>
+        {showEyebrowAndLine && eyebrow && (
+          <p className={`font-sans text-[10px] tracking-[0.4em] uppercase ${eyebrowColor} mb-4`}>
+            {eyebrow}
+          </p>
+        )}
+        {title && (
+          <h2 className={`font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] ${titleColor} tracking-tight ${titleMargin} [text-wrap:balance]`}>
+            {title}
+          </h2>
+        )}
+      </FadeInSection>
+      {showEyebrowAndLine && (
+        <div className={`${lineWidth} h-px bg-dourado/40 ${align === 'center' ? 'mx-auto' : ''} ${lineMargin}`} />
+      )}
+    </>
+  )
+}
+
 /* ── Seção padrão: texto, fundo claro ── */
 function PadraoSection({ section }: { section: StylistSection }) {
   return (
-    <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
-      <div className="relative z-10 max-w-2xl mx-auto">
-        <FadeInSection>
-          {section.eyebrow && (
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado-ink mb-4">
-              {section.eyebrow}
-            </p>
-          )}
-          {section.title && (
-            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight mb-8 [text-wrap:balance]">
-              {section.title}
-            </h2>
-          )}
-        </FadeInSection>
-        <div className="w-8 h-px bg-dourado/40 mb-8" />
-        {section.body && (
-          <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:my-6">
-            <PortableText value={section.body} />
-          </div>
-        )}
-      </div>
-    </section>
+    <SectionShell tone="paper" ariaLabel={section.eyebrow ?? section.title}>
+      <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-8" lineMargin="mb-8" />
+      {section.body && (
+        <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:my-6">
+          <PortableText value={section.body} />
+        </div>
+      )}
+    </SectionShell>
   )
 }
 
 /* ── Seção com foto lateral ── */
 function FotoLadoSection({ section, reverse }: { section: StylistSection; reverse: boolean }) {
   return (
-    <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
+    <SectionShell tone="paper" maxWidth="max-w-5xl" ariaLabel={section.eyebrow ?? section.title}>
       <div
-        className={`relative z-10 max-w-5xl mx-auto flex flex-col ${
+        className={`flex flex-col ${
           reverse ? 'md:flex-row-reverse' : 'md:flex-row'
         } items-start gap-10 md:gap-16`}
       >
@@ -223,19 +299,7 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
 
         {/* Texto */}
         <div className="flex-1">
-          <FadeInSection>
-            {section.eyebrow && (
-              <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado-ink mb-4">
-                {section.eyebrow}
-              </p>
-            )}
-            {section.title && (
-              <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight mb-8 [text-wrap:balance]">
-                {section.title}
-              </h2>
-            )}
-          </FadeInSection>
-          <div className="w-8 h-px bg-dourado/40 mb-8" />
+          <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-8" lineMargin="mb-8" />
           {section.body && (
             <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4">
               <PortableText value={section.body} />
@@ -243,11 +307,11 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
           )}
         </div>
       </div>
-    </section>
+    </SectionShell>
   )
 }
 
-/* ── Seção etapas numeradas (fundo espresso) ── */
+/* ── Seção etapas numeradas ── */
 function EtapasSection({ section }: { section: StylistSection }) {
   /*
    * Números robustos para dois formatos de conteúdo Sanity:
@@ -267,11 +331,11 @@ function EtapasSection({ section }: { section: StylistSection }) {
         <li className="flex gap-6 items-start text-left">
           <span
             aria-hidden
-            className="font-sans text-sm tracking-[0.2em] text-cream-text/50 w-8 shrink-0 pt-2 select-none"
+            className="font-sans text-sm tracking-[0.2em] text-ink-soft w-8 shrink-0 pt-2 select-none"
           >
             {String(index + 1).padStart(2, '0')}
           </span>
-          <div className="font-sans text-sm text-cream-text/75 tracking-wide leading-relaxed flex-1 pt-2">
+          <div className="font-sans text-sm text-ink-soft tracking-wide leading-relaxed flex-1 pt-2">
             {children}
           </div>
         </li>
@@ -280,114 +344,70 @@ function EtapasSection({ section }: { section: StylistSection }) {
   }
 
   return (
-    <section className="relative bg-espresso py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
-      <div className="relative z-10 max-w-3xl mx-auto">
-        <FadeInSection>
-          {section.eyebrow && (
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-4">
-              {section.eyebrow}
-            </p>
-          )}
-          {section.title && (
-            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-cream-text tracking-tight mb-4 [text-wrap:balance]">
-              {section.title}
-            </h2>
-          )}
-        </FadeInSection>
-        <div className="w-8 h-px bg-dourado/40 mb-10" />
-        {section.body && (
-          <div className="space-y-8">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <PortableText value={section.body} components={components as any} />
-          </div>
-        )}
-      </div>
-    </section>
+    <SectionShell tone="paper" maxWidth="max-w-3xl" ariaLabel={section.eyebrow ?? section.title}>
+      <SectionHeading tone="paper" title={section.title} variant="title-only" titleMargin="mb-10" />
+      {section.body && (
+        <div className="space-y-8">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <PortableText value={section.body} components={components as any} />
+        </div>
+      )}
+    </SectionShell>
   )
 }
 
 /* ── Destaque claro — citação itálica, fundo areia, botão WhatsApp (ex. "Vamos começar?") ── */
 function DestaqueClaroSection({ section, waHref }: { section: StylistSection; waHref: string | null }) {
   return (
-    <section className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-24 md:py-36 px-5" aria-label={section.eyebrow ?? section.title}>
-      <div className="relative z-10 max-w-2xl mx-auto text-center">
-        <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
-        {section.body && (
-          <FadeInSection>
-            <div className="[&_p]:font-display [&_p]:text-3xl md:[&_p]:text-4xl [&_p]:font-light [&_p]:italic [&_p]:text-ink-soft [&_p]:leading-snug [&_p]:mb-6 mb-10">
-              <PortableText value={section.body} />
-            </div>
-          </FadeInSection>
-        )}
-        <WaButton waHref={waHref} large />
-      </div>
-    </section>
+    <SectionShell tone="paper-deep" padding="py-24 md:py-36" align="center" ariaLabel={section.eyebrow ?? section.title}>
+      <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
+      {section.body && (
+        <FadeInSection>
+          <div className="[&_p]:font-display [&_p]:text-3xl md:[&_p]:text-4xl [&_p]:font-light [&_p]:italic [&_p]:text-ink-soft [&_p]:leading-snug [&_p]:mb-6 mb-10">
+            <PortableText value={section.body} />
+          </div>
+        </FadeInSection>
+      )}
+      <WaButton waHref={waHref} large />
+    </SectionShell>
   )
 }
 
 /* ── Destaque escuro — clímax da página, fundo espresso, todo texto em creme (ex. "O que muda") ── */
 function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
   return (
-    <section className="relative bg-espresso py-28 md:py-40 px-5" aria-label={section.eyebrow ?? section.title}>
-      <div className="relative z-10 max-w-2xl mx-auto text-center">
-        <FadeInSection>
-          {section.eyebrow && (
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-4">
-              {section.eyebrow}
-            </p>
-          )}
-          {section.title && (
-            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-cream-text tracking-tight mb-6 [text-wrap:balance]">
-              {section.title}
-            </h2>
-          )}
-        </FadeInSection>
-        <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
-        {section.body && (
-          /* text-cream-text no wrapper garante que TODOS os elementos filhos herdam a cor clara,
-             sem depender de seletores [&_p] que não cobrem listas nem outros tipos de bloco */
-          <div className="text-cream-text [&_p]:font-display [&_p]:text-xl md:[&_p]:text-2xl [&_p]:font-light [&_p]:italic [&_p]:leading-snug [&_p]:mb-4 [&_li]:font-sans [&_li]:text-sm [&_li]:leading-relaxed [&_li]:mb-2">
-            <PortableText value={section.body} />
-          </div>
-        )}
-      </div>
-    </section>
+    <SectionShell tone="dark" padding="py-28 md:py-40" align="center" ariaLabel={section.eyebrow ?? section.title}>
+      <SectionHeading tone="dark" eyebrow={section.eyebrow} title={section.title} align="center" titleMargin="mb-6" lineMargin="mb-8" lineWidth="w-6" />
+      {section.body && (
+        /* text-cream-text no wrapper garante que TODOS os elementos filhos herdam a cor clara,
+           sem depender de seletores [&_p] que não cobrem listas nem outros tipos de bloco */
+        <div className="text-cream-text [&_p]:font-display [&_p]:text-xl md:[&_p]:text-2xl [&_p]:font-light [&_p]:italic [&_p]:leading-snug [&_p]:mb-4 [&_li]:font-sans [&_li]:text-sm [&_li]:leading-relaxed [&_li]:mb-2">
+          <PortableText value={section.body} />
+        </div>
+      )}
+    </SectionShell>
   )
 }
 
 /* ── Cards — grade de itens, fundo areia claro (ex. "Pra quem é") ── */
 function CardsSection({ section }: { section: StylistSection }) {
   return (
-    <section className="relative bg-gradient-to-b from-sand-50 to-sand-100 py-24 md:py-32 px-5" aria-label={section.eyebrow ?? section.title}>
-      <div className="relative z-10 max-w-4xl mx-auto">
-        <FadeInSection>
-          {section.eyebrow && (
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado-ink mb-4">
-              {section.eyebrow}
-            </p>
-          )}
-          {section.title && (
-            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight mb-4 [text-wrap:balance]">
-              {section.title}
-            </h2>
-          )}
-        </FadeInSection>
-        <div className="w-8 h-px bg-dourado/40 mb-10" />
-        {section.items && section.items.length > 0 && (
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-5 list-none p-0 m-0">
-            {section.items.map((item) => (
-              <li key={item._key} className="bg-sand-50 px-7 py-6">
-                <h3 className="font-display text-lg font-light text-ink tracking-wide mb-2">
-                  {item.titulo}
-                </h3>
-                <p className="font-sans text-sm text-ink-soft tracking-wide leading-relaxed">
-                  {item.subtitulo}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </section>
+    <SectionShell tone="paper" maxWidth="max-w-4xl" ariaLabel={section.eyebrow ?? section.title}>
+      <SectionHeading tone="paper" title={section.title} variant="title-only" titleMargin="mb-10" />
+      {section.items && section.items.length > 0 && (
+        <ul className="grid grid-cols-1 md:grid-cols-2 gap-5 list-none p-0 m-0">
+          {section.items.map((item) => (
+            <li key={item._key} className="bg-sand-50 px-7 py-6">
+              <h3 className="font-display text-lg font-light text-ink tracking-wide mb-2">
+                {item.titulo}
+              </h3>
+              <p className="font-sans text-sm text-ink-soft tracking-wide leading-relaxed">
+                {item.subtitulo}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
+    </SectionShell>
   )
 }
