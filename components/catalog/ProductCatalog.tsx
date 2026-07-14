@@ -68,6 +68,22 @@ export default function ProductCatalog({
 
   const Heading = headingLevel
 
+  // Grade com poucas peças (ex.: categoria com só 2 produtos) esticada em
+  // grid-cols-4 deixava um vazio enorme à direita — lia como "cru"/quebrado,
+  // não como "seleção pequena por design" (achado do dono, screenshot de
+  // /categoria/vestidos). Capar colunas E largura máxima pelo nº de peças
+  // visíveis evita tanto o vazio quanto cards gigantes esticados por um
+  // grid-cols-2 sozinho numa tela larga.
+  const GRID_LAYOUT: Record<number, { cols: string; maxW: string }> = {
+    1: { cols: 'grid-cols-1', maxW: 'max-w-[300px]' },
+    2: { cols: 'grid-cols-2', maxW: 'max-w-2xl' },
+    3: { cols: 'grid-cols-2 md:grid-cols-3', maxW: 'max-w-4xl' },
+  }
+  const layout = GRID_LAYOUT[visible.length] ?? {
+    cols: 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+    maxW: '',
+  }
+
   return (
     <section aria-label={title}>
       {/* Cabeçalho único: título + contador + filtro/sort no mesmo bloco —
@@ -146,7 +162,7 @@ export default function ProductCatalog({
             Nenhuma peça encontrada com esse filtro.
           </p>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className={`grid gap-4 md:gap-6 ${layout.cols} ${layout.maxW}`}>
             {visible.map(product => (
               <ProductCard key={product._id} product={product} />
             ))}

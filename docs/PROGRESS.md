@@ -1,7 +1,44 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (Fase 4d — harmonia do cabeçalho + Novidades unificado)_
+_Última atualização: 2026-07-14 (Fase 4e — nav sem Novidades duplicado + grade esparsa)_
+
+---
+
+## Fase 4e — Dois retoques após o dono ver a Fase 4d ao vivo (2026-07-14)
+
+Duas capturas de tela reais (`/vestidos` e o mega-menu aberto) trouxeram
+feedback direto:
+
+1. **"Esse Novidades permaneceu no side bar, sendo que não foi o que
+   falei, mandei retirar."** Na Fase 4d eu li "trazer a versão completa pra
+   home, eliminando a outra" como só "acabar com a inconsistência" — mas o
+   dono queria também que a nav parasse de apontar pra lá, já que agora
+   Novidades vive de verdade na home. Removido o "bloco destaque" do
+   mega-menu (`components/layout/Nav.tsx`) por completo — o mega-menu agora
+   é só a grade de categorias. **Não removida** a rota `/colecao/novidades`
+   nem o link do drawer mobile: `EmptyState` usa aquela rota como destino de
+   fallback em várias telas, e o dono não pediu pra tirar do mobile
+   especificamente (só citou o "side bar", a captura era do mega-menu
+   desktop).
+
+2. **"Sobre a vitrine-peças, permaneceu cru."** Mesmo com o cabeçalho
+   harmonizado (Fase 4d), a grade de produtos com poucas peças (ex.: 2
+   vestidos) esticava em `grid-cols-4` e deixava um vazio enorme à direita —
+   lia como "grid quebrado com produtos faltando", não como "seleção
+   pequena por design". Corrigido em `ProductCatalog.tsx`: para 1-3 peças
+   visíveis, o container do grid ganha um `max-w` proporcional ao número de
+   colunas (`max-w-[300px]`/`max-w-2xl`/`max-w-4xl`) — os cards mantêm o
+   tamanho normal, e o "vazio" que sobra é só margem de página, não células
+   de grid órfãs. A partir de 4 peças, comportamento idêntico a antes.
+
+Verificado: mega-menu sem "Novidades" (confirmado via hover real, não só
+DOM — `document.hasFocus()`/eventos sintéticos falharam nesta sessão, mesmo
+artefato de tab em segundo plano já documentado; `computer{hover}` real
+funcionou). Grade de 2 peças em `/categoria/vestidos`: container caiu de
+~1240px para ~672px (`max-w-2xl`), cards mantiveram ~324px cada, sem vazio
+à direita dentro do grid. Mobile (375px) inalterado. Build limpo. Verificação
+rodou em porta separada (3060), não na 3000 do dono.
 
 ---
 

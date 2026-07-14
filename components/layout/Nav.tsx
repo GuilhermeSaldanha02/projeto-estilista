@@ -166,7 +166,10 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                   onMouseEnter={openMega}
                   onMouseLeave={closeMega}
                 >
-                  {/* Categorias: flex-1 preenche todo espaço disponível, grid 3 colunas */}
+                  {/* Categorias: flex-1 preenche todo espaço disponível, grid 3 colunas.
+                      Sem bloco destaque "Novidades" (removido, Fase 4e): a Novidades
+                      completa (com filtro) já vive na home agora — apontar pra ela
+                      de novo aqui duplicava o destino sem motivo, achado do dono. */}
                   <div className="flex-1 px-10 py-8 grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
                     {categories.map(cat => (
                       <Link
@@ -178,25 +181,6 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                         {cat.title}
                       </Link>
                     ))}
-                  </div>
-
-                  {/* Bloco destaque — Fase 4: mesmo gradiente bordô do painel do
-                      hero (cor composicional estendida à nav). Texto em
-                      cream-text, não dourado: dourado sobre bordô mede 4,07:1
-                      de contraste (abaixo do mínimo AA 4,5:1), ver DESIGN.md
-                      "A Regra do Selo de Fundo". */}
-                  <div className="w-56 shrink-0 bg-gradient-to-br from-bordo to-[#4A1123] flex flex-col items-center justify-center gap-4 py-12 px-6">
-                    <span className="font-sans text-[9px] text-cream-text/75 tracking-[0.3em] uppercase">
-                      Em destaque
-                    </span>
-                    <div className="w-6 h-px bg-cream-text/30" />
-                    <Link
-                      href="/colecao/novidades"
-                      className="font-display text-2xl md:text-3xl font-light italic text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 transition-opacity text-center outline-none focus-visible:underline"
-                      onClick={() => setMegaOpen(false)}
-                    >
-                      Novidades
-                    </Link>
                   </div>
                 </div>
               )}
