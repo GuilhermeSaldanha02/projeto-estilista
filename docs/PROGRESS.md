@@ -188,9 +188,16 @@ e `SectionHeading` (eyebrow+linha+H2, tom-aware) — antes duplicados
 byte-a-byte em `PadraoSection`, `FotoLadoSection`, `EtapasSection`,
 `DestaqueClaroSection`, `TransformacaoEscuraSection` e `CardsSection`. Cada
 seção agora só declara o que de fato varia (prosa, foto lateral, etapas
-numeradas, cards, citação centralizada). Margens de título por seção
-preservadas explicitamente (`titleMargin`/`lineMargin`) para não introduzir
-regressão de espaçamento durante a consolidação.
+numeradas, cards, citação centralizada). Margens por seção passadas
+explicitamente (`titleMargin`/`lineMargin`/`lineWidth`) para preservar os
+valores originais onde o andaime completo foi mantido (`Padrao`/`FotoLado`:
+título `mb-8`; `TransformacaoEscura`: título `mb-6`, linha `w-6` — achado do
+code review, a extração tinha hardcoded a linha em `w-8` e quebrado essa
+única seção centralizada que a usava). Em `Etapas`/`Cards`, que perderam a
+linha (ver item 3), o título usa `mb-10` — não é o `mb-4` original do título
+sozinho, é o espaço que antes pertencia à linha removida, redistribuído para
+dar respiro ao corpo sem o marcador visual da linha. Espaçamento revisado,
+não uma preservação 1:1.
 
 **2. Duas mudanças de design, aplicadas sobre a base já unificada:**
 - **Uma seção escura por página** (nova regra em `DESIGN.md`/`design.json`):

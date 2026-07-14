@@ -102,7 +102,7 @@ export const stylistProfile = defineType({
                   { title: 'Padrão (só texto, fundo claro)', value: 'padrao' },
                   { title: 'Foto à esquerda + texto à direita', value: 'foto-esquerda' },
                   { title: 'Texto à esquerda + foto à direita', value: 'foto-direita' },
-                  { title: 'Etapas numeradas (fundo escuro)', value: 'etapas' },
+                  { title: 'Etapas numeradas (fundo claro)', value: 'etapas' },
                   { title: 'Destaque escuro (fundo espresso, texto claro)', value: 'transformacao-escura' },
                   { title: 'Destaque claro (citação, fundo areia)', value: 'destaque-claro' },
                   { title: 'Cards (grade de itens)', value: 'cards' },

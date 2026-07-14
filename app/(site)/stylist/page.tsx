@@ -220,6 +220,7 @@ function SectionHeading({
   align = 'left',
   titleMargin = 'mb-8',
   lineMargin = 'mb-8',
+  lineWidth = 'w-8',
 }: {
   tone: Tone
   eyebrow?: string
@@ -228,6 +229,7 @@ function SectionHeading({
   align?: 'left' | 'center'
   titleMargin?: string
   lineMargin?: string
+  lineWidth?: string
 }) {
   const { eyebrow: eyebrowColor, title: titleColor } = toneClasses(tone)
   const showEyebrowAndLine = variant === 'full'
@@ -247,7 +249,7 @@ function SectionHeading({
         )}
       </FadeInSection>
       {showEyebrowAndLine && (
-        <div className={`w-8 h-px bg-dourado/40 ${align === 'center' ? 'mx-auto' : ''} ${lineMargin}`} />
+        <div className={`${lineWidth} h-px bg-dourado/40 ${align === 'center' ? 'mx-auto' : ''} ${lineMargin}`} />
       )}
     </>
   )
@@ -375,7 +377,7 @@ function DestaqueClaroSection({ section, waHref }: { section: StylistSection; wa
 function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
   return (
     <SectionShell tone="dark" padding="py-28 md:py-40" align="center" ariaLabel={section.eyebrow ?? section.title}>
-      <SectionHeading tone="dark" eyebrow={section.eyebrow} title={section.title} align="center" titleMargin="mb-6" lineMargin="mb-8" />
+      <SectionHeading tone="dark" eyebrow={section.eyebrow} title={section.title} align="center" titleMargin="mb-6" lineMargin="mb-8" lineWidth="w-6" />
       {section.body && (
         /* text-cream-text no wrapper garante que TODOS os elementos filhos herdam a cor clara,
            sem depender de seletores [&_p] que não cobrem listas nem outros tipos de bloco */
