@@ -41,12 +41,10 @@ export default async function NovidadesPage() {
 
   return (
     <main className="min-h-screen">
+      {/* Sem eyebrow/linha aqui: contador de peças agora é dinâmico e mora
+          dentro de SortableProductGrid (achado do code review do PR #41). */}
       <div className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-16 md:py-20 px-5">
         <div className="relative z-10 max-w-7xl mx-auto">
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-4">
-            {products.length} {products.length === 1 ? 'peça' : 'peças'}
-          </p>
-          <div className="w-10 h-px bg-dourado/40 mb-5" />
           <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight">
             Novidades
           </h1>
@@ -54,7 +52,7 @@ export default async function NovidadesPage() {
       </div>
 
       <div className="py-10 px-5 max-w-7xl mx-auto">
-        <SortableProductGrid products={products} />
+        <SortableProductGrid key="novidades" products={products} />
       </div>
     </main>
   )

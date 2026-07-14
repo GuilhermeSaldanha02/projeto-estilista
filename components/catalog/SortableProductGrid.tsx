@@ -57,6 +57,14 @@ export default function SortableProductGrid({ products }: { products: Filterable
 
   return (
     <div>
+      {/* Contador único, calculado a partir da lista já filtrada — antes vivia
+          estático no Server Component da página (banner) e ficava dessincronizado
+          do grid depois de filtrar (achado do code review do PR #41). aria-live
+          avisa leitor de tela quando o filtro/sort muda a contagem. */}
+      <p aria-live="polite" className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-5">
+        {visible.length} {visible.length === 1 ? 'peça' : 'peças'}
+      </p>
+
       <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
         {/* Chips só aparecem quando a lista mistura 2+ categorias */}
         {categoryChips.length > 1 ? (

@@ -83,12 +83,12 @@ export default async function CategoriaPage({ params }: Props) {
 
   return (
     <main className="min-h-screen">
+      {/* Sem eyebrow/linha aqui: o contador de peças virou dinâmico (calculado do
+          grid já filtrado, não do total do servidor — achado do code review do
+          PR #41) e mora dentro de SortableProductGrid. Título sozinho é o padrão
+          certo para seção utilitária (DESIGN.md, "Regra do Andaime Único"). */}
       <div className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-16 md:py-20 px-5">
         <div className="relative z-10 max-w-7xl mx-auto">
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-4">
-            {products.length} {products.length === 1 ? 'peça' : 'peças'}
-          </p>
-          <div className="w-10 h-px bg-dourado/40 mb-5" />
           <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight [text-wrap:balance]">
             {category.title}
           </h1>
@@ -96,7 +96,11 @@ export default async function CategoriaPage({ params }: Props) {
       </div>
 
       <div className="py-10 px-5 max-w-7xl mx-auto">
-        <SortableProductGrid products={products} />
+        {/* key={slug}: força remount ao navegar entre categorias diferentes
+            (mesma rota [slug]) -- sem isso, o filtro de categoria ativo
+            sobrevivia à troca de rota e podia deixar a próxima categoria
+            parecendo vazia (achado do code review do PR #41). */}
+        <SortableProductGrid key={slug} products={products} />
       </div>
     </main>
   )
