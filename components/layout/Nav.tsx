@@ -162,15 +162,16 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 <div
                   role="navigation"
                   aria-label="Vitrine"
-                  className="fixed inset-x-0 top-[72px] z-50 flex bg-espresso border-t border-dourado/25 shadow-2xl"
+                  className="fixed inset-x-0 top-[72px] z-50 bg-espresso border-t border-dourado/25 shadow-2xl"
                   onMouseEnter={openMega}
                   onMouseLeave={closeMega}
                 >
-                  {/* Categorias: flex-1 preenche todo espaço disponível, grid 3 colunas.
-                      Sem bloco destaque "Novidades" (removido, Fase 4e): a Novidades
+                  {/* Sem bloco destaque "Novidades" (removido, Fase 4e): a Novidades
                       completa (com filtro) já vive na home agora — apontar pra ela
-                      de novo aqui duplicava o destino sem motivo, achado do dono. */}
-                  <div className="flex-1 px-10 py-8 grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
+                      de novo aqui duplicava o destino sem motivo, achado do dono.
+                      flex/flex-1 removidos junto (código review PR #43): só
+                      existiam para dividir espaço com o bloco que não existe mais. */}
+                  <div className="px-10 py-8 grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
                     {categories.map(cat => (
                       <Link
                         key={cat._id}
