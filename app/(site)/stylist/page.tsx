@@ -5,6 +5,7 @@ import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { WhatsAppIcon } from '@/components/icons'
 import { FadeInSection } from '@/components/FadeInSection'
+import { PhotoParallax } from '@/components/stylist/PhotoParallax'
 
 export const revalidate = 60
 
@@ -126,9 +127,9 @@ export default async function StylistPage() {
         const layout = section.layout ?? 'padrao'
         switch (layout) {
           case 'foto-esquerda':
-            return <FotoLadoSection key={section._key} section={section} reverse={false} />
+            return <FotoLadoSection key={section._key} section={section} reverse={false} waHref={waHref} />
           case 'foto-direita':
-            return <FotoLadoSection key={section._key} section={section} reverse={true} />
+            return <FotoLadoSection key={section._key} section={section} reverse={true} waHref={waHref} />
           case 'etapas':
             return <EtapasSection key={section._key} section={section} />
           case 'transformacao-escura':
@@ -192,6 +193,7 @@ function SectionShell({
   padding = 'py-24 md:py-32',
   align = 'left',
   ariaLabel,
+  topHairline = false,
   children,
 }: {
   tone: Tone
@@ -199,10 +201,12 @@ function SectionShell({
   padding?: string
   align?: 'left' | 'center'
   ariaLabel?: string
+  topHairline?: boolean
   children: React.ReactNode
 }) {
   return (
     <section className={`relative ${toneClasses(tone).bg} ${padding} px-5`} aria-label={ariaLabel}>
+      {topHairline && <div aria-hidden className="absolute top-0 left-[6vw] right-[6vw] h-px bg-dourado/40" />}
       <div className={`relative z-10 ${maxWidth} mx-auto ${align === 'center' ? 'text-center' : ''}`}>
         {children}
       </div>
@@ -267,42 +271,65 @@ function PadraoSection({ section }: { section: StylistSection }) {
   )
 }
 
-/* ── Seção com foto lateral ── */
-function FotoLadoSection({ section, reverse }: { section: StylistSection; reverse: boolean }) {
-  return (
-    <SectionShell tone="paper" maxWidth="max-w-5xl" ariaLabel={section.eyebrow ?? section.title}>
-      <div
-        className={`flex flex-col ${
-          reverse ? 'md:flex-row-reverse' : 'md:flex-row'
-        } items-start gap-10 md:gap-16`}
-      >
-        {/* Imagem */}
-        <div className="w-full max-w-xs md:w-2/5 md:max-w-none shrink-0 self-center">
-          {section.image?.asset ? (
-            <Image
-              src={urlFor(section.image).width(512).height(683).fit('crop').auto('format').url()}
-              alt={section.image.alt ?? section.title ?? ''}
-              width={512}
-              height={683}
-              className="w-full object-cover"
-            />
-          ) : (
-            <div className="w-full aspect-[3/4] bg-ink/10 flex items-center justify-center">
-              <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft text-center px-4">
-                Foto em breve
-              </span>
-            </div>
-          )}
-        </div>
+/*
+ * Fase 3.1 do redesign (14/07) -- "A História" repensada com 2 rodadas de
+ * agentes (Explorador de varejo ousado + Crítico + Diretor, ver PROGRESS.md).
+ * Substitui o antigo foto+texto plano em fundo claro por: cor composicional
+ * (bloco bordô atrás da foto, não lavagem full-screen atrás do texto --
+ * achado do Explorador: nenhuma loja ousada usa bloco de tinta chapado, a
+ * cor vem sempre da foto/produto), movimento real de scroll via
+ * PhotoParallax (sem sticky), tipografia no tier H2 já estabelecido (não um
+ * recorde de 144px), e CTA de agendamento fechando a seção -- a âncora
+ * comercial que faltava para não ler como portfólio de agência.
+ *
+ * Hairline dourada no topo + eyebrow = 2 pontos do orçamento de dourado
+ * (máx. 3/tela). Sem pull-quote itálico: o Diretor previu esse momento como
+ * a "voz da stylist", mas não existe campo de citação no schema do Sanity
+ * hoje -- fabricar uma frase seria conteúdo inventado. Fica registrado como
+ * possível próximo passo se/quando a Luiza fornecer uma frase real.
+ */
+function FotoLadoSection({ section, reverse, waHref }: { section: StylistSection; reverse: boolean; waHref: string | null }) {
+  const imageUrl = section.image?.asset
+    ? urlFor(section.image).width(700).height(933).fit('crop').auto('format').url()
+    : null
 
+  return (
+    <SectionShell tone="paper-deep" maxWidth="max-w-6xl" padding="py-24 md:py-32" topHairline ariaLabel={section.eyebrow ?? section.title}>
+      <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
         {/* Texto */}
-        <div className="flex-1">
-          <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-8" lineMargin="mb-8" />
+        <div className={`order-2 ${reverse ? 'md:order-2' : 'md:order-1'}`}>
+          <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-7" lineMargin="mb-7" />
           {section.body && (
-            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-ink-soft [&_blockquote]:tracking-wide [&_blockquote]:leading-relaxed [&_blockquote]:mb-4">
+            <div className="[&_p]:font-sans [&_p]:text-[15px] [&_p]:text-ink [&_p]:leading-relaxed [&_p]:mb-8 [&_blockquote]:font-sans [&_blockquote]:text-[15px] [&_blockquote]:text-ink [&_blockquote]:leading-relaxed [&_blockquote]:mb-8">
               <PortableText value={section.body} />
             </div>
           )}
+          <WaButton waHref={waHref} />
+        </div>
+
+        {/* Cor + foto */}
+        <div className={`order-1 ${reverse ? 'md:order-1' : 'md:order-2'}`}>
+          <FadeInSection>
+            <div className="relative max-w-[420px] mx-auto md:mx-0">
+              <div
+                aria-hidden
+                className={`absolute top-[6%] bottom-[-6%] w-[86%] bg-gradient-to-br from-bordo to-[#4A1123] ${
+                  reverse ? 'right-0 md:-right-[6vw]' : 'left-0 md:-left-[6vw]'
+                }`}
+              />
+              <div className={`relative ${reverse ? 'mr-[14%]' : 'ml-[14%]'}`}>
+                {imageUrl ? (
+                  <PhotoParallax src={imageUrl} alt={section.image?.alt ?? section.title ?? ''} />
+                ) : (
+                  <div className="w-full aspect-[3/4] bg-ink/10 flex items-center justify-center">
+                    <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft text-center px-4">
+                      Foto em breve
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </FadeInSection>
         </div>
       </div>
     </SectionShell>
