@@ -50,7 +50,7 @@ Base areia clara, drama concentrado em poucos pontos.
 
 **Regra do degradê (importante):** degradê dentro da família areia (ex.: `--sand-100` → `--sand-200`) é o padrão para textura de fundo dentro de uma seção — sutil, restrito a hero e faixas. Nunca degradê atrás de foto de produto (suja a leitura da roupa). Gradiente forte e genérico é sinal de "cara de IA" — evite.
 
-**Exceção revogada (2026-07-12):** a "costura" cruzando família de cor (areia → espresso) foi removida de toda a vitrine e do `/stylist` — virava sempre uma faixa taupe barrenta (marrom quase sem croma esmaecido sobre claro é matematicamente sujo, não é ajuste de valor). Regra restaurada sem nuance: **nunca degradê cruzando família de cor.** Ritmo entre seções claras e escuras se faz por corte limpo + entrada coreografada por scroll (Framer/`FadeInSection`), não por emenda esmaecida. Lenis (scroll suave) foi cortado do sistema na Fase 3 do redesign de 2026-07-13 — scroll nativo do navegador.
+**Exceção revogada (2026-07-12):** a "costura" cruzando família de cor (areia → espresso) foi removida de toda a vitrine e do `/stylist` — virava sempre uma faixa taupe barrenta (marrom quase sem croma esmaecido sobre claro é matematicamente sujo, não é ajuste de valor). Regra restaurada sem nuance: **nunca degradê cruzando família de cor.** Ritmo entre seções claras e escuras se faz por corte limpo + entrada coreografada por scroll (Lenis/Framer/`FadeInSection`), não por emenda esmaecida.
 
 ## 6. Catálogo: modelo de dados (a regra que impede duplicata)
 
