@@ -250,7 +250,7 @@ export default async function ProdutoPage({ params }: Props) {
 
           {/* Descrição */}
           {product.description && product.description.length > 0 && (
-            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:leading-relaxed [&_p]:mb-3 [&_strong]:font-medium [&_em]:italic">
+            <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:leading-relaxed [&_p]:mb-3 [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:mb-3 [&_strong]:font-medium [&_em]:italic">
               <PortableText value={product.description} />
             </div>
           )}
