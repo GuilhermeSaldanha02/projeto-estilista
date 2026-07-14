@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import { type ProductCardData } from '@/components/ProductCard'
-import SortableProductGrid from '@/components/catalog/SortableProductGrid'
+import ProductCatalog, { type FilterableProduct } from '@/components/catalog/ProductCatalog'
 import EmptyState from '@/components/EmptyState'
 
 // ISR — SDD §1: catálogo reflete o que a dona publica sem rebuild manual
@@ -52,7 +51,7 @@ export default async function CategoriaPage({ params }: Props) {
 
   const [category, products] = await Promise.all([
     client.fetch<Category | null>(categoryQuery, { slug }),
-    client.fetch<ProductCardData[]>(productsQuery, { slug }),
+    client.fetch<FilterableProduct[]>(productsQuery, { slug }),
   ])
 
   if (!category) {
@@ -83,25 +82,14 @@ export default async function CategoriaPage({ params }: Props) {
 
   return (
     <main className="min-h-screen">
-      {/* Sem eyebrow/linha aqui: o contador de peças virou dinâmico (calculado do
-          grid já filtrado, não do total do servidor — achado do code review do
-          PR #41) e mora dentro de SortableProductGrid. Título sozinho é o padrão
-          certo para seção utilitária (DESIGN.md, "Regra do Andaime Único"). */}
-      <div className="relative bg-gradient-to-b from-sand-100 to-sand-200 py-16 md:py-20 px-5">
-        <div className="relative z-10 max-w-7xl mx-auto">
-          <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight [text-wrap:balance]">
-            {category.title}
-          </h1>
-        </div>
-      </div>
-
-      <div className="py-10 px-5 max-w-7xl mx-auto">
-        {/* key={slug}: força remount ao navegar entre categorias diferentes
-            (mesma rota [slug]) -- sem isso, o filtro de categoria ativo
-            sobrevivia à troca de rota e podia deixar a próxima categoria
-            parecendo vazia (achado do code review do PR #41). */}
-        <SortableProductGrid key={slug} products={products} />
-      </div>
+      {/* key={slug}: força remount ao navegar entre categorias diferentes
+          (mesma rota [slug]) -- sem isso, o filtro de categoria ativo
+          sobrevivia à troca de rota e podia deixar a próxima categoria
+          parecendo vazia (achado do code review do PR #41). Título+contador+
+          filtro/sort agora moram juntos em ProductCatalog, no mesmo bloco —
+          antes eram 2 seções separadas por um vão grande, achado do dono
+          ("solto, não harmônico") ao ver a página Saias ao vivo. */}
+      <ProductCatalog key={slug} title={category.title} products={products} />
     </main>
   )
 }
