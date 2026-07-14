@@ -1,7 +1,66 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (Fase 3.1 — "A História" com cor composicional e movimento real)_
+_Última atualização: 2026-07-14 (Fase 4 — "Vitrine em Movimento": remodelação do hero)_
+
+---
+
+## Fase 4 — "Vitrine em Movimento": remodelação após pedido de refação total (2026-07-14)
+
+Depois da Fase 3.1, o dono voltou com a mensagem mais dura da sessão: *"acho
+que ta tendo alguma falta de comunicação... tudo que estão fazer e so
+adaptações no que ja existe e toda hora da erro, pois fica de uma maneira no
+computador e outra no mobile... eu quero pegar o conceito e a ideia ainda do
+cliente, e quero remodelar tudo, interface, cores, a nav bar, os menus, as
+opções."* Não era mais "ajusta esta seção" — era "a abordagem incremental não
+está funcionando, comece de novo pelo visual inteiro, mantendo o conceito do
+negócio."
+
+**Não rodei uma 3ª rodada de agentes.** O dono disse explicitamente que a
+mensagem estava se perdendo *através* dos agentes — repetir o padrão "spawn 3
+agentes" seria reproduzir o problema que ele estava nomeando. Investiguei
+direto, como thread principal.
+
+**Fui na lista de referências de verdade.** Não é um site — é um diretório
+(`3dgallery-eqrvxb8t.manus.space`) com 179 links curados, incluindo uma seção
+Moda & Luxo (Balenciaga, Gucci, Louis Vuitton — com Unreal Engine 5, Prada,
+Cartier, Rolex). **Achado central:** essas referências usam 3D/WebGL pesado e
+câmera cinematográfica — direto em conflito com a regra do próprio projeto
+(sem 3D, mobile-first, rápido). Isso explica o padrão de rodadas anteriores
+lendo como "tímido": os agentes vinham tentando honrar as duas coisas ao
+mesmo tempo e recuando para o seguro. Perguntei ao dono como resolver essa
+tensão; escolheu "motion mais pesado, aceitando algum custo de performance" —
+sem 3D de verdade, mas mais movimento e camadas do que o site tem hoje.
+
+**Protótipo antes de código.** Montei "Vitrine em Movimento"
+(`remodel-vitrine-movimento.html`, publicado como Artifact) mostrando nav,
+hero e uma seção de produtos com **desktop e mobile lado a lado, de
+propósito** — cada um como composição própria, não a mesma tela reflowada.
+Achei e corrigi um bug real antes de mostrar ao dono: o wordmark "LT STUDIO"
+colidia por cima do texto/CTA do hero no desktop (medido via
+`getBoundingClientRect`, não visualmente — a ferramenta de screenshot seguiu
+instável nesta sessão). Isso confirmou a causa real de "fica diferente no
+computador": o desktop nunca estava sendo verificado de verdade, só o mobile.
+
+**Decisão do dono, explícita:** desktop passa a liderar o desenho a partir de
+agora; mobile é derivado por responsividade (mas continua sendo verificado —
+é o canal que mais importa pro funil de WhatsApp, não foi desprezado).
+
+**Implementação real (este commit): só o hero da home.** `HeroSignature.tsx`
+reescrito — o wordmark gigante (antes tier "Assinatura", ver DESIGN.md) vira
+selo de fundo translúcido (`opacity 0.14`, `aria-hidden`), e a tagline
+editorial existente é promovida a `<h1>` real. Painel bordô à direita
+(desktop) / abaixo (mobile) com CTA em contorno cream. Vídeo do hero
+permanece — ele já era o protagonista, não havia motivo pra trocar por foto
+estática. Três camadas de scroll reaproveitam o `useScroll` do framer-motion
+já validado neste arquivo (não o evento `'scroll'` nativo, que o Lenis
+quebra — achado da Fase 3.1, `PhotoParallax.tsx`).
+
+**Fora de escopo desta fase, por decisão consciente:** nav/mega-menu (já
+sólida, acessível, sem bug reportado — mexer sem ganho real é risco à toa) e
+`ProductCard.tsx`/grade de produtos (bloco de cor atrás de cada card numa
+grade de 8+ produtos leria como lavagem repetida — o oposto do "cor escassa"
+que fez a Fase 3.1 funcionar). Ver "A Regra do Selo de Fundo" em DESIGN.md.
 
 ---
 

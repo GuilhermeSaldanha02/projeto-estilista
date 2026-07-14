@@ -177,8 +177,12 @@ que corpo/label** — o modo de falha a proibir é usar os dois como display.
 Escala fluida (`clamp()`), razão brutal entre o tier Assinatura e o Label — só UM
 momento gigante por site, não vários headlines parecidos competindo.
 
-- **Assinatura** (`clamp(4rem,15vw,8.5rem)`, peso **450**, tracking `-0.02em`,
-  uppercase): só o wordmark "LT STUDIO" do hero da home. 1 por site.
+- ~~**Assinatura**~~ (`clamp(4rem,15vw,8.5rem)`) — **APOSENTADA (Fase 4, 2026-07-14)**.
+  Era o wordmark "LT STUDIO" legível e gigante no hero da home. Virou selo de
+  fundo translúcido (`text-cream-text/[0.14]`, `aria-hidden`) — ver "A Regra do
+  Selo de Fundo" abaixo. O hero da home agora usa o tier H1 — Página para sua
+  headline legível (a tagline editorial, promovida a `<h1>`). Não recriar este
+  tier sem decisão nova do dono.
 - **Editorial** (`clamp(2.5rem,6vw,4.25rem)`, peso **400**, itálico): o pull-quote
   da Nota da Stylist (`CuratorialNote.tsx`). **Escassez por regra dura: no máximo 1
   por página, e a MAIORIA das páginas não tem nenhum.**
@@ -247,6 +251,33 @@ sim, mas nunca via `position:sticky`/scroll-hijack — nenhuma referência de
 varejo usa essa técnica, e foi o que quebrou o desktop na 1ª tentativa
 (`overflow:hidden` no ancestral mata o `sticky` por completo). Ver
 `components/stylist/PhotoParallax.tsx`.
+
+**A Regra do Selo de Fundo (Fase 4, 2026-07-14).** Depois da Fase 3.1, o dono
+pediu remodelação total (interface, cores, nav, menus) — não mais um ajuste
+pontual. Fui na lista de referências real (diretório de 179 sites) e conferi
+a seção Moda & Luxo (Balenciaga, Gucci, LV): a ousadia deles vem de escala e
+composição sobre uma tela quase-preto/quase-branco, não de mais cor de UI —
+o que resolve a tensão "referências usam 3D pesado" vs. "este projeto não usa
+3D": buscar a sensação, não a tecnologia (decisão explícita do dono). Validado
+antes em protótipo isolado ("Vitrine em Movimento") com desktop e mobile
+desenhados como composições distintas, não uma reflow da outra — decisão do
+dono também: **desktop lidera o desenho a partir de agora, mobile é derivado
+por responsividade** (não o inverso, que vinha causando "fica diferente no
+computador" — a causa real era falta de verificação visual do desktop, não a
+ordem de escrita do CSS).
+
+Aplicação no hero da home (`HeroSignature.tsx`): o wordmark "LT STUDIO" —
+antes tier Assinatura, legível e gigante — vira selo de fundo translúcido
+(`opacity ~0.14`, `aria-hidden`, nunca um heading) sangrando da foto para o
+painel bordô. O texto legível do hero passa a ser a tagline editorial já
+existente, promovida a `<h1>` (tier H1 — Página). CTA sobre o painel bordô
+usa contorno cream (não sólido bordô-sobre-bordô, que desapareceria) —
+variante nova, específica deste contexto. **Escopo desta fase: só o hero.**
+Nav e a grade de produtos (`ProductCard.tsx`) ficam de fora por decisão
+consciente — um bloco de cor atrás de cada card numa grade densa de 8+
+produtos leria como lavagem repetida, o oposto do "cor escassa" que fez a
+Fase 3.1 funcionar; a nav já é sólida, acessível e sem bug reportado, então
+não foi mexida para não introduzir risco de legibilidade sem ganho real.
 
 ## 4. Elevation
 
