@@ -1,6 +1,6 @@
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import SmoothScroll from '@/components/SmoothScroll'
+import SmoothScroll from '@/components/motion/SmoothScroll'
 
 export default function SiteLayout({
   children,

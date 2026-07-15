@@ -7,9 +7,11 @@ import { motion, useReducedMotion } from 'framer-motion'
 import type { NavCategory } from './Header'
 import { WhatsAppIcon } from '@/components/icons'
 
-// Fase 4 (Vitrine em Movimento) — mesmo padrão de entrada escalonada do
-// HeroSignature.tsx, reaproveitado aqui para o drawer mobile.
-const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const
+// Entrada escalonada do drawer mobile — ease vem do vocabulário único de
+// motion (Fase 5/Etapa 0, components/motion/tokens.ts); os timings locais
+// são mais curtos que os do stagger padrão porque menu abre por ação direta.
+import { EASE_OUT_EXPO } from '@/components/motion/tokens'
+
 const menuContainer = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.05, delayChildren: 0.05 } },

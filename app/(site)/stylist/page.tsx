@@ -5,7 +5,7 @@ import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { WhatsAppIcon } from '@/components/icons'
 import { FadeInSection } from '@/components/FadeInSection'
-import { PhotoParallax } from '@/components/stylist/PhotoParallax'
+import { PhotoParallax } from '@/components/motion/PhotoParallax'
 
 export const revalidate = 60
 

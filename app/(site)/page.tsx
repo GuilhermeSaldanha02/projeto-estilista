@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import CuratorialNote from '@/components/CuratorialNote'
-import HeroSignature from '@/components/HeroSignature'
+import Hero from '@/components/home/Hero'
 import PersonalStyling from '@/components/PersonalStyling'
 import ProductCatalog, { type FilterableProduct } from '@/components/catalog/ProductCatalog'
 
@@ -49,15 +49,17 @@ export default async function HomePage() {
     <main>
 
       {/* ═══════════════════════════════════════
-          1. HERO — momento-assinatura (Fase C): wordmark lockup, entrada
-             escalonada e parallax discreto no scroll. Ver HeroSignature.tsx.
+          1. HERO — Fase 5/Etapa 1 (reconstrução): vídeo full-bleed, "a foto
+             é a tela". Ver components/home/Hero.tsx. As demais seções abaixo
+             são as antigas — serão reconstruídas na Etapa 2 depois que o
+             dono aprovar este hero (portão definido no blueprint).
       ═══════════════════════════════════════ */}
-      <HeroSignature />
+      <Hero />
 
       {/* ═══════════════════════════════════════
           2. NOVIDADES — mesmo ProductCatalog de /colecao/novidades (filtro +
              ordenação inclusos). headingLevel="h2": o h1 da página já é o do
-             hero (HeroSignature) -- nunca dois h1 na mesma página.
+             hero -- nunca dois h1 na mesma página.
              A home de uma loja não pode deixar de mostrar produto nenhum.
       ═══════════════════════════════════════ */}
       {products.length > 0 && (

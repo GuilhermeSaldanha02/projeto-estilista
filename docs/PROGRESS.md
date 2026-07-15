@@ -1,7 +1,90 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (Fase 4e — nav sem Novidades duplicado + grade esparsa)_
+_Última atualização: 2026-07-14 (Fase 5 — RECONSTRUÇÃO DO ZERO, Etapas 0-1)_
+
+---
+
+## Fase 5 — Reconstrução do zero (2026-07-14, em andamento)
+
+O dono rejeitou o hero da Fase 4 ("esse vídeo com esse vermelho e esse LT
+STUDIO assim tá me dando agonia visual") e as páginas de peças ("permanece
+do mesmo jeito"), e deu a ordem definitiva: *"acione um time de agente, faça
+o review de tudo que já solicitamos... você permanece algo só remodelando,
+não uma estrutura nova, organizar as pastas do projeto... sem ser só
+alteração e sim construir do zero."*
+
+**Time de 2 agentes acionado (pedido explícito do dono), ambos em PT-BR:**
+
+1. **AUDITORIA** (relatório completo entregue ao dono): de ~17 pedidos, só 4
+   atendidos de verdade. Três pedidos de "redesign total" (08/07, 09/07,
+   14/07) — nenhum produziu site estruturalmente diferente. Padrões de falha
+   confirmados: (a) pedido global fatiado em "fases seguras" que somam
+   retoques, nunca estrutura — "rigor micro, covardia macro"; (b) DESIGN.md
+   violado pela implementação seguinte (painel bordô chapado do hero Fase 4
+   viola a Regra da Cor Composicional escrita 1 dia antes) e autocontraditório
+   (front-matter vs corpo; §6 diz peso 300, §3 diz 400-450); (c) validação
+   por DOM substituindo olho — o dono era o único QA visual; (d) interpretação
+   sistematicamente restritiva dos pedidos (o dono precisa pedir 2-3x).
+   Condições inegociáveis da reconstrução: desenhar a composição inteira
+   antes de fatiar; nada pronto sem verificação visual real; catálogo+produto
+   no design desde o dia 1.
+
+2. **BLUEPRINT** (arquiteto — documento completo no histórico da sessão de
+   14/07): tese "a foto É a tela" — fotografia full-bleed é o terreno; cor,
+   texto e UI são objetos pequenos sobre ela. Resolve as rejeições 1, 2, 4 e
+   5 de uma vez. Mapa novo: home editorial (hero full-bleed → seleção da
+   Luiza → portais de categoria → fila "acabou de chegar" → consultoria
+   escura) / NOVA /vitrine (catálogo completo, único lugar com filtros —
+   /colecao/novidades morre com redirect) / catálogo com cabeçalho COMO
+   célula da grade (não banner) / produto com galeria em pilha + "Combina
+   com" / /consultoria renomeada de /stylist. Componentes reorganizados por
+   domínio: ui/, layout/, motion/ (4 gestos), home/, catalog/, product/,
+   consultoria/. 6 etapas: 0-fundações → 1-hero (PORTÃO: dono aprova antes
+   de seguir) → 2-home → 3-catálogo → 4-produto → 5-consultoria → 6-passe
+   de coreografia. Cada etapa com gate de verificação visual dupla
+   (desktop 1440 + mobile 390).
+
+### Etapa 0 — Fundações (este commit)
+
+- `lib/wa.ts`: fonte única de href de WhatsApp (antes montado à mão em 6
+  arquivos). Call sites migram conforme cada página é reconstruída.
+- `components/motion/tokens.ts`: EASE_OUT_EXPO + variants de stagger — o
+  vocabulário único de motion. Nav.tsx já importa daqui.
+- `PhotoParallax` movido de `components/stylist/` para `components/motion/`
+  (é genérico); `SmoothScroll` movido da raiz para `components/motion/`.
+- Campo `image` opcional adicionado a `sanity/schemas/category.ts` (para os
+  portais de categoria da home, Etapa 2; fallback = foto do produto mais
+  recente).
+- **Desvios conscientes do blueprint:** redirects (/stylist→/consultoria,
+  /colecao/novidades→/vitrine) NÃO entraram na Etapa 0 — apontariam para
+  rotas que ainda não existem; entram nas Etapas 3 e 5 junto com as rotas.
+  `queries.ts` centralizado nasce com as queries novas nas etapas seguintes;
+  mover as existentes agora seria churn em páginas que serão reescritas.
+
+### Etapa 1 — Hero novo (este commit) — AGUARDANDO PORTÃO DO DONO
+
+`components/home/Hero.tsx`, do zero: vídeo full-bleed 100% da largura ×
+(100vh − header). SEM painel de cor, SEM wordmark-selo (as duas metades da
+rejeição de hoje). Legibilidade via scrim de gradiente só na metade inferior
+(transparente → espresso/60 — tratamento de foto, não lavagem). Conteúdo
+embaixo-esquerda: eyebrow 10px + h1 no tier H1-Página (48px @1440 — presença
+vem da foto de 828px de altura atrás, não do corpo da letra) + CTA único
+"Ver vitrine" contorno cream (href temporário /colecao/novidades até a
+Etapa 3). Indicador de scroll animado no canto direito. 3 camadas de
+parallax via useScroll (vídeo escala 1→1.12 + escurece, conteúdo sobe 12%
+mais rápido). `HeroSignature.tsx` (o hero rejeitado) DELETADO.
+
+Verificado em 1440x900 e 375x812: zero painéis bordô no hero (busca
+programática por qualquer bg com as cores 123,30,58/74,17,35 → 0
+resultados), zero selo, 1 h1 na página, CTA na dobra nos dois viewports,
+sem overflow horizontal. **A ferramenta de screenshot falhou de novo nesta
+sessão (timeout, artefato conhecido de tab em segundo plano) — o gate
+visual REAL desta etapa é o olho do dono, que é exatamente o desenho do
+portão: Etapa 2 não começa sem o dono aprovar este hero ao vivo.**
+
+**Estado: Etapas 0-1 entregues. Próximo: dono olha o hero → aprovando,
+Etapa 2 (home completa); reprovando, itera aqui.**
 
 ---
 
