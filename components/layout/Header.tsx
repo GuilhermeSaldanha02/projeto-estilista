@@ -1,24 +1,12 @@
 import { client } from '@/sanity/lib/client'
+import { navCategoriesQuery, settingsQuery } from '@/sanity/lib/queries'
 import Nav from './Nav'
 
 export type NavCategory = { _id: string; title: string; slug: string }
 
-// Só categorias com ao menos um produto em estoque — regra de negócio, sem fallback
-const categoriesQuery = `
-  *[_type == "category"
-    && count(*[_type == "product" && references(^._id) && inStock == true]) > 0
-  ] | order(order asc) {
-    _id,
-    title,
-    "slug": slug.current
-  }
-`
-
-const settingsQuery = `*[_type == "siteSettings"][0]{ whatsappNumber }`
-
 export default async function Header() {
   const [categories, settings] = await Promise.all([
-    client.fetch<NavCategory[]>(categoriesQuery),
+    client.fetch<NavCategory[]>(navCategoriesQuery),
     client.fetch<{ whatsappNumber?: string } | null>(settingsQuery),
   ])
 

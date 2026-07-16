@@ -1,6 +1,6 @@
 ---
 name: LT Studio
-description: Vitrine editorial de moda feminina com olhar de personal stylist
+description: Vitrine editorial de moda feminina com olhar de personal stylist — "a foto é a tela"
 colors:
   esmeralda: "#0B5D46"
   esmeralda-light: "#1D9A72"
@@ -8,368 +8,150 @@ colors:
   dourado: "#C2A14D"
   espresso: "#241C17"
   ink: "#1A1A1A"
-  sand-200: "#E7DBC8"
-  sand-100: "#EDE3D2"
-  sand-50: "#F4EFE6"
+  ink-soft: "#6B6152"
+  sand-50: "#F5F1EA"
+  sand-100: "#EBE4D6"
+  cream-text: "#F4EFE6"
 typography:
   display:
     fontFamily: "var(--font-display), Georgia, 'Times New Roman', serif"
-    fontWeight: 300
-    lineHeight: 1.1
-    letterSpacing: "0.2em"
-  headline:
-    fontFamily: "var(--font-display), Georgia, 'Times New Roman', serif"
-    fontWeight: 300
-    fontSize: "clamp(1.875rem, 4vw, 2.25rem)"
-    lineHeight: 1.2
-    letterSpacing: "0.05em"
+    fontWeight: 450
+    lineHeight: 1.15
   label:
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
     fontWeight: 400
     fontSize: "0.625rem"
-    lineHeight: 1
-    letterSpacing: "0.4em"
+    letterSpacing: "0.3em-0.4em"
   body:
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
     fontWeight: 400
     fontSize: "0.875rem"
     lineHeight: 1.6
-    letterSpacing: "0.05em"
 rounded:
   none: "0px"
-spacing:
-  xs: "4px"
-  sm: "16px"
-  md: "24px"
-  lg: "40px"
-  xl: "64px"
 components:
   button-primary:
     backgroundColor: "{colors.bordo}"
-    textColor: "{colors.sand-50}"
+    textColor: "{colors.cream-text}"
     rounded: "{rounded.none}"
-    padding: "16px 32px"
-  button-primary-hover:
-    backgroundColor: "{colors.bordo}"
-    textColor: "{colors.sand-50}"
-  button-cta-green:
+  button-cta-agendar:
     backgroundColor: "{colors.esmeralda}"
-    textColor: "{colors.sand-50}"
-    rounded: "{rounded.none}"
-    padding: "16px 40px"
-  button-cta-green-hover:
-    backgroundColor: "{colors.esmeralda}"
-    textColor: "{colors.sand-50}"
-  product-card:
-    backgroundColor: "{colors.sand-50}"
+    textColor: "{colors.cream-text}"
     rounded: "{rounded.none}"
 ---
 
-# Design System: LT Studio
+# Design System: LT Studio (Fase 5 — Reconstrução)
 
-## 1. Overview
+Este documento descreve o sistema **vivo** — só regras em vigor hoje. Histórico
+de decisões revogadas, rodadas de redesign e achados de code review mora em
+`docs/PROGRESS.md`, não aqui. Se uma regra abaixo entrar em conflito com o
+código, o código real vence e este arquivo precisa ser corrigido.
 
-**Creative North Star: "O Olhar da Stylist"**
+## 1. Tese central: "A foto é a tela"
 
-O site da LT Studio não é uma vitrine neutra. É tudo visto através do olhar de uma especialista — cada peça aparece porque foi escolhida, cada seção existe porque tem algo a dizer. O design tem ponto de vista. Não cataloga: cuida.
+O site não usa cor de UI como fundo de seção (banner, painel chapado atrás
+de texto). Fotografia full-bleed é o terreno; cor, texto e botões são
+elementos pequenos e precisos apoiados sobre ela. Escala de foto + contraste
+com tipografia pequena (label 10px sobre 100vh de imagem) é o que carrega a
+presença — não tamanho de letra, não painel de cor.
 
-Visualmente, o sistema vive numa tensão deliberada: a severidade do espresso e o calor da areia. Cantos retos sem rádio, flat sem sombras decorativas, tipografia serif leve com tracking generoso. Não há ornamento gratuito. A foto é o argumento; o texto é a confirmação. O espaço em branco é parte do design, não ausência dele.
+**Nunca:** fundo de seção inteira em bordô/esmeralda atrás de texto corrido.
+**Sempre que precisar de cor forte:** vem em composição com uma foto — bloco
+de cor sangrando atrás/ao redor de uma imagem (ver `FotoLadoSection`,
+`ConsultingInvite`), nunca como lavagem isolada.
 
-O ritmo da página alterna entre faixas espresso (escuras, confiantes) e areia (quentes, acolhedoras), criando cadência editorial sem depender de gradientes ou elementos decorativos. A stylist está presente — na curadoria, no CTA que diz exatamente o que acontece depois, na voz que soa como uma amiga com gosto apurado.
+## 2. Cores
 
-**Key Characteristics:**
-- Cantos retos sem rádio — alfaiataria visual, sem suavização
-- Elevação flat via tonal layering (sem box-shadow decorativo)
-- Tipografia display serif leve com tracking muito amplo
-- Dois tons dominantes: espresso + família areia
-- Três funções de cor distintas: esmeralda (confiança/agendamento), bordô (ação/peça), dourado (detalhe/linha)
-- Mobile-first: a experiência de tocar e scrollar é tão considerada quanto o layout desktop
+- **Espresso** (`#241C17`): único escuro de seção inteira do site (header,
+  footer, 1 seção de conteúdo por página no máximo — hoje: `ConsultingInvite`
+  na home, `TransformacaoEscuraSection` na consultoria).
+- **Papel** (`sand-50 #F5F1EA` / `sand-100 #EBE4D6`): fundo dominante.
+- **Bordô** (`#7B1E3A`): função *produto/desejo*. Só em: botão "Quero esta
+  peça", bloco de cor atrás de foto (nunca atrás de texto puro).
+- **Esmeralda** (`#0B5D46`): função *agendamento/relacionamento*. Só em:
+  botão "Agendar horário". As duas funções nunca trocam de papel, e nunca
+  aparecem com o mesmo peso visual no mesmo componente.
+- **Dourado** (`#C2A14D`): linhas divisórias, eyebrows, ícones — nunca como
+  texto sobre bordô (medido: 4,07:1, abaixo do mínimo AA 4,5:1, mesmo a 100%
+  de opacidade). Seguro sobre espresso/ink. Escasso: no máximo 3 pontos por
+  tela.
+- **Cream-text** (`#F4EFE6`): texto sobre qualquer fundo escuro ou foto.
 
-## 2. Colors: A Paleta do Atelier
+## 3. Tipografia
 
-**Reduzida no redesign de 2026-07-13** (decisão de 3 agentes em loop + o dono — ver
-`docs/PROGRESS.md`, "Direção final do redesign visual"). Tese: quase-monocromático
-quente + 2 acentos funcionais (não 1) — a "Regra das Três Funções" sobrevive por
-decisão explícita do dono, mas `verde-profundo` foi cortado por completo (era a
-mesma rampa tonal da esmeralda — "verde sobre verde" sem separação real) e o
-dourado passou de "regra ignorada" para disciplina ativa (o sistema chegou a violar
-o próprio teto de 3 pontos por tela, medido em 5).
+Fraunces (display) + Schibsted Grotesk (label/corpo). Peso do display:
+**400–450, nunca bold/semibold** — presença vem de escala e do contraste com
+a foto, não do peso da letra.
 
-### Primary
-- **Verde Atelier** (`#0B5D46`): Esmeralda. Acento de **agendamento/relacionamento**
-  (o funil principal do negócio). Carrega o peso da confiança. Usado com espaço —
-  nunca como fundo de seção inteira.
-- **Verde Atelier Claro** (`#1D9A72`): Esmeralda-light. Apenas hover sobre elementos
-  esmeralda. Nunca em repouso.
+- **H1 — Página** `clamp(2rem,4vw,2.75rem)`: título de página (categoria,
+  produto, consultoria). No hero da home, sobe até `clamp(2.25rem,4vw,3rem)`
+  por estar ancorado sobre 100vh de foto.
+- **H2 — Seção** `clamp(1.5rem,3vw,2rem)`: subseções.
+- **Editorial** (itálico, tier maior que H2): só a nota da stylist e
+  pull-quotes — no máximo 1 por página.
+- **Label** `10px`, tracking `0.3–0.4em`, uppercase: nav, eyebrows, preços,
+  CTAs — a voz do sistema, não decoração.
 
-### Secondary
-- **Borgonha** (`#7B1E3A`): Bordô. Acento de **produto/desejo** — "Quero esta peça".
-  Mantido (não cortado) para preservar a Regra das Três Funções. **Nunca aparece com
-  o mesmo peso visual que a esmeralda no mesmo componente** — ver o "Don't" novo
-  abaixo; é o erro que já aconteceu uma vez no hero.
+## 4. Motion — vocabulário único
 
-### Tertiary
-- **Fio de Ouro** (`#C2A14D`): Dourado. Exclusivo para linhas divisórias, ícones e
-  eyebrows. Nunca como fundo ou texto corrido. **Disciplina ativa, não sugestão:**
-  se aparecer em mais de 3 pontos na mesma tela, é bug a corrigir, não estilo.
+Fonte: `components/motion/tokens.ts`. Nunca duplicar ease/variants em
+componente. Quatro gestos, sempre os mesmos:
 
-### Neutral
-- **Espresso** (`#241C17`): o único escuro de seção inteira do sistema (header,
-  footer, e no máximo 1 seção de conteúdo por página). Textura quente de café
-  torrado, não o frio de um preto puro.
-- **Tinta** (`#1A1A1A`): texto primário sobre fundo claro.
-- **Tinta Suave** (`#6B6152`, token `ink-soft`): texto secundário/legendas sobre
-  fundo claro — **substitui os modificadores `text-ink/65`, `/70`, `/75`** que
-  ficavam abaixo de AA em alguns pontos. AA verificado: 5.45:1 sobre `--sand-50`.
-  Nunca usar opacidade solta em `ink` de novo — é este token ou nada.
-- **Paper** (`#F5F1EA`, token `sand-50`): fundo dominante do corpo. Papel quente,
-  quieto — não branco de tela nem beige de template.
-- **Paper Deep** (`#EBE4D6`, tokens `sand-100`/`sand-200`/`sand-300` — todos o
-  mesmo valor agora): único segundo tom de papel, para alternância sutil de seção
-  clara. (Antes eram 3 tons quase indistinguíveis; colapsados de propósito.)
-- **Creme** (`#F4EFE6`, token `cream-text`): texto sobre espresso.
+1. **Reveal** (`components/motion/Reveal.tsx`): fade + `y:24→0` ao entrar na
+   viewport. Uso geral.
+2. **PhotoReveal** (`components/motion/PhotoReveal.tsx`): clip-path de
+   cortina + scale ao entrar na viewport. Fotos editoriais.
+3. **Parallax de camadas**: `useScroll`/`useTransform` do framer-motion
+   (hero) ou rAF+IntersectionObserver (`PhotoParallax.tsx`, seções de
+   foto lateral). **Nunca** o evento `scroll` nativo — o Lenis (smooth
+   scroll global) o quebra sem lançar erro, silenciosamente. **Nunca**
+   `position:sticky`/scroll-hijack — quebrou o desktop numa tentativa
+   anterior (`overflow:hidden` no ancestral mata o sticky por completo).
+4. **Fila com scroll-snap**: `NewArrivalsRail`, galeria mobile de produto.
 
-### ~~Verde-Profundo~~ — CORTADO (2026-07-13)
+Tudo respeita `useReducedMotion`/`motion-reduce:*`.
 
-Existiu como `#083D2C`, tom mais escuro da rampa tonal da própria esmeralda.
-Causava "verde sobre verde" sem separação real (o CTA esmeralda dentro de um fundo
-verde-profundo quase não se distinguia) e competia com o espresso como um segundo
-"escuro de seção inteira" sem necessidade. **Removido do sistema — não redefinido.**
-A "Regra Espresso × Verde-Profundo" (2026-07-12) está revogada; não recriar essa cor
-sem decisão nova e explícita do dono.
+## 5. Estrutura de componentes
 
-### Named Rules
+```
+components/
+├── layout/    Header, Nav, Footer — chrome global
+├── motion/    tokens, Reveal, PhotoReveal, PhotoParallax, SmoothScroll
+├── home/      Hero, CuratedSelection, CategoryPortals, NewArrivalsRail, ConsultingInvite
+├── catalog/   CatalogView (título+contador+filtro como UMA célula da grade)
+├── product/   ProductGallery, RelatedRail
+├── consultoria/ StylistHero, Sections (renderer das seções dinâmicas do CMS)
+└── ui/        ProductCard, EmptyState, icons — primitivos sem domínio
+```
 
-**A Regra das Três Funções.** Esmeralda é confiança e agendamento. Borgonha é desejo
-e produto. Dourado é detalhe e linha. Os três nunca trocam de função — um botão
-borgonha nunca agenda, um botão esmeralda nunca leva ao produto. **Correção nova
-(2026-07-13):** quando bordô e esmeralda aparecem na MESMA tela, eles NUNCA têm o
-mesmo peso visual/tamanho — um é primário (sólido, dominante), o outro é secundário
-(contorno/menor). Nunca dois botões cheios do mesmo tamanho lado a lado — isso é
-"cores brigando", não hierarquia. **Nota (2026-07-14):** o hero da home não tem mais
-os dois CTAs juntos (o de agendamento foi removido — nav já cobre isso sempre
-visível); "Ver coleção" agora é o único CTA do hero e pode ser sólido bordô sem
-precisar ceder a ninguém. A regra de hierarquia acima continua valendo em qualquer
-tela onde bordô e esmeralda voltem a coexistir.
+Zero componente solto na raiz de `components/`. Todo GROQ mora em
+`sanity/lib/queries.ts`, nomeado — nenhuma rota escreve query inline.
 
-**A Regra do Dourado Escasso.** O dourado (`#C2A14D`) só vive em linhas (`h-px`),
-ícones e eyebrow text. Nunca como fundo, nunca como texto de parágrafo, nunca em
-botão. **Se ele aparece em mais de três pontos na mesma tela, há um a mais** — isto
-já foi violado uma vez (5 pontos numa tela só); tratar como bug, não estética.
+## 6. Catálogo — regra do cabeçalho
 
-**A Regra do Degradê Familiar.** Gradiente só dentro da família areia (sand-50 →
-sand-100), sutil. Nunca cruzando família de cor. Gradiente sobre foto de produto é
-proibido — suja a roupa.
+Título + contador + filtro/ordenação vivem **na mesma régua/grade** que os
+produtos — nunca um banner de página inteira acima de uma grade separada. Em
+`/vitrine` e `/categoria/[slug]`, o cabeçalho é literalmente a primeira
+célula do grid. Com 1–3 produtos, o grid ganha um `max-w` proporcional ao
+número de colunas (o container encolhe, não os cards esticam) e uma legenda
+"edição enxuta" — vazio com intenção declarada, nunca vazio que lê como grid
+quebrado.
 
-## 3. Typography: Serif Leve, Sans Preciso
+## 7. Do's and Don'ts
 
-**Display Font:** Fraunces (`var(--font-display)`), Georgia, Times New Roman, serif
-**Body/UI Font:** Schibsted Grotesk (`var(--font-sans)`), sistema como fallback
+**Do:**
+- Cantos retos, sem `border-radius`, em todo elemento interativo.
+- `next/image` + Sanity CDN + `sizes` honesto em toda imagem.
+- Um H1 por página. `headingLevel` explícito quando um componente de
+  catálogo é embutido numa página que já tem H1 próprio (home).
+- `lib/wa.ts` (`buildWaHref`) para todo link de WhatsApp — nunca montar a
+  string à mão num componente.
 
-**Character:** O display carrega autoridade editorial — leve, espaçado, nunca
-comprimido. O sans é o contraponto: preciso, anônimo, funcional. O contraste de
-família (serif display + humanist sans) é intencional. **Guardrail (2026-07-13):
-Fraunces é dona de TODO momento display/editorial; Schibsted nunca aparece maior
-que corpo/label** — o modo de falha a proibir é usar os dois como display.
-
-### Hierarquia — 5 níveis (REESCRITA 2026-07-13, ver "Regra do Peso Único" abaixo)
-
-Escala fluida (`clamp()`), razão brutal entre o tier Assinatura e o Label — só UM
-momento gigante por site, não vários headlines parecidos competindo.
-
-- ~~**Assinatura**~~ (`clamp(4rem,15vw,8.5rem)`) — **APOSENTADA (Fase 4, 2026-07-14)**.
-  Era o wordmark "LT STUDIO" legível e gigante no hero da home. Virou selo de
-  fundo translúcido (`text-cream-text/[0.14]`, `aria-hidden`) — ver "A Regra do
-  Selo de Fundo" abaixo. O hero da home agora usa o tier H1 — Página para sua
-  headline legível (a tagline editorial, promovida a `<h1>`). Não recriar este
-  tier sem decisão nova do dono.
-- **Editorial** (`clamp(2.5rem,6vw,4.25rem)`, peso **400**, itálico): o pull-quote
-  da Nota da Stylist (`CuratorialNote.tsx`). **Escassez por regra dura: no máximo 1
-  por página, e a MAIORIA das páginas não tem nenhum.**
-- **H1 — Página** (`clamp(2rem,4vw,2.75rem)`, peso **450**): título de categoria,
-  coleção, produto, nome da stylist no `/stylist`. Nunca sobe além disso.
-- **H2 — Seção** (`clamp(1.5rem,3vw,2rem)`, peso **450**): subseções da home e do
-  `/stylist`. Visivelmente menor que H1 — hierarquia real entre níveis, não o
-  mesmo tamanho universal.
-- **Corpo** (400, `text-sm`/14px, line-height 1.6, máx 65ch, Schibsted).
-- **Label** (400, 10–11px, tracking `0.2em`–`0.4em`, uppercase, Schibsted):
-  nav, eyebrows, preços, CTAs.
-
-**Numerais decorativos** (ex.: "01/02/03" do Personal Styling e das Etapas do
-`/stylist`) NÃO são um tier de display — são label pequeno (`text-sm`, tracking
-largo), na cor do tom local (`cream-text/50` sobre escuro, `ink-soft` sobre
-claro — ver "Etapas" abaixo, que virou seção clara na Fase 3). Eliminados os
-96px/72px anteriores (`PersonalStyling.tsx`), que eram maiores que qualquer
-headline real do site — o pior ofensor medido pelo Crítico no redesign
-2026-07-13.
-
-### Named Rules
-
-**A Regra do Peso Único — REESCRITA (redesign 2026-07-13, supera a versão de
-2026-07-10).** A versão anterior subiu para `font-medium`(500)/`font-semibold`(600)
-achando que 300 "sussurrava" — mas a SOMA dessas decisões com o resto do sistema
-(numerais gigantes, heading idêntico repetido em 6 páginas) leu como "estourado"
-para o dono. **Correção: peso 400–450 em todo display, nunca 500/600/bold — o
-TAMANHO carrega a presença, não o peso.** Escassez de tamanho (só 1 Assinatura, só
-1 Editorial por página, a maioria das páginas sem Editorial nenhum) é o que
-resolve "estourado" de verdade, não o peso.
-
-**A Regra do Label Imutável.** Labels (`text-[10px]` ou `text-[11px]`, `tracking-widest`, `uppercase`) são a voz do sistema, não da stylist. Não misturar com prose, não aumentar a fonte "para melhorar a leitura", não remover o tracking. Se precisar de texto maior que 11px como label, é um title, não um label.
-
-**A Regra do Andaime Único (Fase 3, 2026-07-13).** O combo "eyebrow +
-linha dourada + H2" é o rótulo de abertura de uma seção — não é decoração
-obrigatória. Usar nas seções que abrem um novo assunto narrativo (ex.:
-`foto-esquerda`/`foto-direita` — primeira seção de conteúdo real de uma
-página) ou que marcam o clímax (`transformacao-escura`). Seções utilitárias
-— grade (`cards`) e lista numerada (`etapas`) — já sinalizam sua identidade
-pelo próprio layout; usam só o H2, sem eyebrow nem linha. Antes da Fase 3,
-o combo se repetia em 5 das 6 seções do `/stylist` numa mesma rolagem — o
-"muita coisa repetida" apontado pelo dono. Ver `SectionHeading` em
-`app/(site)/stylist/page.tsx` (`variant: 'full' | 'title-only'`).
-
-**A Regra de Uma Seção Escura por Página (Fase 3, 2026-07-13).** No máximo
-1 seção com fundo `espresso` por página — o momento escuro é o clímax, não
-um estado que se repete. `/stylist` tinha `etapas` (fundo escuro) seguida
-imediatamente por `transformacao-escura` (fundo escuro) — duas seções
-escuras competindo lado a lado, achado do Crítico. `etapas` virou seção
-clara (`paper`); `transformacao-escura` continua o único clímax escuro da
-página, na penúltima posição antes do CTA final.
-
-**A Regra da Cor Composicional (Fase 3.1, 2026-07-14).** Depois do dono
-rejeitar duas rodadas de redesign por parecerem "sem efeito das
-referências" e depois "portfólio de agência, não loja", uma 2ª rodada de
-3 agentes (Explorador de varejo real — Ganni, Jacquemus, Reformation, Farm
-Rio — + Crítico + Diretor) resolveu a tensão entre "cor ousada" e "ainda
-parecer loja": **cor forte nunca é lavagem chapada full-screen atrás do
-texto — ela vem da composição com a FOTO** (bloco de cor atrás/ao redor da
-foto, grade de cor quente e sutil na própria imagem — nunca duotone duro,
-que lê como projeto de agência). Ver `FotoLadoSection` em
-`app/(site)/stylist/page.tsx` ("A História"): bloco `bordo` sangrando por
-uma borda só, foto com `PhotoParallax` por cima, CTA de agendamento
-fechando a seção (a âncora comercial que faltava). Movimento real de scroll
-sim, mas nunca via `position:sticky`/scroll-hijack — nenhuma referência de
-varejo usa essa técnica, e foi o que quebrou o desktop na 1ª tentativa
-(`overflow:hidden` no ancestral mata o `sticky` por completo). Ver
-`components/stylist/PhotoParallax.tsx`.
-
-**A Regra do Selo de Fundo (Fase 4, 2026-07-14).** Depois da Fase 3.1, o dono
-pediu remodelação total (interface, cores, nav, menus) — não mais um ajuste
-pontual. Fui na lista de referências real (diretório de 179 sites) e conferi
-a seção Moda & Luxo (Balenciaga, Gucci, LV): a ousadia deles vem de escala e
-composição sobre uma tela quase-preto/quase-branco, não de mais cor de UI —
-o que resolve a tensão "referências usam 3D pesado" vs. "este projeto não usa
-3D": buscar a sensação, não a tecnologia (decisão explícita do dono). Validado
-antes em protótipo isolado ("Vitrine em Movimento") com desktop e mobile
-desenhados como composições distintas, não uma reflow da outra — decisão do
-dono também: **desktop lidera o desenho a partir de agora, mobile é derivado
-por responsividade** (não o inverso, que vinha causando "fica diferente no
-computador" — a causa real era falta de verificação visual do desktop, não a
-ordem de escrita do CSS).
-
-Aplicação no hero da home (`HeroSignature.tsx`): o wordmark "LT STUDIO" —
-antes tier Assinatura, legível e gigante — vira selo de fundo translúcido
-(`opacity ~0.14`, `aria-hidden`, nunca um heading) sangrando da foto para o
-painel bordô. O texto legível do hero passa a ser a tagline editorial já
-existente, promovida a `<h1>` (tier H1 — Página). CTA sobre o painel bordô
-usa contorno cream (não sólido bordô-sobre-bordô, que desapareceria) —
-variante nova, específica deste contexto. **Escopo desta fase: só o hero.**
-Nav e a grade de produtos (`ProductCard.tsx`) ficam de fora por decisão
-consciente — um bloco de cor atrás de cada card numa grade densa de 8+
-produtos leria como lavagem repetida, o oposto do "cor escassa" que fez a
-Fase 3.1 funcionar; a nav já é sólida, acessível e sem bug reportado, então
-não foi mexida para não introduzir risco de legibilidade sem ganho real.
-
-**Extensão à nav (mesma Fase 4, commit seguinte).** O header é uma barra fixa
-e sólida — nunca sobrepõe o vídeo do hero (`app/(site)/layout.tsx` reserva
-`pt-16`/`pt-[72px]` de espaço acima do conteúdo), então mexer no header não
-carrega o risco de legibilidade sobre vídeo instável que fez eu descartar a
-transparência-sobre-hero. Duas mudanças seguras: (1) o bloco destaque do
-mega-menu vai de `bg-ink` para o mesmo gradiente bordô do painel do hero
-(`from-bordo to-[#4A1123]`), estendendo a linguagem de cor composicional para
-a nav; (2) o menu mobile ganha entrada escalonada (stagger) nos links, mesma
-lógica de `container`/`item` do hero, sob `useReducedMotion`.
-
-**Achado de contraste: dourado sobre bordô nunca passa AA, nem a 100% de
-opacidade.** Medido via cálculo WCAG relativo (não estimativa): dourado
-(`#C2A14D`) sobre `bordo` (`#7B1E3A`) = 4.07:1, abaixo do mínimo 4.5:1 para
-texto normal — mesmo no ponto mais escuro do gradiente (`#4A1123`) sobe só
-a 6.09:1, então o risco é real na metade "clara" do painel. **Regra nova:
-nunca usar `text-dourado` sobre superfície bordô — usar `cream-text`.** O
-dourado continua seguro sobre `espresso`/`ink` (fundos quase-pretos, onde já
-era usado) e como linha/ícone decorativo (não é texto, WCAG não se aplica).
-Isso já derrubou o eyebrow do hero (ver acima) e o texto do bloco destaque da
-nav — ambos trocados para `cream-text`.
-
-## 4. Elevation
-
-O sistema é plano por design, não por omissão. Profundidade vem de tonal layering — alternância de superfícies (areia clara, areia base, espresso) em vez de sombras. Uma faixa espresso não levanta sobre a areia: substitui o terreno.
-
-A exceção são os menus flutuantes (mega-menu e mobile drawer): recebem `shadow-2xl` para separação de camada, nunca para decoração. Fora de overlays, `box-shadow` é proibido.
-
-### Named Rules
-
-**A Regra Flat-por-Default.** Todo elemento em repouso é plano. Sombra indica overlay (menu, dialog, toast) — nunca usado para "dar profundidade" a card ou seção. Se a intenção é separação, use cor de superfície diferente.
-
-## 5. Components
-
-### Buttons
-
-**Caráter:** Recortados e diretos. Alfaiataria visual — nenhum rádio, nenhuma sombra, nenhum gradiente. A estrutura é o ornamento.
-
-- **Shape:** Sem border-radius (0px)
-- **Primário borgonha** (`bg-bordo text-cream-text`, `px-8 py-4`): Ações de produto. "Quero esta peça." Uppercase 11px tracking-widest.
-- **CTA esmeralda** (`bg-esmeralda text-cream-text`, `px-10 py-4`): Agendamento WhatsApp. "Agendar horário." Mesmo tipo tipográfico.
-- **Hover:** `opacity-90` com `transition-opacity`. Sem mudança de cor, sem translate, sem escala.
-- **Focus visible:** `outline 2px solid cream-text` (sobre escuro) ou `outline 2px solid bordo` (sobre claro), `outline-offset-4`.
-- **Desabilitado:** `opacity-50 cursor-not-allowed select-none`. Sem elemento interativo por baixo.
-
-### Cards de Produto
-
-**Caráter:** A peça em primeiro plano, a informação em segundo. O card desaparece; a foto permanece.
-
-- **Corner Style:** Sem border-radius
-- **Background:** `sand-50` (`#F4EFE6`)
-- **Shadow:** Nenhuma — flat por regra
-- **Image:** `aspect-[3/4]`, `object-cover`, hover `scale-105` com `duration-500`. O hover é o único feedback de interatividade.
-- **Info area:** `p-4`, flex coluna, `gap-2`
-  - Título: `font-display text-lg font-light text-ink` (mantém tipografia editorial)
-  - Preço: `font-sans text-xs text-ink/65`
-  - CTA inline: `text-[10px] tracking-widest uppercase text-bordo`, hover `text-espresso` — não é button, é link sugestivo
-
-### Navegação
-
-**Desktop:** Grid `logo-esquerda | links-centro | WhatsApp-direita`. Header fixo `bg-espresso h-16 md:h-[72px]`.
-
-- Links: `font-sans text-[10px] tracking-widest uppercase text-cream-text opacity-85`, hover `opacity-100`
-- Logo: 66×36px desktop, 55×30px mobile, `hover:opacity-75`
-- WhatsApp: ícone + texto "WhatsApp" apenas desktop, `cream-text/65` → `cream-text`
-
-**Mega-menu:** `fixed inset-x-0`, `bg-espresso`, `border-t border-dourado/25`, grid 2-3 colunas + bloco destaque `bg-ink`. Bloco destaque usa `font-display italic` para o link "Novidades".
-
-**Mobile:** Overlay absoluto `top-16`, `bg-espresso`, lista com separadores `border-t border-white/5`. Links uppercase text-sm com seta `→` direita. "Novidades" em `text-dourado` (exceção intencional de cor no mobile menu).
-
-### Mega-menu — Bloco Destaque
-
-Componente único do sistema: o quadrado escuro à direita do mega-menu. `bg-ink` (mais escuro que espresso), eyebrow dourado, font-display itálico. Representa a curadoria da stylist dentro da navegação — não é só um link, é um ponto de vista.
-
-## 6. Do's and Don'ts
-
-### Do:
-- **Do** usar `font-light` (300) em toda tipografia display e headline — o peso leve é o ponto de vista, não uma omissão.
-- **Do** alternar seções entre espresso e família areia para criar ritmo sem gradiente — sand-100, sand-200, e espresso são os três níveis de profundidade.
-- **Do** reservar bordô para CTAs de produto e esmeralda para CTAs de agendamento — as funções são fixas.
-- **Do** manter labels em `text-[10px]`/`text-[11px]` uppercase tracking-widest — são a voz do sistema, não decoração.
-- **Do** testar contraste de `text-ink/65` e `text-cream-text/75` sobre seus respectivos fundos — as variações com opacidade são onde o AA falha primeiro.
-- **Do** usar `next/image` + Sanity CDN para toda imagem de produto — vitrine lenta é cliente perdida.
-- **Do** manter o dourado escasso: linhas `h-px`, ícones e eyebrows. Três pontos na mesma tela é o máximo.
-
-### Don't:
-- **Don't** adicionar border-radius a nenhum elemento interativo — cantos retos são a identidade, não um padrão a "modernizar".
-- **Don't** usar gradiente sobre foto de produto, nem cruzar famílias de cor em gradiente (areia → esmeralda, espresso → areia).
-- **Don't** fazer o site parecer fast fashion genérico (Shein, Renner): nenhuma grade lotada, nenhum preço em destaque na hero, nenhuma promoção "X% OFF" como elemento visual.
-- **Don't** fazer o site parecer loja de departamento (C&A, Riachuelo): sem identidade de template, sem curadoria perdida em volume de produtos, sem prioridade à função sobre ao ponto de vista.
-- **Don't** usar `box-shadow` fora de overlays (mega-menu, mobile drawer) — sombra indica flutuação; elementos em repouso não flutuam.
-- **Don't** colocar dois CTAs diferentes no mesmo momento de decisão — nunca bordô e esmeralda lado a lado em contexto ambíguo. Se algum dia coexistirem de novo, a hierarquia precisa ficar clara: um sólido/dominante, o outro contorno/secundário — nunca dois botões cheios do mesmo peso (o hero da home não tem mais os dois juntos desde 2026-07-14).
-- **Don't** usar `font-bold` ou `font-semibold` em display serif — ênfase vem de escala e tracking, não de peso.
-- **Don't** criar uma nova cor de acento sem aprovação — o sistema tem três funções (esmeralda, bordô, dourado) e não precisa de uma quarta.
-- **Don't** usar eyebrow em toda seção por reflexo — o tracking-[0.4em] uppercase é o padrão atual, mas só justificado quando há um rótulo de categoria real. Não é scaffolding de layout.
+**Don't:**
+- Painel de cor chapado atrás de texto corrido, em qualquer seção.
+- Dois CTAs do mesmo peso visual no mesmo momento de decisão (ex.: "Quero
+  esta peça" e "Agendar horário" nunca lado a lado como botões iguais — a
+  consultoria entra como link de texto na página de produto).
+- `box-shadow` fora de overlays (mega-menu, drawer mobile).
+- Nova cor de acento sem decisão explícita do dono — o sistema tem duas
+  funções (bordô, esmeralda) e não precisa de uma terceira.

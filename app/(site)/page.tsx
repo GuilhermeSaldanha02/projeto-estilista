@@ -1,9 +1,20 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import CuratorialNote from '@/components/CuratorialNote'
-import HeroSignature from '@/components/HeroSignature'
-import PersonalStyling from '@/components/PersonalStyling'
-import ProductCatalog, { type FilterableProduct } from '@/components/catalog/ProductCatalog'
+import {
+  settingsQuery,
+  featuredProductsQuery,
+  recentProductsQuery,
+  newArrivalsQuery,
+  categoryPortalsQuery,
+  stylistCardQuery,
+} from '@/sanity/lib/queries'
+import { buildWaHref, WA_MESSAGES } from '@/lib/wa'
+import Hero from '@/components/home/Hero'
+import CuratedSelection from '@/components/home/CuratedSelection'
+import CategoryPortals, { type CategoryPortal } from '@/components/home/CategoryPortals'
+import NewArrivalsRail from '@/components/home/NewArrivalsRail'
+import ConsultingInvite, { type StylistCard } from '@/components/home/ConsultingInvite'
+import type { FilterableProduct } from '@/components/catalog/CatalogView'
 
 // ISR — produtos e settings vêm do Sanity; 60s para refletir publicações sem rebuild
 export const revalidate = 60
@@ -14,71 +25,54 @@ export const metadata: Metadata = {
     'Moda feminina com olhar de personal stylist. Encontre a peça certa e agende seu atendimento pelo WhatsApp.',
 }
 
-// Fase 4d: a home usava uma grade simples (8 peças, sem filtro) enquanto
-// /colecao/novidades tinha a versão completa (12 peças, filtro por categoria
-// + ordenação) — o dono viu as duas ao vivo e achou a inconsistência estranha
-// ("um tem filtro e outro não"), pediu pra trazer a versão completa pra home.
-// Mesma query/limite de /colecao/novidades (12, categorySlug/categoryTitle
-// para os chips) -- ProductCatalog é o mesmo componente das duas.
-const productsQuery = `
-  *[_type == "product" && inStock == true]
-  | order(_createdAt desc)
-  [0...12] {
-    _id, title, "slug": slug.current, price,
-    "image": images[0] { asset, crop, hotspot, alt },
-    "categorySlug": category->slug.current,
-    "categoryTitle": category->title
-  }
-`
+type Settings = {
+  whatsappNumber?: string
+  curatorNote?: string
+  curatorNoteByline?: string
+}
 
-const settingsQuery = `*[_type == "siteSettings"][0]{ whatsappNumber, curatorNote, curatorNoteByline }`
-
+/*
+ * Fase 5 (Reconstrução) — home nova, do zero, conforme blueprint:
+ * S1 Hero full-bleed → S2 Seleção da Luiza (curadoria + nota como legenda)
+ * → S3 Portais de categoria → S4 Acabou de chegar (fila snap) → S5 Convite
+ * à consultoria (única seção escura). A home é VITRINE EDITORIAL — quem
+ * quer o catálogo com filtros vai para /vitrine. As seções antigas
+ * (ProductCatalog embutido, CuratorialNote, PersonalStyling) morreram;
+ * o conteúdo delas migrou para S2 e S5.
+ */
 export default async function HomePage() {
-  const [products, settings] = await Promise.all([
-    client.fetch<FilterableProduct[]>(productsQuery),
-    client.fetch<{ whatsappNumber?: string; curatorNote?: string; curatorNoteByline?: string } | null>(settingsQuery),
+  const [settings, featured, newArrivals, portals, stylist] = await Promise.all([
+    client.fetch<Settings | null>(settingsQuery),
+    client.fetch<FilterableProduct[]>(featuredProductsQuery),
+    client.fetch<FilterableProduct[]>(newArrivalsQuery),
+    client.fetch<CategoryPortal[]>(categoryPortalsQuery),
+    client.fetch<StylistCard | null>(stylistCardQuery),
   ])
 
-  const whatsappNumber = settings?.whatsappNumber
-  const waScheduleMessage = 'Oi! Gostaria de agendar um horário de personal styling.'
-  const waScheduleHref = whatsappNumber
-    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waScheduleMessage)}`
-    : null
+  // Seleção: destaques marcados no Studio; sem nenhum marcado, cai para as
+  // mais recentes — a home nunca fica sem a seção de curadoria.
+  const curated =
+    featured.length > 0
+      ? featured
+      : await client.fetch<FilterableProduct[]>(recentProductsQuery)
+
+  const waScheduleHref = buildWaHref(settings?.whatsappNumber, WA_MESSAGES.agendar)
 
   return (
     <main>
+      <Hero />
 
-      {/* ═══════════════════════════════════════
-          1. HERO — momento-assinatura (Fase C): wordmark lockup, entrada
-             escalonada e parallax discreto no scroll. Ver HeroSignature.tsx.
-      ═══════════════════════════════════════ */}
-      <HeroSignature />
+      <CuratedSelection
+        products={curated.slice(0, 3)}
+        note={settings?.curatorNote}
+        byline={settings?.curatorNoteByline}
+      />
 
-      {/* ═══════════════════════════════════════
-          2. NOVIDADES — mesmo ProductCatalog de /colecao/novidades (filtro +
-             ordenação inclusos). headingLevel="h2": o h1 da página já é o do
-             hero (HeroSignature) -- nunca dois h1 na mesma página.
-             A home de uma loja não pode deixar de mostrar produto nenhum.
-      ═══════════════════════════════════════ */}
-      {products.length > 0 && (
-        <ProductCatalog title="Novidades" products={products} headingLevel="h2" />
-      )}
+      <CategoryPortals categories={portals} />
 
-      {/* ═══════════════════════════════════════
-          3. NOTA DA STYLIST — nota curatorial (exibida quando preenchida no CMS)
-      ═══════════════════════════════════════ */}
-      {settings?.curatorNote && (
-        <CuratorialNote
-          note={settings.curatorNote}
-          byline={settings.curatorNoteByline}
-        />
-      )}
+      <NewArrivalsRail products={newArrivals} />
 
-      {/* ═══════════════════════════════════════
-          4. PERSONAL STYLING — Fase E (quebra o monólito). Ver PersonalStyling.tsx.
-      ═══════════════════════════════════════ */}
-      <PersonalStyling waScheduleHref={waScheduleHref} />
-
+      <ConsultingInvite stylist={stylist} waScheduleHref={waScheduleHref} />
     </main>
   )
 }
