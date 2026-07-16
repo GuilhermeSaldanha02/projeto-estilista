@@ -5,7 +5,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
 import type { NavCategory } from './Header'
-import { WhatsAppIcon } from '@/components/icons'
+import { WhatsAppIcon } from '@/components/ui/icons'
+import { buildWaHref, WA_MESSAGES } from '@/lib/wa'
 
 // Entrada escalonada do drawer mobile — ease vem do vocabulário único de
 // motion (Fase 5/Etapa 0, components/motion/tokens.ts); os timings locais
@@ -31,13 +32,10 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const [megaOpen, setMegaOpen] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-  const megaTriggerRef = useRef<HTMLButtonElement>(null)
+  const megaTriggerRef = useRef<HTMLAnchorElement>(null)
   const mobileTriggerRef = useRef<HTMLButtonElement>(null)
-  const waHref = whatsappNumber ? `https://wa.me/${whatsappNumber}` : null
-  const waScheduleMessage = 'Oi! Gostaria de agendar um horário de personal styling.'
-  const waScheduleHref = whatsappNumber
-    ? `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(waScheduleMessage)}`
-    : null
+  const waHref = buildWaHref(whatsappNumber)
+  const waScheduleHref = buildWaHref(whatsappNumber, WA_MESSAGES.agendar)
 
   function closeMobileAndReturnFocus() {
     setMobileOpen(false)
@@ -134,7 +132,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         {/* Desktop: Consultoria (funil principal) + Vitrine — nessa ordem */}
         <div className="hidden md:flex items-center gap-8">
           <Link
-            href="/stylist"
+            href="/consultoria"
             className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
             onClick={() => setMegaOpen(false)}
           >
@@ -149,15 +147,20 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
               onBlur={handleBlur}
               onKeyDown={handleMegaKeyDown}
             >
-              <button
+              {/* Fase 5: "Vitrine" agora é link de verdade para /vitrine —
+                  antes era um <button> que só abria o mega-menu; clicar não
+                  levava a lugar nenhum. O mega-menu continua abrindo no
+                  hover/focus, como um bônus de navegação rápida. */}
+              <Link
                 ref={megaTriggerRef}
+                href="/vitrine"
                 aria-haspopup="true"
                 aria-expanded={megaOpen}
                 onFocus={openMega}
                 className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
               >
                 Vitrine
-              </button>
+              </Link>
 
               {/* Mega-menu: colunas distribuídas sem vão */}
               {megaOpen && (
@@ -252,11 +255,21 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
             )}
             <motion.li variants={menuItem} className="border-b border-white/5">
               <Link
-                href="/stylist"
+                href="/consultoria"
                 className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
                 onClick={() => setMobileOpen(false)}
               >
                 Consultoria
+                <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
+              </Link>
+            </motion.li>
+            <motion.li variants={menuItem} className="border-b border-white/5">
+              <Link
+                href="/vitrine"
+                className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
+                onClick={() => setMobileOpen(false)}
+              >
+                Vitrine
                 <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
               </Link>
             </motion.li>
@@ -281,16 +294,6 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 </motion.li>
               ))
             )}
-            <motion.li variants={menuItem} className="border-t border-dourado/20">
-              <Link
-                href="/colecao/novidades"
-                className="flex items-center justify-between px-6 py-[1.1rem] text-dourado hover:text-cream-text font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
-                onClick={() => setMobileOpen(false)}
-              >
-                Novidades
-                <span className="text-dourado/45 text-xs" aria-hidden="true">→</span>
-              </Link>
-            </motion.li>
           </motion.ul>
         </nav>
       )}

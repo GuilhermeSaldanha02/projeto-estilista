@@ -1,7 +1,92 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-14 (Fase 5 — RECONSTRUÇÃO DO ZERO, Etapas 0-1)_
+_Última atualização: 2026-07-16 (Fase 5 — RECONSTRUÇÃO DO ZERO, completa)_
+
+---
+
+## Fase 5 (continuação) — Reconstrução completa, todas as páginas de uma vez (2026-07-16)
+
+Depois de Etapas 0-1 (fundações + hero), o dono cortou o portão etapa-por-
+etapa: *"novamente só ta alterando pedaços, quero que mude tudo, seja um
+novo site totalmente diferente do que já foi."* Execução direta do blueprint
+inteiro numa sessão, sem gate intermediário — o gate agora é o site completo.
+
+**Mapa de rotas mudou:**
+- `/vitrine` (nova): catálogo completo, único lugar com filtro/ordenação.
+- `/colecao/novidades` → **removida**, redirect 301 → `/vitrine`
+  (`next.config.ts`). Eliminava a duplicação exata home/página que o dono
+  já tinha apontado.
+- `/stylist` → **removida**, redirect 301 → `/consultoria` (a nav já dizia
+  "Consultoria" desde 10/07; a URL nunca tinha acompanhado).
+- `/categoria/[slug]`, `/colecao/[slug]`, `/produto/[slug]`: reescritas,
+  mesmo padrão de rota, template/queries novos.
+
+**Home reconstruída em 5 seções novas** (`components/home/`): Hero (vídeo
+full-bleed, sem painel de cor — ver Etapa 1), `CuratedSelection` (nota da
+stylist virou legenda da curadoria, composição assimétrica 1 peça grande +
+2 em escada — nunca grid esticado), `CategoryPortals` (fotos de categoria
+como botão, com fallback tipográfico quando a categoria não tem foto — hoje
+nenhuma tem, o fallback é o que roda em produção), `NewArrivalsRail` (fila
+com scroll-snap), `ConsultingInvite` (única seção escura, foto+bloco
+esmeralda composicional+CTA). `CuratorialNote.tsx` e `PersonalStyling.tsx`
+deletados — conteúdo migrou.
+
+**Catálogo unificado** (`components/catalog/CatalogView.tsx`, substitui
+`ProductCatalog.tsx`): título+contador+filtro **são a primeira célula da
+grade**, não um banner separado — a causa raiz do "solto, não harmônico"
+que sobreviveu às Fases 4c/4d. Home usa o mesmo componente na seção
+Novidades (Etapa 2 do blueprint) com a mesma query de `/vitrine`.
+
+**Produto reconstruído**: galeria em pilha vertical no desktop (rolar =
+folhear a peça, zero carrossel/sticky), carrossel snap no mobile
+(`ProductGallery.tsx`), seção "Combina com" nova (`RelatedRail.tsx` — a
+página era beco sem saída, agora sempre oferece 4 peças da mesma categoria).
+CTA de consultoria virou link de texto, nunca segundo botão.
+
+**Consultoria renomeada e recomposta**: hero novo foto-dominante
+(`StylistHero.tsx`); as 7 seções dinâmicas do CMS (já aprovadas nas Fases
+3/3.1 — cor composicional, `PhotoParallax`, andaime único) foram extraídas
+de dentro de `app/(site)/stylist/page.tsx` (446 linhas numa rota) para
+`components/consultoria/Sections.tsx` — recomposição de arquivo, não
+redesenho: o que já funcionava só mudou de endereço.
+
+**Reorganização de pastas** (pedido explícito do dono, achado da auditoria):
+zero componente solto na raiz de `components/` — tudo em `layout/`,
+`motion/`, `home/`, `catalog/`, `product/`, `consultoria/`, `ui/`. Todo GROQ
+centralizado e nomeado em `sanity/lib/queries.ts` — nenhuma página mais
+escreve query inline. `lib/wa.ts` é a fonte única de links de WhatsApp
+(sanitiza o número, `\D` fora — achado do code review do PR #44, antes cada
+página montava a string à mão). Footer expandido de 1 linha genérica para
+3 colunas (categorias / consultoria+contato / nota).
+
+**Schema Sanity**: campo `image` opcional em `category` (portais da home);
+fallback automático para a foto do produto mais recente já implementado na
+query (`categoryPortalsQuery`), então a home não quebra enquanto a Luiza não
+cadastra fotos de categoria — hoje roda 100% no fallback tipográfico.
+
+**Achado real corrigido durante a verificação (não pelo code review, por
+mim mesmo revisando):** o CTA do hero ("Ver vitrine") ainda apontava para
+`/colecao/novidades` (rota antiga) em vez de `/vitrine` direto — funcionava
+só porque o redirect 301 cobria, mas era um link morto de verdade,
+corrigido antes do commit.
+
+Verificado (porta isolada, nunca a 3000 do dono): home com as 5 seções e
+exatamente 1 `h1`; `/vitrine` com cabeçalho na mesma linha dos primeiros
+produtos (`top` idêntico, medido); `/categoria/saias` (2 peças) com grid
+capado em `max-w-5xl` e legenda "edição enxuta"; `/produto/[slug]` com 1
+CTA sólido + 1 link de texto + seção "Combina com"; `/consultoria` com as 6
+seções; drawer mobile sem overflow horizontal e sem link morto para
+Novidades; mega-menu funcionando via hover real (não só leitura de DOM);
+redirects `/stylist` e `/colecao/novidades` confirmados. Build limpo.
+
+**Nota honesta sobre o processo:** este ciclo NÃO teve o portão de aprovação
+visual por etapa que a Fase 5 original (Etapas 0-1) tinha estabelecido como
+regra — o dono pediu explicitamente para não gatear por pedaço. Isso
+significa que, diferente do hero isolado da Etapa 1, o dono ainda não viu
+NADA disto ao vivo. O risco que a auditoria descreveu (construir sem
+verificação visual real) está mitigado pelas checagens de DOM/geometria
+acima, mas essas não substituem o olho — a mesma ressalva de sempre.
 
 ---
 

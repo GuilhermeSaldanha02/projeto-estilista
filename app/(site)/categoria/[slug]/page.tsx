@@ -1,7 +1,12 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import ProductCatalog, { type FilterableProduct } from '@/components/catalog/ProductCatalog'
-import EmptyState from '@/components/EmptyState'
+import {
+  categoryQuery,
+  categoryProductsQuery,
+  allCategorySlugsQuery,
+} from '@/sanity/lib/queries'
+import CatalogView, { type FilterableProduct } from '@/components/catalog/CatalogView'
+import EmptyState from '@/components/ui/EmptyState'
 
 // ISR — SDD §1: catálogo reflete o que a dona publica sem rebuild manual
 export const revalidate = 60
@@ -9,26 +14,6 @@ export const revalidate = 60
 type Props = { params: Promise<{ slug: string }> }
 
 type Category = { _id: string; title: string; slug: string }
-
-const categoryQuery = `
-  *[_type == "category" && slug.current == $slug][0] {
-    _id, title, "slug": slug.current
-  }
-`
-
-const productsQuery = `
-  *[_type == "product" && category->slug.current == $slug && inStock == true]
-  | order(_createdAt desc) {
-    _id, title, "slug": slug.current, price,
-    "image": images[0] { asset, crop, hotspot, alt }
-  }
-`
-
-const allCategorySlugsQuery = `
-  *[_type == "category"
-    && count(*[_type == "product" && references(^._id) && inStock == true]) > 0
-  ] { "slug": slug.current }
-`
 
 export async function generateStaticParams() {
   const cats = await client.fetch<{ slug: string }[]>(allCategorySlugsQuery)
@@ -51,7 +36,7 @@ export default async function CategoriaPage({ params }: Props) {
 
   const [category, products] = await Promise.all([
     client.fetch<Category | null>(categoryQuery, { slug }),
-    client.fetch<FilterableProduct[]>(productsQuery, { slug }),
+    client.fetch<FilterableProduct[]>(categoryProductsQuery, { slug }),
   ])
 
   if (!category) {
@@ -59,10 +44,10 @@ export default async function CategoriaPage({ params }: Props) {
       <EmptyState
         headline="Categoria não encontrada."
         body="O link pode ter mudado. Explore nossas peças pelo menu acima."
-        primaryHref="/colecao/novidades"
-        primaryLabel="Ver novidades"
-        secondaryHref="/stylist"
-        secondaryLabel="Conheça a stylist"
+        primaryHref="/vitrine"
+        primaryLabel="Ver a vitrine"
+        secondaryHref="/consultoria"
+        secondaryLabel="Conheça a consultoria"
       />
     )
   }
@@ -72,25 +57,20 @@ export default async function CategoriaPage({ params }: Props) {
       <EmptyState
         headline="Em cuidadosa seleção."
         body={`Novas peças de ${category.title} chegam em breve. Confira o que acabou de chegar.`}
-        primaryHref="/colecao/novidades"
-        primaryLabel="Ver novidades"
-        secondaryHref="/stylist"
-        secondaryLabel="Conheça a stylist"
+        primaryHref="/vitrine"
+        primaryLabel="Ver a vitrine"
+        secondaryHref="/consultoria"
+        secondaryLabel="Conheça a consultoria"
       />
     )
   }
 
   return (
     <main className="min-h-screen">
-      {/* key={slug}: força remount ao navegar entre categorias diferentes
-          (mesma rota [slug]) -- sem isso, o filtro de categoria ativo
-          sobrevivia à troca de rota e podia deixar a próxima categoria
-          parecendo vazia (achado do code review do PR #41). Título+contador+
-          filtro/sort agora moram juntos em ProductCatalog, no mesmo bloco —
-          antes eram 2 seções separadas por um vão grande, achado do dono
-          ("solto, não harmônico") ao ver a página Saias ao vivo. */}
-      <ProductCatalog key={slug} title={category.title} products={products} />
+      {/* key={slug}: remount ao navegar entre categorias (estado de sort não
+          vaza entre rotas — achado do code review do PR #41, mantido). Sem
+          chips: a lista já vem de uma categoria só. */}
+      <CatalogView key={slug} title={category.title} products={products} />
     </main>
   )
 }
-

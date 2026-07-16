@@ -46,7 +46,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-espresso min-h-[calc(100svh-64px)] md:min-h-[calc(100vh-72px)]"
+      className="relative overflow-hidden bg-espresso min-h-[calc(100svh-64px)] md:min-h-[calc(100vh-72px)] flex"
       aria-label="Hero"
     >
       {/* Poster estático — visível somente em prefers-reduced-motion: reduce */}
@@ -77,17 +77,23 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      {/* Scrim: só a metade inferior, transparente → espresso. Tratamento de
-          foto para legibilidade do texto — não é fundo de cor. */}
+      {/* Scrim: 2/3 inferiores, transparente → espresso/70. Tratamento de
+          foto para legibilidade — não é fundo de cor. Calibrado pelo code
+          review do PR #44: com /60 e h-1/2, a zona onde o texto de fato fica
+          tinha só ~8-34% de opacidade — AA passava por sorte do vídeo atual,
+          quebrava com qualquer frame claro. */}
       <div
-        className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-espresso/60 via-espresso/25 to-transparent pointer-events-none"
+        className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-espresso/70 via-espresso/40 to-transparent pointer-events-none"
         aria-hidden="true"
       />
 
-      {/* Camada 2: conteúdo ancorado embaixo-esquerda */}
+      {/* Camada 2: conteúdo embaixo-esquerda. In-flow (flex items-end na
+          section), não absolute: em viewport baixo (landscape de celular) o
+          hero cresce com o conteúdo em vez de cortá-lo no overflow-hidden
+          (achado L3 do code review do PR #44). */}
       <motion.div
         style={contentMotionStyle}
-        className="absolute inset-x-0 bottom-0 z-10 px-[6vw] pb-16 md:pb-20"
+        className="relative z-10 w-full self-end px-[6vw] pb-16 md:pb-20 pt-40"
       >
         <motion.div
           className="max-w-xl"
@@ -95,9 +101,11 @@ export default function Hero() {
           initial={reduceMotion ? 'visible' : 'hidden'}
           animate="visible"
         >
+          {/* cream 100%, não /75: a 10px sobre foto, o /75 derrubava o AA no
+              pior caso (review PR #44) — hierarquia já vem do tamanho+tracking */}
           <motion.p
             variants={staggerItem}
-            className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text/75 mb-5"
+            className="font-sans text-[10px] tracking-[0.4em] uppercase text-cream-text mb-5"
           >
             Consultoria de estilo · Loja
           </motion.p>
@@ -112,10 +120,9 @@ export default function Hero() {
           <motion.div variants={staggerItem}>
             {/* CTA único (o "Agendar" vive no header sempre visível — nunca
                 dois CTAs no mesmo momento de decisão). Contorno cream sobre
-                foto: sólido bordô brigaria com o vídeo.
-                href temporário: /colecao/novidades vira /vitrine na Etapa 3. */}
+                foto: sólido bordô brigaria com o vídeo. */}
             <Link
-              href="/colecao/novidades"
+              href="/vitrine"
               className="inline-flex items-center justify-center border border-cream-text text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:bg-cream-text hover:text-espresso focus-visible:outline focus-visible:outline-2 focus-visible:outline-cream-text focus-visible:outline-offset-4 transition-colors"
             >
               Ver vitrine

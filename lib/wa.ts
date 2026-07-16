@@ -18,6 +18,10 @@ export function buildWaHref(
   message?: string
 ): string | null {
   if (!number) return null
-  const base = `https://wa.me/${number}`
+  // wa.me só aceita dígitos — um número salvo no Studio como "+55 (83) 9..."
+  // geraria link quebrado (achado do code review do PR #44).
+  const digits = number.replace(/\D/g, '')
+  if (!digits) return null
+  const base = `https://wa.me/${digits}`
   return message ? `${base}?text=${encodeURIComponent(message)}` : base
 }

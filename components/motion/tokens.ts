@@ -3,7 +3,6 @@
  * O blueprint define 4 gestos (entrada escalonada, reveal de cortina,
  * parallax de camadas, fila com snap); os tokens abaixo são a base de todos.
  * Nunca duplicar EASE_OUT_EXPO/variants em componente — importar daqui.
- * (Nav.tsx ainda tem cópia local; migra quando a nav for reconstruída.)
  */
 
 export const EASE_OUT_EXPO = [0.16, 1, 0.3, 1] as const
