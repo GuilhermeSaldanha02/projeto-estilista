@@ -73,6 +73,14 @@ export default function CatalogView({
 
   const visible = paginated ? filtered.slice(0, limit) : filtered
   const isSmallEdition = filtered.length > 0 && filtered.length <= 3
+  // Só desenha a célula de "edição enxuta" quando de fato sobra vaga na
+  // última linha do grid desktop (md:grid-cols-3, cabeçalho + produtos).
+  // Achado do code review do PR #44: com N=2, cabeçalho+2 produtos já
+  // fecham a linha (3 células) — desenhar a legenda sem vaga real criava
+  // uma segunda linha inteira quase vazia. emptyCells vira 1 ou 2 (nunca 0
+  // quando isSmallEdition é true e há vaga) e vira o span da própria célula.
+  const totalCells = 1 + visible.length
+  const emptyCells = isSmallEdition ? (3 - (totalCells % 3)) % 3 : 0
 
   const chipClass = (active: boolean) =>
     `font-sans text-[10px] tracking-widest uppercase px-4 py-2 border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-2 whitespace-nowrap ${
@@ -154,9 +162,12 @@ export default function CatalogView({
                 <ProductCard key={product._id} product={product} />
               ))}
 
-              {/* Edição pequena: a última célula declara a intenção */}
-              {isSmallEdition && (
-                <div className="hidden md:flex items-end pb-8" aria-hidden="true">
+              {/* Edição pequena: só desenha quando sobra vaga real na linha */}
+              {emptyCells > 0 && (
+                <div
+                  className={`hidden md:flex items-end pb-8 ${emptyCells === 2 ? 'md:col-span-2' : ''}`}
+                  aria-hidden="true"
+                >
                   <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-ink-soft [writing-mode:vertical-rl]">
                     Edição enxuta — curadoria da semana
                   </span>

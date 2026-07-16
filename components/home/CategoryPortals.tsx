@@ -24,10 +24,12 @@ export type CategoryPortal = {
 export default function CategoryPortals({ categories }: { categories: CategoryPortal[] }) {
   if (categories.length === 0) return null
 
-  const withImage = categories.filter(c => c.image?.asset)
+  const shown = categories.slice(0, 4)
+  const noneHaveImage = shown.every(c => !c.image?.asset)
 
-  // Fallback raro: nenhuma categoria tem foto — lista tipográfica limpa.
-  if (withImage.length === 0) {
+  // Fallback raro: nenhuma categoria (própria ou via produto mais recente,
+  // já resolvido em categoryPortalsQuery) tem foto — lista tipográfica limpa.
+  if (noneHaveImage) {
     return (
       <section aria-label="Categorias" className="py-24 md:py-32 px-[6vw] bg-sand-50">
         <div className="max-w-[1440px] mx-auto">
@@ -54,9 +56,34 @@ export default function CategoryPortals({ categories }: { categories: CategoryPo
   return (
     <section aria-label="Categorias" className="bg-sand-50 pb-24 md:pb-32 px-[6vw]">
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-6">
-        {withImage.slice(0, 4).map((cat, i) => {
+        {shown.map((cat, i) => {
           // Assimetria 7/5 alternada por linha: 7-5 / 5-7
           const span = i % 4 === 0 || i % 4 === 3 ? 'md:col-span-7' : 'md:col-span-5'
+          // Categoria sem foto (própria nem via fallback de produto): tile
+          // tipográfico no lugar da foto — nunca some do portal (achado do
+          // code review do PR #44: filtrar por withImage fazia a categoria
+          // desaparecer de vez quando misturada com outras que tinham foto).
+          if (!cat.image?.asset) {
+            return (
+              <Link
+                key={cat._id}
+                href={`/categoria/${cat.slug}`}
+                className={`group relative flex items-end h-[52vh] md:h-[70vh] bg-sand-100 border border-ink/10 px-6 pb-6 ${span}`}
+              >
+                <span className="flex items-baseline gap-3">
+                  <span className="font-display text-[clamp(1.5rem,2.6vw,2rem)] font-[450] text-ink group-hover:text-bordo transition-colors">
+                    {cat.title}
+                  </span>
+                  <span
+                    aria-hidden
+                    className="font-sans text-ink-soft text-sm transition-transform duration-300 group-hover:translate-x-1"
+                  >
+                    →
+                  </span>
+                </span>
+              </Link>
+            )
+          }
           return (
             <Link
               key={cat._id}
@@ -65,8 +92,8 @@ export default function CategoryPortals({ categories }: { categories: CategoryPo
             >
               <PhotoReveal className="absolute inset-0 overflow-hidden bg-sand-100" delay={(i % 2) * 0.12}>
                 <Image
-                  src={urlFor(cat.image!).width(1400).height(1200).fit('crop').auto('format').url()}
-                  alt={cat.image?.alt ?? cat.title}
+                  src={urlFor(cat.image).width(1400).height(1200).fit('crop').auto('format').url()}
+                  alt={cat.image.alt ?? cat.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 55vw"
                   className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
