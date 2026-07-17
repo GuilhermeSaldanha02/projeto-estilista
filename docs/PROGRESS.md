@@ -1,7 +1,62 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-17 (Fase 5f — legenda da Seleção da Luiza + barra nativa da fila, PR #48)_
+_Última atualização: 2026-07-17 (Fase 5g — composição da Seleção da Luiza + setas na fila)_
+
+---
+
+## Fase 5g — Seleção da Luiza (composição) + setas de navegação na fila (2026-07-17)
+
+Depois do PR #48 (Fase 5f) resolver o bug técnico de stretch, o dono olhou de
+novo e insistiu: *"não esta sendo arrumado oque eu to lhe pedindo... pegar
+referencias e mudar"* — pedindo reconstrução da composição, não só patch de
+bug, para as duas seções (Seleção da Luiza + Acabou de chegar).
+
+**Seleção da Luiza — o `self-center` da Fase 5f não era suficiente.** Medido:
+mesmo sem esticar, a legenda centralizada sobra ~40% de vazio acima do texto
+e ~33% abaixo — um bloco pequeno flutuando isolado ao lado de uma foto
+imponente, não uma composição intencional. Preparadas 3 direções candidatas
+(ancorar no topo / reduzir a foto / tirar a legenda da lateral) e a decisão
+delegada à skill de design (Impeccable, `/impeccable layout`), que confirmou
+o diagnóstico (não é decoração que falta, é relação de vazio) e escolheu
+ancoragem no topo: `flex flex-col justify-between` distribui abertura
+(selo+nota) no topo e assinatura no rodapé da coluna — usa os 806px de altura
+com o ritmo "agrupamento apertado + separação generosa" (registrado em
+`reference/layout.md` da skill), em vez de evitar o espaço. Medido depois:
+assinatura ancorada exatamente no rodapé da coluna (791–806px), batendo com
+a base da foto ao lado. Mobile não muda (`md:` prefix).
+
+**Acabou de chegar — setas de navegação.** Pesquisa em Ganni.com confirmou:
+filas reais de novidades no varejo de moda usam botões explícitos de
+anterior/próximo, não só arrasto — ao esconder a barra nativa (Fase 5f),
+tiramos o único indício de navegação para mouse comum sem shift+wheel. Novo
+componente `components/ui/HorizontalRail.tsx`: wrapper client mínimo (só
+ref+observer+botões viram JS no cliente; `ProductCard`s continuam vindo do
+server component pai como children). Estado de disabled via
+`IntersectionObserver` em sentinelas no início/fim da fila, não listener de
+`scroll` nativo (Lenis quebra esse evento silenciosamente, DESIGN.md §4).
+`aria-disabled`, nunca `disabled` — `disabled` tira o foco do botão para
+`<body>`, quebrando navegação por teclado no próprio componente adicionado
+por acessibilidade. Botões só em `md+` com `pointer:fine`.
+
+Animação do clique via rAF com easing próprio, não `scrollBy({behavior:
+'smooth'})`: em teste isolado nesta sessão o scroll suave nativo não
+avançou. Causa raiz real (confirmada nesta continuação): a aba de teste do
+Browser pane roda com `document.hidden = true` — o próprio Chromium pausa
+`requestAnimationFrame` (e possivelmente throttles outras APIs) numa página
+que ele considera oculta, independente do código. rAF+easing próprio é o
+mesmo padrão já usado no projeto para motion que convive com o Lenis
+(`PhotoParallax.tsx`), escolha segura de qualquer forma. **Verificado nesta
+sessão:** clique calcula o alvo de scroll corretamente (testado forçando o
+fallback `prefers-reduced-motion`, que usa atribuição direta sem depender de
+rAF — `scrollLeft` pulou do valor esperado ao alvo certo). **Não verificado
+ao vivo:** a suavidade real da animação rAF e a atualização dinâmica do
+`aria-disabled` durante o scroll, porque `document.hidden=true` nesta aba
+pausa isso independente do código estar certo. Precisa de confirmação num
+navegador real (o dono, ao testar, é quem vai ver se a animação anima).
+
+**Estado: aguardando confirmação visual do dono em navegador real — as duas
+seções mudaram de composição, não só de bug.**
 
 ---
 
