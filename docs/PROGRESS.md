@@ -72,9 +72,29 @@ hover do card (o schema já tem `images[]`, só não é usado no card) e selo
 - `PRD.md`: seção 7 (features do v1) com os nomes de rota atuais e a
   composição real da home em 5 seções — sem mudar escopo de produto.
 
-**Estado: Fase A entregue e verificada. Fase B (2ª foto + selo "Novo") só
-começa depois do dono confirmar esta correção ao vivo — checkpoint pedido
-por ele, respeitado.**
+**Code review do PR #46, corrigido:** `i<3` deixava o 4º card do rail
+majoritariamente visível (64%) no viewport exato da captura do dono e ainda
+`loading="lazy"` — mesma causa-raiz, card quase visível em vez de fora da
+tela. Virou `i<4` (cobre a faixa real de ~4,1 cards visíveis em
+`lg:w-[24vw]`). Também corrigido: `SDD.md` dizia "redirect 301", o código
+usa `permanent: true` que o Next.js serve como 308; e adicionado comentário
+em `ProductGallery.tsx` explicando por que o carrossel mobile de produto
+(mesma receita `overflow-x-auto`+`snap`+padding) não precisa do mesmo
+`scroll-padding-inline` — testado ao vivo, não reproduz o bug (usa margem
+negativa, não padding direto).
+
+**Follow-up não corrigido nesta fase (fora de escopo, registrado para
+depois):** `ProductCard` em `components/catalog/CatalogView.tsx` (grade de
+`/vitrine`, categoria, coleção) e a `Image` interna de `CuratedPiece` em
+`components/home/CuratedSelection.tsx` (Seleção da Luiza, S2 da home) nunca
+recebem `priority` — mesma classe de sintoma poderia aparecer nessas telas.
+Não corrigido agora por decisão de escopo (o pedido era só a fila "Acabou de
+chegar"); se o dono notar o mesmo problema em `/vitrine` ou na home, é o
+próximo passo óbvio.
+
+**Estado: Fase A entregue, verificada, e com o code review aplicado. Fase B
+(2ª foto + selo "Novo") só começa depois do dono confirmar esta correção ao
+vivo — checkpoint pedido por ele, respeitado.**
 
 ---
 

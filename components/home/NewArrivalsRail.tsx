@@ -44,10 +44,12 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
             role="listitem"
             className="snap-start shrink-0 w-[72vw] sm:w-[44vw] md:w-[30vw] lg:w-[24vw] md:min-w-[300px]"
           >
-            {/* priority nos 3 primeiros: já visíveis no load, sem precisar
-                rolar -- sem isso, next/image lazy-carrega e o card aparece
-                sem foto por um instante (achado do dono, captura de tela). */}
-            <ProductCard product={product} priority={i < 3} />
+            {/* priority nos 4 primeiros: em lg:w-[24vw] cabem ~4,1 cards no
+                viewport sem rolar -- com i<3, o code review do PR #46 mediu
+                o 4º card 64% visível no viewport exato da captura do dono e
+                ainda `loading="lazy"` (mesma causa-raiz, card quase visível
+                em vez de fora da tela). i<4 cobre a faixa de largura real. */}
+            <ProductCard product={product} priority={i < 4} />
           </div>
         ))}
       </div>

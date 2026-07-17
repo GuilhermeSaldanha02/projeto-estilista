@@ -53,7 +53,14 @@ export default function ProductGallery({
         ))}
       </div>
 
-      {/* Mobile: carrossel snap */}
+      {/* Mobile: carrossel snap. Mesma receita estrutural do rail da home
+          (overflow-x-auto + snap + padding no container), mas NÃO precisa de
+          scroll-padding-inline: aqui o padding vem de margem negativa
+          (-mx-5 px-5, cancela o padding da página), não de padding direto
+          somado ao overflow -- testado ao vivo (code review do PR #46):
+          scrollLeft fica em 0 no load, sem o auto-scroll do rail. Se este
+          padrão mudar para padding direto no futuro, reavaliar a mesma
+          correção. */}
       <div
         className="md:hidden flex gap-2 overflow-x-auto snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] -mx-5 px-5"
         role="list"

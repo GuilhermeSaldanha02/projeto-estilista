@@ -66,7 +66,9 @@ foto do produto mais recente da categoria via `coalesce()`)
 ## 4. Rotas (poucos templates, muitas instâncias)
 
 _Atualizado na Fase 5 (reconstrução) — `/stylist` e `/colecao/novidades` não
-existem mais como rotas próprias; ambas viram redirect 301 (`next.config.ts`)._
+existem mais como rotas próprias; ambas viram redirect permanente
+(`permanent: true` em `next.config.ts`, servido como HTTP 308 pelo Next.js
+— não 301; achado do code review do PR #46)._
 
 | Rota | Template | Instâncias |
 |---|---|---|
