@@ -137,7 +137,23 @@ número de colunas (o container encolhe, não os cards esticam) e uma legenda
 "edição enxuta" — vazio com intenção declarada, nunca vazio que lê como grid
 quebrado.
 
-## 7. Do's and Don'ts
+## 7. ProductCard — 2ª foto e selo "Novo" (Fase 5e)
+
+Pesquisado em varejo real de escala comparável (Reformation, Ganni) antes de
+aplicar — não é enfeite, é padrão comum de "dar vida" ao card sem 3D/vídeo.
+
+- **2ª foto no hover**: se `product.image2` existir (`images[1]` no
+  Sanity), crossfade puro sobre a 1ª foto no hover — sem zoom competindo (a
+  1ª é a "parada", a 2ª é o "movimento"). Sem 2ª foto, comportamento
+  idêntico a antes (zoom sutil na única foto).
+- **Selo "Novo"**: quando `product.isNew` é `true`. Texto sobre
+  `sand-50/90`, canto superior esquerdo da foto — **nunca** dourado como
+  fundo (mede abaixo do AA, ver §2), nunca uma 3ª cor de função nova.
+- Os dois dependem de dado que a dona cadastra no Studio (2ª foto no
+  produto, marcar "Novidade") — sem esse dado, o card renderiza igual a
+  antes, nunca quebra. Não confundir "sem dado ainda" com "não funciona".
+
+## 8. Do's and Don'ts
 
 **Do:**
 - Cantos retos, sem `border-radius`, em todo elemento interativo.

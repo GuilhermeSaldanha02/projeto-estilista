@@ -3,17 +3,23 @@ import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { formatPrice } from '@/lib/format'
 
+type ProductImage = {
+  asset: { _ref: string; _type: string }
+  crop?: { top: number; bottom: number; left: number; right: number } | null
+  hotspot?: { x: number; y: number; width: number; height: number } | null
+  alt?: string
+} | null
+
 export type ProductCardData = {
   _id: string
   title: string
   slug: string
   price?: number | null
-  image?: {
-    asset: { _ref: string; _type: string }
-    crop?: { top: number; bottom: number; left: number; right: number } | null
-    hotspot?: { x: number; y: number; width: number; height: number } | null
-    alt?: string
-  } | null
+  isNew?: boolean | null
+  image?: ProductImage
+  /** 2ª foto (Fase 5e) — crossfade no hover, se existir. Pesquisado em
+   *  varejo real (Reformation, Ganni): dá sensação de "vivo" sem 3D/vídeo. */
+  image2?: ProductImage
 }
 
 export default function ProductCard({
@@ -34,19 +40,45 @@ export default function ProductCard({
       <article className="bg-sand-50 flex flex-col h-full">
         {/* Imagem 3:4 */}
         <div className="relative aspect-[3/4] overflow-hidden bg-sand-100">
+          {product.isNew && (
+            <span className="absolute top-3 left-3 z-10 bg-sand-50/90 px-2.5 py-1 font-sans text-[9px] tracking-[0.2em] uppercase text-ink">
+              Novo
+            </span>
+          )}
           {product.image?.asset ? (
-            <Image
-              src={urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()}
-              alt={product.image.alt ?? product.title}
-              fill
-              priority={priority}
-              sizes={
-                featured
-                  ? '(max-width: 1024px) 50vw, 50vw'
-                  : '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
-              }
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
-            />
+            <>
+              <Image
+                src={urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()}
+                alt={product.image.alt ?? product.title}
+                fill
+                priority={priority}
+                sizes={
+                  featured
+                    ? '(max-width: 1024px) 50vw, 50vw'
+                    : '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
+                }
+                className={`object-cover ${
+                  product.image2?.asset
+                    ? 'transition-opacity duration-300 group-hover:opacity-0'
+                    : 'transition-transform duration-500 group-hover:scale-105'
+                }`}
+              />
+              {/* 2ª foto: crossfade puro no hover, sem zoom -- a 1ª já é a
+                  "parada", a 2ª é o "movimento" (Fase 5e). */}
+              {product.image2?.asset && (
+                <Image
+                  src={urlFor(product.image2).width(600).height(800).fit('crop').auto('format').url()}
+                  alt={product.image2.alt ?? `${product.title} — outro ângulo`}
+                  fill
+                  sizes={
+                    featured
+                      ? '(max-width: 1024px) 50vw, 50vw'
+                      : '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
+                  }
+                  className="object-cover absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                />
+              )}
+            </>
           ) : (
             <div className="absolute inset-0 bg-sand-200 flex items-center justify-center">
               <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft">
