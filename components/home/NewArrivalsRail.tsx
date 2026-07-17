@@ -32,9 +32,17 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
           scroll-padding-inline igual ao padding visual (achado do dono, captura de
           tela): sem isso, scroll-snap "corrige" a posição inicial pra bater com o
           snap-point e a fila abre pré-deslocada (~78px), sem nenhum toque do
-          usuário -- media exatamente o valor do padding-left computado. */}
+          usuário -- media exatamente o valor do padding-left computado.
+
+          Fase 5f (feedback do dono, medido ao vivo): `scrollbar-width: thin` é
+          propriedade EXCLUSIVA do Firefox -- no Chrome/Edge (Chromium) ela é
+          ignorada e o navegador desenha a barra nativa padrão (~10px, cinza,
+          sem nenhum estilo do site) por baixo da fila, lendo como "barra solta".
+          Corrigido: barra escondida nos três motores (Firefox, IE/Edge legado,
+          Chromium/Safari via pseudo-elemento) -- o arrasto já é sinalizado pelo
+          meio-card visível na borda direita, sem precisar de UI nativa. */}
       <div
-        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin] [scroll-padding-inline:6vw]"
+        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [scroll-padding-inline:6vw]"
         role="list"
         aria-label="Peças recém-chegadas"
       >

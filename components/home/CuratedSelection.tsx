@@ -18,6 +18,14 @@ import { Reveal } from '@/components/motion/Reveal'
  * margin-top), o que lia como "desalinhado", não como ritmo intencional.
  * Corrigido: todas as 3 peças têm posição de coluna explícita, A reduzida
  * a col-span-6 (50%), B e C lado a lado embaixo dela, sem hack de margem.
+ *
+ * Fase 5f (feedback do dono, medido ao vivo em 1440px): `align-items: stretch`
+ * (padrão do CSS Grid) esticava a coluna da legenda para bater com a altura
+ * da peça A (806px) -- mas o conteúdo real (selo + nota + assinatura) só
+ * ocupa ~220px, sobrando ~590px de vazio embaixo do texto. No mobile isso
+ * não aparece (empilha em coluna única, sem vizinho para "bater"), daí o
+ * relato "no mobile fica ok, no desktop não". Corrigido com `self-center`
+ * na legenda: ela deixa de esticar e passa a centralizar ao lado da foto.
  */
 export default function CuratedSelection({
   products,
@@ -34,8 +42,9 @@ export default function CuratedSelection({
   return (
     <section aria-label="Seleção da Luiza" className="bg-sand-50 py-20 md:py-28 px-[6vw]">
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-8">
-        {/* Cabeçalho/legenda — col 1-4 */}
-        <Reveal className="md:col-span-4 md:pr-8">
+        {/* Cabeçalho/legenda — col 1-4. self-center: não estica para bater
+            com a altura da peça A (Fase 5f) — centraliza ao lado da foto. */}
+        <Reveal className="md:col-span-4 md:pr-8 md:self-center">
           <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-5">
             Seleção da Luiza
           </p>
