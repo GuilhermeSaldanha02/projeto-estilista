@@ -1,7 +1,60 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-17 (Fase 5d — bug real do rail + plano em fases + docs atualizados)_
+_Última atualização: 2026-07-17 (Fase 5e — home finalizada: Fase B + priority na Seleção da Luiza)_
+
+---
+
+## Fase 5e — Home finalizada de ponta a ponta (2026-07-17)
+
+O dono mudou a forma do checkpoint: em vez de gate por correção pontual
+("Fase A confirma, depois Fase B"), pediu pra eu **terminar a home inteira**
+antes de qualquer nova rodada de confirmação, e só então passar pra outra
+página. Isso absorveu a Fase B que estava reservada (ver Fase 5d) + uma
+auditoria própria do resto da home.
+
+**Fase B aplicada** (`sanity/lib/queries.ts`, `components/ui/ProductCard.tsx`):
+`CARD_FIELDS` ganhou `image2` (`images[1]`) e `isNew`. `ProductCard` mostra a
+2ª foto em crossfade no hover quando existe (sem zoom competindo — a 1ª foto
+é "parada", a 2ª é o "movimento"), e um selo "Novo" (texto sobre fundo
+`sand-50/90`, sem cor de função nova) quando `isNew` é `true`. Aplica em
+todo lugar que usa `ProductCard` (vitrine, categoria, coleção, rail,
+relacionados), não só na home.
+
+**Achado da própria auditoria (antes de declarar a home pronta):** conferi
+diretamente na API do Sanity (`*[_type=="product"]{title,isNew,"imgCount":
+count(images)}`) — **todos os 16 produtos têm exatamente 1 foto e
+`isNew: false`.** O código da Fase B está correto e não quebra nada (cards
+renderizam normalmente com 1 foto, sem selo, como antes), mas **não tem
+dado nenhum pra mostrar o efeito ainda** — isso é tarefa da dona no Sanity
+Studio (subir uma 2ª foto por produto, marcar `isNew` em peças novas), não
+um bug de código. Registrado aqui pra não ser confundido com "não
+funcionou" quando o dono for conferir.
+
+**Achado da auditoria, corrigido:** `CuratedSelection.tsx` (Seleção da
+Luiza, S2 — logo após o hero) tinha a mesma lacuna que o code review do
+PR #46 achou no rail: a peça dominante (A) não tinha `priority` na
+`&lt;Image&gt;`, então carregava em lazy mesmo estando acima da dobra na
+maioria das telas. Adicionada prop `priority` em `CuratedPiece`, usada só
+em A (a maior, mais visível sem rolar — B e C continuam lazy, corretamente).
+
+**Seções revisadas e sem pendência nova:** `Hero.tsx` (vídeo full-bleed, já
+corrigido nas Fases 4/5), `CategoryPortals.tsx` (fallback tipográfico
+funcionando; grid de fotos pronto pra quando a dona subir fotos de
+categoria — hoje nenhuma categoria tem, roda 100% no fallback, por design),
+`ConsultingInvite.tsx` (sem pendência reportada, revisado, estrutura ok),
+`Footer.tsx` (3 colunas, Fase 5).
+
+Verificado (porta isolada, `.next` limpo): build limpo; home com 1 `h1`, 2
+`h2` (Acabou de chegar + Consultoria), sem erro de console; peça A da
+Seleção da Luiza carrega `complete: true` sem `loading` (eager); sem
+overflow horizontal em mobile.
+
+**Estado: home finalizada do lado do código — inclusive os itens que
+dependem de dado que a dona ainda não cadastrou (2ª foto, isNew), já
+preparados e seguros para quando ela cadastrar. Aguardando o dono conferir
+a home inteira ao vivo antes de qualquer trabalho em outra página —
+checkpoint por página, pedido explícito dele.**
 
 ---
 

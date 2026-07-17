@@ -52,10 +52,13 @@ export default function CuratedSelection({
           )}
         </Reveal>
 
-        {/* Peça A — col 5-10 (50%, não mais 66%) */}
+        {/* Peça A — col 5-10 (50%, não mais 66%). priority: é a S2, logo após
+            o hero, quase sempre acima da dobra -- mesmo achado do code
+            review do PR #46 (card sem priority = lazy = "sem foto" por um
+            instante), aplicado aqui como parte de terminar a home inteira. */}
         {a && (
           <div className="md:col-start-5 md:col-span-6">
-            <CuratedPiece product={a} sizes="(max-width: 768px) 100vw, 50vw" ratio="aspect-[4/5]" />
+            <CuratedPiece product={a} sizes="(max-width: 768px) 100vw, 50vw" ratio="aspect-[4/5]" priority />
           </div>
         )}
 
@@ -81,11 +84,13 @@ function CuratedPiece({
   sizes,
   ratio,
   delay = 0,
+  priority = false,
 }: {
   product: FilterableProduct
   sizes: string
   ratio: string
   delay?: number
+  priority?: boolean
 }) {
   return (
     <Link href={`/produto/${product.slug}`} className="group block">
@@ -95,6 +100,7 @@ function CuratedPiece({
             src={urlFor(product.image).width(1000).height(1250).fit('crop').auto('format').url()}
             alt={product.image.alt ?? product.title}
             fill
+            priority={priority}
             sizes={sizes}
             className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />

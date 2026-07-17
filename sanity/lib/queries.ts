@@ -7,9 +7,12 @@
 // ── Fragmentos ──────────────────────────────────────────────────────────
 
 // Campos de card de produto — o contrato do ProductCard/grades.
+// image2 + isNew (Fase 5e): 2ª foto no hover e selo "Novo" -- padrão comum
+// em varejo de moda real (Reformation, Ganni), pesquisado antes de aplicar.
 const CARD_FIELDS = `
-  _id, title, "slug": slug.current, price,
+  _id, title, "slug": slug.current, price, isNew,
   "image": images[0] { asset, crop, hotspot, alt },
+  "image2": images[1] { asset, crop, hotspot, alt },
   "categorySlug": category->slug.current,
   "categoryTitle": category->title
 `
