@@ -1,7 +1,45 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-17 (Fase 5g — composição da Seleção da Luiza + setas na fila)_
+_Última atualização: 2026-07-17 (Fase 5h — reconstrução da Seleção da Luiza + imagens)_
+
+---
+
+## Fase 5h — Seleção da Luiza reconstruída do zero + fix de imagens (2026-07-17)
+
+O dono aprovou a fila "Acabou de chegar" ("começando a ficar bom") mas
+reprovou de vez a Seleção da Luiza: *"MATAR A SEÇÃO E CRIAR ALGO NOVO POIS
+NÃO ESTÁ FUNCIONANDO DE MANEIRA NENHUMA"*. As Fases 5b/5c/5f/5g tentaram
+consertar a MESMA estrutura (coluna de texto ao lado de foto dominante) e a
+mesma reclamação voltava — porque texto e foto nunca têm a mesma altura e
+todo conserto só movia o vazio de lugar.
+
+**Estrutura nova (`CuratedSelection.tsx` reescrito):** a nota da stylist
+vira uma abertura editorial CENTRALIZADA (largura contida, não estica), e as
+peças ficam numa linha de 3 IGUAIS abaixo — mesma foto, mesma largura, mesma
+altura. Grade uniforme = impossível desalinhar. Verificado ao vivo (1440 e
+390px): 3 peças com altura idêntica (567px) na mesma linha no desktop,
+empilham no mobile. Direção decidida com a skill Impeccable (`/impeccable
+layout`, register brand) depois de 3 direções candidatas.
+
+**Fix de imagens (dono: "só não apareceu as imagem"):** investigado ao vivo.
+As URLs eram válidas (otimizador 200 + bytes), mas em dev as fotos
+`loading=lazy` intermitentemente não decodificavam — o otimizador do
+next/image engasga com os PNGs originais grandes do Sanity (1792×2400), e o
+placeholder (sand-100) quase igual ao fundo faz uma foto atrasada ler como
+"não apareceu". Ajustes: tamanho pedido 800→600px (mesmo da fila, que já era
+confiável) e as 3 imagens em `priority` (eager) em vez de lazy — são só 3,
+logo abaixo do hero. Verificado 3/3 carregando em 3 reloads no servidor
+isolado E as 3 retornando 200 pelo otimizador do próprio servidor do dono
+(porta 3000).
+
+Nota sobre a limitação do ambiente de teste desta sessão: a aba do Browser
+pane roda com `document.hidden=true`, o que faz o Chromium estrangular
+carregamento lazy e rAF — por isso imagens eager e medição DOM são
+confiáveis aqui, mas suavidade de animação e lazy-load precisam de
+confirmação num navegador real do dono.
+
+**Estado: aguardando o dono confirmar visualmente (Ctrl+Shift+R na home).**
 
 ---
 
