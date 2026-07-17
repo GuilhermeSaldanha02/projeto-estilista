@@ -7,33 +7,21 @@ import { PhotoReveal } from '@/components/motion/PhotoReveal'
 import { Reveal } from '@/components/motion/Reveal'
 
 /*
- * Home S2 — Seleção da Luiza (Fase 5, blueprint).
- * A curadoria é o que faz isto ser loja COM ponto de vista: a nota da
- * stylist (siteSettings.curatorNote) deixa de ser seção isolada e vira
- * LEGENDA da seleção — texto e produto conversando no mesmo bloco.
+ * Home S2 — Seleção da Luiza (Fase 5h — reconstrução da seção).
  *
- * Fase 5b (feedback do dono ao ver ao vivo): a peça A estava grande demais
- * (col-span-8, 66% da largura) e a peça C não tinha `col-start` explícito —
- * o grid auto-posicionava ela na MESMA linha de B (só afastada por
- * margin-top), o que lia como "desalinhado", não como ritmo intencional.
- * Corrigido: todas as 3 peças têm posição de coluna explícita, A reduzida
- * a col-span-6 (50%), B e C lado a lado embaixo dela, sem hack de margem.
+ * As Fases 5b/5c/5f tentaram consertar a MESMA estrutura: uma coluna de texto
+ * estreita ao lado de uma foto dominante (legenda lateral). Essa estrutura
+ * gerou o mesmo tipo de reclamação em rodada após rodada — desalinhamento,
+ * "muito grande", vazio no desktop — porque a coluna de texto e a foto nunca
+ * têm a mesma altura, e todo conserto só movia o vazio de lugar. O dono
+ * mandou explicitamente MATAR a seção e refazer.
  *
- * Fase 5f (feedback do dono, medido ao vivo em 1440px): `align-items: stretch`
- * (padrão do CSS Grid) esticava a coluna da legenda para bater com a altura
- * da peça A (806px), com o conteúdo real (selo + nota + assinatura) ocupando
- * só ~220px -- 27% da altura da linha, medido: ~40% de vazio acima do bloco
- * de texto e ~33% abaixo dele. Um primeiro fix (`self-center`) tirou o
- * esticamento mas só recentralizou o mesmo bloco pequeno num campo vazio,
- * sem resolver a sensação de "flutuando sozinho ao lado de uma foto
- * imponente" -- daí o relato persistir ("no mobile fica ok, no desktop
- * não": no mobile é coluna única, sem vizinho pra criar esse vazio).
- *
- * Fase 5g: a legenda usa a altura inteira da linha COM intenção, em vez de
- * evitá-la -- `flex flex-col justify-between` distribui o bloco selo+nota
- * no topo e a assinatura ancorada no rodapé da coluna, ritmo de "abertura e
- * assinatura" (agrupamento apertado em cada ponta, separação generosa no
- * meio) em vez de um bloco isolado boiando no centro.
+ * Estrutura nova, sem a dependência de altura lado-a-lado que causava tudo
+ * isso: a nota da stylist vira uma ABERTURA editorial centralizada (a
+ * curadora apresentando a seleção — coerente com "a foto é a tela": o texto
+ * é pequeno e preciso, não um painel), e as peças ficam numa linha de 3
+ * IGUAIS abaixo. Centralizado + grid uniforme = impossível desalinhar, e
+ * lê igual no mobile (empilha) e no desktop (3 colunas).
  */
 export default function CuratedSelection({
   products,
@@ -45,56 +33,42 @@ export default function CuratedSelection({
   byline?: string | null
 }) {
   if (products.length === 0) return null
-  const [a, b, c] = products
+  const pieces = products.slice(0, 3)
 
   return (
     <section aria-label="Seleção da Luiza" className="bg-sand-50 py-20 md:py-28 px-[6vw]">
-      <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-8">
-        {/* Cabeçalho/legenda — col 1-4. Volta a ocupar a altura inteira da
-            linha (stretch padrão do grid), mas com intenção: flex-col
-            justify-between separa abertura (selo+nota) de assinatura,
-            ancorando cada uma numa ponta da coluna (Fase 5g). */}
-        <Reveal className="md:col-span-4 md:pr-8 md:flex md:flex-col md:justify-between">
-          <div>
-            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-5">
-              Seleção da Luiza
+      <div className="max-w-[1440px] mx-auto">
+        {/* Abertura editorial — a curadora apresenta a seleção. Centralizada,
+            largura contida (não estica no desktop), respiro generoso abaixo. */}
+        <Reveal className="max-w-[46ch] mx-auto text-center mb-14 md:mb-20">
+          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-6">
+            A seleção da Luiza
+          </p>
+          {note && (
+            <p className="font-display text-2xl md:text-[1.75rem] font-light italic text-ink leading-snug text-balance">
+              {note}
             </p>
-            <div className="w-8 h-px bg-dourado/40 mb-6" />
-            {note && (
-              <p className="font-display text-xl md:text-2xl font-light italic text-ink leading-snug max-w-[24ch]">
-                {note}
-              </p>
-            )}
-          </div>
+          )}
+          <div className="w-8 h-px bg-dourado/40 mx-auto mt-8 mb-5" />
           {byline && (
-            <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft mt-8 md:mt-0">
+            <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-ink-soft">
               {byline}
             </p>
           )}
         </Reveal>
 
-        {/* Peça A — col 5-10 (50%, não mais 66%). priority: é a S2, logo após
-            o hero, quase sempre acima da dobra -- mesmo achado do code
-            review do PR #46 (card sem priority = lazy = "sem foto" por um
-            instante), aplicado aqui como parte de terminar a home inteira. */}
-        {a && (
-          <div className="md:col-start-5 md:col-span-6">
-            <CuratedPiece product={a} sizes="(max-width: 768px) 100vw, 50vw" ratio="aspect-[4/5]" priority />
-          </div>
-        )}
-
-        {/* B e C — lado a lado, mesma linha, mesma largura de A somada.
-            Posição explícita nas duas: nada de auto-placement adivinhando. */}
-        {b && (
-          <div className="md:col-start-5 md:col-span-3">
-            <CuratedPiece product={b} sizes="(max-width: 768px) 100vw, 25vw" ratio="aspect-[3/4]" delay={0.12} />
-          </div>
-        )}
-        {c && (
-          <div className="md:col-start-8 md:col-span-3">
-            <CuratedPiece product={c} sizes="(max-width: 768px) 100vw, 25vw" ratio="aspect-[3/4]" delay={0.24} />
-          </div>
-        )}
+        {/* Peças — 3 iguais. Mesmo aspecto, mesma largura: uma grade uniforme
+            não tem como desalinhar. Empilha no mobile. */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
+          {pieces.map((product, i) => (
+            <CuratedPiece
+              key={product._id}
+              product={product}
+              delay={i * 0.1}
+              priority={i < 3}
+            />
+          ))}
+        </div>
       </div>
     </section>
   )
@@ -102,27 +76,23 @@ export default function CuratedSelection({
 
 function CuratedPiece({
   product,
-  sizes,
-  ratio,
   delay = 0,
   priority = false,
 }: {
   product: FilterableProduct
-  sizes: string
-  ratio: string
   delay?: number
   priority?: boolean
 }) {
   return (
     <Link href={`/produto/${product.slug}`} className="group block">
-      <PhotoReveal className={`relative ${ratio} overflow-hidden bg-sand-100`} delay={delay}>
+      <PhotoReveal className="relative aspect-[3/4] overflow-hidden bg-sand-100" delay={delay}>
         {product.image?.asset ? (
           <Image
-            src={urlFor(product.image).width(1000).height(1250).fit('crop').auto('format').url()}
+            src={urlFor(product.image).width(800).height(1067).fit('crop').auto('format').url()}
             alt={product.image.alt ?? product.title}
             fill
             priority={priority}
-            sizes={sizes}
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
           />
         ) : (
