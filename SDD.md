@@ -51,7 +51,9 @@ Dona (stylist) ──edita──▶ Sanity Studio (CMS + login dela)
 - `inStock` (boolean) — controla a regra de categoria vazia
 - `featured` / `isNew` (boolean) — alimenta o bloco de novidades
 
-**category** — `title`, `slug`, `order` (ordem no menu)
+**category** — `title`, `slug`, `order` (ordem no menu), `image` (opcional,
+Fase 5 — portais de categoria da home; sem foto própria, a query resolve a
+foto do produto mais recente da categoria via `coalesce()`)
 **collection** — `title`, `slug` (Novidades, Denim, Alfaiataria, Conjuntos, Festa, Estação)
 **stylistProfile** (singleton) — `name`, `tagline`, `photo`, `sections` (array de seções
   CMS-driven: `eyebrow`/`title`/`body`/`image`/`layout`/`items[]`, 7 layouts visuais).
@@ -63,15 +65,22 @@ Dona (stylist) ──edita──▶ Sanity Studio (CMS + login dela)
 
 ## 4. Rotas (poucos templates, muitas instâncias)
 
+_Atualizado na Fase 5 (reconstrução) — `/stylist` e `/colecao/novidades` não
+existem mais como rotas próprias; ambas viram redirect 301 (`next.config.ts`)._
+
 | Rota | Template | Instâncias |
 |---|---|---|
-| `/` | Home | 1 |
-| `/stylist` | Personal stylist (sobre + agendar) | 1 |
-| `/categoria/[slug]` | Categoria | 9 (das categorias) |
+| `/` | Home (vitrine editorial — 5 seções, ver `components/home/`) | 1 |
+| `/vitrine` | Catálogo completo — único lugar com filtro/ordenação | 1 |
+| `/consultoria` | Personal stylist (sobre + agendar) — era `/stylist` | 1 |
+| `/categoria/[slug]` | Categoria (mesmo template de `/vitrine`, sem chips) | N (das categorias) |
+| `/colecao/[slug]` | Coleção (mesmo template, com chips de categoria) | por tag |
 | `/produto/[slug]` | Produto | N (todas as peças) |
-| `/colecao/[slug]` | Coleção/novidades | por tag |
 
-`generateStaticParams` lê as categorias/coleções/produtos do Sanity. A categoria só entra no menu se tiver ao menos um `product` com `inStock = true`.
+`generateStaticParams` lê as categorias/coleções/produtos do Sanity. A
+categoria só entra no menu se tiver ao menos um `product` com
+`inStock = true`. Todo GROQ das rotas acima vem de `sanity/lib/queries.ts`
+(centralizado, nomeado — nenhuma rota escreve query inline desde a Fase 5).
 
 ## 5. Pipeline de imagem (resolve o risco de peso)
 
@@ -83,12 +92,17 @@ Dona (stylist) ──edita──▶ Sanity Studio (CMS + login dela)
 
 Formato: `https://wa.me/<NUMERO>?text=<mensagem_url_encoded>`. Número e mensagens-base vêm do Sanity (`siteSettings`/`stylistProfile`).
 
-- **Botão de peça:** `text = "Oi! Tenho interesse na peça {title}."` _(sem `{url}` —
-  o código nunca incluiu a URL; CLAUDE.md §7 é a fonte de verdade aqui, esta linha
-  estava desatualizada)_
-- **Botão de agendamento:** `text = "Oi! Quero agendar um horário de personal styling."`
+**Fonte única desde a Fase 5: `lib/wa.ts`.** `buildWaHref(number, message)` —
+sanitiza o número (`\D` fora, `wa.me` só aceita dígitos) e monta a URL.
+`WA_MESSAGES` centraliza os textos-base. Antes da Fase 5 cada página montava
+a string à mão (6 lugares diferentes); nenhuma página nova deve fazer isso de
+novo — sempre importar de `lib/wa.ts`.
 
-Os dois textos são diferentes de propósito: ao cair no celular da dona, ela já sabe se é sobre produto ou sobre styling.
+- **Botão de peça:** `WA_MESSAGES.peca(title)` → `"Oi! Tenho interesse na peça {title}."`
+- **Botão de agendamento:** `WA_MESSAGES.agendar` → `"Oi! Gostaria de agendar um horário de personal styling."`
+- **Link de texto da consultoria na página de produto:** `WA_MESSAGES.consultoriaSobrePeca(title)` (Fase 5 — substitui o antigo 2º botão que duplicava "Agendar horário" na mesma tela).
+
+Os textos são diferentes de propósito: ao cair no celular da dona, ela já sabe se é sobre produto ou sobre styling.
 
 ## 7. Login da dona (sem auth caseira)
 

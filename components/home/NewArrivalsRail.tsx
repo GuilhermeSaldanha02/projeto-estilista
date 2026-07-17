@@ -28,19 +28,26 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
         </div>
       </Reveal>
 
-      {/* Fila: padding esquerdo alinha com o site; overflow à direita convida o arrasto */}
+      {/* Fila: padding esquerdo alinha com o site; overflow à direita convida o arrasto.
+          scroll-padding-inline igual ao padding visual (achado do dono, captura de
+          tela): sem isso, scroll-snap "corrige" a posição inicial pra bater com o
+          snap-point e a fila abre pré-deslocada (~78px), sem nenhum toque do
+          usuário -- media exatamente o valor do padding-left computado. */}
       <div
-        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]"
+        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin] [scroll-padding-inline:6vw]"
         role="list"
         aria-label="Peças recém-chegadas"
       >
-        {products.map(product => (
+        {products.map((product, i) => (
           <div
             key={product._id}
             role="listitem"
             className="snap-start shrink-0 w-[72vw] sm:w-[44vw] md:w-[30vw] lg:w-[24vw] md:min-w-[300px]"
           >
-            <ProductCard product={product} />
+            {/* priority nos 3 primeiros: já visíveis no load, sem precisar
+                rolar -- sem isso, next/image lazy-carrega e o card aparece
+                sem foto por um instante (achado do dono, captura de tela). */}
+            <ProductCard product={product} priority={i < 3} />
           </div>
         ))}
       </div>
