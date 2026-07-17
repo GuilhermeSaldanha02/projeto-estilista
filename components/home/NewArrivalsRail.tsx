@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ProductCard from '@/components/ui/ProductCard'
+import { HorizontalRail } from '@/components/ui/HorizontalRail'
 import type { FilterableProduct } from '@/components/catalog/CatalogView'
 import { Reveal } from '@/components/motion/Reveal'
 
@@ -40,17 +41,16 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
           navegador caía na barra nativa padrão (~10px, cinza, sem nenhum
           estilo do site) por baixo da fila, lendo como "barra solta".
           Corrigido: barra escondida nos três seletores (Firefox, IE/Edge
-          legado, Chromium/Safari via pseudo-elemento) -- independe de versão.
-          Troca consciente: sinaliza o arrasto só pelo meio-card visível na
-          borda direita, sem UI nativa -- quem usa mouse comum sem
-          shift+wheel/scroll horizontal fica sem um mecanismo visível de
-          rolagem (trackpad, touch e teclado continuam cobertos). Se o dono
-          notar baixo uso da fila em desktop, considerar `onWheel` convertendo
-          scroll vertical em horizontal. */}
-      <div
+          legado, Chromium/Safari via pseudo-elemento).
+
+          Fase 5g: esconder a barra tirou o único indício de navegação para
+          mouse comum -- pesquisado em Ganni.com, filas reais de novidades
+          usam setas explícitas de anterior/próximo. `HorizontalRail` devolve
+          esse mecanismo sem UI nativa (ver componente para detalhes de
+          acessibilidade: aria-disabled, IntersectionObserver, teclado). */}
+      <HorizontalRail
+        ariaLabel="Peças recém-chegadas"
         className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [scroll-padding-inline:6vw]"
-        role="list"
-        aria-label="Peças recém-chegadas"
       >
         {products.map((product, i) => (
           <div
@@ -66,7 +66,7 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
             <ProductCard product={product} priority={i < 4} />
           </div>
         ))}
-      </div>
+      </HorizontalRail>
     </section>
   )
 }
