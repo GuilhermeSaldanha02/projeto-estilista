@@ -49,8 +49,10 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Info */}
-        <div className={`flex flex-col gap-2 ${featured ? 'p-5 md:p-6' : 'p-5 md:p-6'}`}>
+        {/* Info — pt pequeno de propósito: o nome cola na foto, não flutua
+            solto num "card" com respiro igual dos 4 lados (achado do dono:
+            "ficou solto o nome" na fila Acabou de chegar). */}
+        <div className="flex flex-col gap-1.5 pt-3 pb-1">
           <h3
             className={`font-display font-light text-ink leading-tight ${
               featured ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'

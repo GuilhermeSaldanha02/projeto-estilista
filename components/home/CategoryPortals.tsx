@@ -28,26 +28,32 @@ export default function CategoryPortals({ categories }: { categories: CategoryPo
   const noneHaveImage = shown.every(c => !c.image?.asset)
 
   // Fallback raro: nenhuma categoria (própria ou via produto mais recente,
-  // já resolvido em categoryPortalsQuery) tem foto — lista tipográfica limpa.
+  // já resolvido em categoryPortalsQuery) tem foto. Fase 5b (feedback do
+  // dono): a lista vertical dividida antes ficava "solta" — 4 links soltos
+  // ocupando uma faixa alta da página. Agora é UM bloco só: grid com borda
+  // e divisores internos, as 4 categorias lado a lado (2x2 no mobile),
+  // altura modesta — nada de caixas vazias de 70vh sem foto nenhuma dentro.
   if (noneHaveImage) {
     return (
-      <section aria-label="Categorias" className="py-24 md:py-32 px-[6vw] bg-sand-50">
-        <div className="max-w-[1440px] mx-auto">
-          <ul className="divide-y divide-ink/10">
-            {categories.map(cat => (
-              <li key={cat._id}>
-                <Link
-                  href={`/categoria/${cat.slug}`}
-                  className="group flex items-baseline justify-between py-6"
-                >
-                  <span className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink group-hover:text-bordo transition-colors">
-                    {cat.title}
-                  </span>
-                  <span aria-hidden className="font-sans text-ink-soft text-sm">→</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+      <section aria-label="Categorias" className="pb-20 md:pb-28 px-[6vw] bg-sand-50">
+        <div className="max-w-[1440px] mx-auto grid grid-cols-2 md:grid-cols-4 border border-ink/10 divide-x divide-y md:divide-y-0 divide-ink/10">
+          {shown.map(cat => (
+            <Link
+              key={cat._id}
+              href={`/categoria/${cat.slug}`}
+              className="group flex items-center justify-center gap-2 py-9 px-4 text-center"
+            >
+              <span className="font-display text-lg md:text-xl font-[450] text-ink group-hover:text-bordo transition-colors">
+                {cat.title}
+              </span>
+              <span
+                aria-hidden
+                className="font-sans text-ink-soft text-sm transition-transform duration-300 group-hover:translate-x-1"
+              >
+                →
+              </span>
+            </Link>
+          ))}
         </div>
       </section>
     )

@@ -1,7 +1,71 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-16 (Fase 5 — RECONSTRUÇÃO DO ZERO, completa)_
+_Última atualização: 2026-07-16 (Fase 5c — ajustes pontuais após o dono ver o site novo ao vivo)_
+
+---
+
+## Fase 5c — Retoques após o dono ver a reconstrução ao vivo (2026-07-16)
+
+Primeira vez que o dono viu qualquer coisa da Fase 5 rodando de verdade (no
+`npm run dev` dele). Feedback misto: *"gostei do fato de eu scroll a página
+e acompanhar"* (parallax do hero aprovado), mas *"senti a página um pouco
+pesada"* com 4 pontos concretos + consultoria + vitrine.
+
+1. **"Seleção da Luiza tá muito grande, poderia deixar mais na esquerda e
+   menor"** + **"logo abaixo está desalinhado"**: achei um bug real por trás
+   do "desalinhado" — a peça C (`CuratedSelection.tsx`) não tinha
+   `col-start` explícito, então o grid auto-posicionava ela na MESMA linha
+   de B, só empurrada por `margin-top` — um hack quebrado, não ritmo
+   intencional. Corrigido: as 3 peças têm posição de coluna explícita
+   (A: col-span-6, 50% — era col-span-8, 66%; B e C lado a lado, mesma
+   linha, sem hack de margem).
+
+2. **"As opções vestidos/saias/blusas/calças poderiam alinhar num único
+   bloco"**: o fallback tipográfico de `CategoryPortals.tsx` (quando
+   nenhuma categoria resolve foto) era uma lista vertical dividida, alta e
+   solta. Virou um bloco único: grid com borda externa e divisores
+   internos, as 4 categorias lado a lado (2x2 no mobile), altura modesta.
+
+3. **"Acabou de chegar, ficou solto o nome"**: `ProductCard.tsx` tinha
+   `p-5 md:p-6` (respiro igual nos 4 lados, como um card com margem
+   própria) — reduzido para `pt-3 pb-1`, o nome agora cola na foto.
+   Afeta todo uso de `ProductCard` (vitrine, categoria, rail, relacionados)
+   por design — é a mesma lógica em todo lugar.
+
+4. **Consultoria "repetitivo, Agendar horário uns 4x"**: removido o
+   `WaButton` de dentro de `FotoLadoSection` (repetia a cada seção
+   foto+texto do CMS). Ficam só 2 no CONTEÚDO da página: hero
+   (`StylistHero`) e a seção de fechamento (`DestaqueClaroSection`,
+   "Vamos começar?"). As outras ocorrências que apareciam ao contar
+   `document.querySelectorAll('a')` sem escopo eram nav + footer (chrome
+   global, em toda página do site por design — não é repetição de página).
+
+5. **"Vitrine: as peças também não está legal"**: achei a causa em
+   `/categoria/saias` (2 peças) — `CatalogHeaderCell` esticava pra ocupar
+   uma coluna inteira de 1/3 do grid (~325px) só pra um título curto
+   ("Saias"), sobrando um vão vazio grande do lado. Corrigido com um
+   grid-template diferente para N≤2 (`md:grid-cols-[auto_1fr_1fr]` — a
+   coluna do cabeçalho vira largura do próprio texto, não 1/3 fixo) +
+   `justify-start` no header (antes `justify-end` ancorava o texto embaixo
+   de uma célula esticada, deixando um vão vazio em cima). N=3 continua no
+   grid uniforme de 3 colunas (o auto-header bagunçaria a largura da coluna
+   1 na 2ª linha, com 2 linhas envolvidas).
+
+**Nota sobre o ambiente de verificação nesta sessão:** o servidor de
+verificação isolado (portas 3070-3090) apresentou instabilidade real —
+"Jest worker encountered 2 child process exceptions" e
+"Cannot find module for page" — rastreados a cache `.next` compartilhado
+entre `next build` (produção) e `next dev` rodando em sequência rápida na
+mesma pasta. `rm -rf .next` antes de cada novo `next dev` resolveu
+consistentemente. Isso não afetou o código entregue (build de produção
+sempre limpo), só atrasou a verificação visual própria.
+
+Verificado (porta isolada, após `rm -rf .next` limpo): B/C da Seleção da
+Luiza agora com o mesmo `top`/`bottom` (alinhados de verdade); bloco de
+categorias com as 4 lado a lado; consultoria com 2 CTAs no conteúdo (hero +
+fechamento); `/categoria/saias` com header auto-dimensionado e gap de 24px
+(o gap do grid, não um vazio) até o primeiro produto. Build limpo.
 
 ---
 
