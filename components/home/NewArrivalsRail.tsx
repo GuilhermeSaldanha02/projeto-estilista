@@ -15,20 +15,19 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
 
   return (
     <section aria-label="Acabou de chegar" className="bg-sand-50 pb-24 md:pb-32">
-      {/* Cabeçalho editorial — mesmo vocabulário da Seleção da Luiza (etiqueta
-          + fio dourado) para as seções pertencerem à mesma página. Antes o
-          título ficava solto, um "negrito forte" sem enquadramento (feedback
-          do dono). Agora tem contexto (etiqueta "Novidades") e a linha dourada
-          que é o motivo recorrente do site, com o link de "ver tudo" no fim
-          da mesma régua do título. */}
+      {/* Cabeçalho — campo de dourado translúcido por trás do título (Fase 5i,
+          escolha do dono entre 3 direções). Antes o título era um "negrito
+          forte" solto no fundo areia. Agora repousa sobre uma faixa de dourado
+          em DEGRADÊ (forte à esquerda, some à direita) que sangra na largura
+          da seção -- cor e calor por trás, sem virar o painel chapado que deu
+          "agonia visual" no hero (aquele era cor sólida + letra gigante; este
+          é dourado translúcido em degradê + título espresso mais leve). É o
+          único ponto de dourado forte da seção (respeita o teto de dourado
+          por tela do DESIGN.md), por isso não há mais o fio/etiqueta extras. */}
       <Reveal className="px-[6vw]">
-        <div className="max-w-[1440px] mx-auto mb-10 md:mb-12">
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-3">
-            Novidades
-          </p>
-          <div className="w-8 h-px bg-dourado/40 mb-5" />
-          <div className="flex items-baseline justify-between gap-4">
-            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight">
+        <div className="max-w-[1440px] mx-auto mb-12 md:mb-16 bg-gradient-to-r from-dourado/25 via-dourado/[0.10] to-transparent">
+          <div className="py-9 md:py-12 px-6 md:px-10 flex items-baseline justify-between gap-4">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-espresso tracking-tight">
               Acabou de chegar
             </h2>
             <Link
