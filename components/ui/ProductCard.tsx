@@ -68,7 +68,7 @@ export default function ProductCard({
               {product.image2?.asset && (
                 <Image
                   src={urlFor(product.image2).width(600).height(800).fit('crop').auto('format').url()}
-                  alt={product.image2.alt ?? product.title}
+                  alt={product.image2.alt ?? `${product.title} — outro ângulo`}
                   fill
                   sizes={
                     featured
