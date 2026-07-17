@@ -1,7 +1,100 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-16 (Fase 5c — ajustes pontuais após o dono ver o site novo ao vivo)_
+_Última atualização: 2026-07-17 (Fase 5d — bug real do rail + plano em fases + docs atualizados)_
+
+---
+
+## Fase 5d — Bug real da fila "Acabou de chegar" + plano formal (2026-07-17)
+
+Nova captura de tela do dono mostrando "Acabou de chegar" com o primeiro
+produto sem foto e um vão vazio grande, com a frase *"nada que eu pedi da
+home page foi feito"*. Junto, três pedidos de processo, explícitos:
+1. não fazer tudo de uma vez, trabalhar em fases com checkpoint;
+2. olhar referências de sites reais para a vitrine;
+3. atualizar `PRD.md`/`CLAUDE.md`/`docs/PROGRESS.md`.
+
+Segui os três. Entrei em modo de planejamento formal (`EnterPlanMode`) antes
+de tocar em qualquer código — plano salvo e aprovado pelo dono antes da
+implementação.
+
+**Investigação (antes de qualquer correção):** reproduzi a captura em
+ambiente isolado (viewport 1307×628, o tamanho exato da imagem) e achei
+**dois bugs reais e distintos**, não um problema de design:
+1. A fila (`components/home/NewArrivalsRail.tsx`) media `scrollLeft: 78`
+   **sem nenhuma interação do usuário** — comportamento conhecido de
+   `scroll-snap` quando o padding do container não é declarado também como
+   `scroll-padding`: o navegador corrige a posição inicial pra bater com o
+   snap-point, deslocando a fila sozinha no load.
+2. `ProductCard.tsx` não tinha como marcar uma imagem como prioritária —
+   os primeiros itens da fila (já visíveis no load, sem rolar) carregavam em
+   lazy, e o placeholder (`bg-sand-100`) é quase idêntico ao fundo da seção
+   (`bg-sand-50`): enquanto a foto não chega, o card mostra só a legenda,
+   lendo como "sem foto".
+
+As 4 correções da Fase 5c (Seleção da Luiza, bloco de categorias, padding do
+`ProductCard`, CTA da consultoria) foram reconfirmadas como corretas nesta
+investigação — não precisaram ser refeitas.
+
+**Correção (Fase A do plano):**
+- `NewArrivalsRail.tsx`: `[scroll-padding-inline:6vw]` no container da fila
+  (mesmo valor do padding visual) + `priority` nos 3 primeiros `ProductCard`.
+- `ProductCard.tsx`: nova prop `priority?: boolean`, repassada ao
+  `next/image` interno (não existia antes — é a causa de não dar pra marcar
+  itens específicos como eager sem essa mudança).
+- Verificado no viewport exato da captura (1307×628) e em mobile: `scrollLeft`
+  volta a `0` no load; os 3 primeiros `img` carregam sem atributo `loading`
+  (eager) e chegam com `complete: true`; o 4º continua `loading="lazy"`,
+  como esperado. Sem overflow horizontal em nenhum dos dois viewports.
+
+**Pesquisa de referências (pedido explícito do dono, feita antes do plano):**
+fui em dois sites reais de moda de escala comparável ao projeto —
+Reformation (`thereformation.com/dresses`) e Ganni (`ganni.com/clothing`) —
+em vez da lista genérica de 179 links 3D já descartada. Confirmado: a
+estrutura do `CatalogView` (cabeçalho como célula da grade, régua de
+filtro/ordenação) já bate com o que o varejo de verdade faz — não precisa
+mudar. Duas melhorias concretas ficaram registradas para a **Fase B** (só
+depois do dono confirmar a Fase A ao vivo, por pedido dele): 2ª foto no
+hover do card (o schema já tem `images[]`, só não é usado no card) e selo
+"Novo" quando `isNew` (o dado já existe, só não é mostrado).
+
+**Documentos atualizados nesta fase** (pedido explícito do dono):
+- `CLAUDE.md`: removida a contradição real que existia desde antes da
+  reconstrução — §7 ainda dizia *"desenhe o mobile primeiro"*, o oposto da
+  decisão já tomada na Fase 4 ("desktop lidera, mobile é derivado"). Tokens
+  desatualizados (`sand-200`/`300`, que não existem mais) trocados por
+  referência direta ao `DESIGN.md`. Protocolo de trabalho (§8) ganhou a
+  lição desta fase: medir DOM não substitui olhar; fases pequenas com
+  checkpoint, não tudo de uma vez.
+- `SDD.md`: tabela de rotas (`/vitrine`, `/consultoria`, sem `/stylist` nem
+  `/colecao/novidades`), schema (`category.image`), especificação de
+  WhatsApp (`lib/wa.ts` como fonte única desde a Fase 5).
+- `PRD.md`: seção 7 (features do v1) com os nomes de rota atuais e a
+  composição real da home em 5 seções — sem mudar escopo de produto.
+
+**Code review do PR #46, corrigido:** `i<3` deixava o 4º card do rail
+majoritariamente visível (64%) no viewport exato da captura do dono e ainda
+`loading="lazy"` — mesma causa-raiz, card quase visível em vez de fora da
+tela. Virou `i<4` (cobre a faixa real de ~4,1 cards visíveis em
+`lg:w-[24vw]`). Também corrigido: `SDD.md` dizia "redirect 301", o código
+usa `permanent: true` que o Next.js serve como 308; e adicionado comentário
+em `ProductGallery.tsx` explicando por que o carrossel mobile de produto
+(mesma receita `overflow-x-auto`+`snap`+padding) não precisa do mesmo
+`scroll-padding-inline` — testado ao vivo, não reproduz o bug (usa margem
+negativa, não padding direto).
+
+**Follow-up não corrigido nesta fase (fora de escopo, registrado para
+depois):** `ProductCard` em `components/catalog/CatalogView.tsx` (grade de
+`/vitrine`, categoria, coleção) e a `Image` interna de `CuratedPiece` em
+`components/home/CuratedSelection.tsx` (Seleção da Luiza, S2 da home) nunca
+recebem `priority` — mesma classe de sintoma poderia aparecer nessas telas.
+Não corrigido agora por decisão de escopo (o pedido era só a fila "Acabou de
+chegar"); se o dono notar o mesmo problema em `/vitrine` ou na home, é o
+próximo passo óbvio.
+
+**Estado: Fase A entregue, verificada, e com o code review aplicado. Fase B
+(2ª foto + selo "Novo") só começa depois do dono confirmar esta correção ao
+vivo — checkpoint pedido por ele, respeitado.**
 
 ---
 

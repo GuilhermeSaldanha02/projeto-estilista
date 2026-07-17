@@ -32,25 +32,24 @@ Uma **vitrine multi-página de roupa feminina** que mostra as peças e a persona
 
 ## 5. Tokens de marca
 
-Base areia clara, drama concentrado em poucos pontos.
+**A tabela completa e sempre atual vive em `DESIGN.md`** (front-matter +
+"A foto é a tela") — não duplicar valores aqui, é o que causou o §5 antigo
+ficar com nomes de token que não existem mais no código (`sand-200`/`300` —
+removidos na Fase 5). Resumo do que importa saber sem abrir o outro arquivo:
 
-| Token | Hex | Uso |
-|---|---|---|
-| `--sand-50` | `#F4EFE6` | superfície de card de produto (quase branco quente) |
-| `--sand-100` | `#EDE3D2` | fundo de seção claro |
-| `--sand-200` | `#E7DBC8` | base areia (área dominante) |
-| `--sand-300` | `#DCCBB0` | ponta escura do degradê de areia |
-| `--espresso` | `#241C17` | faixas escuras: header, footer, destaque, painel-cascata |
-| `--esmeralda` | `#0B5D46` | cor dominante de marca |
-| `--esmeralda-light` | `#1D9A72` | hovers e detalhes |
-| `--bordo` | `#7B1E3A` | só acento e CTA |
-| `--dourado` | `#C2A14D` | linhas e ícones |
-| `--ink` | `#1A1A1A` | texto sobre claro |
-| `--cream-text` | `#F4EFE6` | texto sobre espresso |
-
-**Regra do degradê (importante):** degradê dentro da família areia (ex.: `--sand-100` → `--sand-200`) é o padrão para textura de fundo dentro de uma seção — sutil, restrito a hero e faixas. Nunca degradê atrás de foto de produto (suja a leitura da roupa). Gradiente forte e genérico é sinal de "cara de IA" — evite.
-
-**Exceção revogada (2026-07-12):** a "costura" cruzando família de cor (areia → espresso) foi removida de toda a vitrine e do `/stylist` — virava sempre uma faixa taupe barrenta (marrom quase sem croma esmaecido sobre claro é matematicamente sujo, não é ajuste de valor). Regra restaurada sem nuance: **nunca degradê cruzando família de cor.** Ritmo entre seções claras e escuras se faz por corte limpo + entrada coreografada por scroll (Lenis/Framer/`FadeInSection`), não por emenda esmaecida.
+- Base: `sand-50`/`sand-100` (areia clara) + `espresso` (único escuro de
+  seção inteira, no máximo 1 seção escura por página).
+- Três funções de cor fixas, nunca trocam de papel: `esmeralda` = agendamento,
+  `bordo` = produto/desejo, `dourado` = linha/eyebrow (nunca texto sobre
+  `bordo` — mede abaixo do mínimo AA de contraste, já medido e documentado
+  em `DESIGN.md`).
+- **Nunca cor chapada (painel/fundo de seção) atrás de texto corrido.** Cor
+  forte só em composição com foto (bloco sangrando atrás/ao redor de uma
+  imagem). Isso já foi violado uma vez (hero da Fase 4, painel bordô atrás do
+  `<h1>`) e rejeitado pelo dono — não repetir.
+- **Nunca degradê cruzando família de cor** (areia → espresso). Ritmo entre
+  seções claras e escuras é corte limpo + entrada coreografada por scroll
+  (`components/motion/`), não emenda esmaecida.
 
 ## 6. Catálogo: modelo de dados (a regra que impede duplicata)
 
@@ -64,7 +63,15 @@ Cada produto tem **uma categoria** (tipo de peça) e **várias tags** (cortes tr
 
 ## 7. Regras técnicas inegociáveis
 
-- **Mobile-first.** A maioria das clientes está no celular. Hover não existe lá — o menu-cascata vira acordeão de tocar. Desenhe o mobile primeiro, o desktop é o aprimoramento.
+- **Desktop lidera o desenho; mobile é derivado por responsividade** (decisão
+  explícita do dono, Fase 4 — ver `docs/PROGRESS.md`). Isto **substitui** a
+  regra antiga "desenhe o mobile primeiro": construir mobile-first e adaptar
+  pro desktop depois foi a causa raiz de "fica de um jeito no computador e de
+  outro no celular" ao longo de várias rodadas — a causa real não era a ordem
+  de escrita do CSS, era falta de verificação visual do desktop. **A maioria
+  das clientes ainda está no celular** (isso não mudou — hover não existe lá,
+  o menu vira acordeão de tocar), então mobile continua tão verificado quanto
+  desktop; só a ordem de composição virou desktop → mobile, não o inverso.
 - **Toda imagem passa por otimização** (`next/image` + Sanity CDN). Nunca renderize `<img>` cru com arquivo pesado. Vitrine lenta = cliente perdida na primeira tela.
 - **WhatsApp com texto pré-preenchido e diferente por contexto** (ver SDD): o botão de peça leva o nome do produto; o de agendamento leva a intenção de styling. Nunca dois links em branco iguais.
 - **Acessibilidade:** alt em imagem, contraste adequado (cuidado com texto sobre areia e sobre espresso), foco visível, navegável por teclado.
@@ -72,11 +79,23 @@ Cada produto tem **uma categoria** (tipo de peça) e **várias tags** (cortes tr
 
 ## 8. Protocolo de trabalho (siga em TODA tarefa)
 
-Você (agente) sempre fecha uma unidade de trabalho com estes três passos, nesta ordem:
+Você (agente) sempre fecha uma unidade de trabalho com estes passos, nesta ordem:
 
-1. **Atualize o estado.** Edite `docs/PROGRESS.md`: o que ficou pronto, o que está pendente, qual o próximo passo. É a sua memória entre sessões — nunca se perca por não ter lido/escrito aqui.
-2. **Valide por comportamento observável.** O dono valida pela tela, não lendo código. Entregue uma checklist do que ele deve conseguir VER ou FAZER para confirmar que funcionou (ex.: "abra `/categoria/vestidos` no celular: o menu vira acordeão; as fotos carregam em < 2s; o botão WhatsApp abre conversa com o nome da peça"). Liste qualquer ponto de incerteza honestamente — se há risco de lógica, diga, não esconda.
-3. **Entregue o próximo prompt.** Termine sempre com o prompt exato que o dono deve colar para iniciar o próximo passo. Curto, acionável, um passo de cada vez.
+1. **Verifique de verdade antes de dizer que terminou.** Medir DOM
+   (`getBoundingClientRect`/`getComputedStyle`) prova estrutura, não prova
+   composição visual — várias rodadas deste projeto declararam "verificado"
+   uma coisa que, ao olho, estava quebrada (ex.: o bug de `font-[450]`
+   renderizando como 500 que o `getComputedStyle` não detectava; o
+   auto-scroll do scroll-snap que só apareceu numa captura de tela real).
+   Rodar em dois viewports isolados (desktop largo + mobile) é o mínimo;
+   **o dono no navegador real dele é o gate final, não substituível por
+   medição.**
+2. **Não fature tudo de uma vez.** Fases pequenas com checkpoint do dono
+   entre elas — ele já pediu isso explicitamente mais de uma vez. Se o
+   pedido for grande, proponha as fases antes de implementar.
+3. **Atualize o estado.** Edite `docs/PROGRESS.md`: o que ficou pronto, o que está pendente, qual o próximo passo. É a sua memória entre sessões — nunca se perca por não ter lido/escrito aqui.
+4. **Valide por comportamento observável.** O dono valida pela tela, não lendo código. Entregue uma checklist do que ele deve conseguir VER ou FAZER para confirmar que funcionou. Liste qualquer ponto de incerteza honestamente — se há risco de lógica, diga, não esconda.
+5. **Entregue o próximo prompt.** Termine sempre com o prompt exato que o dono deve colar para iniciar o próximo passo. Curto, acionável, um passo de cada vez.
 
 ## 9. Git (mudança bem definida por commit)
 

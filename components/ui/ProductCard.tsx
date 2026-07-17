@@ -19,9 +19,15 @@ export type ProductCardData = {
 export default function ProductCard({
   product,
   featured = false,
+  priority = false,
 }: {
   product: ProductCardData
   featured?: boolean
+  /** Fase 5d: itens visíveis já no load (ex.: 1os da fila "Acabou de chegar")
+   *  precisam disso -- sem `priority`, next/image carrega em lazy e, com o
+   *  fundo do placeholder quase idêntico ao da seção (sand-100 sobre
+   *  sand-50), o card aparece como "legenda sem foto" até a imagem chegar. */
+  priority?: boolean
 }) {
   return (
     <Link href={`/produto/${product.slug}`} className="group block h-full">
@@ -33,6 +39,7 @@ export default function ProductCard({
               src={urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()}
               alt={product.image.alt ?? product.title}
               fill
+              priority={priority}
               sizes={
                 featured
                   ? '(max-width: 1024px) 50vw, 50vw'

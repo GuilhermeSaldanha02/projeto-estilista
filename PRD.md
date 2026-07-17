@@ -47,17 +47,28 @@ Produto = 1 categoria + N tags. Categoria sem estoque some do menu (regra sazona
 
 ## 7. Features do v1 (MVP — o mínimo para lançar e começar a converter)
 
-- **Home:** hero com vídeo em loop mudo de fundo + entradas para as coleções; segunda
-  dobra já destacando a stylist. _(A "faixa fixa no topo" desta lista original nunca
-  foi construída — os campos de schema que a sustentariam (`topBarText`/`topBarLink`)
-  foram removidos por não terem consumidor no código; sem nenhuma tela lendo isso,
-  virou dívida de doc. Se a faixa for desejada, é decisão nova, não recuperação de algo
-  que existia.)_
-- **Seção/página da personal stylist:** sobre ela + botão "Agendar horário" (→ WhatsApp).
-- **Navegação cascata:** menu com as categorias em um painel (coluna de tipos + bloco escuro de novidade); vira acordeão no mobile.
-- **Página de categoria** (1 template, serve as 9 categorias): grade de produtos, escaneável.
-- **Página de produto** (1 template, serve todas as peças): fotos, descrição, botão "Quero esta peça" (→ WhatsApp com o nome).
-- **Página de coleção/novidades** (filtro): peças marcadas com a tag.
+_Atualizado na Fase 5 (reconstrução completa) — nomes de rota e composição da
+home mudaram; o escopo de produto abaixo continua o mesmo._
+
+- **Home:** hero com vídeo em loop mudo de fundo (S1) → seleção curada da
+  dona com nota da stylist (S2) → portais de categoria (S3) → fila de
+  novidades (S4) → convite à consultoria com a stylist em destaque, botão
+  "Agendar horário" (S5, última seção — não mais "segunda dobra": a curadoria
+  de produto vem antes, a stylist fecha a página). _(A "faixa fixa no topo"
+  desta lista original nunca foi construída — decisão já registrada, não
+  recuperar sem pedido novo.)_
+- **`/consultoria`** (era `/stylist`): sobre a personal stylist + botão
+  "Agendar horário" (→ WhatsApp).
+- **Navegação:** "Vitrine" (link + mega-menu de categorias no hover) e
+  "Consultoria" no header; sem bloco de destaque de novidades no menu — a
+  seção de novidades já vive com destaque na home e em `/vitrine`.
+- **Página de categoria** (1 template, serve todas as categorias): grade de
+  produtos, escaneável.
+- **Página de produto** (1 template, serve todas as peças): fotos, descrição,
+  botão "Quero esta peça" (→ WhatsApp com o nome), seção "Combina com" (4
+  peças da mesma categoria).
+- **`/vitrine`** (era "página de coleção/novidades"): catálogo completo,
+  único lugar com filtro por categoria + ordenação.
 - **CMS configurado:** a dona cadastra produto (1 categoria + tags), sobe fotos, marca novidade — tudo otimizado.
 
 ## 8. Depois (só quando o v1 provar que vale)

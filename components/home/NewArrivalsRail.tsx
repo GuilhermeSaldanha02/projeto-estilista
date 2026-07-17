@@ -28,19 +28,28 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
         </div>
       </Reveal>
 
-      {/* Fila: padding esquerdo alinha com o site; overflow à direita convida o arrasto */}
+      {/* Fila: padding esquerdo alinha com o site; overflow à direita convida o arrasto.
+          scroll-padding-inline igual ao padding visual (achado do dono, captura de
+          tela): sem isso, scroll-snap "corrige" a posição inicial pra bater com o
+          snap-point e a fila abre pré-deslocada (~78px), sem nenhum toque do
+          usuário -- media exatamente o valor do padding-left computado. */}
       <div
-        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]"
+        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin] [scroll-padding-inline:6vw]"
         role="list"
         aria-label="Peças recém-chegadas"
       >
-        {products.map(product => (
+        {products.map((product, i) => (
           <div
             key={product._id}
             role="listitem"
             className="snap-start shrink-0 w-[72vw] sm:w-[44vw] md:w-[30vw] lg:w-[24vw] md:min-w-[300px]"
           >
-            <ProductCard product={product} />
+            {/* priority nos 4 primeiros: em lg:w-[24vw] cabem ~4,1 cards no
+                viewport sem rolar -- com i<3, o code review do PR #46 mediu
+                o 4º card 64% visível no viewport exato da captura do dono e
+                ainda `loading="lazy"` (mesma causa-raiz, card quase visível
+                em vez de fora da tela). i<4 cobre a faixa de largura real. */}
+            <ProductCard product={product} priority={i < 4} />
           </div>
         ))}
       </div>
