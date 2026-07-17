@@ -34,13 +34,19 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
           snap-point e a fila abre pré-deslocada (~78px), sem nenhum toque do
           usuário -- media exatamente o valor do padding-left computado.
 
-          Fase 5f (feedback do dono, medido ao vivo): `scrollbar-width: thin` é
-          propriedade EXCLUSIVA do Firefox -- no Chrome/Edge (Chromium) ela é
-          ignorada e o navegador desenha a barra nativa padrão (~10px, cinza,
-          sem nenhum estilo do site) por baixo da fila, lendo como "barra solta".
-          Corrigido: barra escondida nos três motores (Firefox, IE/Edge legado,
-          Chromium/Safari via pseudo-elemento) -- o arrasto já é sinalizado pelo
-          meio-card visível na borda direita, sem precisar de UI nativa. */}
+          Fase 5f (feedback do dono, medido ao vivo): `scrollbar-width: thin`
+          não tinha efeito no Chrome/Edge do dono (suporte a essa propriedade
+          no Chromium é recente e ainda inconsistente entre versões) -- o
+          navegador caía na barra nativa padrão (~10px, cinza, sem nenhum
+          estilo do site) por baixo da fila, lendo como "barra solta".
+          Corrigido: barra escondida nos três seletores (Firefox, IE/Edge
+          legado, Chromium/Safari via pseudo-elemento) -- independe de versão.
+          Troca consciente: sinaliza o arrasto só pelo meio-card visível na
+          borda direita, sem UI nativa -- quem usa mouse comum sem
+          shift+wheel/scroll horizontal fica sem um mecanismo visível de
+          rolagem (trackpad, touch e teclado continuam cobertos). Se o dono
+          notar baixo uso da fila em desktop, considerar `onWheel` convertendo
+          scroll vertical em horizontal. */}
       <div
         className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [scroll-padding-inline:6vw]"
         role="list"
