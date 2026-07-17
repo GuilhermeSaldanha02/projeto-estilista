@@ -1,7 +1,63 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-17 (Fase 5e — home finalizada: Fase B + priority na Seleção da Luiza)_
+_Última atualização: 2026-07-17 (Fase 5f — legenda da Seleção da Luiza + barra nativa da fila, PR #48)_
+
+---
+
+## Fase 5f — Legenda esticada no desktop + barra nativa da fila (2026-07-17)
+
+Depois da Fase 5e ("home finalizada do lado do código"), o dono mandou duas
+capturas novas e disse: *"não esta sendo arrumado oque eu to lhe pedindo...
+na versão mobile fica ok, mas na de computador não"* (Seleção da Luiza) e
+*"na parte acabou de chegar ta com uma barra está tambem errado e solto"*
+(Acabou de chegar). Desta vez a investigação foi feita **ao vivo, com
+medição DOM real** (`getBoundingClientRect`/`getComputedStyle` num servidor
+isolado, porta 3130) antes de qualquer alteração de código — a ferramenta de
+screenshot travava nesta sessão (timeout repetido em duas páginas
+diferentes), então a verificação visual foi substituída por medição
+numérica precisa, não pulada.
+
+**Achado 1 — `CuratedSelection.tsx` (Seleção da Luiza).** `align-items:
+stretch` (padrão do CSS Grid) esticava a coluna da legenda (selo + nota +
+assinatura) para bater com a altura da peça A ao lado — medido: coluna com
+806px de altura, mas o conteúdo real ocupa só 219px, sobrando ~587px vazios
+embaixo do texto. Só existe no desktop (grid de 12 colunas); no mobile é
+grid de coluna única, sem vizinho para "esticar até bater". Bate exatamente
+com o relato "mobile ok, desktop não". **Diferente** do achado da Fase 5b
+(auto-placement da peça C) — aquele continua correto, este é um bug novo,
+não pego antes porque a verificação anterior media posição/alinhamento de
+coluna, não altura de conteúdo vs. altura esticada do grid.
+Corrigido: `md:self-center` na legenda — não estica mais, centraliza ao
+lado da foto. Medido depois: coluna caiu para 219px (bate com o conteúdo).
+
+**Achado 2 — `NewArrivalsRail.tsx` (Acabou de chegar).** `[scrollbar-width:
+thin]` é propriedade CSS **exclusiva do Firefox** — em Chrome/Edge
+(Chromium, o navegador do dono) é ignorada e o navegador desenha a barra de
+rolagem nativa padrão (cinza, ~10px) por baixo da fila. Medido: 10px de
+espaço reservado para a barra antes da correção. Corrigido escondendo a
+barra nos três motores (`scrollbar-width:none` + `-ms-overflow-style:none`
++ `[&::-webkit-scrollbar]:hidden`) — o arrasto continua sinalizado pelo
+meio-card visível na borda direita, sem depender de UI nativa do navegador.
+Medido depois: 0px reservados; `scrollWidth` da fila preservado em mobile
+(rolagem continua funcional).
+
+**Lição de processo, registrada por já ter se repetido:** o dono apontou
+duas vezes seguidas (após PR #45 e após PR #47) que a correção não batia
+com o que ele via. A causa, nas duas vezes, não era falta de esforço — era
+verificação incompleta (medir alinhamento de posição, não altura
+efetiva/CSS específico de motor de navegador). A partir desta fase, toda
+alegação de "corrigido" nesta seção da home foi confirmada por medição
+numérica antes/depois, não só por releitura do código.
+
+PR #48, aberto a partir de `main` (que estava sincronizado com
+`origin/main` — sem incidente de commit direto desta vez). Code review em
+PT-BR disparado em background antes do merge, mesmo processo já usado
+desde a Fase 5.
+
+**Estado: aguardando code review + confirmação visual do dono. Continua
+valendo o checkpoint por página — nenhuma outra página deve começar antes
+dele confirmar a home.**
 
 ---
 
