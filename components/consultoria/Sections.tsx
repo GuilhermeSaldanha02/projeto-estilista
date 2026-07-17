@@ -55,9 +55,9 @@ export function StylistSectionsRenderer({
         const layout = section.layout ?? 'padrao'
         switch (layout) {
           case 'foto-esquerda':
-            return <FotoLadoSection key={section._key} section={section} reverse={false} waHref={waHref} />
+            return <FotoLadoSection key={section._key} section={section} reverse={false} />
           case 'foto-direita':
-            return <FotoLadoSection key={section._key} section={section} reverse={true} waHref={waHref} />
+            return <FotoLadoSection key={section._key} section={section} reverse={true} />
           case 'etapas':
             return <EtapasSection key={section._key} section={section} />
           case 'transformacao-escura':
@@ -188,7 +188,7 @@ function PadraoSection({ section }: { section: StylistSection }) {
 }
 
 /* ── Foto + texto: cor composicional (bloco bordô atrás da foto), PhotoParallax ── */
-function FotoLadoSection({ section, reverse, waHref }: { section: StylistSection; reverse: boolean; waHref: string | null }) {
+function FotoLadoSection({ section, reverse }: { section: StylistSection; reverse: boolean }) {
   const imageUrl = section.image?.asset
     ? urlFor(section.image).width(700).height(933).fit('crop').auto('format').url()
     : null
@@ -203,7 +203,10 @@ function FotoLadoSection({ section, reverse, waHref }: { section: StylistSection
               <PortableText value={section.body} />
             </div>
           )}
-          <WaButton waHref={waHref} />
+          {/* Sem WaButton aqui (Fase 5b, feedback do dono: "Agendar horário"
+              repetia ~4x na página). O hero já abre com o CTA e a seção de
+              destaque fecha a página com ele — meio de página fica só a
+              narrativa, sem repetir a cada bloco foto+texto. */}
         </div>
 
         <div className={`order-1 ${reverse ? 'md:order-2' : 'md:order-1'}`}>

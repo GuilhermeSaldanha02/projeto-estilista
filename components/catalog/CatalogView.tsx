@@ -149,10 +149,16 @@ export default function CatalogView({
           </div>
         ) : (
           <>
+            {/* N<=2: coluna do cabeçalho vira "auto" (largura do próprio
+                título), não 1/3 fixo do grid -- era isso que deixava um
+                vão vazio ao lado de um título curto tipo "Saias" (achado
+                do dono ao ver /categoria/saias ao vivo). N=3 continua nas
+                3 colunas uniformes (com 2 linhas, o auto-header bagunçaria
+                a largura da coluna 1 na 2ª linha). */}
             <div
-              className={`grid grid-cols-2 md:grid-cols-3 gap-x-4 md:gap-x-6 gap-y-12 md:gap-y-16 ${
-                isSmallEdition ? 'max-w-5xl' : ''
-              }`}
+              className={`grid grid-cols-2 gap-x-4 md:gap-x-6 gap-y-12 md:gap-y-16 ${
+                isSmallEdition && filtered.length <= 2 ? 'md:grid-cols-[auto_1fr_1fr]' : 'md:grid-cols-3'
+              } ${isSmallEdition ? 'max-w-5xl' : ''}`}
             >
               {/* Célula 1 da grade: o cabeçalho. Divide a linha de base com
                   os primeiros produtos — um bloco só, sem vão. */}
@@ -194,8 +200,12 @@ export default function CatalogView({
 }
 
 function CatalogHeaderCell({ title, count }: { title: string; count: number }) {
+  // justify-start (topo), não justify-end: a célula estica pra igualar a
+  // altura da linha (foto+legenda do produto vizinho é mais alta que o
+  // título), e ancorar embaixo deixava um vão vazio grande acima do texto,
+  // lendo como desalinhado (achado do dono em /categoria/saias).
   return (
-    <header className="flex flex-col justify-end pb-2 col-span-2 md:col-span-1">
+    <header className="flex flex-col justify-start col-span-2 md:col-span-1 md:pr-6">
       <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight [text-wrap:balance] mb-4">
         {title}
       </h1>

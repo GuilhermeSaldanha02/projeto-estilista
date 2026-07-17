@@ -11,8 +11,13 @@ import { Reveal } from '@/components/motion/Reveal'
  * A curadoria é o que faz isto ser loja COM ponto de vista: a nota da
  * stylist (siteSettings.curatorNote) deixa de ser seção isolada e vira
  * LEGENDA da seleção — texto e produto conversando no mesmo bloco.
- * Composição assimétrica desenhada para 2-4 peças (nunca grid esticado):
- * peça A grande à direita, B e C abaixo em escada com offset vertical.
+ *
+ * Fase 5b (feedback do dono ao ver ao vivo): a peça A estava grande demais
+ * (col-span-8, 66% da largura) e a peça C não tinha `col-start` explícito —
+ * o grid auto-posicionava ela na MESMA linha de B (só afastada por
+ * margin-top), o que lia como "desalinhado", não como ritmo intencional.
+ * Corrigido: todas as 3 peças têm posição de coluna explícita, A reduzida
+ * a col-span-6 (50%), B e C lado a lado embaixo dela, sem hack de margem.
  */
 export default function CuratedSelection({
   products,
@@ -27,9 +32,9 @@ export default function CuratedSelection({
   const [a, b, c] = products
 
   return (
-    <section aria-label="Seleção da Luiza" className="bg-sand-50 py-24 md:py-32 px-[6vw]">
-      <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-12">
-        {/* Cabeçalho/legenda — col 1-4, gruda no topo da composição */}
+    <section aria-label="Seleção da Luiza" className="bg-sand-50 py-20 md:py-28 px-[6vw]">
+      <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-8">
+        {/* Cabeçalho/legenda — col 1-4 */}
         <Reveal className="md:col-span-4 md:pr-8">
           <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-5">
             Seleção da Luiza
@@ -47,22 +52,23 @@ export default function CuratedSelection({
           )}
         </Reveal>
 
-        {/* Peça A — dominante, col 5-12 */}
+        {/* Peça A — col 5-10 (50%, não mais 66%) */}
         {a && (
-          <div className="md:col-span-8">
-            <CuratedPiece product={a} sizes="(max-width: 768px) 100vw, 60vw" ratio="aspect-[4/5]" />
+          <div className="md:col-start-5 md:col-span-6">
+            <CuratedPiece product={a} sizes="(max-width: 768px) 100vw, 50vw" ratio="aspect-[4/5]" />
           </div>
         )}
 
-        {/* B e C — escada com offset (ritmo, não grade) */}
+        {/* B e C — lado a lado, mesma linha, mesma largura de A somada.
+            Posição explícita nas duas: nada de auto-placement adivinhando. */}
         {b && (
-          <div className="md:col-span-4 md:col-start-5">
-            <CuratedPiece product={b} sizes="(max-width: 768px) 100vw, 30vw" ratio="aspect-[3/4]" delay={0.12} />
+          <div className="md:col-start-5 md:col-span-3">
+            <CuratedPiece product={b} sizes="(max-width: 768px) 100vw, 25vw" ratio="aspect-[3/4]" delay={0.12} />
           </div>
         )}
         {c && (
-          <div className="md:col-span-4 md:mt-16">
-            <CuratedPiece product={c} sizes="(max-width: 768px) 100vw, 30vw" ratio="aspect-[3/4]" delay={0.24} />
+          <div className="md:col-start-8 md:col-span-3">
+            <CuratedPiece product={c} sizes="(max-width: 768px) 100vw, 25vw" ratio="aspect-[3/4]" delay={0.24} />
           </div>
         )}
       </div>
