@@ -58,14 +58,20 @@ export default function CuratedSelection({
         </Reveal>
 
         {/* Peças — 3 iguais. Mesmo aspecto, mesma largura: uma grade uniforme
-            não tem como desalinhar. Empilha no mobile. */}
+            não tem como desalinhar. Empilha no mobile.
+            priority nas 3: são só 3 imagens e ficam logo abaixo do hero, quase
+            sempre alcançadas num scroll curto. Carregá-las eager (em vez de
+            lazy) evita o padrão recorrente deste projeto de "card sem foto"
+            -- o placeholder (sand-100) é quase igual ao fundo da seção, então
+            uma foto que demora a chegar lê como "não apareceu". Com 3 imagens
+            pequenas (600px) o custo de carregar todas de imediato é baixo. */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
           {pieces.map((product, i) => (
             <CuratedPiece
               key={product._id}
               product={product}
               delay={i * 0.1}
-              priority={i < 3}
+              priority
             />
           ))}
         </div>
@@ -88,7 +94,7 @@ function CuratedPiece({
       <PhotoReveal className="relative aspect-[3/4] overflow-hidden bg-sand-100" delay={delay}>
         {product.image?.asset ? (
           <Image
-            src={urlFor(product.image).width(800).height(1067).fit('crop').auto('format').url()}
+            src={urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()}
             alt={product.image.alt ?? product.title}
             fill
             priority={priority}
