@@ -21,11 +21,19 @@ import { Reveal } from '@/components/motion/Reveal'
  *
  * Fase 5f (feedback do dono, medido ao vivo em 1440px): `align-items: stretch`
  * (padrão do CSS Grid) esticava a coluna da legenda para bater com a altura
- * da peça A (806px) -- mas o conteúdo real (selo + nota + assinatura) só
- * ocupa ~220px, sobrando ~590px de vazio embaixo do texto. No mobile isso
- * não aparece (empilha em coluna única, sem vizinho para "bater"), daí o
- * relato "no mobile fica ok, no desktop não". Corrigido com `self-center`
- * na legenda: ela deixa de esticar e passa a centralizar ao lado da foto.
+ * da peça A (806px), com o conteúdo real (selo + nota + assinatura) ocupando
+ * só ~220px -- 27% da altura da linha, medido: ~40% de vazio acima do bloco
+ * de texto e ~33% abaixo dele. Um primeiro fix (`self-center`) tirou o
+ * esticamento mas só recentralizou o mesmo bloco pequeno num campo vazio,
+ * sem resolver a sensação de "flutuando sozinho ao lado de uma foto
+ * imponente" -- daí o relato persistir ("no mobile fica ok, no desktop
+ * não": no mobile é coluna única, sem vizinho pra criar esse vazio).
+ *
+ * Fase 5g: a legenda usa a altura inteira da linha COM intenção, em vez de
+ * evitá-la -- `flex flex-col justify-between` distribui o bloco selo+nota
+ * no topo e a assinatura ancorada no rodapé da coluna, ritmo de "abertura e
+ * assinatura" (agrupamento apertado em cada ponta, separação generosa no
+ * meio) em vez de um bloco isolado boiando no centro.
  */
 export default function CuratedSelection({
   products,
@@ -42,20 +50,24 @@ export default function CuratedSelection({
   return (
     <section aria-label="Seleção da Luiza" className="bg-sand-50 py-20 md:py-28 px-[6vw]">
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-x-6 gap-y-8">
-        {/* Cabeçalho/legenda — col 1-4. self-center: não estica para bater
-            com a altura da peça A (Fase 5f) — centraliza ao lado da foto. */}
-        <Reveal className="md:col-span-4 md:pr-8 md:self-center">
-          <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-5">
-            Seleção da Luiza
-          </p>
-          <div className="w-8 h-px bg-dourado/40 mb-6" />
-          {note && (
-            <p className="font-display text-xl md:text-2xl font-light italic text-ink leading-snug mb-4 max-w-[24ch]">
-              {note}
+        {/* Cabeçalho/legenda — col 1-4. Volta a ocupar a altura inteira da
+            linha (stretch padrão do grid), mas com intenção: flex-col
+            justify-between separa abertura (selo+nota) de assinatura,
+            ancorando cada uma numa ponta da coluna (Fase 5g). */}
+        <Reveal className="md:col-span-4 md:pr-8 md:flex md:flex-col md:justify-between">
+          <div>
+            <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft mb-5">
+              Seleção da Luiza
             </p>
-          )}
+            <div className="w-8 h-px bg-dourado/40 mb-6" />
+            {note && (
+              <p className="font-display text-xl md:text-2xl font-light italic text-ink leading-snug max-w-[24ch]">
+                {note}
+              </p>
+            )}
+          </div>
           {byline && (
-            <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft">
+            <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft mt-8 md:mt-0">
               {byline}
             </p>
           )}
