@@ -18,8 +18,8 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
       {/* Cabeçalho — campo de dourado translúcido por trás do título (Fase 5i,
           escolha do dono entre 3 direções). Antes o título era um "negrito
           forte" solto no fundo areia. Agora repousa sobre uma faixa de dourado
-          em DEGRADÊ (forte à esquerda, some à direita) que sangra na largura
-          da seção -- cor e calor por trás, sem virar o painel chapado que deu
+          em DEGRADÊ (forte à esquerda, some à direita), contida na coluna de
+          conteúdo -- cor e calor por trás, sem virar o painel chapado que deu
           "agonia visual" no hero (aquele era cor sólida + letra gigante; este
           é dourado translúcido em degradê + título espresso mais leve). É o
           único ponto de dourado forte da seção (respeita o teto de dourado
