@@ -24,8 +24,19 @@ export function HorizontalRail({
   const scrollRef = useRef<HTMLDivElement>(null)
   const startRef = useRef<HTMLDivElement>(null)
   const endRef = useRef<HTMLDivElement>(null)
+  const rafRef = useRef<number | null>(null)
   const [atStart, setAtStart] = useState(true)
   const [atEnd, setAtEnd] = useState(false)
+
+  // Cancela qualquer animação em andamento ao desmontar -- e scrollByPage
+  // também cancela antes de iniciar uma nova (achado do code review: cliques
+  // rápidos nas setas disparavam duas cadeias de rAF competindo pelo mesmo
+  // scrollLeft, a fila "brigava" com ela mesma por até 450ms).
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current)
+    }
+  }, [])
 
   useEffect(() => {
     const root = scrollRef.current
@@ -61,6 +72,15 @@ export function HorizontalRail({
   function scrollByPage(direction: 1 | -1) {
     const root = scrollRef.current
     if (!root) return
+
+    // Cancela a animação anterior antes de iniciar uma nova -- sem isso,
+    // um segundo clique enquanto a primeira animação ainda roda faz duas
+    // cadeias de rAF escreverem scrollLeft no mesmo frame, competindo.
+    if (rafRef.current !== null) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const from = root.scrollLeft
     const distance = direction * root.clientWidth * 0.9
@@ -80,9 +100,9 @@ export function HorizontalRail({
       if (!root) return
       const t = Math.min(1, (now - start) / duration)
       root.scrollLeft = from + (to - from) * easeOutExpo(t)
-      if (t < 1) requestAnimationFrame(step)
+      rafRef.current = t < 1 ? requestAnimationFrame(step) : null
     }
-    requestAnimationFrame(step)
+    rafRef.current = requestAnimationFrame(step)
   }
 
   return (
