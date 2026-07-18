@@ -1,7 +1,193 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-17 (Fase 5e — home finalizada: Fase B + priority na Seleção da Luiza)_
+_Última atualização: 2026-07-17 (Fase 5i — campo dourado no cabeçalho de "Acabou de chegar")_
+
+---
+
+## Fase 5i — Cabeçalho de "Acabou de chegar": 2 tentativas até acertar (2026-07-17)
+
+**Tentativa 1 (rejeitada):** depois do dono apontar que o título "Acabou de
+chegar" era só um "negrito forte" solto, dei a ele o mesmo vocabulário da
+Seleção da Luiza (etiqueta "Novidades" + fio dourado fino). O dono rejeitou:
+*"permaneço sem achar que ficou bom... da maneira assim marcadão em negrito
+não ficou legal"*. Certo em rejeitar — etiqueta pequena com tracking largo
+acima de todo título de seção é exatamente o padrão que a skill de design
+(Impeccable) marca como "AI scaffolding" quando repetido (era a 2ª seção da
+página com esse mesmo recurso).
+
+**Correção de processo:** em vez de tentar mais um ajuste isolado (4ª rodada
+no mesmo título), parei e mostrei 3 direções REALMENTE diferentes num mockup
+visual antes de tocar em código: (A) campo de dourado atrás do título, (B)
+faixa fina de foto com véu escuro atrás (a tese "a foto é a tela" aplicada
+ao cabeçalho), (C) fio dourado atravessando a seção. O dono pediu
+recomendação; descartei B (banda escura de foto logo acima de uma fila que
+já é toda fotos, e o site só permite pouca área escura por página) e
+recomendei A, que ele já preferia mas tinha receio de repetir a "agonia
+visual" do hero.
+
+**Tentativa 2 (aprovada, com um bug pego a tempo):** implementado o campo
+dourado como degradê TRANSLÚCIDO (`from-dourado/25 via-dourado/10
+to-transparent`), nunca cor sólida — é isso que evita o "painel chapado"
+que deu agonia no hero (aquele era cor sólida + letra gigante). Primeira
+versão sangrava a banda até a borda da viewport (`bg-gradient` no `<section>`
+inteiro); medido em 1920px: o dourado forte caía na margem vazia à esquerda,
+longe do título, porque o conteúdo é centralizado numa coluna de 1440px mas
+o gradiente não era. Corrigido: a banda fica contida na própria coluna
+`max-w-1440` — o dourado forte agora sempre atrás do título, testado em
+1920/1440/390px. Documentado como padrão novo no `DESIGN.md` §2 (dourado
+também pode ser campo de fundo em degradê, nunca sólido, contido na coluna).
+
+Screenshot real do dono (localhost:3000) confirma o resultado ao vivo.
+
+---
+
+## Fase 5h — Seleção da Luiza reconstruída do zero + fix de imagens (2026-07-17)
+
+O dono aprovou a fila "Acabou de chegar" ("começando a ficar bom") mas
+reprovou de vez a Seleção da Luiza: *"MATAR A SEÇÃO E CRIAR ALGO NOVO POIS
+NÃO ESTÁ FUNCIONANDO DE MANEIRA NENHUMA"*. As Fases 5b/5c/5f/5g tentaram
+consertar a MESMA estrutura (coluna de texto ao lado de foto dominante) e a
+mesma reclamação voltava — porque texto e foto nunca têm a mesma altura e
+todo conserto só movia o vazio de lugar.
+
+**Estrutura nova (`CuratedSelection.tsx` reescrito):** a nota da stylist
+vira uma abertura editorial CENTRALIZADA (largura contida, não estica), e as
+peças ficam numa linha de 3 IGUAIS abaixo — mesma foto, mesma largura, mesma
+altura. Grade uniforme = impossível desalinhar. Verificado ao vivo (1440 e
+390px): 3 peças com altura idêntica (567px) na mesma linha no desktop,
+empilham no mobile. Direção decidida com a skill Impeccable (`/impeccable
+layout`, register brand) depois de 3 direções candidatas.
+
+**Fix de imagens (dono: "só não apareceu as imagem"):** investigado ao vivo.
+As URLs eram válidas (otimizador 200 + bytes), mas em dev as fotos
+`loading=lazy` intermitentemente não decodificavam — o otimizador do
+next/image engasga com os PNGs originais grandes do Sanity (1792×2400), e o
+placeholder (sand-100) quase igual ao fundo faz uma foto atrasada ler como
+"não apareceu". Ajustes: tamanho pedido 800→600px (mesmo da fila, que já era
+confiável) e as 3 imagens em `priority` (eager) em vez de lazy — são só 3,
+logo abaixo do hero. Verificado 3/3 carregando em 3 reloads no servidor
+isolado E as 3 retornando 200 pelo otimizador do próprio servidor do dono
+(porta 3000).
+
+Nota sobre a limitação do ambiente de teste desta sessão: a aba do Browser
+pane roda com `document.hidden=true`, o que faz o Chromium estrangular
+carregamento lazy e rAF — por isso imagens eager e medição DOM são
+confiáveis aqui, mas suavidade de animação e lazy-load precisam de
+confirmação num navegador real do dono.
+
+**Estado: aguardando o dono confirmar visualmente (Ctrl+Shift+R na home).**
+
+---
+
+## Fase 5g — Seleção da Luiza (composição) + setas de navegação na fila (2026-07-17)
+
+Depois do PR #48 (Fase 5f) resolver o bug técnico de stretch, o dono olhou de
+novo e insistiu: *"não esta sendo arrumado oque eu to lhe pedindo... pegar
+referencias e mudar"* — pedindo reconstrução da composição, não só patch de
+bug, para as duas seções (Seleção da Luiza + Acabou de chegar).
+
+**Seleção da Luiza — o `self-center` da Fase 5f não era suficiente.** Medido:
+mesmo sem esticar, a legenda centralizada sobra ~40% de vazio acima do texto
+e ~33% abaixo — um bloco pequeno flutuando isolado ao lado de uma foto
+imponente, não uma composição intencional. Preparadas 3 direções candidatas
+(ancorar no topo / reduzir a foto / tirar a legenda da lateral) e a decisão
+delegada à skill de design (Impeccable, `/impeccable layout`), que confirmou
+o diagnóstico (não é decoração que falta, é relação de vazio) e escolheu
+ancoragem no topo: `flex flex-col justify-between` distribui abertura
+(selo+nota) no topo e assinatura no rodapé da coluna — usa os 806px de altura
+com o ritmo "agrupamento apertado + separação generosa" (registrado em
+`reference/layout.md` da skill), em vez de evitar o espaço. Medido depois:
+assinatura ancorada exatamente no rodapé da coluna (791–806px), batendo com
+a base da foto ao lado. Mobile não muda (`md:` prefix).
+
+**Acabou de chegar — setas de navegação.** Pesquisa em Ganni.com confirmou:
+filas reais de novidades no varejo de moda usam botões explícitos de
+anterior/próximo, não só arrasto — ao esconder a barra nativa (Fase 5f),
+tiramos o único indício de navegação para mouse comum sem shift+wheel. Novo
+componente `components/ui/HorizontalRail.tsx`: wrapper client mínimo (só
+ref+observer+botões viram JS no cliente; `ProductCard`s continuam vindo do
+server component pai como children). Estado de disabled via
+`IntersectionObserver` em sentinelas no início/fim da fila, não listener de
+`scroll` nativo (Lenis quebra esse evento silenciosamente, DESIGN.md §4).
+`aria-disabled`, nunca `disabled` — `disabled` tira o foco do botão para
+`<body>`, quebrando navegação por teclado no próprio componente adicionado
+por acessibilidade. Botões só em `md+` com `pointer:fine`.
+
+Animação do clique via rAF com easing próprio, não `scrollBy({behavior:
+'smooth'})`: em teste isolado nesta sessão o scroll suave nativo não
+avançou. Causa raiz real (confirmada nesta continuação): a aba de teste do
+Browser pane roda com `document.hidden = true` — o próprio Chromium pausa
+`requestAnimationFrame` (e possivelmente throttles outras APIs) numa página
+que ele considera oculta, independente do código. rAF+easing próprio é o
+mesmo padrão já usado no projeto para motion que convive com o Lenis
+(`PhotoParallax.tsx`), escolha segura de qualquer forma. **Verificado nesta
+sessão:** clique calcula o alvo de scroll corretamente (testado forçando o
+fallback `prefers-reduced-motion`, que usa atribuição direta sem depender de
+rAF — `scrollLeft` pulou do valor esperado ao alvo certo). **Não verificado
+ao vivo:** a suavidade real da animação rAF e a atualização dinâmica do
+`aria-disabled` durante o scroll, porque `document.hidden=true` nesta aba
+pausa isso independente do código estar certo. Precisa de confirmação num
+navegador real (o dono, ao testar, é quem vai ver se a animação anima).
+
+**Estado: aguardando confirmação visual do dono em navegador real — as duas
+seções mudaram de composição, não só de bug.**
+
+---
+
+## Fase 5f — Legenda esticada no desktop + barra nativa da fila (2026-07-17)
+
+Depois da Fase 5e ("home finalizada do lado do código"), o dono mandou duas
+capturas novas e disse: *"não esta sendo arrumado oque eu to lhe pedindo...
+na versão mobile fica ok, mas na de computador não"* (Seleção da Luiza) e
+*"na parte acabou de chegar ta com uma barra está tambem errado e solto"*
+(Acabou de chegar). Desta vez a investigação foi feita **ao vivo, com
+medição DOM real** (`getBoundingClientRect`/`getComputedStyle` num servidor
+isolado, porta 3130) antes de qualquer alteração de código — a ferramenta de
+screenshot travava nesta sessão (timeout repetido em duas páginas
+diferentes), então a verificação visual foi substituída por medição
+numérica precisa, não pulada.
+
+**Achado 1 — `CuratedSelection.tsx` (Seleção da Luiza).** `align-items:
+stretch` (padrão do CSS Grid) esticava a coluna da legenda (selo + nota +
+assinatura) para bater com a altura da peça A ao lado — medido: coluna com
+806px de altura, mas o conteúdo real ocupa só 219px, sobrando ~587px vazios
+embaixo do texto. Só existe no desktop (grid de 12 colunas); no mobile é
+grid de coluna única, sem vizinho para "esticar até bater". Bate exatamente
+com o relato "mobile ok, desktop não". **Diferente** do achado da Fase 5b
+(auto-placement da peça C) — aquele continua correto, este é um bug novo,
+não pego antes porque a verificação anterior media posição/alinhamento de
+coluna, não altura de conteúdo vs. altura esticada do grid.
+Corrigido: `md:self-center` na legenda — não estica mais, centraliza ao
+lado da foto. Medido depois: coluna caiu para 219px (bate com o conteúdo).
+
+**Achado 2 — `NewArrivalsRail.tsx` (Acabou de chegar).** `[scrollbar-width:
+thin]` é propriedade CSS **exclusiva do Firefox** — em Chrome/Edge
+(Chromium, o navegador do dono) é ignorada e o navegador desenha a barra de
+rolagem nativa padrão (cinza, ~10px) por baixo da fila. Medido: 10px de
+espaço reservado para a barra antes da correção. Corrigido escondendo a
+barra nos três motores (`scrollbar-width:none` + `-ms-overflow-style:none`
++ `[&::-webkit-scrollbar]:hidden`) — o arrasto continua sinalizado pelo
+meio-card visível na borda direita, sem depender de UI nativa do navegador.
+Medido depois: 0px reservados; `scrollWidth` da fila preservado em mobile
+(rolagem continua funcional).
+
+**Lição de processo, registrada por já ter se repetido:** o dono apontou
+duas vezes seguidas (após PR #45 e após PR #47) que a correção não batia
+com o que ele via. A causa, nas duas vezes, não era falta de esforço — era
+verificação incompleta (medir alinhamento de posição, não altura
+efetiva/CSS específico de motor de navegador). A partir desta fase, toda
+alegação de "corrigido" nesta seção da home foi confirmada por medição
+numérica antes/depois, não só por releitura do código.
+
+PR #48, aberto a partir de `main` (que estava sincronizado com
+`origin/main` — sem incidente de commit direto desta vez). Code review em
+PT-BR disparado em background antes do merge, mesmo processo já usado
+desde a Fase 5.
+
+**Estado: aguardando code review + confirmação visual do dono. Continua
+valendo o checkpoint por página — nenhuma outra página deve começar antes
+dele confirmar a home.**
 
 ---
 

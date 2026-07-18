@@ -74,7 +74,14 @@ de cor sangrando atrás/ao redor de uma imagem (ver `FotoLadoSection`,
 - **Dourado** (`#C2A14D`): linhas divisórias, eyebrows, ícones — nunca como
   texto sobre bordô (medido: 4,07:1, abaixo do mínimo AA 4,5:1, mesmo a 100%
   de opacidade). Seguro sobre espresso/ink. Escasso: no máximo 3 pontos por
-  tela.
+  tela. **Campo translúcido em degradê** (Fase 5i, decisão do dono, ver
+  `NewArrivalsRail.tsx`): dourado também pode aparecer como fundo de um
+  cabeçalho de seção, mas só em degradê (`from-dourado/25 via-dourado/10
+  to-transparent`), nunca cor sólida/chapada — isso reintroduziria o "painel
+  chapado atrás de texto" que já deu "agonia visual" no hero. Conta como 1
+  dos 3 pontos de dourado permitidos por tela; a banda deve ficar contida na
+  coluna de conteúdo (`max-w-1440`), nunca sangrar até a borda da viewport,
+  senão o dourado forte cai fora do alcance do título em telas largas.
 - **Cream-text** (`#F4EFE6`): texto sobre qualquer fundo escuro ou foto.
 
 ## 3. Tipografia
@@ -121,7 +128,7 @@ components/
 ├── catalog/   CatalogView (título+contador+filtro como UMA célula da grade)
 ├── product/   ProductGallery, RelatedRail
 ├── consultoria/ StylistHero, Sections (renderer das seções dinâmicas do CMS)
-└── ui/        ProductCard, EmptyState, icons — primitivos sem domínio
+└── ui/        ProductCard, HorizontalRail, EmptyState, icons — primitivos sem domínio
 ```
 
 Zero componente solto na raiz de `components/`. Todo GROQ mora em

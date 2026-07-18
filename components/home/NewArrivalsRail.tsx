@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ProductCard from '@/components/ui/ProductCard'
+import { HorizontalRail } from '@/components/ui/HorizontalRail'
 import type { FilterableProduct } from '@/components/catalog/CatalogView'
 import { Reveal } from '@/components/motion/Reveal'
 
@@ -14,17 +15,28 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
 
   return (
     <section aria-label="Acabou de chegar" className="bg-sand-50 pb-24 md:pb-32">
+      {/* Cabeçalho — campo de dourado translúcido por trás do título (Fase 5i,
+          escolha do dono entre 3 direções). Antes o título era um "negrito
+          forte" solto no fundo areia. Agora repousa sobre uma faixa de dourado
+          em DEGRADÊ (forte à esquerda, some à direita), contida na coluna de
+          conteúdo -- cor e calor por trás, sem virar o painel chapado que deu
+          "agonia visual" no hero (aquele era cor sólida + letra gigante; este
+          é dourado translúcido em degradê + título espresso mais leve). É o
+          único ponto de dourado forte da seção (respeita o teto de dourado
+          por tela do DESIGN.md), por isso não há mais o fio/etiqueta extras. */}
       <Reveal className="px-[6vw]">
-        <div className="max-w-[1440px] mx-auto flex items-baseline justify-between mb-8">
-          <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight">
-            Acabou de chegar
-          </h2>
-          <Link
-            href="/vitrine"
-            className="font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
-          >
-            Ver toda a vitrine →
-          </Link>
+        <div className="max-w-[1440px] mx-auto mb-12 md:mb-16 bg-gradient-to-r from-dourado/25 via-dourado/[0.10] to-transparent">
+          <div className="py-9 md:py-12 px-6 md:px-10 flex items-baseline justify-between gap-4">
+            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-espresso tracking-tight">
+              Acabou de chegar
+            </h2>
+            <Link
+              href="/vitrine"
+              className="shrink-0 font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
+            >
+              Ver toda a vitrine →
+            </Link>
+          </div>
         </div>
       </Reveal>
 
@@ -32,11 +44,24 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
           scroll-padding-inline igual ao padding visual (achado do dono, captura de
           tela): sem isso, scroll-snap "corrige" a posição inicial pra bater com o
           snap-point e a fila abre pré-deslocada (~78px), sem nenhum toque do
-          usuário -- media exatamente o valor do padding-left computado. */}
-      <div
-        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:thin] [scroll-padding-inline:6vw]"
-        role="list"
-        aria-label="Peças recém-chegadas"
+          usuário -- media exatamente o valor do padding-left computado.
+
+          Fase 5f (feedback do dono, medido ao vivo): `scrollbar-width: thin`
+          não tinha efeito no Chrome/Edge do dono (suporte a essa propriedade
+          no Chromium é recente e ainda inconsistente entre versões) -- o
+          navegador caía na barra nativa padrão (~10px, cinza, sem nenhum
+          estilo do site) por baixo da fila, lendo como "barra solta".
+          Corrigido: barra escondida nos três seletores (Firefox, IE/Edge
+          legado, Chromium/Safari via pseudo-elemento).
+
+          Fase 5g: esconder a barra tirou o único indício de navegação para
+          mouse comum -- pesquisado em Ganni.com, filas reais de novidades
+          usam setas explícitas de anterior/próximo. `HorizontalRail` devolve
+          esse mecanismo sem UI nativa (ver componente para detalhes de
+          acessibilidade: aria-disabled, IntersectionObserver, teclado). */}
+      <HorizontalRail
+        ariaLabel="Peças recém-chegadas"
+        className="flex gap-4 md:gap-6 overflow-x-auto snap-x snap-mandatory pl-[6vw] pr-[6vw] pb-4 [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [scroll-padding-inline:6vw]"
       >
         {products.map((product, i) => (
           <div
@@ -52,7 +77,7 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
             <ProductCard product={product} priority={i < 4} />
           </div>
         ))}
-      </div>
+      </HorizontalRail>
     </section>
   )
 }
