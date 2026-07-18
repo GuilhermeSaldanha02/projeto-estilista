@@ -1,7 +1,44 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-17 (Fase 5h — reconstrução da Seleção da Luiza + imagens)_
+_Última atualização: 2026-07-17 (Fase 5i — campo dourado no cabeçalho de "Acabou de chegar")_
+
+---
+
+## Fase 5i — Cabeçalho de "Acabou de chegar": 2 tentativas até acertar (2026-07-17)
+
+**Tentativa 1 (rejeitada):** depois do dono apontar que o título "Acabou de
+chegar" era só um "negrito forte" solto, dei a ele o mesmo vocabulário da
+Seleção da Luiza (etiqueta "Novidades" + fio dourado fino). O dono rejeitou:
+*"permaneço sem achar que ficou bom... da maneira assim marcadão em negrito
+não ficou legal"*. Certo em rejeitar — etiqueta pequena com tracking largo
+acima de todo título de seção é exatamente o padrão que a skill de design
+(Impeccable) marca como "AI scaffolding" quando repetido (era a 2ª seção da
+página com esse mesmo recurso).
+
+**Correção de processo:** em vez de tentar mais um ajuste isolado (4ª rodada
+no mesmo título), parei e mostrei 3 direções REALMENTE diferentes num mockup
+visual antes de tocar em código: (A) campo de dourado atrás do título, (B)
+faixa fina de foto com véu escuro atrás (a tese "a foto é a tela" aplicada
+ao cabeçalho), (C) fio dourado atravessando a seção. O dono pediu
+recomendação; descartei B (banda escura de foto logo acima de uma fila que
+já é toda fotos, e o site só permite pouca área escura por página) e
+recomendei A, que ele já preferia mas tinha receio de repetir a "agonia
+visual" do hero.
+
+**Tentativa 2 (aprovada, com um bug pego a tempo):** implementado o campo
+dourado como degradê TRANSLÚCIDO (`from-dourado/25 via-dourado/10
+to-transparent`), nunca cor sólida — é isso que evita o "painel chapado"
+que deu agonia no hero (aquele era cor sólida + letra gigante). Primeira
+versão sangrava a banda até a borda da viewport (`bg-gradient` no `<section>`
+inteiro); medido em 1920px: o dourado forte caía na margem vazia à esquerda,
+longe do título, porque o conteúdo é centralizado numa coluna de 1440px mas
+o gradiente não era. Corrigido: a banda fica contida na própria coluna
+`max-w-1440` — o dourado forte agora sempre atrás do título, testado em
+1920/1440/390px. Documentado como padrão novo no `DESIGN.md` §2 (dourado
+também pode ser campo de fundo em degradê, nunca sólido, contido na coluna).
+
+Screenshot real do dono (localhost:3000) confirma o resultado ao vivo.
 
 ---
 
