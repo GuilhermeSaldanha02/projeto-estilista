@@ -1,7 +1,70 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-17 (Fase 5i — campo dourado no cabeçalho de "Acabou de chegar")_
+_Última atualização: 2026-07-20 (Fase 6 — reconstrução da página de peças + padrão de cabeçalho do site)_
+
+---
+
+## Fase 6 — Página de peças reconstruída + `SectionHeading` como padrão (2026-07-20)
+
+**Pedido do dono (repetido 3x, cada vez mais enfático):** *"mudar o design
+dessa pagina, não quero ajusto"*, *"mudar a pagina por completo e não
+ajuste"*, *"fazer uma nova sessão, mais bonita e adequada"*. Não era pedido
+de patch — era reconstrução, igual ao "MATAR A SEÇÃO" da Seleção da Luiza.
+
+### O que eu errei antes de acertar (registrar pra não repetir)
+
+1. **Escopo errado:** interpretei "página de peças" como a PDP
+   (`/produto/[slug]`) e mexi lá. O dono queria a LISTAGEM (`/categoria`).
+2. **Eixo errado, 3 vezes:** propus A/B/C mudando layout de PÁGINA (posição
+   do título, grade vs. spreads). Todas rejeitadas — porque nenhuma mexia
+   nas DUAS coisas que ele nomeou: "o VESTIDO solto" (a peça boiando no
+   fundo de estúdio dentro da foto) e "o nome da peça solto". A lição:
+   quando ele nomeia dois elementos específicos, o redesenho tem que
+   atacar esses dois, não a moldura em volta deles.
+3. **Não olhei a referência que ele mandou.** Ele teve que repetir *"qual a
+   dificuldade de entrar no link de referencias"*. Só depois de abrir o
+   link (SPA — `WebFetch` só trouxe o `<title>`, precisou de navegador) é
+   que a direção destravou.
+
+### Direção que funcionou
+
+Da referência (galeria escura com cards sólidos): **o card é um objeto
+sólido apoiado num chão** — o nome vive numa superfície, não flutua. Foi
+isso que matou o "solto". Testamos fundo escuro na seção inteira; o dono
+pediu de volta o creme mas **mantendo as peças escuras** — card escuro
+sobre chão claro é a composição final.
+
+### Entregue (tudo medido ao vivo, não só code review)
+
+- **`ProductCard` com prop `onDark`** — card escuro sólido (espresso, 12px,
+  texto creme, dourado no preço/CTA). Card único do site: catálogo E home
+  (a home tinha marcação própria em `CuratedSelection`, removida).
+- **`productCardImageUrl`** (`sanity/lib/image.ts`) — crop real via `rect`
+  (12% topo / 10% base), tirando o fundo de estúdio. **Achado técnico:** o
+  Sanity IGNORA `fp-z` do imgix — minha 1ª implementação por ponto focal
+  não cortava nada; confirmado comparando bytes da resposta do CDN
+  (439.955 B com e sem `fp-z`, idênticos). Dimensões nativas lidas do
+  `_ref` do asset (`image-<hash>-<w>x<h>-<fmt>`).
+- **`components/ui/SectionHeading.tsx`** — padrão A3 (nome maiúsculas +
+  losango dourado + meta, centralizado), escolhido pelo dono entre 3
+  alternativas depois de rejeitar serif preto grande. Aplicado em catálogo,
+  "Combina com" e "Acabou de chegar" (este perdeu o campo dourado da Fase
+  5i por decisão explícita dele). "A seleção da Luiza" ficou de fora — tem
+  a frase em itálico da curadora, é voz, não rótulo.
+- **Cabeçalho SAIU da grade** — revoga a regra da Fase 5 ("cabeçalho é a
+  1ª célula do grid"), que era o mesmo defeito da Seleção da Luiza.
+- **Tamanho de card corrigido:** ~430px de largura / foto de ~570px →
+  **286px / 381px**. O dono: *"pra ver a imagem precisa rolar"*. Com poucas
+  peças a grade encolhe e centraliza em vez de inflar o card.
+- **Filtro no eixo central** + filete dourado simétrico (o "Ordenar" à
+  direita contra título centralizado lia como desalinhado).
+
+### Pendência aberta
+
+`stash@{0}` — ajuste de espaçamento na PDP, feito durante o erro de escopo
+(item 1). Não foi pedido e a direção mudou desde então; decidir com o dono
+se descarta ou reaproveita.
 
 ---
 

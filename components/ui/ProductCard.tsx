@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { urlFor } from '@/sanity/lib/image'
+import { productCardImageUrl } from '@/sanity/lib/image'
 import { formatPrice } from '@/lib/format'
 
 type ProductImage = {
@@ -26,6 +26,7 @@ export default function ProductCard({
   product,
   featured = false,
   priority = false,
+  onDark = false,
 }: {
   product: ProductCardData
   featured?: boolean
@@ -34,29 +35,50 @@ export default function ProductCard({
    *  fundo do placeholder quase idêntico ao da seção (sand-100 sobre
    *  sand-50), o card aparece como "legenda sem foto" até a imagem chegar. */
   priority?: boolean
+  /** Fase 6 (direção escura, decidida com o dono a partir da referência
+   *  3dgallery): na seção de peças o card vira um objeto sólido sobre fundo
+   *  escuro — foto no topo, nome/preço numa base própria. Era isso que
+   *  matava o "solto": o nome apoiado numa superfície, não flutuando no
+   *  creme vazio. A home segue clara (onDark=false) até levarmos o escuro
+   *  pro site todo. */
+  onDark?: boolean
 }) {
+  const sizes = featured
+    ? '(max-width: 1024px) 50vw, 50vw'
+    : '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
+
   return (
     <Link href={`/produto/${product.slug}`} className="group block h-full">
-      <article className="bg-sand-50 flex flex-col h-full">
+      <article
+        className={`flex flex-col h-full overflow-hidden ${
+          onDark
+            ? 'bg-espresso rounded-xl ring-1 ring-cream-text/10'
+            : 'bg-sand-50'
+        }`}
+      >
         {/* Imagem 3:4 */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-sand-100">
+        <div
+          className={`relative aspect-[3/4] overflow-hidden ${
+            onDark ? 'bg-espresso' : 'bg-sand-100'
+          }`}
+        >
           {product.isNew && (
-            <span className="absolute top-3 left-3 z-10 bg-sand-50/90 px-2.5 py-1 font-sans text-[9px] tracking-[0.2em] uppercase text-ink">
+            <span
+              className={`absolute top-3 left-3 z-10 px-2.5 py-1 font-sans text-[9px] tracking-[0.2em] uppercase ${
+                onDark ? 'bg-espresso/80 text-dourado' : 'bg-sand-50/90 text-ink'
+              }`}
+            >
               Novo
             </span>
           )}
           {product.image?.asset ? (
             <>
               <Image
-                src={urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()}
+                src={productCardImageUrl(product.image, 600, 800)}
                 alt={product.image.alt ?? product.title}
                 fill
                 priority={priority}
-                sizes={
-                  featured
-                    ? '(max-width: 1024px) 50vw, 50vw'
-                    : '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
-                }
+                sizes={sizes}
                 className={`object-cover ${
                   product.image2?.asset
                     ? 'transition-opacity duration-300 group-hover:opacity-0'
@@ -67,46 +89,69 @@ export default function ProductCard({
                   "parada", a 2ª é o "movimento" (Fase 5e). */}
               {product.image2?.asset && (
                 <Image
-                  src={urlFor(product.image2).width(600).height(800).fit('crop').auto('format').url()}
+                  src={productCardImageUrl(product.image2, 600, 800)}
                   alt={product.image2.alt ?? `${product.title} — outro ângulo`}
                   fill
-                  sizes={
-                    featured
-                      ? '(max-width: 1024px) 50vw, 50vw'
-                      : '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
-                  }
+                  sizes={sizes}
                   className="object-cover absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 />
               )}
             </>
           ) : (
-            <div className="absolute inset-0 bg-sand-200 flex items-center justify-center">
-              <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft">
+            <div
+              className={`absolute inset-0 flex items-center justify-center ${
+                onDark ? 'bg-espresso' : 'bg-sand-200'
+              }`}
+            >
+              <span
+                className={`font-sans text-[10px] tracking-widest uppercase ${
+                  onDark ? 'text-cream-text/40' : 'text-ink-soft'
+                }`}
+              >
                 Foto em breve
               </span>
             </div>
           )}
         </div>
 
-        {/* Info — pt pequeno de propósito: o nome cola na foto, não flutua
-            solto num "card" com respiro igual dos 4 lados (achado do dono:
-            "ficou solto o nome" na fila Acabou de chegar). */}
-        <div className="flex flex-col gap-1.5 pt-3 pb-1">
-          <h3
-            className={`font-display font-light text-ink leading-tight ${
-              featured ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'
-            }`}
-          >
-            {product.title}
-          </h3>
-          {product.price ? (
-            <p className="font-sans text-sm text-ink-soft">{formatPrice(product.price)}</p>
-          ) : null}
-          {/* span, não Link/button aninhado — card inteiro já é o <Link> */}
-          <span className="mt-1 inline-block font-sans text-[10px] tracking-widest uppercase text-bordo group-hover:text-espresso transition-colors">
-            Quero esta peça →
-          </span>
-        </div>
+        {/* Info — nome e preço na MESMA linha de base, apoiados numa base
+            própria do card. No escuro isso é uma superfície sólida (o card
+            é um objeto, o nome não flutua); no claro, a régua dourada nasce
+            da foto. Ambos matam o "solto" (achado do dono). */}
+        {onDark ? (
+          <div className="flex flex-col gap-3 px-5 pt-4 pb-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <h3
+                className={`font-display font-light text-cream-text leading-tight ${
+                  featured ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'
+                }`}
+              >
+                {product.title}
+              </h3>
+              {product.price ? (
+                <p className="shrink-0 font-sans text-sm text-dourado">
+                  {formatPrice(product.price)}
+                </p>
+              ) : null}
+            </div>
+            <span className="inline-flex items-center gap-2 font-sans text-[10px] tracking-[0.18em] uppercase text-dourado group-hover:gap-3 transition-[gap]">
+              Quero esta peça <span aria-hidden="true">→</span>
+            </span>
+          </div>
+        ) : (
+          <div className="flex items-baseline justify-between gap-3 border-t border-dourado/40 pt-2.5">
+            <h3
+              className={`font-display font-light text-ink leading-tight ${
+                featured ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'
+              }`}
+            >
+              {product.title}
+            </h3>
+            {product.price ? (
+              <p className="shrink-0 font-sans text-sm text-ink-soft">{formatPrice(product.price)}</p>
+            ) : null}
+          </div>
+        )}
       </article>
     </Link>
   )

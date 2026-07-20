@@ -1,9 +1,5 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { urlFor } from '@/sanity/lib/image'
-import { formatPrice } from '@/lib/format'
 import type { FilterableProduct } from '@/components/catalog/CatalogView'
-import { PhotoReveal } from '@/components/motion/PhotoReveal'
+import ProductCard from '@/components/ui/ProductCard'
 import { Reveal } from '@/components/motion/Reveal'
 
 /*
@@ -65,56 +61,19 @@ export default function CuratedSelection({
             -- o placeholder (sand-100) é quase igual ao fundo da seção, então
             uma foto que demora a chegar lê como "não apareceu". Com 3 imagens
             pequenas (600px) o custo de carregar todas de imediato é baixo. */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-          {pieces.map((product, i) => (
-            <CuratedPiece
-              key={product._id}
-              product={product}
-              delay={i * 0.1}
-              priority
-            />
+        {/* Cards padronizados com a vitrine (decisão do dono): o mesmo
+            ProductCard escuro, não uma marcação própria — peça escura sólida
+            sobre o creme, crop fechado (ponto focal), nome/preço ancorados.
+            Uma fonte de verdade pro card em todo o site. */}
+        {/* max-w + centralizado: com 3 colunas em 1440px o card passava de
+            400px de largura (foto de ~540px de altura) -- fora do tamanho de
+            varejo real. Limitado, o card fica em ~280-300px como nos sites. */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-7 max-w-[920px] mx-auto">
+          {pieces.map(product => (
+            <ProductCard key={product._id} product={product} priority onDark />
           ))}
         </div>
       </div>
     </section>
-  )
-}
-
-function CuratedPiece({
-  product,
-  delay = 0,
-  priority = false,
-}: {
-  product: FilterableProduct
-  delay?: number
-  priority?: boolean
-}) {
-  return (
-    <Link href={`/produto/${product.slug}`} className="group block">
-      <PhotoReveal className="relative aspect-[3/4] overflow-hidden bg-sand-100" delay={delay}>
-        {product.image?.asset ? (
-          <Image
-            src={urlFor(product.image).width(600).height(800).fit('crop').auto('format').url()}
-            alt={product.image.alt ?? product.title}
-            fill
-            priority={priority}
-            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-          />
-        ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft">
-              Foto em breve
-            </span>
-          </div>
-        )}
-      </PhotoReveal>
-      <div className="flex items-baseline justify-between pt-4">
-        <h3 className="font-display text-lg font-light text-ink leading-tight">{product.title}</h3>
-        {product.price ? (
-          <p className="font-sans text-xs text-ink-soft shrink-0 pl-4">{formatPrice(product.price)}</p>
-        ) : null}
-      </div>
-    </Link>
   )
 }
