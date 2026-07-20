@@ -67,7 +67,12 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
                 o 4º card 64% visível no viewport exato da captura do dono e
                 ainda `loading="lazy"` (mesma causa-raiz, card quase visível
                 em vez de fora da tela). i<4 cobre a faixa de largura real. */}
-            <ProductCard product={product} priority={i < 4} onDark />
+            <ProductCard
+              product={product}
+              priority={i < 4}
+              onDark
+              sizes="(max-width: 640px) 62vw, 300px"
+            />
           </div>
         ))}
       </HorizontalRail>

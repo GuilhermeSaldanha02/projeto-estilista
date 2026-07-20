@@ -70,7 +70,13 @@ export default function CuratedSelection({
             varejo real. Limitado, o card fica em ~280-300px como nos sites. */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-5 md:gap-7 max-w-[920px] mx-auto">
           {pieces.map(product => (
-            <ProductCard key={product._id} product={product} priority onDark />
+            <ProductCard
+              key={product._id}
+              product={product}
+              priority
+              onDark
+              sizes="(max-width: 640px) 50vw, 300px"
+            />
           ))}
         </div>
       </div>

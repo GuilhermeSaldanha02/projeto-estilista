@@ -18,7 +18,12 @@ export default function RelatedRail({ products }: { products: FilterableProduct[
       </Reveal>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {products.map(product => (
-          <ProductCard key={product._id} product={product} />
+          <ProductCard
+            key={product._id}
+            product={product}
+            onDark
+            sizes="(max-width: 640px) 50vw, 300px"
+          />
         ))}
       </div>
     </section>

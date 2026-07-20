@@ -16,7 +16,7 @@ export function urlFor(source: SanityImageSource) {
 
 type CardImageSource = SanityImageSource & {
   asset?: { _ref?: string }
-  hotspot?: { x: number; y: number } | null
+  crop?: { top: number; bottom: number; left: number; right: number } | null
 }
 
 /**
@@ -35,19 +35,24 @@ function assetDimensions(ref?: string): { w: number; h: number } | null {
 
 /**
  * Crop de card de produto: corta uma faixa do topo e da base pra "puxar" a
- * peça pra fora do fundo de estúdio. Sem crop/hotspot manual salvo no
- * Sanity, o fit('crop') padrão usa a proporção nativa da foto (quase igual
- * à do card) — corta quase nada, sobrando fundo em volta da peça ("vestido
- * solto", achado do dono em /categoria/vestidos). Se a peça tiver um
- * hotspot definido no Studio, respeita ele em vez de aplicar o corte fixo.
+ * peça pra fora do fundo de estúdio. Sem isso, o fit('crop') padrão usa a
+ * proporção nativa da foto (quase igual à do card) — corta quase nada,
+ * sobrando fundo em volta da peça ("vestido solto", achado do dono).
+ *
+ * Só um `crop` EDITORIAL (recorte feito à mão no Studio) desliga o corte
+ * automático — nesse caso a decisão da editora manda. `hotspot` sozinho não
+ * desliga: o Studio grava um hotspot padrão (centro, imagem inteira) assim
+ * que alguém encosta na ferramenta de crop, e antes isso fazia a peça voltar
+ * ao enquadramento largo em UM produto no meio de uma grade de cards
+ * cortados — inconsistência visual silenciosa (achado do code review).
  */
 export function productCardImageUrl(source: CardImageSource, width: number, height: number) {
-  if (source?.hotspot) {
-    return builder.image(source).width(width).height(height).fit('crop').auto('format').url()
-  }
+  const chain = builder.image(source).width(width).height(height).fit('crop').auto('format')
+
+  // Recorte manual da editora tem prioridade — não sobrepor com rect().
+  if (source?.crop) return chain.url()
 
   const dims = assetDimensions(source?.asset?._ref)
-  const chain = builder.image(source).width(width).height(height).fit('crop').auto('format')
   if (!dims) return chain.url()
 
   const topCut = Math.round(dims.h * 0.12)

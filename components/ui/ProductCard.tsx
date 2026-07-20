@@ -27,6 +27,7 @@ export default function ProductCard({
   featured = false,
   priority = false,
   onDark = false,
+  sizes,
 }: {
   product: ProductCardData
   featured?: boolean
@@ -36,16 +37,19 @@ export default function ProductCard({
    *  sand-50), o card aparece como "legenda sem foto" até a imagem chegar. */
   priority?: boolean
   /** Fase 6 (direção escura, decidida com o dono a partir da referência
-   *  3dgallery): na seção de peças o card vira um objeto sólido sobre fundo
-   *  escuro — foto no topo, nome/preço numa base própria. Era isso que
-   *  matava o "solto": o nome apoiado numa superfície, não flutuando no
-   *  creme vazio. A home segue clara (onDark=false) até levarmos o escuro
-   *  pro site todo. */
+   *  3dgallery): a peça vira um objeto sólido sobre o fundo creme — foto no
+   *  topo, nome/preço numa base própria. Era isso que matava o "solto": o
+   *  nome apoiado numa superfície, não flutuando no creme vazio. Usado no
+   *  catálogo e nas duas seções da home; `RelatedRail` também. */
   onDark?: boolean
+  /** O card vive em geometrias diferentes (grid do catálogo, grid 3-up da
+   *  home, rail horizontal), então quem posiciona informa a largura real.
+   *  Com um `sizes` único o navegador errava nos dois sentidos: baixava
+   *  imagem grande demais no grid desktop e pequena demais no rail. */
+  sizes?: string
 }) {
-  const sizes = featured
-    ? '(max-width: 1024px) 50vw, 50vw'
-    : '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw'
+  const resolvedSizes =
+    sizes ?? (featured ? '(max-width: 1024px) 50vw, 50vw' : '(max-width: 640px) 50vw, 300px')
 
   return (
     <Link href={`/produto/${product.slug}`} className="group block h-full">
@@ -78,7 +82,7 @@ export default function ProductCard({
                 alt={product.image.alt ?? product.title}
                 fill
                 priority={priority}
-                sizes={sizes}
+                sizes={resolvedSizes}
                 className={`object-cover ${
                   product.image2?.asset
                     ? 'transition-opacity duration-300 group-hover:opacity-0'
@@ -92,7 +96,7 @@ export default function ProductCard({
                   src={productCardImageUrl(product.image2, 600, 800)}
                   alt={product.image2.alt ?? `${product.title} — outro ângulo`}
                   fill
-                  sizes={sizes}
+                  sizes={resolvedSizes}
                   className="object-cover absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                 />
               )}
@@ -105,7 +109,7 @@ export default function ProductCard({
             >
               <span
                 className={`font-sans text-[10px] tracking-widest uppercase ${
-                  onDark ? 'text-cream-text/40' : 'text-ink-soft'
+                  onDark ? 'text-cream-text/55' : 'text-ink-soft'
                 }`}
               >
                 Foto em breve
@@ -114,22 +118,26 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* Info — nome e preço na MESMA linha de base, apoiados numa base
-            própria do card. No escuro isso é uma superfície sólida (o card
-            é um objeto, o nome não flutua); no claro, a régua dourada nasce
-            da foto. Ambos matam o "solto" (achado do dono). */}
+        {/* Info — o nome fica apoiado numa base própria do card: no escuro
+            uma superfície sólida (o card é um objeto, o nome não flutua); no
+            claro, a régua dourada nasce da foto. Ambos matam o "solto".
+            Nome e preço EMPILHAM no mobile e só dividem a linha de base a
+            partir de sm. No grid 2-up de 375px o card tem ~155px: com os
+            dois na mesma linha e o preço `shrink-0`, um preço de 4 dígitos
+            deixava ~51px pro nome (quebrava em 4 linhas). O padding também
+            cai no mobile -- px-5 num card de 155px é 26% da largura. */}
         {onDark ? (
-          <div className="flex flex-col gap-3 px-5 pt-4 pb-5">
-            <div className="flex items-baseline justify-between gap-3">
+          <div className="flex flex-col gap-3 px-3 sm:px-5 pt-3 sm:pt-4 pb-4 sm:pb-5">
+            <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-3">
               <h3
                 className={`font-display font-light text-cream-text leading-tight ${
-                  featured ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'
+                  featured ? 'text-2xl md:text-3xl' : 'text-base sm:text-lg md:text-xl'
                 }`}
               >
                 {product.title}
               </h3>
               {product.price ? (
-                <p className="shrink-0 font-sans text-sm text-dourado">
+                <p className="sm:shrink-0 font-sans text-sm text-dourado">
                   {formatPrice(product.price)}
                 </p>
               ) : null}
@@ -139,16 +147,16 @@ export default function ProductCard({
             </span>
           </div>
         ) : (
-          <div className="flex items-baseline justify-between gap-3 border-t border-dourado/40 pt-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-3 border-t border-dourado/40 pt-2.5">
             <h3
               className={`font-display font-light text-ink leading-tight ${
-                featured ? 'text-2xl md:text-3xl' : 'text-lg md:text-xl'
+                featured ? 'text-2xl md:text-3xl' : 'text-base sm:text-lg md:text-xl'
               }`}
             >
               {product.title}
             </h3>
             {product.price ? (
-              <p className="shrink-0 font-sans text-sm text-ink-soft">{formatPrice(product.price)}</p>
+              <p className="sm:shrink-0 font-sans text-sm text-ink-soft">{formatPrice(product.price)}</p>
             ) : null}
           </div>
         )}

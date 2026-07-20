@@ -174,7 +174,7 @@ export default function CatalogView({
         <div className="h-px bg-gradient-to-r from-transparent via-dourado/45 to-transparent mb-10 md:mb-14" />
 
         {filtered.length === 0 ? (
-          <p className="font-sans text-sm text-cream-text/60 py-16">
+          <p className="font-sans text-sm text-ink-soft py-16">
             Nenhuma peça encontrada com esse filtro.
           </p>
         ) : (
