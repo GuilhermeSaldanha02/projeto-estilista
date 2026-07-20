@@ -62,7 +62,7 @@ export default function ProductGallery({
           padrão mudar para padding direto no futuro, reavaliar a mesma
           correção. */}
       <div
-        className="md:hidden flex gap-2 overflow-x-auto snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] -mx-5 px-5"
+        className="md:hidden flex gap-2 overflow-x-auto snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden -mx-5 px-5"
         role="list"
         aria-label={`Fotos de ${title}`}
       >

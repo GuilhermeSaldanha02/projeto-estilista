@@ -96,7 +96,7 @@ export default function CatalogView({
         <div className="flex items-center justify-between gap-4 border-y border-ink/10 min-h-12 py-2 mb-10 md:mb-14">
           {categoryChips.length > 1 ? (
             <div
-              className="flex gap-2 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none]"
+              className="flex gap-2 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
               role="group"
               aria-label="Filtrar por categoria"
             >
