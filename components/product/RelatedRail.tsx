@@ -1,6 +1,7 @@
 import ProductCard from '@/components/ui/ProductCard'
 import type { FilterableProduct } from '@/components/catalog/CatalogView'
 import { Reveal } from '@/components/motion/Reveal'
+import SectionHeading from '@/components/ui/SectionHeading'
 
 /*
  * Fase 5 — "Combina com": peças da mesma categoria ao fim da página de
@@ -13,13 +14,16 @@ export default function RelatedRail({ products }: { products: FilterableProduct[
   return (
     <section aria-label="Combina com" className="mt-24 md:mt-32">
       <Reveal>
-        <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-ink tracking-tight mb-8">
-          Combina com
-        </h2>
+        <SectionHeading title="Combina com" className="mb-10 md:mb-12" />
       </Reveal>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
         {products.map(product => (
-          <ProductCard key={product._id} product={product} />
+          <ProductCard
+            key={product._id}
+            product={product}
+            onDark
+            sizes="(max-width: 640px) 50vw, 300px"
+          />
         ))}
       </div>
     </section>

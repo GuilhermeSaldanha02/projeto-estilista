@@ -3,6 +3,7 @@ import ProductCard from '@/components/ui/ProductCard'
 import { HorizontalRail } from '@/components/ui/HorizontalRail'
 import type { FilterableProduct } from '@/components/catalog/CatalogView'
 import { Reveal } from '@/components/motion/Reveal'
+import SectionHeading from '@/components/ui/SectionHeading'
 
 /*
  * Home S4 — Acabou de chegar (Fase 5, blueprint).
@@ -15,28 +16,20 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
 
   return (
     <section aria-label="Acabou de chegar" className="bg-sand-50 pb-24 md:pb-32">
-      {/* Cabeçalho — campo de dourado translúcido por trás do título (Fase 5i,
-          escolha do dono entre 3 direções). Antes o título era um "negrito
-          forte" solto no fundo areia. Agora repousa sobre uma faixa de dourado
-          em DEGRADÊ (forte à esquerda, some à direita), contida na coluna de
-          conteúdo -- cor e calor por trás, sem virar o painel chapado que deu
-          "agonia visual" no hero (aquele era cor sólida + letra gigante; este
-          é dourado translúcido em degradê + título espresso mais leve). É o
-          único ponto de dourado forte da seção (respeita o teto de dourado
-          por tela do DESIGN.md), por isso não há mais o fio/etiqueta extras. */}
-      <Reveal className="px-[6vw]">
-        <div className="max-w-[1440px] mx-auto mb-12 md:mb-16 bg-gradient-to-r from-dourado/25 via-dourado/[0.10] to-transparent">
-          <div className="py-9 md:py-12 px-6 md:px-10 flex items-baseline justify-between gap-4">
-            <h2 className="font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] text-espresso tracking-tight">
-              Acabou de chegar
-            </h2>
-            <Link
-              href="/vitrine"
-              className="shrink-0 font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
-            >
-              Ver toda a vitrine →
-            </Link>
-          </div>
+      {/* Cabeçalho — padrão do site (SectionHeading, A3): nome + losango
+          dourado + meta, centralizado. Substitui o campo de dourado
+          translúcido anterior por decisão do dono ("só 'Acabou de chegar'
+          vira A3"), padronizando com os cabeçalhos de catálogo. O link
+          "ver tudo" desce centralizado, discreto. */}
+      <Reveal className="px-[6vw] mb-12 md:mb-16">
+        <SectionHeading title="Acabou de chegar" />
+        <div className="text-center mt-4">
+          <Link
+            href="/vitrine"
+            className="font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4"
+          >
+            Ver toda a vitrine →
+          </Link>
         </div>
       </Reveal>
 
@@ -67,14 +60,19 @@ export default function NewArrivalsRail({ products }: { products: FilterableProd
           <div
             key={product._id}
             role="listitem"
-            className="snap-start shrink-0 w-[72vw] sm:w-[44vw] md:w-[30vw] lg:w-[24vw] md:min-w-[300px]"
+            className="snap-start shrink-0 w-[62vw] sm:w-[40vw] md:w-[28vw] lg:w-[22vw] md:min-w-[240px] max-w-[300px]"
           >
             {/* priority nos 4 primeiros: em lg:w-[24vw] cabem ~4,1 cards no
                 viewport sem rolar -- com i<3, o code review do PR #46 mediu
                 o 4º card 64% visível no viewport exato da captura do dono e
                 ainda `loading="lazy"` (mesma causa-raiz, card quase visível
                 em vez de fora da tela). i<4 cobre a faixa de largura real. */}
-            <ProductCard product={product} priority={i < 4} />
+            <ProductCard
+              product={product}
+              priority={i < 4}
+              onDark
+              sizes="(max-width: 640px) 62vw, 300px"
+            />
           </div>
         ))}
       </HorizontalRail>

@@ -125,24 +125,67 @@ components/
 ├── layout/    Header, Nav, Footer — chrome global
 ├── motion/    tokens, Reveal, PhotoReveal, PhotoParallax, SmoothScroll
 ├── home/      Hero, CuratedSelection, CategoryPortals, NewArrivalsRail, ConsultingInvite
-├── catalog/   CatalogView (título+contador+filtro como UMA célula da grade)
+├── catalog/   CatalogView (cabeçalho FORA da grade — ver §6)
 ├── product/   ProductGallery, RelatedRail
 ├── consultoria/ StylistHero, Sections (renderer das seções dinâmicas do CMS)
-└── ui/        ProductCard, HorizontalRail, EmptyState, icons — primitivos sem domínio
+└── ui/        ProductCard, SectionHeading, HorizontalRail, EmptyState, icons — primitivos sem domínio
 ```
 
 Zero componente solto na raiz de `components/`. Todo GROQ mora em
 `sanity/lib/queries.ts`, nomeado — nenhuma rota escreve query inline.
 
-## 6. Catálogo — regra do cabeçalho
+## 6. Cabeçalho de seção — padrão único do site (Fase 6)
 
-Título + contador + filtro/ordenação vivem **na mesma régua/grade** que os
-produtos — nunca um banner de página inteira acima de uma grade separada. Em
-`/vitrine` e `/categoria/[slug]`, o cabeçalho é literalmente a primeira
-célula do grid. Com 1–3 produtos, o grid ganha um `max-w` proporcional ao
-número de colunas (o container encolhe, não os cards esticam) e uma legenda
-"edição enxuta" — vazio com intenção declarada, nunca vazio que lê como grid
-quebrado.
+**Regra revogada (Fase 5):** "o cabeçalho é a primeira célula do grid".
+Ela reproduzia exatamente o defeito que obrigou a reconstruir a Seleção da
+Luiza: texto curto e foto alta disputando altura na mesma linha do grid
+sempre volta como "desalinhado/solto", porque a célula de texto estica pra
+igualar a foto. O cabeçalho agora sai da grade — a grade é só produto.
+
+**O padrão é `components/ui/SectionHeading.tsx`** (variação "A3", escolhida
+pelo dono entre alternativas): nome em maiúsculas espaçadas + **losango
+dourado** + meta curto, **centralizado**. Serif preto grande está fora — o
+dono rejeitou "nome enorme preto" e "marcadão em negrito" em rodadas
+sucessivas; nesta identidade quem domina a tela é a FOTO da peça, não a
+palavra. Toda seção importa o componente, ninguém recria a marcação.
+
+Usado em: `/vitrine`, `/categoria/[slug]`, `/colecao/[slug]`, "Combina com"
+(PDP) e "Acabou de chegar" (home). Exceção deliberada: "A seleção da Luiza"
+mantém a frase em itálico da curadora — é conteúdo com voz, não um rótulo.
+
+**Eixo central.** Com o cabeçalho centralizado, chips e ordenação também
+ficam centralizados (`justify-center`, com `flex-wrap`) — controle
+alinhado à direita contra título centralizado lê como desalinhamento. O
+divisor é um filete dourado **simétrico** (`from-transparent via-dourado/45
+to-transparent`), nunca um traço reto full-width nem duas hairlines
+paralelas com um vão no meio.
+
+## 6b. Tamanho de card — padrão de varejo real
+
+Card de produto fica em **~280–300px de largura** no desktop (foto ~380px de
+altura), o tamanho que varejo de moda real usa. Com poucas peças a grade
+**encolhe e centraliza** (`max-w` + `mx-auto`) — nunca infla o card. Inflar
+gerou card de ~430px com foto de ~570px, obrigando a ROLAR pra ver a peça.
+
+Colunas: `≤2 → grid-cols-2 max-w-[600px]`; `3 → md:grid-cols-3
+max-w-[920px]`; `≥4 → grid-cols-2 md:grid-cols-3 lg:grid-cols-4`.
+
+## 6c. Card escuro sobre fundo claro
+
+A página segue creme; a **peça** é um card escuro sólido (`bg-espresso`,
+cantos 12px, texto creme, preço/CTA dourado) — prop `onDark` do
+`ProductCard`. Objeto sólido apoiado num chão claro: era isso que matava a
+queixa recorrente de "o nome da peça solto" (nome flutuando no creme vazio
+abaixo da foto). O mesmo card é usado no catálogo E na home — uma fonte de
+verdade.
+
+**Crop da foto** (`productCardImageUrl` em `sanity/lib/image.ts`): sem
+hotspot salvo no Studio, a proporção nativa das fotos é quase igual à do
+card e o `fit('crop')` padrão não corta quase nada, sobrando fundo de
+estúdio em volta da peça ("o vestido solto"). O helper corta 12% do topo e
+10% da base via `rect`, em pixels lidos do próprio `_ref` do asset. Atenção:
+o Sanity **ignora `fp-z`** (zoom por ponto focal do imgix) — confirmado
+comparando bytes de resposta; corte real só via `rect`.
 
 ## 7. ProductCard — 2ª foto e selo "Novo" (Fase 5e)
 

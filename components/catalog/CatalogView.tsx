@@ -2,20 +2,27 @@
 
 import { useMemo, useState } from 'react'
 import ProductCard, { type ProductCardData } from '@/components/ui/ProductCard'
+import SectionHeading from '@/components/ui/SectionHeading'
 
 /*
- * Fase 5 (Reconstrução) — template único de catálogo para /vitrine,
- * /categoria/[slug] e /colecao/[slug].
+ * Fase 6 (Reconstrução da página de categoria) — template único de catálogo
+ * para /vitrine, /categoria/[slug] e /colecao/[slug].
  *
- * A rejeição "banner gigante + grade solta" morre com uma decisão
- * estrutural: O CABEÇALHO É A PRIMEIRA CÉLULA DA GRADE, não uma faixa acima
- * dela. Título e produto dividem a mesma linha — impossível ler como "dois
- * blocos com vão". Acima da grade, só uma régua fina (h-12, hairlines) com
- * chips + ordenação — nunca um banner py-16.
+ * A versão anterior (Fase 5) tratava o título como a primeira célula da
+ * grade — a mesma decisão estrutural que tinha sido rejeitada e reconstruída
+ * na Seleção da Luiza (home): texto e foto disputando altura na mesma linha
+ * sempre volta como "solto"/desalinhado quando a foto é mais alta que o
+ * texto. Aqui o cabeçalho sai da grade de vez e vira abertura de página —
+ * título, régua, contagem — a grade abaixo é só produto.
  *
- * Grade em 3 colunas no desktop (não 4): cards maiores = fotografia com
- * escala. Com 1-3 peças, as células vazias ganham uma legenda de "edição
- * enxuta" — vazio com intenção declarada ≠ vazio quebrado.
+ * O achado do dono ("o vestido solto", "o nome da peça solto") não era sobre
+ * onde o título fica na página — é sobre a foto do PRODUTO sobrando fundo de
+ * estúdio em volta da peça, e o nome flutuando sem nada que o prenda à foto.
+ * Corrigido no ProductCard (crop com zoom de ponto focal + nome/preço
+ * colados na base da foto por uma régua), não aqui — mas a grade agora dá
+ * espaço pra isso aparecer: com poucas peças (edição enxuta), os cards ficam
+ * maiores (2 colunas, não 3) em vez de espremidos numa grade pensada pra
+ * catálogo grande.
  */
 export type FilterableProduct = ProductCardData & {
   categorySlug?: string
@@ -72,15 +79,20 @@ export default function CatalogView({
   }, [products, sortBy, activeCategory])
 
   const visible = paginated ? filtered.slice(0, limit) : filtered
-  const isSmallEdition = filtered.length > 0 && filtered.length <= 3
-  // Só desenha a célula de "edição enxuta" quando de fato sobra vaga na
-  // última linha do grid desktop (md:grid-cols-3, cabeçalho + produtos).
-  // Achado do code review do PR #44: com N=2, cabeçalho+2 produtos já
-  // fecham a linha (3 células) — desenhar a legenda sem vaga real criava
-  // uma segunda linha inteira quase vazia. emptyCells vira 1 ou 2 (nunca 0
-  // quando isSmallEdition é true e há vaga) e vira o span da própria célula.
-  const totalCells = 1 + visible.length
-  const emptyCells = isSmallEdition ? (3 - (totalCells % 3)) % 3 : 0
+
+  // Tamanho de card alinhado com varejo de moda real (~280-300px de largura
+  // no desktop, 4 colunas), não o card gigante que o dono viu: com 2 peças
+  // em 2 colunas largas o card ficava ~430px e a foto ~570px de altura --
+  // precisava ROLAR pra ver a peça inteira. Com poucas peças, em vez de
+  // esticar o card, a grade é limitada e CENTRALIZADA: mesmo tamanho de
+  // sempre, composição equilibrada.
+  const count = filtered.length
+  const gridClass =
+    count <= 2
+      ? 'grid-cols-2 max-w-[600px] mx-auto'
+      : count === 3
+        ? 'grid-cols-2 md:grid-cols-3 max-w-[920px] mx-auto'
+        : 'grid-cols-2 md:grid-cols-3 lg:grid-cols-4'
 
   const chipClass = (active: boolean) =>
     `font-sans text-[10px] tracking-widest uppercase px-4 py-2 border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-2 whitespace-nowrap ${
@@ -92,9 +104,28 @@ export default function CatalogView({
   return (
     <section aria-label={title} className="px-[6vw] pt-10 md:pt-14 pb-24 md:pb-32">
       <div className="max-w-[1440px] mx-auto">
-        {/* Régua de controles: fina, com hairlines — não é banner */}
-        <div className="flex items-center justify-between gap-4 border-y border-ink/10 min-h-12 py-2 mb-10 md:mb-14">
-          {categoryChips.length > 1 ? (
+        {/* Padrão de cabeçalho do site (SectionHeading, variação A3): nome +
+            losango dourado + contagem, centralizado e leve. Substitui o
+            serif preto grande (o dono: "nome enorme preto não ficou bom").
+            A foto da peça é que domina a tela. */}
+        <SectionHeading
+          as="h1"
+          title={title}
+          meta={`${String(filtered.length).padStart(2, '0')} ${filtered.length === 1 ? 'peça' : 'peças'}`}
+          className="mb-8 md:mb-10"
+        />
+
+        {/* Controles: no lugar do traço reto full-width (que lia como linha
+            solta), a régua vira um filete dourado que desvanece pra direita
+            — mesmo motivo do campo dourado da home. Sem chips (categoria
+            única), o lado esquerdo ganha um rótulo discreto pra o "Ordenar"
+            não ficar órfão. */}
+        {/* Tudo no eixo central pra casar com o cabeçalho centralizado (o
+            "Ordenar" sozinho na direita brigava com o título no centro — o
+            dono: "filtro desalinhado"). Chips e ordenação ficam centralizados;
+            sem chips (categoria única), só a ordenação, também no centro. */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 min-h-11 mb-6 md:mb-7">
+          {categoryChips.length > 1 && (
             <div
               className="flex gap-2 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
               role="group"
@@ -120,8 +151,6 @@ export default function CatalogView({
                 </button>
               ))}
             </div>
-          ) : (
-            <div />
           )}
 
           <label className="flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink-soft shrink-0">
@@ -140,45 +169,22 @@ export default function CatalogView({
           </label>
         </div>
 
+        {/* Filete simétrico (desvanece do centro pros lados) — casa com o
+            eixo central; substitui o traço reto e o antigo fade lateral. */}
+        <div className="h-px bg-gradient-to-r from-transparent via-dourado/45 to-transparent mb-10 md:mb-14" />
+
         {filtered.length === 0 ? (
-          <div>
-            <CatalogHeaderCell title={title} count={0} />
-            <p className="font-sans text-sm text-ink-soft py-16">
-              Nenhuma peça encontrada com esse filtro.
-            </p>
-          </div>
+          <p className="font-sans text-sm text-ink-soft py-16">
+            Nenhuma peça encontrada com esse filtro.
+          </p>
         ) : (
           <>
-            {/* N<=2: coluna do cabeçalho vira "auto" (largura do próprio
-                título), não 1/3 fixo do grid -- era isso que deixava um
-                vão vazio ao lado de um título curto tipo "Saias" (achado
-                do dono ao ver /categoria/saias ao vivo). N=3 continua nas
-                3 colunas uniformes (com 2 linhas, o auto-header bagunçaria
-                a largura da coluna 1 na 2ª linha). */}
-            <div
-              className={`grid grid-cols-2 gap-x-4 md:gap-x-6 gap-y-12 md:gap-y-16 ${
-                isSmallEdition && filtered.length <= 2 ? 'md:grid-cols-[auto_1fr_1fr]' : 'md:grid-cols-3'
-              } ${isSmallEdition ? 'max-w-5xl' : ''}`}
-            >
-              {/* Célula 1 da grade: o cabeçalho. Divide a linha de base com
-                  os primeiros produtos — um bloco só, sem vão. */}
-              <CatalogHeaderCell title={title} count={filtered.length} />
-
+            {/* Card no tamanho de varejo real (~280-300px); com poucas peças
+                a grade encolhe e centraliza em vez de inflar o card. */}
+            <div className={`grid gap-5 md:gap-7 ${gridClass}`}>
               {visible.map(product => (
-                <ProductCard key={product._id} product={product} />
+                <ProductCard key={product._id} product={product} onDark />
               ))}
-
-              {/* Edição pequena: só desenha quando sobra vaga real na linha */}
-              {emptyCells > 0 && (
-                <div
-                  className={`hidden md:flex items-end pb-8 ${emptyCells === 2 ? 'md:col-span-2' : ''}`}
-                  aria-hidden="true"
-                >
-                  <span className="font-sans text-[10px] tracking-[0.3em] uppercase text-ink-soft [writing-mode:vertical-rl]">
-                    Edição enxuta — curadoria da semana
-                  </span>
-                </div>
-              )}
             </div>
 
             {paginated && filtered.length > limit && (
@@ -186,7 +192,7 @@ export default function CatalogView({
                 <button
                   type="button"
                   onClick={() => setLimit(l => l + PAGE_SIZE)}
-                  className="border border-ink/20 text-ink font-sans text-[11px] tracking-widest uppercase px-10 py-4 hover:border-ink transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-2"
+                  className="border border-dourado/40 text-dourado font-sans text-[11px] tracking-widest uppercase px-10 py-4 hover:bg-dourado hover:text-espresso transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2"
                 >
                   Carregar mais ({filtered.length - limit})
                 </button>
@@ -196,23 +202,5 @@ export default function CatalogView({
         )}
       </div>
     </section>
-  )
-}
-
-function CatalogHeaderCell({ title, count }: { title: string; count: number }) {
-  // justify-start (topo), não justify-end: a célula estica pra igualar a
-  // altura da linha (foto+legenda do produto vizinho é mais alta que o
-  // título), e ancorar embaixo deixava um vão vazio grande acima do texto,
-  // lendo como desalinhado (achado do dono em /categoria/saias).
-  return (
-    <header className="flex flex-col justify-start col-span-2 md:col-span-1 md:pr-6">
-      <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight [text-wrap:balance] mb-4">
-        {title}
-      </h1>
-      <div className="w-8 h-px bg-dourado/40 mb-3" />
-      <p aria-live="polite" className="font-sans text-[10px] tracking-[0.4em] uppercase text-ink-soft">
-        {count} {count === 1 ? 'peça' : 'peças'}
-      </p>
-    </header>
   )
 }
