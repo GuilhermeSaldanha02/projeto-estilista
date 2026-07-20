@@ -2560,9 +2560,14 @@ Build limpo. Ainda falta validação visual do dono.
 
 ## Pendências — prioridade alta
 
-- **CTA sticky no mobile da página de produto** (item 3.1 do POLISH-FIXES): o CTA
-  principal de compra/contato fica abaixo da dobra no mobile — risco direto de
-  conversão perdida. Prioridade máxima para a próxima rodada de trabalho.
+- ~~**CTA sticky no mobile da página de produto**~~ — **resolvido na Fase 5**
+  (reconstrução completa, commit `23332e8`). A página de produto atual já tem
+  uma barra fixa no rodapé do mobile (`fixed inset-x-0 bottom-0`, `md:hidden`)
+  com o CTA "Quero esta peça". Verificado ao vivo em 2026-07-18 no viewport
+  exato citado aqui (375×667, iPhone SE) e após scroll: CTA sempre visível,
+  nunca abaixo da dobra. Este item ficou órfão no documento desde antes da
+  Fase 5 — mantido riscado em vez de apagado, para não perder o rastro de
+  quando/por que foi resolvido.
 
 ---
 
