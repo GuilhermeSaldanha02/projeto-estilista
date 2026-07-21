@@ -166,102 +166,131 @@ export default async function ProdutoPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="max-w-[1440px] mx-auto">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Trilha de navegação"
-          className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink-soft"
-        >
-          <Link href="/" className="hover:text-ink transition-colors">Início</Link>
-          {product.category && (
-            <>
-              <span aria-hidden="true">›</span>
-              <Link
-                href={`/categoria/${product.category.slug}`}
-                className="hover:text-ink transition-colors"
-              >
-                {product.category.title}
-              </Link>
-            </>
-          )}
-          <span aria-hidden="true">›</span>
-          <span className="text-ink-soft">{product.title}</span>
-        </nav>
-
-        <div className="grid md:grid-cols-[58%_1fr] gap-10 lg:gap-16 items-start">
-          {/* Galeria — pilha desktop / carrossel mobile */}
+        {/* Fase 7 (direção B1+B3, escolhida pelo dono): o painel de informação
+            vira um BLOCO ESCURO único, contínuo com o "Combina com" logo
+            abaixo — antes a área principal era clara e só o rail era escuro,
+            duas linguagens na mesma página. A trilha de navegação entra
+            DENTRO do painel (B1): nada claro "vazando" por cima da coluna.
+            gap-0 no desktop: o painel encosta na galeria, um objeto sólido
+            ao lado da foto, não um texto solto. */}
+        <div className="grid md:grid-cols-[58%_1fr] gap-6 md:gap-0 items-start md:items-stretch">
+          {/* Galeria — pilha desktop / carrossel mobile.
+              A foto NÃO leva o corte fechado do card de grade: aqui a cliente
+              quer ver a peça inteira, em detalhe. O crop apertado
+              (productCardImageUrl) é só pra vitrine. */}
           <ProductGallery images={product.images ?? []} title={product.title} />
 
-          {/* Informação */}
-          <div className="flex flex-col gap-8">
-            <div>
+          {/* Painel escuro de informação */}
+          <div className="bg-espresso text-cream-text flex flex-col gap-5 p-7 md:p-8">
+            <nav
+              aria-label="Trilha de navegação"
+              className="flex flex-wrap items-center gap-2 font-sans text-[9px] tracking-widest uppercase text-cream-text/40"
+            >
+              <Link href="/" className="hover:text-cream-text transition-colors">Início</Link>
               {product.category && (
-                <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft mb-2">
-                  {product.category.title}
-                </p>
+                <>
+                  <span aria-hidden="true">›</span>
+                  <Link
+                    href={`/categoria/${product.category.slug}`}
+                    className="hover:text-cream-text transition-colors"
+                  >
+                    {product.category.title}
+                  </Link>
+                </>
               )}
-              <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight leading-tight [text-wrap:balance]">
-                {product.title}
-              </h1>
-              {product.price ? (
-                <p className="mt-4 font-sans text-xl text-ink">{formatPrice(product.price)}</p>
-              ) : null}
+            </nav>
+
+            {/* Categoria + losango dourado + status (B3) — o mesmo motivo do
+                SectionHeading, costurando esta página ao resto do site. */}
+            <div className="flex items-center gap-2.5 pt-1">
+              {product.category && (
+                <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-dourado">
+                  {product.category.title}
+                </span>
+              )}
+              <span aria-hidden="true" className="w-1 h-1 bg-dourado rotate-45 shrink-0" />
+              <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-cream-text/40">
+                Disponível
+              </span>
             </div>
 
-            <div className="h-px bg-dourado/30" />
+            <h1 className="font-display text-[clamp(1.75rem,3.2vw,2.5rem)] font-[450] text-cream-text tracking-tight leading-tight [text-wrap:balance]">
+              {product.title}
+            </h1>
+
+            {product.price ? (
+              <p className="font-sans text-xl text-dourado">{formatPrice(product.price)}</p>
+            ) : null}
 
             {product.description && product.description.length > 0 && (
-              <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:leading-relaxed [&_p]:mb-3 [&_p]:max-w-[65ch] [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:mb-3 [&_strong]:font-medium [&_em]:italic">
+              <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-cream-text/65 [&_p]:leading-relaxed [&_p]:mb-3 [&_p]:max-w-[60ch] [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-cream-text/65 [&_blockquote]:leading-relaxed [&_blockquote]:mb-3 [&_strong]:font-medium [&_strong]:text-cream-text [&_em]:italic">
                 <PortableText value={product.description} />
               </div>
             )}
 
-            {waHref && (
-              <a
-                href={waHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:bg-bordo/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4 transition-colors self-start"
-              >
-                <WhatsAppIcon />
-                Quero esta peça
-              </a>
-            )}
+            {/* Decisão ancorada na BASE do painel (lógica da variação B2):
+                o painel estica pra acompanhar a altura da foto, e sem isso a
+                informação se aglomerava no topo deixando um vazio escuro
+                embaixo. Hoje toda peça tem 1 foto e as alturas batem; se a
+                Luiza cadastrar 2-3 fotos por peça, a galeria empilha e este
+                painel fica bem mais alto — revisar aqui quando isso
+                acontecer. */}
+            <div className="mt-auto pt-6 flex flex-col gap-4">
+              {/* CTA dourado sólido (B1). Exceção deliberada ao "bordô = botão
+                  de produto" do DESIGN.md §2: sobre o painel espresso, bordô
+                  (#7B1E3A) fica escuro-sobre-escuro e o botão some. O dourado
+                  com texto espresso é o único que mantém o CTA legível aqui —
+                  é acessibilidade, não preferência. */}
+              {waHref && (
+                <a
+                  href={waHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4 transition-colors"
+                >
+                  <WhatsAppIcon />
+                  Quero esta peça
+                </a>
+              )}
 
-            {/* Consultoria como link de texto — nunca segundo botão */}
-            {waConsultHref && (
-              <a
-                href={waConsultHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-sans text-[11px] tracking-wide text-esmeralda hover:text-esmeralda-light transition-colors self-start"
-              >
-                Não sabe se é pra você? Pergunta pra Luiza →
-              </a>
-            )}
+              {/* Consultoria como link de texto — nunca segundo botão */}
+              {waConsultHref && (
+                <a
+                  href={waConsultHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-sans text-[11px] tracking-wide text-esmeralda-light hover:text-cream-text transition-colors self-start"
+                >
+                  Não sabe se é pra você? Pergunta pra Luiza →
+                </a>
+              )}
 
-            {product.category && (
-              <Link
-                href={`/categoria/${product.category.slug}`}
-                className="font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors"
-              >
-                ← Ver mais em {product.category.title}
-              </Link>
-            )}
+              {product.category && (
+                <Link
+                  href={`/categoria/${product.category.slug}`}
+                  className="font-sans text-[10px] tracking-widest uppercase text-cream-text/40 hover:text-cream-text transition-colors self-start"
+                >
+                  ← Ver mais em {product.category.title}
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 
         <RelatedRail products={related} />
       </div>
 
-      {/* CTA fixo mobile — o funil no celular; padrão aprovado, mantido */}
+      {/* CTA fixo mobile — o funil no celular. Dourado sobre espresso, igual
+          ao CTA do painel: com o botão do painel dourado, manter este bordô
+          deixaria duas cores de CTA na mesma tela. */}
       {waHref ? (
-        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-sand-50/95 backdrop-blur-sm border-t border-dourado/30 px-5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-espresso/95 backdrop-blur-sm border-t border-dourado/30 px-5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
           <a
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Quero esta peça ${product.title} (atalho fixo)`}
-            className="flex w-full items-center justify-center gap-3 bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase py-4 hover:bg-bordo/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-2 transition-colors"
+            className="flex w-full items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[11px] tracking-widest uppercase py-4 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2 transition-colors"
           >
             <WhatsAppIcon />
             Quero esta peça
