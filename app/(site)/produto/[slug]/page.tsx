@@ -166,66 +166,40 @@ export default async function ProdutoPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="max-w-[1440px] mx-auto">
-        {/* Fase 7 (direção B1+B3, escolhida pelo dono): o painel de informação
-            vira um BLOCO ESCURO único, contínuo com o "Combina com" logo
-            abaixo — antes a área principal era clara e só o rail era escuro,
-            duas linguagens na mesma página. A trilha de navegação entra
-            DENTRO do painel (B1): nada claro "vazando" por cima da coluna.
-            gap-0 no desktop: o painel encosta na galeria, um objeto sólido
-            ao lado da foto, não um texto solto. */}
-        {/* Coluna da galeria em largura FIXA (minmax(0,520px)), não
-            porcentagem (58%) -- 58% de um container de 1440px escalava a
-            foto pra 683x854px, bem acima do padrão de mercado (~500-560px
-            de largura). Fixo em vez de proporcional: o tamanho da foto não
-            cresce mais só porque a tela é larga. */}
-        <div className="grid md:grid-cols-[minmax(0,520px)_1fr] gap-6 md:gap-0 items-start md:items-stretch">
+        {/* Fase 7b (direção B2 + botão do B1, escolhida pelo dono): painel
+            escuro compacto -- NÃO estica mais pra bater com a altura da foto
+            (items-start, não items-stretch). Esticar era a causa raiz do
+            vazio gigante: com só categoria+título (sem preço/descrição
+            cadastrados ainda), a régua e o botão só apareciam lá embaixo,
+            longe do título, sem nada no meio. Painel curto, no topo, ao lado
+            da foto alta -- exatamente como Amaro e Shoulder fazem (medido ao
+            vivo: título deles em 18-27px, o nosso estava em 41px).
+            Cortado por "muita informação" (achado do dono): trilha de
+            navegação duplicada (o header já navega), losango+status
+            decorativo, link "← Ver mais em". Sobra: categoria, título,
+            preço opcional, régua, botão, e o link de consultoria (funil
+            não-negociável). */}
+        <div className="grid md:grid-cols-[minmax(0,520px)_1fr] gap-6 md:gap-0 items-start">
           {/* Galeria — pilha desktop / carrossel mobile.
               A foto NÃO leva o corte fechado do card de grade: aqui a cliente
               quer ver a peça inteira, em detalhe. O crop apertado
               (productCardImageUrl) é só pra vitrine. */}
           <ProductGallery images={product.images ?? []} title={product.title} />
 
-          {/* Painel escuro de informação */}
-          <div className="bg-espresso text-cream-text flex flex-col gap-5 p-7 md:p-8">
-            <nav
-              aria-label="Trilha de navegação"
-              className="flex flex-wrap items-center gap-2 font-sans text-[9px] tracking-widest uppercase text-cream-text/40"
-            >
-              <Link href="/" className="hover:text-cream-text transition-colors">Início</Link>
-              {product.category && (
-                <>
-                  <span aria-hidden="true">›</span>
-                  <Link
-                    href={`/categoria/${product.category.slug}`}
-                    className="hover:text-cream-text transition-colors"
-                  >
-                    {product.category.title}
-                  </Link>
-                </>
-              )}
-            </nav>
-
-            {/* Categoria + losango dourado + status (B3) — o mesmo motivo do
-                SectionHeading, costurando esta página ao resto do site. */}
-            <div className="flex items-center gap-2.5 pt-1">
-              {product.category && (
-                <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-dourado">
-                  {product.category.title}
-                </span>
-              )}
-              <span aria-hidden="true" className="w-1 h-1 bg-dourado rotate-45 shrink-0" />
-              <span className="font-sans text-[10px] tracking-[0.15em] uppercase text-cream-text/40">
-                Disponível
+          {/* Painel escuro de informação — compacto, largura natural */}
+          <div className="bg-espresso text-cream-text flex flex-col gap-4 p-7 md:p-8">
+            {product.category && (
+              <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-dourado">
+                {product.category.title}
               </span>
-            </div>
+            )}
 
-            <h1 className="font-display text-[clamp(1.75rem,3.2vw,2.5rem)] font-[450] text-cream-text tracking-tight leading-tight [text-wrap:balance]">
+            {/* Título no tamanho real de mercado (medido: Amaro 27px,
+                Shoulder 18px) — era 41px (clamp até 2.5rem), o maior fator
+                de "muito grande" na composição inteira. */}
+            <h1 className="font-display text-[1.75rem] md:text-[2rem] font-[450] text-cream-text tracking-tight leading-tight [text-wrap:balance]">
               {product.title}
             </h1>
-
-            {product.price ? (
-              <p className="font-sans text-xl text-dourado">{formatPrice(product.price)}</p>
-            ) : null}
 
             {product.description && product.description.length > 0 && (
               <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-cream-text/65 [&_p]:leading-relaxed [&_p]:mb-3 [&_p]:max-w-[60ch] [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-cream-text/65 [&_blockquote]:leading-relaxed [&_blockquote]:mb-3 [&_strong]:font-medium [&_strong]:text-cream-text [&_em]:italic">
@@ -233,14 +207,13 @@ export default async function ProdutoPage({ params }: Props) {
               </div>
             )}
 
-            {/* Decisão ancorada na BASE do painel (lógica da variação B2):
-                o painel estica pra acompanhar a altura da foto, e sem isso a
-                informação se aglomerava no topo deixando um vazio escuro
-                embaixo. Hoje toda peça tem 1 foto e as alturas batem; se a
-                Luiza cadastrar 2-3 fotos por peça, a galeria empilha e este
-                painel fica bem mais alto — revisar aqui quando isso
-                acontecer. */}
-            <div className="mt-auto pt-6 flex flex-col gap-4">
+            {/* Régua + preço/CTA na mesma unidade (B2): nasce direto do
+                título, sem vão -- nunca um bloco distante lá embaixo. */}
+            <div className="border-t border-cream-text/15 pt-4 mt-1 flex flex-col gap-4">
+              {product.price ? (
+                <p className="font-sans text-xl text-dourado">{formatPrice(product.price)}</p>
+              ) : null}
+
               {/* CTA dourado sólido (B1). Exceção deliberada ao "bordô = botão
                   de produto" do DESIGN.md §2: sobre o painel espresso, bordô
                   (#7B1E3A) fica escuro-sobre-escuro e o botão some. O dourado
@@ -268,15 +241,6 @@ export default async function ProdutoPage({ params }: Props) {
                 >
                   Não sabe se é pra você? Pergunta pra Luiza →
                 </a>
-              )}
-
-              {product.category && (
-                <Link
-                  href={`/categoria/${product.category.slug}`}
-                  className="font-sans text-[10px] tracking-widest uppercase text-cream-text/40 hover:text-cream-text transition-colors self-start"
-                >
-                  ← Ver mais em {product.category.title}
-                </Link>
               )}
             </div>
           </div>
