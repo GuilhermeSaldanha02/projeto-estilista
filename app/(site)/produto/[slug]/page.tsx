@@ -166,61 +166,66 @@ export default async function ProdutoPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="max-w-[1440px] mx-auto">
-        {/* Fase 8 (direção N1, escolhida pelo dono): a página inteira vira UM
-            CARD ESCURO centralizado -- a moldura espresso envolve a foto pelos
-            quatro lados, os dados e o botão. Substitui a estrutura de duas
-            colunas (foto | painel), que foi rejeitada em várias rodadas: com
-            poucos dados cadastrados, uma coluna de texto ao lado de uma foto
-            alta sempre deixava vazio, não importava o ajuste.
-            Coluna única e estreita = não existem duas alturas pra conciliar.
-            Escala tipográfica das referências medidas ao vivo (Toteme: nome
-            16px, preço 14px; Shoulder: nome 18px) -- não o 32px anterior. */}
-        {/* w-full no mobile / w-fit só a partir de sm: com `w-fit` puro, o
-            carrossel interno (que usa w-full) não tinha largura de
-            referência e colapsava -- card de 266px e foto sem renderizar
-            num aparelho de 375px (medido ao vivo). */}
-        <div className="mx-auto w-full max-w-[520px] sm:w-fit sm:max-w-none bg-espresso text-cream-text p-4 sm:p-5">
-          {/* Galeria em tamanho FIXO (480x600), não fluida.
+        {/* Fase 9 (direção T, escolhida pelo dono): o ESCURO EMOLDURA A FOTO e
+            a informação fica FORA dele, no claro. Inverte a lógica das
+            tentativas anteriores, em que o painel escuro segurava o texto.
+
+            A estrutura (foto alta à esquerda, coluna de texto à esquerda-
+            alinhada ao lado, ordem categoria -> título -> preço -> descrição
+            -> botão) foi medida ao vivo em Toteme, Shoulder e Amaro: as três
+            usam exatamente esse esqueleto, nenhuma centraliza o texto e
+            nenhuma põe o texto dentro de uma caixa colorida.
+
+            Escala tipográfica também medida, não arbitrada: título 20px
+            (Toteme 16, Shoulder 18, Amaro 27) e preço 15px, discreto e perto
+            do tamanho do corpo -- Shoulder e Toteme mantêm o preço quieto;
+            só a Amaro o destaca em negrito, e ela vive de desconto, que não
+            é o caso da Luiza. */}
+        <div className="grid md:grid-cols-[auto_1fr] gap-8 md:gap-12 items-start">
+          {/* Moldura escura: o bloco espresso envolve a foto pelos 4 lados.
               A foto NÃO leva o corte fechado do card de grade: aqui a cliente
               quer ver a peça inteira, em detalhe. O crop apertado
               (productCardImageUrl) é só pra vitrine. */}
-          <ProductGallery images={product.images ?? []} title={product.title} />
+          <div className="bg-espresso p-3.5 w-full md:w-auto">
+            <ProductGallery images={product.images ?? []} title={product.title} />
+          </div>
 
-          <div className="w-full sm:w-[480px] pt-6 flex flex-col items-center text-center gap-2.5">
+          {/* Informação no claro, alinhada à esquerda */}
+          <div className="flex flex-col gap-2.5 max-w-[46ch] md:pt-1">
             {product.category && (
-              <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-dourado">
+              <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-ink-soft">
                 {product.category.title}
               </span>
             )}
 
-            <h1 className="font-display text-[1.0625rem] font-[450] text-cream-text tracking-tight leading-snug [text-wrap:balance]">
+            <h1 className="font-display text-[1.25rem] font-normal text-espresso tracking-tight leading-snug [text-wrap:balance]">
               {product.title}
             </h1>
 
-            <div aria-hidden="true" className="w-[18px] h-px bg-dourado/70 my-1" />
-
             {product.price ? (
-              <p className="font-sans text-[13px] text-cream-text/65">
+              <p className="font-sans text-[0.9375rem] text-espresso">
                 {formatPrice(product.price)}
               </p>
             ) : null}
 
+            <div aria-hidden="true" className="h-px bg-dourado/50 my-1.5" />
+
             {product.description && product.description.length > 0 && (
-              <div className="max-w-[46ch] [&_p]:font-sans [&_p]:text-[13px] [&_p]:text-cream-text/60 [&_p]:leading-relaxed [&_p]:mb-2 [&_blockquote]:font-sans [&_blockquote]:text-[13px] [&_blockquote]:text-cream-text/60 [&_blockquote]:leading-relaxed [&_blockquote]:mb-2 [&_strong]:font-medium [&_strong]:text-cream-text [&_em]:italic">
+              <div className="[&_p]:font-sans [&_p]:text-[13px] [&_p]:text-ink-soft [&_p]:leading-relaxed [&_p]:mb-2 [&_blockquote]:font-sans [&_blockquote]:text-[13px] [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:mb-2 [&_strong]:font-medium [&_strong]:text-espresso [&_em]:italic">
                 <PortableText value={product.description} />
               </div>
             )}
 
-            {/* CTA dourado sólido. Exceção deliberada ao "bordô = botão de
-                produto" do DESIGN.md §2: sobre espresso, bordô (#7B1E3A) fica
-                escuro-sobre-escuro e o botão some. O dourado com texto
-                espresso mede 6,78:1 — é acessibilidade, não preferência. */}
+            {/* CTA espresso com letra dourada -- casa com a moldura da foto em
+                vez de brigar com ela. Exceção deliberada ao "bordô = botão de
+                produto" do DESIGN.md §2, mantida das fases anteriores: o par
+                dourado/espresso mede 6,78:1 (AA exige 4,5:1). */}
             {waHref && (
               <a
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 w-full inline-flex items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[10px] tracking-[0.14em] uppercase px-6 py-3.5 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4 transition-colors"
+                className="mt-3 inline-flex items-center justify-center gap-3 bg-espresso text-dourado font-sans text-[10px] tracking-[0.14em] uppercase px-8 py-3.5 hover:bg-espresso/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-espresso focus-visible:outline-offset-4 transition-colors"
               >
                 <WhatsAppIcon />
                 Quero esta peça
@@ -233,7 +238,7 @@ export default async function ProdutoPage({ params }: Props) {
                 href={waConsultHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1 font-sans text-[10px] tracking-wide text-esmeralda-light hover:text-cream-text transition-colors"
+                className="mt-1 font-sans text-[11px] tracking-wide text-esmeralda hover:text-espresso transition-colors self-start"
               >
                 Não sabe se é pra você? Pergunta pra Luiza →
               </a>
