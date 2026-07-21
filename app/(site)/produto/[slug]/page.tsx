@@ -1,12 +1,10 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { PortableText, type PortableTextBlock } from '@portabletext/react'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import {
   productQuery,
   allProductSlugsQuery,
-  relatedProductsQuery,
   settingsQuery,
 } from '@/sanity/lib/queries'
 import { buildWaHref, WA_MESSAGES } from '@/lib/wa'
@@ -14,8 +12,6 @@ import { formatPrice } from '@/lib/format'
 import { WhatsAppIcon } from '@/components/ui/icons'
 import EmptyState from '@/components/ui/EmptyState'
 import ProductGallery, { type GalleryImage } from '@/components/product/ProductGallery'
-import RelatedRail from '@/components/product/RelatedRail'
-import type { FilterableProduct } from '@/components/catalog/CatalogView'
 
 // ISR — produto reflete o que a dona publica sem rebuild manual
 export const revalidate = 60
@@ -127,13 +123,6 @@ export default async function ProdutoPage({ params }: Props) {
     )
   }
 
-  const related = product.category
-    ? await client.fetch<FilterableProduct[]>(relatedProductsQuery, {
-        categorySlug: product.category.slug,
-        slug: product.slug,
-      })
-    : []
-
   const waHref = buildWaHref(settings?.whatsappNumber, WA_MESSAGES.peca(product.title))
   const waConsultHref = buildWaHref(
     settings?.whatsappNumber,
@@ -193,7 +182,7 @@ export default async function ProdutoPage({ params }: Props) {
               A foto NÃO leva o corte fechado do card de grade: aqui a cliente
               quer ver a peça inteira, em detalhe. O crop apertado
               (productCardImageUrl) é só pra vitrine. */}
-          <div className="bg-espresso p-3.5 w-full md:w-auto rounded-2xl">
+          <div className="bg-espresso p-2 w-full md:w-auto rounded-2xl">
             <ProductGallery images={product.images ?? []} title={product.title} />
           </div>
 
@@ -252,8 +241,6 @@ export default async function ProdutoPage({ params }: Props) {
             )}
           </div>
         </div>
-
-        <RelatedRail products={related} />
       </div>
 
       {/* CTA fixo mobile — o funil no celular. Dourado sobre espresso, igual
