@@ -173,7 +173,12 @@ export default async function ProdutoPage({ params }: Props) {
             DENTRO do painel (B1): nada claro "vazando" por cima da coluna.
             gap-0 no desktop: o painel encosta na galeria, um objeto sólido
             ao lado da foto, não um texto solto. */}
-        <div className="grid md:grid-cols-[58%_1fr] gap-6 md:gap-0 items-start md:items-stretch">
+        {/* Coluna da galeria em largura FIXA (minmax(0,520px)), não
+            porcentagem (58%) -- 58% de um container de 1440px escalava a
+            foto pra 683x854px, bem acima do padrão de mercado (~500-560px
+            de largura). Fixo em vez de proporcional: o tamanho da foto não
+            cresce mais só porque a tela é larga. */}
+        <div className="grid md:grid-cols-[minmax(0,520px)_1fr] gap-6 md:gap-0 items-start md:items-stretch">
           {/* Galeria — pilha desktop / carrossel mobile.
               A foto NÃO leva o corte fechado do card de grade: aqui a cliente
               quer ver a peça inteira, em detalhe. O crop apertado

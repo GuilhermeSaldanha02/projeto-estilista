@@ -42,11 +42,11 @@ export default function ProductGallery({
         {valid.map((img, i) => (
           <PhotoReveal key={i} className="relative aspect-[4/5] overflow-hidden bg-sand-100">
             <Image
-              src={urlFor(img).width(1100).height(1375).fit('crop').auto('format').url()}
+              src={urlFor(img).width(1040).height(1300).fit('crop').auto('format').url()}
               alt={img.alt ?? `${title} — foto ${i + 1}`}
               fill
               priority={i === 0}
-              sizes="(max-width: 768px) 100vw, 58vw"
+              sizes="(max-width: 768px) 100vw, 520px"
               className="object-cover"
             />
           </PhotoReveal>
