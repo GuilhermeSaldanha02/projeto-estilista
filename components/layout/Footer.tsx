@@ -1,108 +1,56 @@
 import Image from 'next/image'
-import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
-import { navCategoriesQuery, settingsQuery } from '@/sanity/lib/queries'
-import { buildWaHref, WA_MESSAGES } from '@/lib/wa'
-import type { NavCategory } from './Header'
+import { settingsQuery } from '@/sanity/lib/queries'
+import { buildWaHref } from '@/lib/wa'
 
 /*
- * Fase 5 (Reconstrução) — rodapé em 3 colunas (categorias / consultoria+
- * contato / nota curta), substituindo o footer de 1 linha genérica. Server
- * component: mesmas queries do Header, sem estado, sem JS extra.
+ * Fase 12 — rodapé reduzido a uma faixa de uma linha.
+ *
+ * Antes eram 3 colunas (categorias / consultoria / nota) com 472px de altura.
+ * As duas colunas de links foram removidas a pedido do dono, e a razão é
+ * boa: elas DUPLICAVAM o cabeçalho inteiro — "Vitrine" e "Consultoria" já
+ * são os dois únicos itens da barra de cima, e "Agendar horário" já é o
+ * botão de destaque dela. O rodapé repetia tudo e não oferecia nada novo.
+ *
+ * O que sobra é o que só existe aqui: identidade (logo + o que a marca faz)
+ * e o canal de venda real (WhatsApp). Não há mais nada legítimo pra colocar
+ * — o projeto não tem Instagram, página de trocas nem dados da empresa
+ * cadastrados. Encher a faixa com link inventado seria pior que deixá-la
+ * pequena.
+ *
+ * Se um dia entrarem Instagram, política de troca ou CNPJ (obrigatório se a
+ * venda sair do WhatsApp e virar checkout no site), é aqui que eles vão.
  */
 export default async function Footer() {
-  const [categories, settings] = await Promise.all([
-    client.fetch<NavCategory[]>(navCategoriesQuery),
-    client.fetch<{ whatsappNumber?: string } | null>(settingsQuery),
-  ])
-
+  const settings = await client.fetch<{ whatsappNumber?: string } | null>(settingsQuery)
   const waHref = buildWaHref(settings?.whatsappNumber)
-  const waScheduleHref = buildWaHref(settings?.whatsappNumber, WA_MESSAGES.agendar)
 
   return (
     <footer className="bg-espresso border-t border-dourado/25">
-      <div className="max-w-[1440px] mx-auto px-[6vw] py-16 md:py-20 grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-6">
-        {/* Categorias */}
-        <div>
-          <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-dourado mb-5">
-            Vitrine
-          </p>
-          <ul className="space-y-3">
-            {categories.map(cat => (
-              <li key={cat._id}>
-                <Link
-                  href={`/categoria/${cat.slug}`}
-                  className="font-sans text-sm text-cream-text/75 hover:text-cream-text transition-colors"
-                >
-                  {cat.title}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link
-                href="/vitrine"
-                className="font-sans text-sm text-cream-text/75 hover:text-cream-text transition-colors"
-              >
-                Ver tudo →
-              </Link>
-            </li>
-          </ul>
-        </div>
-
-        {/* Consultoria + contato */}
-        <div>
-          <p className="font-sans text-[10px] tracking-[0.3em] uppercase text-dourado mb-5">
-            Consultoria
-          </p>
-          <ul className="space-y-3">
-            <li>
-              <Link
-                href="/consultoria"
-                className="font-sans text-sm text-cream-text/75 hover:text-cream-text transition-colors"
-              >
-                Conheça a stylist
-              </Link>
-            </li>
-            {waScheduleHref && (
-              <li>
-                <a
-                  href={waScheduleHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans text-sm text-esmeralda-light hover:text-cream-text transition-colors"
-                >
-                  Agendar horário
-                </a>
-              </li>
-            )}
-            {waHref && (
-              <li>
-                <a
-                  href={waHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans text-sm text-cream-text/75 hover:text-cream-text transition-colors"
-                >
-                  Falar no WhatsApp
-                </a>
-              </li>
-            )}
-          </ul>
-        </div>
-
-        {/* Nota */}
-        <div className="flex flex-col md:items-end">
+      <div className="max-w-[1440px] mx-auto px-[6vw] py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-3.5">
           <Image
             src="/logo-lt.png"
             alt="LT Studio"
-            width={80}
-            height={44}
-            className="opacity-80 mb-4"
+            width={52}
+            height={28}
+            className="opacity-80"
           />
-          <p className="font-sans text-cream-text/60 text-[10px] tracking-widest uppercase md:text-right">
-            Moda Feminina · Consultoria de Estilo
-          </p>
+          <span className="font-sans text-[10px] tracking-[0.18em] uppercase text-cream-text/55">
+            Moda feminina · Consultoria de estilo
+          </span>
         </div>
+
+        {waHref && (
+          <a
+            href={waHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-sans text-[10px] tracking-[0.18em] uppercase text-cream-text/70 hover:text-dourado transition-colors"
+          >
+            Falar no WhatsApp
+          </a>
+        )}
       </div>
     </footer>
   )
