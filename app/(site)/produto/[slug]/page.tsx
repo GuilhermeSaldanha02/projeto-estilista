@@ -181,12 +181,19 @@ export default async function ProdutoPage({ params }: Props) {
             do tamanho do corpo -- Shoulder e Toteme mantêm o preço quieto;
             só a Amaro o destaca em negrito, e ela vive de desconto, que não
             é o caso da Luiza. */}
-        <div className="grid md:grid-cols-[auto_1fr] gap-8 md:gap-12 items-start">
+        {/* w-fit + mx-auto: a composição fecha na largura do próprio conteúdo
+            e centraliza. Com `1fr` na coluna de texto sobravam 242px mortos à
+            direita (medido) e o conjunto ficava encostado à esquerda,
+            desequilibrado. */}
+        <div className="grid md:grid-cols-[auto_auto] gap-8 md:gap-12 items-start md:w-fit md:mx-auto">
           {/* Moldura escura: o bloco espresso envolve a foto pelos 4 lados.
+              rounded-2xl segue a linguagem do ProductCard (rounded-xl) — aqui
+              um passo maior porque o objeto é bem maior; a foto interna leva
+              um raio menor, como manda o encaixe de cantos aninhados.
               A foto NÃO leva o corte fechado do card de grade: aqui a cliente
               quer ver a peça inteira, em detalhe. O crop apertado
               (productCardImageUrl) é só pra vitrine. */}
-          <div className="bg-espresso p-3.5 w-full md:w-auto">
+          <div className="bg-espresso p-3.5 w-full md:w-auto rounded-2xl">
             <ProductGallery images={product.images ?? []} title={product.title} />
           </div>
 

@@ -40,7 +40,7 @@ export default function ProductGallery({
 
   if (valid.length === 0) {
     return (
-      <div className="w-full sm:w-[420px] aspect-[4/5] bg-espresso/40 flex items-center justify-center">
+      <div className="w-full sm:w-[420px] aspect-[4/5] rounded-lg bg-espresso/40 flex items-center justify-center">
         <span className="font-sans text-[10px] tracking-widest uppercase text-cream-text/40">
           Foto em breve
         </span>
@@ -55,7 +55,7 @@ export default function ProductGallery({
         {valid.map((img, i) => (
           <PhotoReveal
             key={i}
-            className="relative w-[420px] h-[525px] overflow-hidden bg-espresso/40"
+            className="relative w-[420px] h-[525px] overflow-hidden rounded-lg bg-espresso/40"
           >
             <Image
               src={urlFor(img).width(840).height(1050).fit('crop').auto('format').url()}
@@ -80,7 +80,7 @@ export default function ProductGallery({
           <div
             key={i}
             role="listitem"
-            className="relative snap-center shrink-0 w-full aspect-[4/5] overflow-hidden bg-espresso/40"
+            className="relative snap-center shrink-0 w-full aspect-[4/5] overflow-hidden rounded-lg bg-espresso/40"
           >
             <Image
               src={urlFor(img).width(800).height(1000).fit('crop').auto('format').url()}
