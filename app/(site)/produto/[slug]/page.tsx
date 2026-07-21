@@ -94,11 +94,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /*
- * Fase 5 (Reconstrução) — página de produto nova: 58% galeria em pilha /
- * 42% informação (mesmo split de proporção do hero — coerência entre
- * páginas). "Quero esta peça" (bordô sólido) é o único botão; a consultoria
- * entra como link de texto — nunca segundo botão no mesmo momento de
- * decisão. "Combina com" fecha a página — sem beco sem saída.
+ * Fase 11 — página de produto: o mesmo card escuro da vitrine, deitado.
+ * Foto na metade esquerda, informação na direita, dentro de um único bloco
+ * espresso (ver comentário completo mais abaixo, junto ao JSX). CTA é
+ * dourado sólido — exceção documentada ao "bordô = botão de produto" do
+ * DESIGN.md §2, por contraste (ver comentário junto ao botão). Consultoria
+ * é link de texto, nunca segundo botão. Sem "Combina com": removido a
+ * pedido do dono para a página caber numa tela sem rolagem extra.
  */
 export default async function ProdutoPage({ params }: Props) {
   const { slug } = await params
