@@ -154,74 +154,63 @@ export default async function ProdutoPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="max-w-[1440px] mx-auto">
-        {/* Fase 9 (direção T, escolhida pelo dono): o ESCURO EMOLDURA A FOTO e
-            a informação fica FORA dele, no claro. Inverte a lógica das
-            tentativas anteriores, em que o painel escuro segurava o texto.
+      {/* Fase 11 — O MESMO CARD DA VITRINE, DEITADO (exemplo 2, escolhido pelo
+          dono depois de analisarmos o padrão que o site já tinha).
 
-            A estrutura (foto alta à esquerda, coluna de texto à esquerda-
-            alinhada ao lado, ordem categoria -> título -> preço -> descrição
-            -> botão) foi medida ao vivo em Toteme, Shoulder e Amaro: as três
-            usam exatamente esse esqueleto, nenhuma centraliza o texto e
-            nenhuma põe o texto dentro de uma caixa colorida.
+          Nada de elemento novo: é o ProductCard — bg-espresso, rounded-xl,
+          o mesmo fio `ring-cream-text/10` — só que horizontal. A foto
+          preenche a metade esquerda de ponta a ponta (como preenche o topo
+          no card da grade) e o texto ocupa a direita. Quem clica numa peça
+          na vitrine encontra o mesmo objeto, deitado e maior.
 
-            Escala tipográfica também medida, não arbitrada: título 20px
-            (Toteme 16, Shoulder 18, Amaro 27) e preço 15px, discreto e perto
-            do tamanho do corpo -- Shoulder e Toteme mantêm o preço quieto;
-            só a Amaro o destaca em negrito, e ela vive de desconto, que não
-            é o caso da Luiza. */}
-        {/* w-fit + mx-auto: a composição fecha na largura do próprio conteúdo
-            e centraliza. Com `1fr` na coluna de texto sobravam 242px mortos à
-            direita (medido) e o conjunto ficava encostado à esquerda,
-            desequilibrado. */}
-        <div className="grid md:grid-cols-[auto_auto] gap-8 md:gap-12 items-start md:w-fit md:mx-auto">
-          {/* Moldura escura: o bloco espresso envolve a foto pelos 4 lados.
-              rounded-2xl segue a linguagem do ProductCard (rounded-xl) — aqui
-              um passo maior porque o objeto é bem maior; a foto interna leva
-              um raio menor, como manda o encaixe de cantos aninhados.
-              A foto NÃO leva o corte fechado do card de grade: aqui a cliente
-              quer ver a peça inteira, em detalhe. O crop apertado
-              (productCardImageUrl) é só pra vitrine. */}
-          <div className="bg-espresso p-2 w-full md:w-auto rounded-2xl">
+          Tipografia herdada do card, não inventada aqui: nome em serif clara
+          sobre o escuro, preço dourado, micro-rótulo dourado maiúsculo.
+
+          max-w-[840px]: com o card em duas metades iguais e a foto em 3/4,
+          a altura do card é (largura/2)*4/3. Em 840 isso dá 560px de altura,
+          que cabe nos ~584px livres de uma tela de 720 (viewport - header 72
+          - padding 40 - respiro). Passar disso obrigaria a rolar. */}
+      <div className="max-w-[840px] mx-auto">
+        <div className="bg-espresso rounded-xl ring-1 ring-cream-text/10 overflow-hidden grid md:grid-cols-2">
+          {/* Metade da foto — encosta nas bordas do card */}
+          <div className="aspect-[3/4]">
             <ProductGallery images={product.images ?? []} title={product.title} />
           </div>
 
-          {/* Informação no claro, alinhada à esquerda */}
-          <div className="flex flex-col gap-2.5 max-w-[46ch] md:pt-1">
+          {/* Metade da informação */}
+          <div className="flex flex-col justify-center gap-3 p-7 md:p-8">
             {product.category && (
-              <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-ink-soft">
+              <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-dourado">
                 {product.category.title}
               </span>
             )}
 
-            <h1 className="font-display text-[1.25rem] font-normal text-espresso tracking-tight leading-snug [text-wrap:balance]">
+            <h1 className="font-display text-[1.25rem] font-light text-cream-text tracking-tight leading-snug [text-wrap:balance]">
               {product.title}
             </h1>
 
             {product.price ? (
-              <p className="font-sans text-[0.9375rem] text-espresso">
-                {formatPrice(product.price)}
-              </p>
+              <p className="font-sans text-sm text-dourado">{formatPrice(product.price)}</p>
             ) : null}
 
-            <div aria-hidden="true" className="h-px bg-dourado/50 my-1.5" />
+            <div aria-hidden="true" className="h-px bg-cream-text/15 my-0.5" />
 
             {product.description && product.description.length > 0 && (
-              <div className="[&_p]:font-sans [&_p]:text-[13px] [&_p]:text-ink-soft [&_p]:leading-relaxed [&_p]:mb-2 [&_blockquote]:font-sans [&_blockquote]:text-[13px] [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:mb-2 [&_strong]:font-medium [&_strong]:text-espresso [&_em]:italic">
+              <div className="[&_p]:font-sans [&_p]:text-[13px] [&_p]:text-cream-text/60 [&_p]:leading-relaxed [&_p]:mb-2 [&_blockquote]:font-sans [&_blockquote]:text-[13px] [&_blockquote]:text-cream-text/60 [&_blockquote]:leading-relaxed [&_blockquote]:mb-2 [&_strong]:font-medium [&_strong]:text-cream-text [&_em]:italic">
                 <PortableText value={product.description} />
               </div>
             )}
 
-            {/* CTA espresso com letra dourada -- casa com a moldura da foto em
-                vez de brigar com ela. Exceção deliberada ao "bordô = botão de
-                produto" do DESIGN.md §2, mantida das fases anteriores: o par
-                dourado/espresso mede 6,78:1 (AA exige 4,5:1). */}
+            {/* CTA dourado sólido. Exceção deliberada ao "bordô = botão de
+                produto" do DESIGN.md §2: sobre espresso, bordô (#7B1E3A) fica
+                escuro-sobre-escuro e o botão some. O par dourado/espresso
+                mede 6,78:1 (AA exige 4,5:1) — é acessibilidade, não gosto. */}
             {waHref && (
               <a
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 inline-flex items-center justify-center gap-3 bg-espresso text-dourado font-sans text-[10px] tracking-[0.14em] uppercase px-8 py-3.5 hover:bg-espresso/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-espresso focus-visible:outline-offset-4 transition-colors"
+                className="mt-2 inline-flex items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[10px] tracking-[0.18em] uppercase px-6 py-3.5 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4 transition-colors"
               >
                 <WhatsAppIcon />
                 Quero esta peça
@@ -234,7 +223,7 @@ export default async function ProdutoPage({ params }: Props) {
                 href={waConsultHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-1 font-sans text-[11px] tracking-wide text-esmeralda hover:text-espresso transition-colors self-start"
+                className="font-sans text-[11px] tracking-wide text-esmeralda-light hover:text-cream-text transition-colors self-start"
               >
                 Não sabe se é pra você? Pergunta pra Luiza →
               </a>

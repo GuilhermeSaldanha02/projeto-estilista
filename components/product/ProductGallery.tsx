@@ -1,26 +1,23 @@
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
-import { PhotoReveal } from '@/components/motion/PhotoReveal'
 
 /*
- * Fase 9 — galeria da página de produto, montada DENTRO da moldura escura
- * (direção T, escolhida pelo dono): o bloco espresso emoldura a foto e a
- * informação fica fora dele, no claro.
+ * Fase 11 — galeria da página de produto, dentro do CARD DEITADO.
  *
- * Tamanho FIXO, não fluido (pedido explícito: "elas estão como adaptativas e
- * não é isso que quero"). 420x525 no desktop, escolhido por duas restrições
- * que se cruzam:
- *  - CABER NA TELA sem rolar: em 1280x720 sobram ~584px (viewport - header 72
- *    - padding 40 - respiro). Com os 28px da moldura, 525 de foto fecha em
- *    553px de bloco.
- *  - ficar perto da faixa de loja real medida ao vivo (Toteme 494px,
- *    Amaro 543px, Shoulder 633px de largura).
- * É menor que as referências de propósito: elas não têm moldura em volta.
+ * O componente não define tamanho próprio: preenche o container que a página
+ * dá (h-full/w-full). Quem manda na proporção é o card — 3/4, a mesma do
+ * ProductCard da vitrine. Versões anteriores travavam largura/altura aqui
+ * dentro (480x600, 420x525, clamp de viewport) e era isso que fazia o
+ * tamanho brigar com o layout a cada mudança de direção.
  *
- * Desktop: pilha vertical editorial — rolar a página é folhear a peça
- * (padrão das referências de luxo), sem thumbnails, sem carrossel, sem
- * sticky. Mobile: carrossel horizontal com scroll-snap.
- * CSS puro — componente servidor, zero JS de galeria.
+ * object-cover é seguro nesta proporção: as fotos do acervo são 4/5
+ * (896x1200 = 0,747) e a caixa é 3/4 (0,75) -- o corte é de menos de 1%, a
+ * peça não perde nada. Por isso NÃO se usa aqui o productCardImageUrl (o
+ * corte fechado da vitrine, que puxa a peça pra fora do fundo de estúdio):
+ * na página da peça a cliente quer ver o conjunto inteiro.
+ *
+ * Várias fotos: rolagem vertical com snap DENTRO do painel, a primeira
+ * ocupando a caixa toda. Hoje toda peça tem 1 foto só.
  */
 export type GalleryImage = {
   asset: { _ref: string; _type: string }
@@ -40,8 +37,8 @@ export default function ProductGallery({
 
   if (valid.length === 0) {
     return (
-      <div className="w-full sm:w-[420px] aspect-[4/5] rounded-lg bg-espresso/40 flex items-center justify-center">
-        <span className="font-sans text-[10px] tracking-widest uppercase text-cream-text/40">
+      <div className="h-full w-full bg-espresso flex items-center justify-center">
+        <span className="font-sans text-[10px] tracking-widest uppercase text-cream-text/55">
           Foto em breve
         </span>
       </div>
@@ -49,50 +46,27 @@ export default function ProductGallery({
   }
 
   return (
-    <>
-      {/* Desktop: pilha vertical, tamanho FIXO (não cresce com a viewport) */}
-      <div className="hidden sm:flex flex-col gap-3.5">
-        {valid.map((img, i) => (
-          <PhotoReveal
-            key={i}
-            className="relative w-[420px] h-[525px] overflow-hidden rounded-lg bg-espresso/40"
-          >
-            <Image
-              src={urlFor(img).width(840).height(1050).fit('crop').auto('format').url()}
-              alt={img.alt ?? `${title} — foto ${i + 1}`}
-              fill
-              priority={i === 0}
-              sizes="420px"
-              className="object-cover"
-            />
-          </PhotoReveal>
-        ))}
-      </div>
-
-      {/* Mobile (<640px): carrossel snap. Aqui a largura acompanha a tela por
-          necessidade -- 420px fixos não caberiam num aparelho de 375px. */}
-      <div
-        className="sm:hidden flex gap-2 overflow-x-auto snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        role="list"
-        aria-label={`Fotos de ${title}`}
-      >
-        {valid.map((img, i) => (
-          <div
-            key={i}
-            role="listitem"
-            className="relative snap-center shrink-0 w-full aspect-[4/5] overflow-hidden rounded-lg bg-espresso/40"
-          >
-            <Image
-              src={urlFor(img).width(800).height(1000).fit('crop').auto('format').url()}
-              alt={img.alt ?? `${title} — foto ${i + 1}`}
-              fill
-              priority={i === 0}
-              sizes="100vw"
-              className="object-cover"
-            />
-          </div>
-        ))}
-      </div>
-    </>
+    <div
+      className="h-full w-full overflow-y-auto snap-y snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      role={valid.length > 1 ? 'list' : undefined}
+      aria-label={valid.length > 1 ? `Fotos de ${title}` : undefined}
+    >
+      {valid.map((img, i) => (
+        <div
+          key={i}
+          role={valid.length > 1 ? 'listitem' : undefined}
+          className="relative h-full w-full snap-start"
+        >
+          <Image
+            src={urlFor(img).width(840).height(1120).fit('crop').auto('format').url()}
+            alt={img.alt ?? `${title} — foto ${i + 1}`}
+            fill
+            priority={i === 0}
+            sizes="(max-width: 768px) 100vw, 420px"
+            className="object-cover"
+          />
+        </div>
+      ))}
+    </div>
   )
 }
