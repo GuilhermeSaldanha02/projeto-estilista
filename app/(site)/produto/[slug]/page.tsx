@@ -166,83 +166,78 @@ export default async function ProdutoPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="max-w-[1440px] mx-auto">
-        {/* Fase 7b (direção B2 + botão do B1, escolhida pelo dono): painel
-            escuro compacto -- NÃO estica mais pra bater com a altura da foto
-            (items-start, não items-stretch). Esticar era a causa raiz do
-            vazio gigante: com só categoria+título (sem preço/descrição
-            cadastrados ainda), a régua e o botão só apareciam lá embaixo,
-            longe do título, sem nada no meio. Painel curto, no topo, ao lado
-            da foto alta -- exatamente como Amaro e Shoulder fazem (medido ao
-            vivo: título deles em 18-27px, o nosso estava em 41px).
-            Cortado por "muita informação" (achado do dono): trilha de
-            navegação duplicada (o header já navega), losango+status
-            decorativo, link "← Ver mais em". Sobra: categoria, título,
-            preço opcional, régua, botão, e o link de consultoria (funil
-            não-negociável). */}
-        <div className="grid md:grid-cols-[minmax(0,520px)_1fr] gap-6 md:gap-0 items-start">
-          {/* Galeria — pilha desktop / carrossel mobile.
+        {/* Fase 8 (direção N1, escolhida pelo dono): a página inteira vira UM
+            CARD ESCURO centralizado -- a moldura espresso envolve a foto pelos
+            quatro lados, os dados e o botão. Substitui a estrutura de duas
+            colunas (foto | painel), que foi rejeitada em várias rodadas: com
+            poucos dados cadastrados, uma coluna de texto ao lado de uma foto
+            alta sempre deixava vazio, não importava o ajuste.
+            Coluna única e estreita = não existem duas alturas pra conciliar.
+            Escala tipográfica das referências medidas ao vivo (Toteme: nome
+            16px, preço 14px; Shoulder: nome 18px) -- não o 32px anterior. */}
+        {/* w-full no mobile / w-fit só a partir de sm: com `w-fit` puro, o
+            carrossel interno (que usa w-full) não tinha largura de
+            referência e colapsava -- card de 266px e foto sem renderizar
+            num aparelho de 375px (medido ao vivo). */}
+        <div className="mx-auto w-full max-w-[520px] sm:w-fit sm:max-w-none bg-espresso text-cream-text p-4 sm:p-5">
+          {/* Galeria em tamanho FIXO (480x600), não fluida.
               A foto NÃO leva o corte fechado do card de grade: aqui a cliente
               quer ver a peça inteira, em detalhe. O crop apertado
               (productCardImageUrl) é só pra vitrine. */}
           <ProductGallery images={product.images ?? []} title={product.title} />
 
-          {/* Painel escuro de informação — compacto, largura natural */}
-          <div className="bg-espresso text-cream-text flex flex-col gap-4 p-7 md:p-8">
+          <div className="w-full sm:w-[480px] pt-6 flex flex-col items-center text-center gap-2.5">
             {product.category && (
-              <span className="font-sans text-[10px] tracking-[0.2em] uppercase text-dourado">
+              <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-dourado">
                 {product.category.title}
               </span>
             )}
 
-            {/* Título no tamanho real de mercado (medido: Amaro 27px,
-                Shoulder 18px) — era 41px (clamp até 2.5rem), o maior fator
-                de "muito grande" na composição inteira. */}
-            <h1 className="font-display text-[1.75rem] md:text-[2rem] font-[450] text-cream-text tracking-tight leading-tight [text-wrap:balance]">
+            <h1 className="font-display text-[1.0625rem] font-[450] text-cream-text tracking-tight leading-snug [text-wrap:balance]">
               {product.title}
             </h1>
 
+            <div aria-hidden="true" className="w-[18px] h-px bg-dourado/70 my-1" />
+
+            {product.price ? (
+              <p className="font-sans text-[13px] text-cream-text/65">
+                {formatPrice(product.price)}
+              </p>
+            ) : null}
+
             {product.description && product.description.length > 0 && (
-              <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-cream-text/65 [&_p]:leading-relaxed [&_p]:mb-3 [&_p]:max-w-[60ch] [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-cream-text/65 [&_blockquote]:leading-relaxed [&_blockquote]:mb-3 [&_strong]:font-medium [&_strong]:text-cream-text [&_em]:italic">
+              <div className="max-w-[46ch] [&_p]:font-sans [&_p]:text-[13px] [&_p]:text-cream-text/60 [&_p]:leading-relaxed [&_p]:mb-2 [&_blockquote]:font-sans [&_blockquote]:text-[13px] [&_blockquote]:text-cream-text/60 [&_blockquote]:leading-relaxed [&_blockquote]:mb-2 [&_strong]:font-medium [&_strong]:text-cream-text [&_em]:italic">
                 <PortableText value={product.description} />
               </div>
             )}
 
-            {/* Régua + preço/CTA na mesma unidade (B2): nasce direto do
-                título, sem vão -- nunca um bloco distante lá embaixo. */}
-            <div className="border-t border-cream-text/15 pt-4 mt-1 flex flex-col gap-4">
-              {product.price ? (
-                <p className="font-sans text-xl text-dourado">{formatPrice(product.price)}</p>
-              ) : null}
+            {/* CTA dourado sólido. Exceção deliberada ao "bordô = botão de
+                produto" do DESIGN.md §2: sobre espresso, bordô (#7B1E3A) fica
+                escuro-sobre-escuro e o botão some. O dourado com texto
+                espresso mede 6,78:1 — é acessibilidade, não preferência. */}
+            {waHref && (
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-3 w-full inline-flex items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[10px] tracking-[0.14em] uppercase px-6 py-3.5 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4 transition-colors"
+              >
+                <WhatsAppIcon />
+                Quero esta peça
+              </a>
+            )}
 
-              {/* CTA dourado sólido (B1). Exceção deliberada ao "bordô = botão
-                  de produto" do DESIGN.md §2: sobre o painel espresso, bordô
-                  (#7B1E3A) fica escuro-sobre-escuro e o botão some. O dourado
-                  com texto espresso é o único que mantém o CTA legível aqui —
-                  é acessibilidade, não preferência. */}
-              {waHref && (
-                <a
-                  href={waHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4 transition-colors"
-                >
-                  <WhatsAppIcon />
-                  Quero esta peça
-                </a>
-              )}
-
-              {/* Consultoria como link de texto — nunca segundo botão */}
-              {waConsultHref && (
-                <a
-                  href={waConsultHref}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-sans text-[11px] tracking-wide text-esmeralda-light hover:text-cream-text transition-colors self-start"
-                >
-                  Não sabe se é pra você? Pergunta pra Luiza →
-                </a>
-              )}
-            </div>
+            {/* Consultoria como link de texto — nunca segundo botão */}
+            {waConsultHref && (
+              <a
+                href={waConsultHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-1 font-sans text-[10px] tracking-wide text-esmeralda-light hover:text-cream-text transition-colors"
+              >
+                Não sabe se é pra você? Pergunta pra Luiza →
+              </a>
+            )}
           </div>
         </div>
 
