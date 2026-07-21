@@ -1,25 +1,26 @@
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
+import { PhotoReveal } from '@/components/motion/PhotoReveal'
 
 /*
- * Fase 10 — galeria da página de produto, reescrita do zero.
+ * Fase 9 — galeria da página de produto, montada DENTRO da moldura escura
+ * (direção T, escolhida pelo dono): o bloco espresso emoldura a foto e a
+ * informação fica fora dele, no claro.
  *
- * O componente NÃO define mais tamanho próprio: ele preenche o container que
- * o chamador dá (h-full/w-full). Quem manda na altura é a página — no
- * desktop, metade da tela inteira; no mobile, uma proporção 4/5. Todas as
- * versões anteriores travavam largura/altura aqui dentro (480x600, 420x525,
- * clamp de viewport), e era isso que fazia o tamanho brigar com o layout a
- * cada mudança de direção.
+ * Tamanho FIXO, não fluido (pedido explícito: "elas estão como adaptativas e
+ * não é isso que quero"). 420x525 no desktop, escolhido por duas restrições
+ * que se cruzam:
+ *  - CABER NA TELA sem rolar: em 1280x720 sobram ~584px (viewport - header 72
+ *    - padding 40 - respiro). Com os 28px da moldura, 525 de foto fecha em
+ *    553px de bloco.
+ *  - ficar perto da faixa de loja real medida ao vivo (Toteme 494px,
+ *    Amaro 543px, Shoulder 633px de largura).
+ * É menor que as referências de propósito: elas não têm moldura em volta.
  *
- * object-contain, não object-cover: num painel de meia tela (≈640x648 num
- * monitor de 1280x720) uma foto 4/5 seria cortada no topo e na base pelo
- * cover -- em loja de roupa isso corta a peça, que é justamente o que a
- * cliente veio ver. Com contain a peça aparece inteira SEMPRE, e o espresso
- * em volta vira a moldura naturalmente, sem precisar desenhar borda.
- *
- * Várias fotos: rolagem vertical com snap DENTRO do painel — a primeira
- * continua ocupando a tela inteira, as outras ficam a um scroll de
- * distância. Hoje toda peça tem 1 foto só.
+ * Desktop: pilha vertical editorial — rolar a página é folhear a peça
+ * (padrão das referências de luxo), sem thumbnails, sem carrossel, sem
+ * sticky. Mobile: carrossel horizontal com scroll-snap.
+ * CSS puro — componente servidor, zero JS de galeria.
  */
 export type GalleryImage = {
   asset: { _ref: string; _type: string }
@@ -39,7 +40,7 @@ export default function ProductGallery({
 
   if (valid.length === 0) {
     return (
-      <div className="h-full w-full flex items-center justify-center">
+      <div className="w-full sm:w-[420px] aspect-[4/5] rounded-lg bg-espresso/40 flex items-center justify-center">
         <span className="font-sans text-[10px] tracking-widest uppercase text-cream-text/40">
           Foto em breve
         </span>
@@ -48,27 +49,50 @@ export default function ProductGallery({
   }
 
   return (
-    <div
-      className="h-full w-full overflow-y-auto snap-y snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-      role={valid.length > 1 ? 'list' : undefined}
-      aria-label={valid.length > 1 ? `Fotos de ${title}` : undefined}
-    >
-      {valid.map((img, i) => (
-        <div
-          key={i}
-          role={valid.length > 1 ? 'listitem' : undefined}
-          className="relative h-full w-full snap-start p-6 md:p-10"
-        >
-          <Image
-            src={urlFor(img).width(1000).height(1250).fit('crop').auto('format').url()}
-            alt={img.alt ?? `${title} — foto ${i + 1}`}
-            fill
-            priority={i === 0}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="object-contain"
-          />
-        </div>
-      ))}
-    </div>
+    <>
+      {/* Desktop: pilha vertical, tamanho FIXO (não cresce com a viewport) */}
+      <div className="hidden sm:flex flex-col gap-3.5">
+        {valid.map((img, i) => (
+          <PhotoReveal
+            key={i}
+            className="relative w-[420px] h-[525px] overflow-hidden rounded-lg bg-espresso/40"
+          >
+            <Image
+              src={urlFor(img).width(840).height(1050).fit('crop').auto('format').url()}
+              alt={img.alt ?? `${title} — foto ${i + 1}`}
+              fill
+              priority={i === 0}
+              sizes="420px"
+              className="object-cover"
+            />
+          </PhotoReveal>
+        ))}
+      </div>
+
+      {/* Mobile (<640px): carrossel snap. Aqui a largura acompanha a tela por
+          necessidade -- 420px fixos não caberiam num aparelho de 375px. */}
+      <div
+        className="sm:hidden flex gap-2 overflow-x-auto snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        role="list"
+        aria-label={`Fotos de ${title}`}
+      >
+        {valid.map((img, i) => (
+          <div
+            key={i}
+            role="listitem"
+            className="relative snap-center shrink-0 w-full aspect-[4/5] overflow-hidden rounded-lg bg-espresso/40"
+          >
+            <Image
+              src={urlFor(img).width(800).height(1000).fit('crop').auto('format').url()}
+              alt={img.alt ?? `${title} — foto ${i + 1}`}
+              fill
+              priority={i === 0}
+              sizes="100vw"
+              className="object-cover"
+            />
+          </div>
+        ))}
+      </div>
+    </>
   )
 }
