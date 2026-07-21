@@ -1,12 +1,10 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import { PortableText, type PortableTextBlock } from '@portabletext/react'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import {
   productQuery,
   allProductSlugsQuery,
-  relatedProductsQuery,
   settingsQuery,
 } from '@/sanity/lib/queries'
 import { buildWaHref, WA_MESSAGES } from '@/lib/wa'
@@ -14,8 +12,6 @@ import { formatPrice } from '@/lib/format'
 import { WhatsAppIcon } from '@/components/ui/icons'
 import EmptyState from '@/components/ui/EmptyState'
 import ProductGallery, { type GalleryImage } from '@/components/product/ProductGallery'
-import RelatedRail from '@/components/product/RelatedRail'
-import type { FilterableProduct } from '@/components/catalog/CatalogView'
 
 // ISR — produto reflete o que a dona publica sem rebuild manual
 export const revalidate = 60
@@ -98,11 +94,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /*
- * Fase 5 (Reconstrução) — página de produto nova: 58% galeria em pilha /
- * 42% informação (mesmo split de proporção do hero — coerência entre
- * páginas). "Quero esta peça" (bordô sólido) é o único botão; a consultoria
- * entra como link de texto — nunca segundo botão no mesmo momento de
- * decisão. "Combina com" fecha a página — sem beco sem saída.
+ * Fase 11 — página de produto: o mesmo card escuro da vitrine, deitado.
+ * Foto na metade esquerda, informação na direita, dentro de um único bloco
+ * espresso (ver comentário completo mais abaixo, junto ao JSX). CTA é
+ * dourado sólido — exceção documentada ao "bordô = botão de produto" do
+ * DESIGN.md §2, por contraste (ver comentário junto ao botão). Consultoria
+ * é link de texto, nunca segundo botão. Sem "Combina com": removido a
+ * pedido do dono para a página caber numa tela sem rolagem extra.
  */
 export default async function ProdutoPage({ params }: Props) {
   const { slug } = await params
@@ -126,13 +124,6 @@ export default async function ProdutoPage({ params }: Props) {
       />
     )
   }
-
-  const related = product.category
-    ? await client.fetch<FilterableProduct[]>(relatedProductsQuery, {
-        categorySlug: product.category.slug,
-        slug: product.slug,
-      })
-    : []
 
   const waHref = buildWaHref(settings?.whatsappNumber, WA_MESSAGES.peca(product.title))
   const waConsultHref = buildWaHref(
@@ -165,62 +156,63 @@ export default async function ProdutoPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="max-w-[1440px] mx-auto">
-        {/* Breadcrumb */}
-        <nav
-          aria-label="Trilha de navegação"
-          className="mb-8 flex items-center gap-2 font-sans text-[10px] tracking-widest uppercase text-ink-soft"
-        >
-          <Link href="/" className="hover:text-ink transition-colors">Início</Link>
-          {product.category && (
-            <>
-              <span aria-hidden="true">›</span>
-              <Link
-                href={`/categoria/${product.category.slug}`}
-                className="hover:text-ink transition-colors"
-              >
+      {/* Fase 11 — O MESMO CARD DA VITRINE, DEITADO (exemplo 2, escolhido pelo
+          dono depois de analisarmos o padrão que o site já tinha).
+
+          Nada de elemento novo: é o ProductCard — bg-espresso, rounded-xl,
+          o mesmo fio `ring-cream-text/10` — só que horizontal. A foto
+          preenche a metade esquerda de ponta a ponta (como preenche o topo
+          no card da grade) e o texto ocupa a direita. Quem clica numa peça
+          na vitrine encontra o mesmo objeto, deitado e maior.
+
+          Tipografia herdada do card, não inventada aqui: nome em serif clara
+          sobre o escuro, preço dourado, micro-rótulo dourado maiúsculo.
+
+          max-w-[840px]: com o card em duas metades iguais e a foto em 3/4,
+          a altura do card é (largura/2)*4/3. Em 840 isso dá 560px de altura,
+          que cabe nos ~584px livres de uma tela de 720 (viewport - header 72
+          - padding 40 - respiro). Passar disso obrigaria a rolar. */}
+      <div className="max-w-[840px] mx-auto">
+        <div className="bg-espresso rounded-xl ring-1 ring-cream-text/10 overflow-hidden grid md:grid-cols-2">
+          {/* Metade da foto — encosta nas bordas do card */}
+          <div className="aspect-[3/4]">
+            <ProductGallery images={product.images ?? []} title={product.title} />
+          </div>
+
+          {/* Metade da informação */}
+          <div className="flex flex-col justify-center gap-3 p-7 md:p-8">
+            {product.category && (
+              <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-dourado">
                 {product.category.title}
-              </Link>
-            </>
-          )}
-          <span aria-hidden="true">›</span>
-          <span className="text-ink-soft">{product.title}</span>
-        </nav>
+              </span>
+            )}
 
-        <div className="grid md:grid-cols-[58%_1fr] gap-10 lg:gap-16 items-start">
-          {/* Galeria — pilha desktop / carrossel mobile */}
-          <ProductGallery images={product.images ?? []} title={product.title} />
+            <h1 className="font-display text-[1.25rem] font-light text-cream-text tracking-tight leading-snug [text-wrap:balance]">
+              {product.title}
+            </h1>
 
-          {/* Informação */}
-          <div className="flex flex-col gap-8">
-            <div>
-              {product.category && (
-                <p className="font-sans text-[10px] tracking-widest uppercase text-ink-soft mb-2">
-                  {product.category.title}
-                </p>
-              )}
-              <h1 className="font-display text-[clamp(2rem,4vw,2.75rem)] font-[450] text-ink tracking-tight leading-tight [text-wrap:balance]">
-                {product.title}
-              </h1>
-              {product.price ? (
-                <p className="mt-4 font-sans text-xl text-ink">{formatPrice(product.price)}</p>
-              ) : null}
-            </div>
+            {product.price ? (
+              <p className="font-sans text-sm text-dourado">{formatPrice(product.price)}</p>
+            ) : null}
 
-            <div className="h-px bg-dourado/30" />
+            <div aria-hidden="true" className="h-px bg-cream-text/15 my-0.5" />
 
             {product.description && product.description.length > 0 && (
-              <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:leading-relaxed [&_p]:mb-3 [&_p]:max-w-[65ch] [&_blockquote]:font-sans [&_blockquote]:text-sm [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:mb-3 [&_strong]:font-medium [&_em]:italic">
+              <div className="[&_p]:font-sans [&_p]:text-[13px] [&_p]:text-cream-text/60 [&_p]:leading-relaxed [&_p]:mb-2 [&_blockquote]:font-sans [&_blockquote]:text-[13px] [&_blockquote]:text-cream-text/60 [&_blockquote]:leading-relaxed [&_blockquote]:mb-2 [&_strong]:font-medium [&_strong]:text-cream-text [&_em]:italic">
                 <PortableText value={product.description} />
               </div>
             )}
 
+            {/* CTA dourado sólido. Exceção deliberada ao "bordô = botão de
+                produto" do DESIGN.md §2: sobre espresso, bordô (#7B1E3A) fica
+                escuro-sobre-escuro e o botão some. O par dourado/espresso
+                mede 6,78:1 (AA exige 4,5:1) — é acessibilidade, não gosto. */}
             {waHref && (
               <a
                 href={waHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-3 bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase px-8 py-4 hover:bg-bordo/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-4 transition-colors self-start"
+                className="mt-2 inline-flex items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[10px] tracking-[0.18em] uppercase px-6 py-3.5 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4 transition-colors"
               >
                 <WhatsAppIcon />
                 Quero esta peça
@@ -233,35 +225,26 @@ export default async function ProdutoPage({ params }: Props) {
                 href={waConsultHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-sans text-[11px] tracking-wide text-esmeralda hover:text-esmeralda-light transition-colors self-start"
+                className="font-sans text-[11px] tracking-wide text-esmeralda-light hover:text-cream-text transition-colors self-start"
               >
                 Não sabe se é pra você? Pergunta pra Luiza →
               </a>
             )}
-
-            {product.category && (
-              <Link
-                href={`/categoria/${product.category.slug}`}
-                className="font-sans text-[10px] tracking-widest uppercase text-ink-soft hover:text-ink transition-colors"
-              >
-                ← Ver mais em {product.category.title}
-              </Link>
-            )}
           </div>
         </div>
-
-        <RelatedRail products={related} />
       </div>
 
-      {/* CTA fixo mobile — o funil no celular; padrão aprovado, mantido */}
+      {/* CTA fixo mobile — o funil no celular. Dourado sobre espresso, igual
+          ao CTA do painel: com o botão do painel dourado, manter este bordô
+          deixaria duas cores de CTA na mesma tela. */}
       {waHref ? (
-        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-sand-50/95 backdrop-blur-sm border-t border-dourado/30 px-5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
+        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-espresso/95 backdrop-blur-sm border-t border-dourado/30 px-5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
           <a
             href={waHref}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Quero esta peça ${product.title} (atalho fixo)`}
-            className="flex w-full items-center justify-center gap-3 bg-bordo text-cream-text font-sans text-[11px] tracking-widest uppercase py-4 hover:bg-bordo/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-bordo focus-visible:outline-offset-2 transition-colors"
+            className="flex w-full items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[11px] tracking-widest uppercase py-4 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2 transition-colors"
           >
             <WhatsAppIcon />
             Quero esta peça

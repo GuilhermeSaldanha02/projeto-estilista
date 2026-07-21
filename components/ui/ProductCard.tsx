@@ -40,7 +40,7 @@ export default function ProductCard({
    *  3dgallery): a peça vira um objeto sólido sobre o fundo creme — foto no
    *  topo, nome/preço numa base própria. Era isso que matava o "solto": o
    *  nome apoiado numa superfície, não flutuando no creme vazio. Usado no
-   *  catálogo e nas duas seções da home; `RelatedRail` também. */
+   *  catálogo e nas duas seções da home. */
   onDark?: boolean
   /** O card vive em geometrias diferentes (grid do catálogo, grid 3-up da
    *  home, rail horizontal), então quem posiciona informa a largura real.

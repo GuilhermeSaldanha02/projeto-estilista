@@ -128,10 +128,3 @@ export const productQuery = `
 export const allProductSlugsQuery = `
   *[_type == "product" && inStock == true] { "slug": slug.current }
 `
-
-// "Combina com": mesma categoria, exclui a própria peça.
-export const relatedProductsQuery = `
-  *[_type == "product" && inStock == true
-    && category->slug.current == $categorySlug && slug.current != $slug]
-  | order(_createdAt desc) [0...4] { ${CARD_FIELDS} }
-`

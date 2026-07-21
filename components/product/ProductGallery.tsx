@@ -1,13 +1,23 @@
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
-import { PhotoReveal } from '@/components/motion/PhotoReveal'
 
 /*
- * Fase 5 — galeria da página de produto.
- * Desktop: pilha vertical editorial — rolar a página é folhear a peça
- * (padrão das referências de luxo), sem thumbnails, sem carrossel, sem
- * sticky. Mobile: carrossel horizontal com scroll-snap.
- * CSS puro — componente servidor, zero JS de galeria.
+ * Fase 11 — galeria da página de produto, dentro do CARD DEITADO.
+ *
+ * O componente não define tamanho próprio: preenche o container que a página
+ * dá (h-full/w-full). Quem manda na proporção é o card — 3/4, a mesma do
+ * ProductCard da vitrine. Versões anteriores travavam largura/altura aqui
+ * dentro (480x600, 420x525, clamp de viewport) e era isso que fazia o
+ * tamanho brigar com o layout a cada mudança de direção.
+ *
+ * object-cover é seguro nesta proporção: as fotos do acervo são 4/5
+ * (896x1200 = 0,747) e a caixa é 3/4 (0,75) -- o corte é de menos de 1%, a
+ * peça não perde nada. Por isso NÃO se usa aqui o productCardImageUrl (o
+ * corte fechado da vitrine, que puxa a peça pra fora do fundo de estúdio):
+ * na página da peça a cliente quer ver o conjunto inteiro.
+ *
+ * Várias fotos: rolagem vertical com snap DENTRO do painel, a primeira
+ * ocupando a caixa toda. Hoje toda peça tem 1 foto só.
  */
 export type GalleryImage = {
   asset: { _ref: string; _type: string }
@@ -27,8 +37,8 @@ export default function ProductGallery({
 
   if (valid.length === 0) {
     return (
-      <div className="aspect-[4/5] bg-sand-100 flex items-center justify-center">
-        <span className="font-sans text-[10px] tracking-widest uppercase text-ink-soft">
+      <div className="h-full w-full bg-espresso flex items-center justify-center">
+        <span className="font-sans text-[10px] tracking-widest uppercase text-cream-text/55">
           Foto em breve
         </span>
       </div>
@@ -36,53 +46,27 @@ export default function ProductGallery({
   }
 
   return (
-    <>
-      {/* Desktop: pilha vertical */}
-      <div className="hidden md:flex flex-col gap-3">
-        {valid.map((img, i) => (
-          <PhotoReveal key={i} className="relative aspect-[4/5] overflow-hidden bg-sand-100">
-            <Image
-              src={urlFor(img).width(1100).height(1375).fit('crop').auto('format').url()}
-              alt={img.alt ?? `${title} — foto ${i + 1}`}
-              fill
-              priority={i === 0}
-              sizes="(max-width: 768px) 100vw, 58vw"
-              className="object-cover"
-            />
-          </PhotoReveal>
-        ))}
-      </div>
-
-      {/* Mobile: carrossel snap. Mesma receita estrutural do rail da home
-          (overflow-x-auto + snap + padding no container), mas NÃO precisa de
-          scroll-padding-inline: aqui o padding vem de margem negativa
-          (-mx-5 px-5, cancela o padding da página), não de padding direto
-          somado ao overflow -- testado ao vivo (code review do PR #46):
-          scrollLeft fica em 0 no load, sem o auto-scroll do rail. Se este
-          padrão mudar para padding direto no futuro, reavaliar a mesma
-          correção. */}
-      <div
-        className="md:hidden flex gap-2 overflow-x-auto snap-x snap-mandatory [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden -mx-5 px-5"
-        role="list"
-        aria-label={`Fotos de ${title}`}
-      >
-        {valid.map((img, i) => (
-          <div
-            key={i}
-            role="listitem"
-            className="relative snap-center shrink-0 w-[88vw] aspect-[4/5] overflow-hidden bg-sand-100"
-          >
-            <Image
-              src={urlFor(img).width(800).height(1000).fit('crop').auto('format').url()}
-              alt={img.alt ?? `${title} — foto ${i + 1}`}
-              fill
-              priority={i === 0}
-              sizes="88vw"
-              className="object-cover"
-            />
-          </div>
-        ))}
-      </div>
-    </>
+    <div
+      className="h-full w-full overflow-y-auto snap-y snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      role={valid.length > 1 ? 'list' : undefined}
+      aria-label={valid.length > 1 ? `Fotos de ${title}` : undefined}
+    >
+      {valid.map((img, i) => (
+        <div
+          key={i}
+          role={valid.length > 1 ? 'listitem' : undefined}
+          className="relative h-full w-full snap-start"
+        >
+          <Image
+            src={urlFor(img).width(840).height(1120).fit('crop').auto('format').url()}
+            alt={img.alt ?? `${title} — foto ${i + 1}`}
+            fill
+            priority={i === 0}
+            sizes="(max-width: 768px) 100vw, 420px"
+            className="object-cover"
+          />
+        </div>
+      ))}
+    </div>
   )
 }

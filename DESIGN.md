@@ -126,7 +126,7 @@ components/
 ├── motion/    tokens, Reveal, PhotoReveal, PhotoParallax, SmoothScroll
 ├── home/      Hero, CuratedSelection, CategoryPortals, NewArrivalsRail, ConsultingInvite
 ├── catalog/   CatalogView (cabeçalho FORA da grade — ver §6)
-├── product/   ProductGallery, RelatedRail
+├── product/   ProductGallery
 ├── consultoria/ StylistHero, Sections (renderer das seções dinâmicas do CMS)
 └── ui/        ProductCard, SectionHeading, HorizontalRail, EmptyState, icons — primitivos sem domínio
 ```
@@ -149,9 +149,9 @@ dono rejeitou "nome enorme preto" e "marcadão em negrito" em rodadas
 sucessivas; nesta identidade quem domina a tela é a FOTO da peça, não a
 palavra. Toda seção importa o componente, ninguém recria a marcação.
 
-Usado em: `/vitrine`, `/categoria/[slug]`, `/colecao/[slug]`, "Combina com"
-(PDP) e "Acabou de chegar" (home). Exceção deliberada: "A seleção da Luiza"
-mantém a frase em itálico da curadora — é conteúdo com voz, não um rótulo.
+Usado em: `/vitrine`, `/categoria/[slug]`, `/colecao/[slug]` e "Acabou de
+chegar" (home). Exceção deliberada: "A seleção da Luiza" mantém a frase em
+itálico da curadora — é conteúdo com voz, não um rótulo.
 
 **Eixo central.** Com o cabeçalho centralizado, chips e ordenação também
 ficam centralizados (`justify-center`, com `flex-wrap`) — controle

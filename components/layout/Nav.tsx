@@ -30,9 +30,6 @@ interface NavProps {
 export default function Nav({ categories, whatsappNumber }: NavProps) {
   const reduceMotion = useReducedMotion()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const [megaOpen, setMegaOpen] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-  const megaTriggerRef = useRef<HTMLAnchorElement>(null)
   const mobileTriggerRef = useRef<HTMLButtonElement>(null)
   const waHref = buildWaHref(whatsappNumber)
   const waScheduleHref = buildWaHref(whatsappNumber, WA_MESSAGES.agendar)
@@ -46,29 +43,6 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
   // funciona mesmo com o foco ainda no botão, que é irmão — não ancestral — do <nav>.
   function handleMobileKeyDown(e: React.KeyboardEvent<HTMLElement>) {
     if (mobileOpen && e.key === 'Escape') closeMobileAndReturnFocus()
-  }
-
-  function openMega() {
-    clearTimeout(timerRef.current)
-    setMegaOpen(true)
-  }
-
-  function closeMega() {
-    timerRef.current = setTimeout(() => setMegaOpen(false), 150)
-  }
-
-  function closeMegaAndReturnFocus() {
-    clearTimeout(timerRef.current)
-    setMegaOpen(false)
-    megaTriggerRef.current?.focus()
-  }
-
-  function handleBlur(e: React.FocusEvent<HTMLDivElement>) {
-    if (!e.currentTarget.contains(e.relatedTarget)) closeMega()
-  }
-
-  function handleMegaKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (e.key === 'Escape') closeMegaAndReturnFocus()
   }
 
   return (
@@ -99,7 +73,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         <Link
           href="/"
           className="hidden md:block hover:opacity-75 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4"
-          onClick={() => { setMobileOpen(false); setMegaOpen(false) }}
+          onClick={() => setMobileOpen(false)}
         >
           <Image
             src="/logo-lt.png"
@@ -118,7 +92,7 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
         <Link
           href="/"
           className="md:hidden hover:opacity-75 transition-opacity focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-4"
-          onClick={() => { setMobileOpen(false); setMegaOpen(false) }}
+          onClick={() => setMobileOpen(false)}
         >
           <Image
             src="/logo-lt.png"
@@ -134,64 +108,22 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
           <Link
             href="/consultoria"
             className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
-            onClick={() => setMegaOpen(false)}
+            onClick={() => setMobileOpen(false)}
           >
             Consultoria
           </Link>
 
-          {categories.length > 0 && (
-            <div
-              className="relative"
-              onMouseEnter={openMega}
-              onMouseLeave={closeMega}
-              onBlur={handleBlur}
-              onKeyDown={handleMegaKeyDown}
-            >
-              {/* Fase 5: "Vitrine" agora é link de verdade para /vitrine —
-                  antes era um <button> que só abria o mega-menu; clicar não
-                  levava a lugar nenhum. O mega-menu continua abrindo no
-                  hover/focus, como um bônus de navegação rápida. */}
-              <Link
-                ref={megaTriggerRef}
-                href="/vitrine"
-                aria-haspopup="true"
-                aria-expanded={megaOpen}
-                onFocus={openMega}
-                className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
-              >
-                Vitrine
-              </Link>
-
-              {/* Mega-menu: colunas distribuídas sem vão */}
-              {megaOpen && (
-                <div
-                  role="navigation"
-                  aria-label="Vitrine"
-                  className="fixed inset-x-0 top-[72px] z-50 bg-espresso border-t border-dourado/25 shadow-2xl"
-                  onMouseEnter={openMega}
-                  onMouseLeave={closeMega}
-                >
-                  {/* Sem bloco destaque "Novidades" (removido, Fase 4e): a Novidades
-                      completa (com filtro) já vive na home agora — apontar pra ela
-                      de novo aqui duplicava o destino sem motivo, achado do dono.
-                      flex/flex-1 removidos junto (código review PR #43): só
-                      existiam para dividir espaço com o bloco que não existe mais. */}
-                  <div className="px-10 py-8 grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-4">
-                    {categories.map(cat => (
-                      <Link
-                        key={cat._id}
-                        href={`/categoria/${cat.slug}`}
-                        className="text-cream-text opacity-90 hover:opacity-100 focus:opacity-100 font-sans text-sm tracking-[0.15em] uppercase transition-opacity outline-none focus-visible:underline"
-                        onClick={() => setMegaOpen(false)}
-                      >
-                        {cat.title}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          {/* "Vitrine" é só um link. O mega-menu que abria no hover foi
+              removido a pedido do dono: clicar em Vitrine já leva a uma
+              página que lista tudo, então a cascata repetia o destino e
+              atrapalhava quem só estava passando o mouse. As categorias
+              continuam alcançáveis pela própria /vitrine e pelo rodapé. */}
+          <Link
+            href="/vitrine"
+            className="text-cream-text opacity-85 hover:opacity-100 font-sans text-[11px] tracking-[0.2em] uppercase transition-opacity py-2"
+          >
+            Vitrine
+          </Link>
         </div>
       </div>
 
