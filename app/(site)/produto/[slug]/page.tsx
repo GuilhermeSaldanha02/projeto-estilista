@@ -151,7 +151,7 @@ export default async function ProdutoPage({ params }: Props) {
   }
 
   return (
-    <main className="min-h-screen pt-10 pb-28 md:pb-24 px-[6vw]">
+    <main className="min-h-screen pt-10 pb-10 md:pb-16 px-[6vw]">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -233,24 +233,6 @@ export default async function ProdutoPage({ params }: Props) {
           </div>
         </div>
       </div>
-
-      {/* CTA fixo mobile — o funil no celular. Dourado sobre espresso, igual
-          ao CTA do painel: com o botão do painel dourado, manter este bordô
-          deixaria duas cores de CTA na mesma tela. */}
-      {waHref ? (
-        <div className="md:hidden fixed inset-x-0 bottom-0 z-40 bg-espresso/95 backdrop-blur-sm border-t border-dourado/30 px-5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))]">
-          <a
-            href={waHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`Quero esta peça ${product.title} (atalho fixo)`}
-            className="flex w-full items-center justify-center gap-3 bg-dourado text-espresso font-sans text-[11px] tracking-widest uppercase py-4 hover:bg-dourado/85 focus-visible:outline focus-visible:outline-2 focus-visible:outline-dourado focus-visible:outline-offset-2 transition-colors"
-          >
-            <WhatsAppIcon />
-            Quero esta peça
-          </a>
-        </div>
-      ) : null}
     </main>
   )
 }

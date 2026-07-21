@@ -4,7 +4,6 @@ import { useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, useReducedMotion } from 'framer-motion'
-import type { NavCategory } from './Header'
 import { WhatsAppIcon } from '@/components/ui/icons'
 import { buildWaHref, WA_MESSAGES } from '@/lib/wa'
 
@@ -23,11 +22,10 @@ const menuItem = {
 }
 
 interface NavProps {
-  categories: NavCategory[]
   whatsappNumber: string
 }
 
-export default function Nav({ categories, whatsappNumber }: NavProps) {
+export default function Nav({ whatsappNumber }: NavProps) {
   const reduceMotion = useReducedMotion()
   const [mobileOpen, setMobileOpen] = useState(false)
   const mobileTriggerRef = useRef<HTMLButtonElement>(null)
@@ -195,6 +193,11 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
               </Link>
             </motion.li>
+            {/* Sem a cascata de categorias abaixo de Vitrine (pedido do
+                dono: "seguir igual o desktop") -- lá o link "Vitrine" já
+                não abre mais o mega-menu, então o mobile não deveria listar
+                as categorias soltas aqui embaixo dele. Quem quiser navegar
+                por categoria entra em /vitrine e filtra lá. */}
             <motion.li variants={menuItem} className="border-b border-white/5">
               <Link
                 href="/vitrine"
@@ -205,27 +208,6 @@ export default function Nav({ categories, whatsappNumber }: NavProps) {
                 <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
               </Link>
             </motion.li>
-
-            {categories.length === 0 ? (
-              <motion.li variants={menuItem} className="border-t border-white/5">
-                <p className="px-6 py-5 font-sans text-cream-text/70 text-sm">
-                  Nenhuma categoria disponível.
-                </p>
-              </motion.li>
-            ) : (
-              categories.map(cat => (
-                <motion.li key={cat._id} variants={menuItem} className="border-t border-white/5">
-                  <Link
-                    href={`/categoria/${cat.slug}`}
-                    className="flex items-center justify-between px-6 py-[1.1rem] text-cream-text/75 hover:text-cream-text hover:bg-white/5 font-sans text-sm tracking-wide uppercase transition-colors focus-visible:bg-white/5 outline-none"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {cat.title}
-                    <span className="text-cream-text/25 text-xs" aria-hidden="true">→</span>
-                  </Link>
-                </motion.li>
-              ))
-            )}
           </motion.ul>
         </nav>
       )}

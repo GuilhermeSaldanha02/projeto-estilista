@@ -23,14 +23,6 @@ export const settingsQuery = `*[_type == "siteSettings"][0]{
   whatsappNumber, curatorNote, curatorNoteByline
 }`
 
-export const navCategoriesQuery = `
-  *[_type == "category"
-    && count(*[_type == "product" && references(^._id) && inStock == true]) > 0
-  ] | order(order asc) {
-    _id, title, "slug": slug.current
-  }
-`
-
 // ── Home ────────────────────────────────────────────────────────────────
 
 // Seleção da Luiza (S2): destaques marcados no Studio; a página cai para as
