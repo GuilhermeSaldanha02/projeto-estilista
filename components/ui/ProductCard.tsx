@@ -147,7 +147,7 @@ export default function ProductCard({
             </span>
           </div>
         ) : (
-          <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-3 border-t border-dourado/40 pt-2.5">
+          <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-3 border-t border-ink/10 pt-2.5">
             <h3
               className={`font-display font-light text-ink leading-tight ${
                 featured ? 'text-2xl md:text-3xl' : 'text-base sm:text-lg md:text-xl'

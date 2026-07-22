@@ -21,10 +21,9 @@ export default function EmptyState({
 }: Props) {
   return (
     <main className="bg-espresso min-h-[80vh] flex flex-col items-center justify-center text-center px-6 py-20">
-      <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-5">
+      <p className="font-sans text-[10px] tracking-[0.4em] uppercase text-dourado mb-8">
         LT Studio
       </p>
-      <div className="w-8 h-px bg-dourado/40 mx-auto mb-8" />
 
       <h1 className="font-display text-3xl md:text-4xl font-light text-cream-text tracking-wide [text-wrap:balance] mb-5">
         {headline}

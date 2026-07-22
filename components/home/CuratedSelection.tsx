@@ -41,11 +41,10 @@ export default function CuratedSelection({
             A seleção da Luiza
           </p>
           {note && (
-            <p className="font-display text-2xl md:text-[1.75rem] font-light italic text-ink leading-snug text-balance">
+            <p className="font-display text-2xl md:text-[1.75rem] font-light italic text-ink leading-snug text-balance mb-7">
               {note}
             </p>
           )}
-          <div className="w-8 h-px bg-dourado/40 mx-auto mt-8 mb-5" />
           {byline && (
             <p className="font-sans text-[10px] tracking-[0.18em] uppercase text-ink-soft">
               {byline}

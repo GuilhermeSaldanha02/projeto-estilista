@@ -135,41 +135,30 @@ function SectionHeading({
   eyebrow,
   title,
   variant = 'full',
-  align = 'left',
   titleMargin = 'mb-8',
-  lineMargin = 'mb-8',
-  lineWidth = 'w-8',
 }: {
   tone: Tone
   eyebrow?: string
   title?: string
   variant?: 'full' | 'title-only'
-  align?: 'left' | 'center'
   titleMargin?: string
-  lineMargin?: string
-  lineWidth?: string
 }) {
   const { eyebrow: eyebrowColor, title: titleColor } = toneClasses(tone)
-  const showEyebrowAndLine = variant === 'full'
+  const showEyebrow = variant === 'full'
 
   return (
-    <>
-      <Reveal>
-        {showEyebrowAndLine && eyebrow && (
-          <p className={`font-sans text-[10px] tracking-[0.4em] uppercase ${eyebrowColor} mb-4`}>
-            {eyebrow}
-          </p>
-        )}
-        {title && (
-          <h2 className={`font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] ${titleColor} tracking-tight ${titleMargin} [text-wrap:balance]`}>
-            {title}
-          </h2>
-        )}
-      </Reveal>
-      {showEyebrowAndLine && (
-        <div className={`${lineWidth} h-px bg-dourado/40 ${align === 'center' ? 'mx-auto' : ''} ${lineMargin}`} />
+    <Reveal>
+      {showEyebrow && eyebrow && (
+        <p className={`font-sans text-[10px] tracking-[0.4em] uppercase ${eyebrowColor} mb-4`}>
+          {eyebrow}
+        </p>
       )}
-    </>
+      {title && (
+        <h2 className={`font-display text-[clamp(1.5rem,3vw,2rem)] font-[450] ${titleColor} tracking-tight ${titleMargin} [text-wrap:balance]`}>
+          {title}
+        </h2>
+      )}
+    </Reveal>
   )
 }
 
@@ -177,7 +166,7 @@ function SectionHeading({
 function PadraoSection({ section }: { section: StylistSection }) {
   return (
     <SectionShell tone="paper" ariaLabel={section.eyebrow ?? section.title}>
-      <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-8" lineMargin="mb-8" />
+      <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-10" />
       {section.body && (
         <div className="[&_p]:font-sans [&_p]:text-sm [&_p]:text-ink-soft [&_p]:tracking-wide [&_p]:leading-relaxed [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink-soft [&_blockquote]:leading-relaxed [&_blockquote]:my-6">
           <PortableText value={section.body} />
@@ -197,7 +186,7 @@ function FotoLadoSection({ section, reverse }: { section: StylistSection; revers
     <SectionShell tone="paper-deep" maxWidth="max-w-6xl" padding="py-24 md:py-32" topHairline ariaLabel={section.eyebrow ?? section.title}>
       <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
         <div className={`order-2 ${reverse ? 'md:order-1' : 'md:order-2'}`}>
-          <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-7" lineMargin="mb-7" />
+          <SectionHeading tone="paper" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-9" />
           {section.body && (
             <div className="[&_p]:font-sans [&_p]:text-[15px] [&_p]:text-ink [&_p]:leading-relaxed [&_p]:mb-8 [&_blockquote]:font-sans [&_blockquote]:text-[15px] [&_blockquote]:text-ink [&_blockquote]:leading-relaxed [&_blockquote]:mb-8">
               <PortableText value={section.body} />
@@ -276,7 +265,6 @@ function EtapasSection({ section }: { section: StylistSection }) {
 function DestaqueClaroSection({ section, waHref }: { section: StylistSection; waHref: string | null }) {
   return (
     <SectionShell tone="paper-deep" padding="py-24 md:py-36" align="center" ariaLabel={section.eyebrow ?? section.title}>
-      <div className="w-6 h-px bg-dourado/40 mx-auto mb-8" />
       {section.body && (
         <Reveal>
           <div className="[&_p]:font-display [&_p]:text-3xl md:[&_p]:text-4xl [&_p]:font-light [&_p]:italic [&_p]:text-ink-soft [&_p]:leading-snug [&_p]:mb-6 [&_blockquote]:font-display [&_blockquote]:text-3xl md:[&_blockquote]:text-4xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:text-ink-soft [&_blockquote]:leading-snug [&_blockquote]:mb-6 mb-10">
@@ -293,7 +281,7 @@ function DestaqueClaroSection({ section, waHref }: { section: StylistSection; wa
 function TransformacaoEscuraSection({ section }: { section: StylistSection }) {
   return (
     <SectionShell tone="dark" padding="py-28 md:py-40" align="center" ariaLabel={section.eyebrow ?? section.title}>
-      <SectionHeading tone="dark" eyebrow={section.eyebrow} title={section.title} align="center" titleMargin="mb-6" lineMargin="mb-8" lineWidth="w-6" />
+      <SectionHeading tone="dark" eyebrow={section.eyebrow} title={section.title} titleMargin="mb-10" />
       {section.body && (
         <div className="text-cream-text [&_p]:font-display [&_p]:text-xl md:[&_p]:text-2xl [&_p]:font-light [&_p]:italic [&_p]:leading-snug [&_p]:mb-4 [&_blockquote]:font-display [&_blockquote]:text-xl md:[&_blockquote]:text-2xl [&_blockquote]:font-light [&_blockquote]:italic [&_blockquote]:leading-snug [&_blockquote]:mb-4 [&_li]:font-sans [&_li]:text-sm [&_li]:leading-relaxed [&_li]:mb-2">
           <PortableText value={section.body} />
