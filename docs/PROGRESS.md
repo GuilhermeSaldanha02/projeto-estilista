@@ -1,7 +1,88 @@
 # PROGRESS.md — Estado do projeto
 
 _Atualizado a cada sessão. É a memória do agente entre conversas._
-_Última atualização: 2026-07-20 (Fase 6 — reconstrução da página de peças + padrão de cabeçalho do site)_
+_Última atualização: 2026-07-23 (Fase 7 — página de produto reconstruída de novo + critique Impeccable do site inteiro)_
+
+---
+
+## Fase 7 — PDP reconstruída (card deitado) + critique Impeccable + lightbox (2026-07-23)
+
+**Contexto:** depois da Fase 6 fixar o card escuro no catálogo/home, o dono
+pediu pra levar o mesmo tratamento pro `/produto/[slug]`. Rodada mais longa
+da sessão — muitas direções tentadas e rejeitadas antes de convergir. Não
+listo cada uma (ficaria enorme); o que importa registrar é o padrão do erro
+e a direção final.
+
+### O que eu errei antes de acertar
+
+1. **Julguei layout com dados falsos.** As primeiras rodadas (painel escuro
+   com moldura, N1 centralizado, direção "T" com foto emoldurada) foram
+   julgadas com o banco **vazio** — só 2 de 14 produtos tinham preço e
+   descrição cadastrados. Qualquer layout parecia "vazio" porque *estava*
+   vazio de conteúdo, não porque o design estivesse errado. Só depois de
+   inserir dados fictícios via API do Sanity (pra testar) foi possível
+   avaliar layout de verdade.
+2. **Tentei um redesign completo baseado só em mockup, sem testar com a
+   peça real.** A reação do dono foi direta: *"CAGOU TUDO, FICOU UMA
+   MERDA"*. Revertido com `git revert` (limpo, sem resíduo — confirmado no
+   code review depois).
+3. **Resolvi "CTA cortado no mobile" encolhendo a foto.** O dono rejeitou
+   com um argumento de negócio que eu não tinha considerado: *"o site é uma
+   loja de roupa, ficar muito pequeno não é interessante pois o cliente
+   perde a opção de ver o produto"*. A foto é o produto — não é um elemento
+   decorativo que se pode encolher pra resolver um problema de layout.
+
+### Direção final entregue
+
+**O mesmo `ProductCard` da vitrine, deitado** — nenhum elemento novo: foto
+preenche a metade esquerda de ponta a ponta, informação na direita, dentro
+do mesmo bloco espresso com `rounded-xl` e o fio `ring-cream-text/10` que o
+card já usava. Escolhida depois de eu analisar o padrão que o site **já
+tinha** construído (em vez de importar estrutura de referências externas) e
+apresentar 3 variações dele — "o card ampliado", "o mesmo card deitado" e
+"foto no claro com base escura". O dono escolheu a deitada.
+
+Também nesta fase:
+- **Seção "Combina com" removida** da PDP (decisão final do dono — confirmou
+  explicitamente que a página fica como beco sem saída; não reintroduzir
+  sem ele pedir de novo).
+- **Mega-menu da Vitrine removido** (desktop e a cascata equivalente no
+  drawer mobile) — clicar em "Vitrine" já leva a uma página que lista tudo.
+- **Rodapé reduzido de 472px (3 colunas) pra 69px (1 linha)** — as colunas
+  duplicavam o cabeçalho.
+- **Reguinhas douradas soltas removidas** (`h-px bg-dourado` sem função) em
+  5 lugares; mantidos os filetes estruturais (separadores reais).
+- **Lightbox de foto** (`ProductGallery.tsx` virou client component): toque
+  na foto do card abre ela em tela cheia, sem corte. Resolve a necessidade
+  real por trás do "CTA cortado" (ver a peça em detalhe) sem mexer no
+  tamanho do card.
+
+### Critique Impeccable rodado no site inteiro (2026-07-23)
+
+Primeira auditoria formal via skill Impeccable (`/impeccable critique`),
+dual-agent (revisão de design + detector/browser). Snapshot completo em
+`.impeccable/critique/2026-07-23T11-44-03Z__inteiro-home-vitrine-categoria-produto-consultoria.md`.
+**Score: 29/40 (Good).**
+
+### Pendências abertas (não documentadas em lugar nenhum até esta entrada)
+
+- **[P0] CTA "Quero esta peça" cortado na PDP mobile.** Medido ao vivo em
+  375×812: o botão ultrapassa o viewport em 9px, o link "Pergunta pra
+  Luiza" fica inteiramente fora da dobra. O lightbox resolveu a
+  *necessidade* (ver a peça), mas **não corrigiu o corte em si** — o botão
+  continua na mesma posição. Se atacar depois: considerar um CTA fixo
+  (sticky) que só aparece quando o botão original sai da tela, sem duplicar
+  visualmente (a versão anterior desse padrão foi removida por duplicar).
+- **[P1] "Quero esta peça" tem dois destinos diferentes conforme o
+  componente** — no card da vitrine é `Link` interno (abre a PDP); na PDP é
+  `<a>` que abre WhatsApp. Mesmo rótulo, ação de natureza diferente.
+- **[P1] Nenhuma rota tem `loading.tsx`/`error.tsx`/`not-found.tsx`** — uma
+  falha do Sanity em produção cai na tela de erro genérica do Next.
+- **[P1] H1 pulando direto pra H3 (sem H2)** em home, vitrine e categoria.
+- **[P3] Motivo eyebrow+losango dourado repetido** em quase toda seção do
+  site — achado cruzado (leitura humana + detector), baixa urgência.
+- **12 de 14 produtos sem preço/descrição no Studio** — trabalho da Luiza,
+  não é bug de código. Já comunicado a ela via o dono.
 
 ---
 
