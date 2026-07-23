@@ -174,7 +174,12 @@ export default async function ProdutoPage({ params }: Props) {
           - padding 40 - respiro). Passar disso obrigaria a rolar. */}
       <div className="max-w-[840px] mx-auto">
         <div className="bg-espresso rounded-xl ring-1 ring-cream-text/10 overflow-hidden grid md:grid-cols-2">
-          {/* Metade da foto — encosta nas bordas do card */}
+          {/* Metade da foto — encosta nas bordas do card. Clicável: abre a
+              foto em tela cheia (lightbox), pra cliente ver a peça em
+              detalhe sem depender do tamanho fixo do card. Ver
+              PhotoLightbox mais abaixo -- decisão do dono (2026-07-23): não
+              encolher a foto pra "resolver" o CTA cortado no mobile, numa
+              loja de roupa a foto é o produto. */}
           <div className="aspect-[3/4]">
             <ProductGallery images={product.images ?? []} title={product.title} />
           </div>
